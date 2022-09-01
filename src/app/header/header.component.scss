@@ -1,0 +1,22 @@
+ion-header {
+
+    ion-toolbar { 
+
+        .header-text {
+            margin-top: 10px;
+            color: #fff;
+            font-weight: bold;
+        }
+        --background: #047473;
+        .material-symbols-outlined {
+            font-size: 35px;
+            color: #fff;
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 48
+        }
+    }
+    
+}
