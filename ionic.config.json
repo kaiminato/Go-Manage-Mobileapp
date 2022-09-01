@@ -1,7 +1,8 @@
 {
   "name": "jade amber",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
