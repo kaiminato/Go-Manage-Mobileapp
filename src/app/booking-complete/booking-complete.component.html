@@ -1,0 +1,23 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="false"></app-header>
+
+  <ion-img [src]="this.imageService.LOGO" class="app-logo ion-margin-top"></ion-img>
+
+  <ion-grid class="thankyou_section">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-text>
+          Thank you for your booking with Jade Amber Beauty Studio
+        </ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="return_home_section">
+      <ion-col size="12" class="ion-text-center">
+        <ion-button [routerLink]="['/']">Return home</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<app-footer></app-footer>

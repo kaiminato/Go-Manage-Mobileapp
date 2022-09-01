@@ -1,0 +1,26 @@
+ion-content {
+
+    .details {
+        color: #047473;
+        font-size: 17px;
+        font-weight: bolder;
+        border-bottom: 1px solid #047473;
+
+        ion-img {
+            width: 20%;
+        }
+    }
+
+    .details_no_border {
+        color: #047473;
+        font-size: 17px;
+        font-weight: bolder;
+
+        ion-button {
+            --background:#047473;
+            width: 35%;
+            height: 75%;
+        }
+    }
+
+}

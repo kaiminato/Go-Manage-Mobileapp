@@ -1,0 +1,51 @@
+ion-content {
+
+    .request-tabs {
+
+        padding-left: 0px;
+        padding-right: 0px;
+        
+        ion-row {
+            box-shadow: 0px 3px 3px #bdbcbc;
+            text-align: center;
+            color: #047473;
+            margin-top: 15px;
+
+            div {
+                margin-bottom: 10px;
+            }
+            .active {
+                border-bottom: 4px solid #047473;
+                font-weight: bold;
+                
+            }
+    
+            .inactive {
+                //border-bottom: 3px solid #bdbcbc;
+            }
+    
+            ion-text {
+                margin-left: 5px;
+            }
+        }
+        
+    }
+
+    .staff_list {
+        margin: 25px;
+        border-radius: 5px;
+        --background: #047473;
+        color: #fff;
+
+        ion-thumbnail {
+            border-radius: 50% !important;
+            overflow: hidden;
+        }
+
+        h3{
+            font-weight: bold;
+            font-size: 15px;
+        }
+    }
+    
+}
