@@ -6,9 +6,27 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './header/header.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { MakeABookingComponent } from './make-a-booking/make-a-booking.component';
+import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
+import { SelectTimingComponent } from './select-timing/select-timing.component';
+import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
+import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    HomePageComponent,
+    MakeABookingComponent,
+    StaffServiceDetailsComponent,
+    SelectTimingComponent,
+    BookingSummaryComponent,
+    BookingCompleteComponent,
+  ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
