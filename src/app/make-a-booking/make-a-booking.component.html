@@ -28,9 +28,9 @@
       >
       
         <ion-thumbnail slot="start">
-          <img [src]="value.image">
+          <img [src]="this.imageService.DEFAULT_PERSON">
         </ion-thumbnail>
-        <ion-label> <h3>{{ value.name }}</h3>  </ion-label>
+        <ion-label> <h3>{{ value.firstName }} {{ value.lastName }}</h3>  </ion-label>
       
     </ion-item>
   </ion-list>

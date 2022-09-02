@@ -19,7 +19,7 @@ export class HomePageComponent implements OnInit {
     ],
     [
       {
-        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',roter_link: '/' 
+        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',roter_link: '/buy-a-voucher' 
       },
       {
         id: 4 , is_icon: false, name:'groups', text: 'About us' ,roter_link: '/'

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
 import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
+import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { MakeABookingComponent } from './make-a-booking/make-a-booking.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'booking-complete',
     component: BookingCompleteComponent
+  },
+  {
+    path: 'buy-a-voucher',
+    component: BuyVoucherComponent
   },
   {
     path: '',

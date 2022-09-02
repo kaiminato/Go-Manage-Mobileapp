@@ -1,0 +1,32 @@
+ion-content {
+
+    ion-input,ion-textarea {
+        border: 2px solid #d0cbdd;
+        background-color: #eeeeef;
+        border-radius: 5px;
+    }
+
+    label {
+        font-weight: bolder;
+    }
+
+    .add_cart_button {
+        margin-top: 18px;
+    }
+
+    ion-button {
+        --background: #047473;
+
+        ion-text {
+            font-weight: bold;
+        }
+       
+    }
+
+    .divider {
+
+        width: 100%;
+        border: 2px solid rgb(173 171 171);
+        margin-top: 30px;
+    }
+}
