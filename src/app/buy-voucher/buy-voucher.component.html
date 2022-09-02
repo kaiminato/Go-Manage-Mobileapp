@@ -1,0 +1,51 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+  
+  <ion-grid>
+    <ion-row class="ion-margin">
+      <ion-col size="12">
+        <label>To</label>
+        <ion-input></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin-start ion-margin-end">
+      <ion-col size="12">
+        <label>From</label>
+        <ion-input></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin-start ion-margin-end">
+      <ion-col size="12">
+        <label>Message</label>
+        <ion-textarea rows="3"></ion-textarea>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin-top ion-margin-start ion-margin-end">
+      <ion-col size="6">
+        <label>Value</label>
+        <ion-input></ion-input>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" class="add_cart_button"> <ion-text>Add to cart</ion-text></ion-button>
+      </ion-col>
+    </ion-row>
+
+    <div class="divider"></div>
+
+    <ion-row class="ion-margin-top ion-margin-start ion-margin-end">
+      <ion-col size="6">
+        <label >Total: $185.00</label>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" class=""> <ion-text>Place Order</ion-text></ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+<app-footer></app-footer>

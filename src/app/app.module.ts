@@ -14,6 +14,8 @@ import { StaffServiceDetailsComponent } from './staff-service-details/staff-serv
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,9 @@ import { BookingCompleteComponent } from './booking-complete/booking-complete.co
     SelectTimingComponent,
     BookingSummaryComponent,
     BookingCompleteComponent,
+    BuyVoucherComponent,
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
