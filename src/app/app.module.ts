@@ -16,6 +16,8 @@ import { BookingSummaryComponent } from './booking-summary/booking-summary.compo
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { AddReviewComponent } from './add-review/add-review.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
     BookingSummaryComponent,
     BookingCompleteComponent,
     BuyVoucherComponent,
+    AboutUsComponent,
+    AddReviewComponent
   ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],

@@ -25,18 +25,24 @@ export class MakeABookingComponent implements OnInit {
     {id:3, name: 'Waxing Service', image:  this.imageService.DEFAULT_PERSON},
   ];
 
+  CATEGORY_LIST: any = [];
+
   constructor(
     public imageService: ImageService,
     private router: Router,
     private apiData: ApiDataService,
    ) { 
     
-    this.getStaffList()
+    
   }
 
   ngOnInit() {
 
     
+  }
+
+  async ionViewWillEnter (){
+    await this.getStaffList();
   }
 
   async  getStaffList (){
@@ -48,11 +54,63 @@ export class MakeABookingComponent implements OnInit {
 
         await this.apiData.dismiss();
 
+        await this.getServiceList();
         if (response.length > 0){
 
           this.STAFF_LIST = response
         }
         console.log(response);
+      },
+      async (error: any) => {
+
+        await this.apiData.dismiss();
+        alert(JSON.stringify(error));
+      }
+    );
+  }
+
+  async getServiceList() {
+    await this.apiData.presentLoading();
+
+    await (await this.apiData.getServiceList()).subscribe(
+      async (response: any) => {
+
+        await this.apiData.dismiss();
+
+        if (response.length > 0){
+
+          console.log('services list----', response);
+
+          let categorie_ids = [...new Set(response.map(data => data.categoryId))];
+          console.log('categories--------', categorie_ids)
+
+          this.CATEGORY_LIST = [];
+
+          for(let category_id of categorie_ids){
+
+            //console.log('categorie_id--', categorie_id)
+
+            let service_list = response.filter(service => service.categoryId == category_id);
+            //console.log('services------', service_list);
+
+            if (service_list.length > 0){
+
+              this.CATEGORY_LIST.push(
+                                      {
+                                        category_id: category_id,
+                                        category_name: service_list[0].categoryName,
+                                        is_open: false,
+                                        count:service_list.length,
+                                        services: service_list
+                                      }
+                                    );
+            }
+          }
+
+          console.log('categories_list-----', this.CATEGORY_LIST)
+
+          
+        }
       },
       async (error: any) => {
         await this.apiData.dismiss();
@@ -61,6 +119,12 @@ export class MakeABookingComponent implements OnInit {
     );
   }
 
+  changeServiceStatus (service_id: any , status){
+
+    this.CATEGORY_LIST[service_id].is_open = !status ;
+    
+  }
+  
   navigation() {
 
     console.log('back  button is triggered')
