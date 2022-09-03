@@ -22,12 +22,12 @@ export class HomePageComponent implements OnInit {
         id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',roter_link: '/buy-a-voucher' 
       },
       {
-        id: 4 , is_icon: false, name:'groups', text: 'About us' ,roter_link: '/'
+        id: 4 , is_icon: false, name:'groups', text: 'About us' ,roter_link: '/about-us'
       },
     ],
     [
       {
-        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,roter_link: '/'
+        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,roter_link: '/add-a-review'
       },
       {
         id: 6 , is_icon: false, name:'person_add', text: 'Refer a friend' ,roter_link: '/'

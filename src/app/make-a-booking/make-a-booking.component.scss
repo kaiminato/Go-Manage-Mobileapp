@@ -48,4 +48,62 @@ ion-content {
         }
     }
     
+    .staff-details {
+        
+        color: #047473;
+        font-weight: bold;
+        font-size: 13px;
+
+        ion-avatar {
+            width:70% !important;  
+            height : 75% !important;  
+            max-width: 100px !important;  //any size
+            max-height: 100px !important;
+            margin: 10px;
+        }
+
+        .comment {
+            margin-right: 30px;
+        }
+    }
+
+    .service_detail {
+        margin: 5px;
+        border-radius: 5px;
+        --background: #f6f5fa;
+        color: #047473;
+        border: 2px solid;
+        .service_count {
+            font-size: 15px;
+        }
+
+        h3{
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .toggle {
+            color: #000;
+            margin-left: 15px;
+        }
+
+    }
+
+    .service_order_list {
+
+        ion-icon {
+            margin-left: 0px;
+            margin-left: 5px;
+        }
+        ion-label {
+            margin-left: 5px;
+            
+        }
+
+        ion-checkbox {
+
+            --background-checked: #047473;
+        }
+        
+    }
 }
