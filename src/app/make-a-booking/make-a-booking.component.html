@@ -24,7 +24,8 @@
       *ngFor="let value of this.STAFF_LIST" 
       class="staff_list" 
       detail="false" 
-      [routerLink]="['/staff-service-details', value.id]"
+      
+      (click)="SelectStaff(value.id)"
       >
       
         <ion-thumbnail slot="start">

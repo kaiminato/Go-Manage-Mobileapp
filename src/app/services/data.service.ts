@@ -12,7 +12,10 @@ export class DataService {
   public NO_OF_YEARS: number = 10;
   public MORNING_SHIFT: string = 'morning';
   public EVENING_SHIFT: string = 'evening';
-
+  public BOOKING_KEY: string  = 'service_booking';
+  public STAFF_LIST_KEY: string  = 'staff_list';
+  public SERVICE_LIST_KEY: string  = 'service_list';
+  
   constructor() { }
 
   async getMonths () {
@@ -72,5 +75,63 @@ export class DataService {
     ];
   }
 
+  async setStaffList (data: any) {
+
+    return await localStorage.setItem(this.STAFF_LIST_KEY, JSON.stringify(data));
+  }
+
+  async setServiceList (data: any) {
+
+    return await localStorage.setItem(this.SERVICE_LIST_KEY, JSON.stringify(data));
+  }
+
+  async getStaffList () {
+
+    let staff_list = await localStorage.getItem(this.STAFF_LIST_KEY);
+    return await staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
+  }
+
+  async getStaffDetail (staff_id: any) {
+
+    let staff_list: any = await localStorage.getItem(this.STAFF_LIST_KEY);
+    staff_list = staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
+
+   return await staff_list.filter( data => data.id == staff_id);
+  }
+
+  async getServiceList () {
+
+    let service_list = await localStorage.getItem(this.SERVICE_LIST_KEY);
+    return await service_list == undefined || service_list == null ? [] :  JSON.parse(service_list);
+  }
+
+  async setInitialBooking(id: any) {
+
+    let data = {
+      staff_id: id,
+      servises: [],
+      date: ''
+    }
+
+    return await localStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
+  }
+
+  async getInitialBookingdata(){
+    
+    let data = await localStorage.getItem(this.BOOKING_KEY);
+    return await data == undefined ? '' : JSON.parse(data);
+  }
+
+  async setSelectedServicesInBooking (selected_services_list : []) {
+
+    let data = await this.getInitialBookingdata();
+
+    if (data != '') {
+
+      data.servises = selected_services_list;
+      return await localStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
+    }
+    return
+  }
  
 }
