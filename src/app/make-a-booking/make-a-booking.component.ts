@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../services/image.service';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-make-a-booking',
@@ -31,6 +32,7 @@ export class MakeABookingComponent implements OnInit {
     public imageService: ImageService,
     private router: Router,
     private apiData: ApiDataService,
+    private dataService: DataService,
    ) { 
     
     
@@ -58,6 +60,7 @@ export class MakeABookingComponent implements OnInit {
         if (response.length > 0){
 
           this.STAFF_LIST = response
+          await this.dataService.setStaffList(response)
         }
         console.log(response);
       },
@@ -88,10 +91,7 @@ export class MakeABookingComponent implements OnInit {
 
           for(let category_id of categorie_ids){
 
-            //console.log('categorie_id--', categorie_id)
-
             let service_list = response.filter(service => service.categoryId == category_id);
-            //console.log('services------', service_list);
 
             if (service_list.length > 0){
 
@@ -107,8 +107,7 @@ export class MakeABookingComponent implements OnInit {
             }
           }
 
-          console.log('categories_list-----', this.CATEGORY_LIST)
-
+          await this.dataService.setServiceList(response)
           
         }
       },
@@ -117,6 +116,12 @@ export class MakeABookingComponent implements OnInit {
         alert(error);
       }
     );
+  }
+
+  async SelectStaff (staff_id: any) {
+
+    await this.dataService.setInitialBooking(staff_id);
+    this.router.navigate(['/staff-service-details',staff_id]);
   }
 
   changeServiceStatus (service_id: any , status){
