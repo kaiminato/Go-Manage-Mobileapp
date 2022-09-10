@@ -92,6 +92,19 @@
     </ion-row>
   </ion-grid>
 
+  
+  <ion-modal [isOpen]="IS_CALNDER_OPEN" [breakpoints]="[0.1, 0.5, 1]" [initialBreakpoint]="0.5" trigger="topen-calender">
+    <ng-template>
+      <ion-calendar [(ngModel)]="date"
+          (change)="onDateSelect($event)"
+          [options]="options"
+          
+          [type]="DATE_TYPE"
+          [format]="'YYYY-MM-DD'">
+      </ion-calendar>
+    </ng-template>
+  </ion-modal>
+
 
 </ion-content>
 

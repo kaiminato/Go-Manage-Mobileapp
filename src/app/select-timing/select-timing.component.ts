@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PickerController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
+import { CalendarModalOptions } from 'ion2-calendar';
 
 @Component({
   selector: 'app-select-timing',
@@ -11,6 +12,7 @@ import { DataService } from '../services/data.service';
 })
 export class SelectTimingComponent implements OnInit {
 
+  ID: any = '';
   HEADING: string = "Select a time";
   CURRENT_MONTH: number = this.dataService.CURRENT_MONTH;
   CURRENT_YEAR: number = this.dataService.CURRENT_YEAR;
@@ -21,10 +23,28 @@ export class SelectTimingComponent implements OnInit {
   ALL_SHIFT : any = [];
   ACTIVE_DAY: number = 10;
   IS_STAFF: any = true;
+  IS_CALNDER_OPEN: boolean = false;
+  date: string;
+  DATE_TYPE: 'object';
+  STAFF_BOOKING_LIST: any = [];
 
+  options: CalendarModalOptions = {
+    daysConfig: [
+        {
+          date: new Date('2022-09-20'),
+          disable: true,
+          cssClass:'line',
+        },
+        {
+          date: new Date('2022-09-22'),
+          disable: true,
+        }
+      ]
+    };
 
   constructor(
     private router: Router,
+    private activateRoute: ActivatedRoute,
     private location: Location,
     private pickerCtrl: PickerController,
     public dataService: DataService
@@ -36,10 +56,15 @@ export class SelectTimingComponent implements OnInit {
 
   async ionViewWillEnter () {
 
+    let booking_data = await this.dataService.getInitialBookingdata();
+    console.log(this.ID, 'staff id')
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_YEAR , this.CURRENT_YEAR);
     this.ALL_SHIFT = await this.dataService.getShift();
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
+    this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
+
+    console.log('this.STAFF_BOOKING_LIST---', this.STAFF_BOOKING_LIST)
   }
 
   slideOpts = {
@@ -51,32 +76,28 @@ export class SelectTimingComponent implements OnInit {
 
   async openPicker() {
 
-    let month_list = await this.dataService.getMonths();
-    let year_list = await this.dataService.getYears();
-    const picker = await this.pickerCtrl.create({
-      columns: [
-        { name: 'month', options: month_list, },
-        { name: 'year', options: year_list, },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
-        {
-          text: 'Confirm',
-          handler: (value) => {
-            
-            this.CURRENT_MONTH = value.month.value;
-            this.CURRENT_YEAR = value.year.value;
-          },
-        },
-      ],
-    });
+    this.IS_CALNDER_OPEN = true;
+    return;
 
-    await picker.present();
   }
 
+  async disabledDates() {
+
+    this.options = {
+      daysConfig:  [{
+        date: new Date('2022-09-25'),
+        disable: true,
+    }, {
+      date: new Date('2022-09-27'),
+        disable: true,
+    }],
+    }
+    
+  }
+
+  onDateSelect ($event){
+    console.log($event.format('YYYY-MM-DD'));
+  }
 
   selectTiming (id: number , timing_type){
 

@@ -27,6 +27,11 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl+'services/retrieveServices');
   }
 
+  async getStaffBookingList () {
+
+    return await this.http.get(this.apiUrl+'bookings/retrieveBookings');
+  }
+
   async presentLoading() {
 
     this.isLoading = true;

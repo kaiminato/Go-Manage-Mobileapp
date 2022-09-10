@@ -15,6 +15,7 @@ export class DataService {
   public BOOKING_KEY: string  = 'service_booking';
   public STAFF_LIST_KEY: string  = 'staff_list';
   public SERVICE_LIST_KEY: string  = 'service_list';
+  public STAFF_BOOKING_LIST_KEY: string  = 'staff_booking_list';
   
   constructor() { }
 
@@ -85,6 +86,11 @@ export class DataService {
     return await localStorage.setItem(this.SERVICE_LIST_KEY, JSON.stringify(data));
   }
 
+  async setStaffBookingList (data: any) {
+
+    return await localStorage.setItem(this.STAFF_BOOKING_LIST_KEY, JSON.stringify(data));
+  }
+
   async getStaffList () {
 
     let staff_list = await localStorage.getItem(this.STAFF_LIST_KEY);
@@ -103,6 +109,20 @@ export class DataService {
 
     let service_list = await localStorage.getItem(this.SERVICE_LIST_KEY);
     return await service_list == undefined || service_list == null ? [] :  JSON.parse(service_list);
+  }
+
+  async getStaffBookingList () {
+
+    let service_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+    return await service_list == undefined || service_list == null ? [] :  JSON.parse(service_list);
+  }
+
+  async getStaffBookingDetail (staff_id: any) {
+
+    let staff_list: any = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+    staff_list = staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
+
+   return await staff_list.filter( data => data.employeeId == staff_id && (new Date() < new Date(data.endTime)));
   }
 
   async setInitialBooking(id: any) {

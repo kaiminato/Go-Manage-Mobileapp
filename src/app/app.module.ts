@@ -18,6 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { AddReviewComponent } from './add-review/add-review.component';
+import { CalendarModule } from 'ion2-calendar';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,14 @@ import { AddReviewComponent } from './add-review/add-review.component';
     AboutUsComponent,
     AddReviewComponent
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule],
+  imports: [
+    BrowserModule, 
+    CalendarModule,
+    FormsModule,
+    IonicModule.forRoot(), 
+    AppRoutingModule,
+    HttpClientModule
+  ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
