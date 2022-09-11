@@ -5,9 +5,9 @@
     
     <ion-item button  class="details ion-margin-top"   detail="false">
           
-      <ion-text class="ion-margin-bottom"> 3 june 2022 at 9:00am 
+      <ion-text class="ion-margin-bottom ion-text-lowercase"> {{ DATE }} at {{ STARTING_TIME }} 
         <br/>
-        <ion-text>60 minuts duration, ends at 10:00am</ion-text>
+        <ion-text>{{ TOTAL_DURATION }} minuts duration, ends at {{ ENDING_TIME }}</ion-text>
       </ion-text>
         
     </ion-item>
@@ -16,19 +16,19 @@
     <ion-item button  class="details ion-margin-top"   detail="false">
           
       
-      <ion-text class="ion-margin-bottom"> Jade amber beauty studio Corogin galway</ion-text>
+      <ion-text class="ion-margin-bottom"> {{ STUDIO_NAME }}</ion-text>
       <ion-img slot="end" [src]="this.imageService.LOGO" class="ion-margin-bottom"></ion-img>
     </ion-item>
 
-    <ion-item button  class="details ion-margin-top"   detail="false">
+    <ion-item button  class="details ion-margin-top"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
           
       
-      <ion-text class="ion-margin-bottom"> File and Polish Nail
+      <ion-text class="ion-margin-bottom"> {{ service.serviceName }}
         <br/>
-        <ion-text>60 mins with Jade</ion-text>
+        <ion-text>{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text>
       </ion-text>
 
-      <ion-text slot="end" class="ion-margin-bottom"> $30.00</ion-text>
+      <ion-text slot="end" class="ion-margin-bottom"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
 
     </ion-item>
 
@@ -39,7 +39,7 @@
       <ion-text class="ion-margin-bottom ion-margin-top"> Total
       </ion-text>
 
-      <ion-text slot="end" class="ion-margin-bottom ion-margin-top"> $30.00</ion-text>
+      <ion-text slot="end" class="ion-margin-bottom ion-margin-top"> {{ TOTAL_AMOUNT | currency: 'EUR'}}</ion-text>
 
     </ion-item>
 
