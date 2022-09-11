@@ -25,7 +25,11 @@
       <ion-slides pager="false" [options]="slideOpts" #mySlider >
         <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
        
-          <div class="date-range" [class.active]=" i == ACTIVE_DAY">
+          <div  class="date-range" 
+                [class.active]=" value.is_active" 
+                [class.disabled]=" value.is_disabled" 
+                (click)="selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year)"
+                >
             
             <ion-text class="ion-text-uppercase"><b>{{value.day_number}} </b></ion-text>
             

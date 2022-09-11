@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PickerController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
+import { IonSlides} from '@ionic/angular';
 
 @Component({
   selector: 'app-select-timing',
@@ -11,6 +12,8 @@ import { CalendarModalOptions } from 'ion2-calendar';
   styleUrls: ['./select-timing.component.scss'],
 })
 export class SelectTimingComponent implements OnInit {
+
+  @ViewChild('mySlider')  slides: IonSlides;
 
   ID: any = '';
   HEADING: string = "Select a time";
@@ -24,21 +27,31 @@ export class SelectTimingComponent implements OnInit {
   ACTIVE_DAY: number = 10;
   IS_STAFF: any = true;
   IS_CALNDER_OPEN: boolean = false;
-  date: string;
+  date: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
+  COMPAREBLE_DATES: any = [];
+  MONTH_NAME_LIST: any = [];
+  DISABLED_DATES_ARRAY: any = [];
+  
+  slideOpts = {
+    slidesPerView: 6,
+    initialSlide: 10,
+    speed: 400,
+    loop: false,
+  };
 
   options: CalendarModalOptions = {
     daysConfig: [
-        {
-          date: new Date('2022-09-20'),
-          disable: true,
-          cssClass:'line',
-        },
-        {
-          date: new Date('2022-09-22'),
-          disable: true,
-        }
+        // {
+        //   date: new Date('2022-09-20'),
+        //   disable: true,
+        //   cssClass:'line',
+        // },
+        // {
+        //   date: new Date('2022-09-22'),
+        //   disable: true,
+        // }
       ]
     };
 
@@ -56,54 +69,193 @@ export class SelectTimingComponent implements OnInit {
 
   async ionViewWillEnter () {
 
+    this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]
     let booking_data = await this.dataService.getInitialBookingdata();
-    console.log(this.ID, 'staff id')
-    this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_YEAR , this.CURRENT_YEAR);
+    this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
+    
+    
     this.ALL_SHIFT = await this.dataService.getShift();
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
+    await this.getDisabledDates();
     console.log('this.STAFF_BOOKING_LIST---', this.STAFF_BOOKING_LIST)
   }
 
-  slideOpts = {
-    slidesPerView: 6,
-    initialSlide: 10,
-    speed: 400,
-    loop: false,
-  };
+  async getDisabledDates (){
 
-  async openPicker() {
+    let array = [];
 
-    this.IS_CALNDER_OPEN = true;
-    return;
-
-  }
-
-  async disabledDates() {
-
-    this.options = {
-      daysConfig:  [{
-        date: new Date('2022-09-25'),
-        disable: true,
-    }, {
-      date: new Date('2022-09-27'),
-        disable: true,
-    }],
+    for(let value of this.STAFF_BOOKING_LIST){
+        
+      let [date, time] = value.startTime.split('T');
+      array.push(date)
     }
+
+    let uniq_dates = [...new Set(array)];
+
+    this.DISABLED_DATES_ARRAY = [];
+
+    for(let current_date of uniq_dates) {
+
+      let all_booked = true;
+
+      for(let shift of this.ALL_SHIFT) {
+
+        let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(current_date));
+
+        for(let booking_detail of current_date_booking) {
+
+          let from_date = new Date(booking_detail.startTime);
+          let to_date = new Date(booking_detail.endTime)
+          let check_date = new Date(current_date+'T'+shift.value);
+
+          if (check_date >= from_date && check_date <= to_date){  
+          } else {
+            all_booked = false;
+          }
+        }
+      }
+
+      if (all_booked) { this.DISABLED_DATES_ARRAY.push(current_date) }
+      
+    }
+
+    
+    if (this.DISABLED_DATES_ARRAY.length > 0) {
+
+      let daysConfig = [];
+
+      for (let value of this.DISABLED_DATES_ARRAY){
+        daysConfig.push({date: new Date(value) , disable: true})
+      }
+
+      this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
+
+    }
+
+    //  Set Date and Slider range values
+
+    this.date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate()}`;
+
+    for (let index in this.DAYS_ARRAY){
+
+      let create_date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+      
+      let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
+
+      const today = new Date()
+      const yesterday = new Date(today)
+      yesterday.setDate(yesterday.getDate() - 1)
+      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
+    }
+
+    this.slides.slideTo(new Date().getDate()-1,1000);//(index_number, speed_time)
+    this.DAYS_ARRAY[new Date().getDate()-1].is_active = true;
     
   }
 
-  onDateSelect ($event){
-    console.log($event.format('YYYY-MM-DD'));
+  
+
+  async openPicker() {
+
+    this.IS_CALNDER_OPEN = false;
+    setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
+    
   }
 
-  selectTiming (id: number , timing_type){
+  // async disabledDates() {
+
+  //   this.options = {
+  //     daysConfig:  [{
+  //       date: new Date('2022-09-25'),
+  //       disable: true,
+  //   }, {
+  //     date: new Date('2022-09-27'),
+  //       disable: true,
+  //   }],
+  //   }
+    
+  // }
+
+  async onDateSelect ($event){
+    
+    this.date = $event.format('YYYY-MM-DD')
+    
+    let [year , month , date] = this.date.split('-')
+    this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
+
+    for (let index in this.DAYS_ARRAY){
+
+      let create_date = `${year}-${parseInt(month) < 10 ? '0'+month : month}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+      
+      let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
+
+      const today = new Date()
+      const yesterday = new Date(today)
+      yesterday.setDate(yesterday.getDate() - 1)
+
+      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
+    }
+
+    let new_date = new Date(this.date)
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
+    this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
+    this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
+    
+  }
+
+  async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
+
+    if (!is_disabled){
+
+      
+      this.date = `${year}-${month < 10 ? '0'+month : month}-${day < 10 ? '0'+day : day}`;
+      this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
+
+      for (let index in this.DAYS_ARRAY){
+
+        let create_date = `${year}-${month < 10 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+        
+        let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
+
+        this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date() ? true : false);
+      }
+
+      let new_date = new Date(this.date)
+      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
+      this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
+      this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
+      
+    }
+  }
+
+  async selectTiming (id: number , timing_type){
 
     for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
 
     for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
+
+    let date_not_available = this.DISABLED_DATES_ARRAY.filter(data => data == this.date)
+
+    if (date_not_available.length > 0) {
+      
+      alert('please select a available date')
+      return
+    }
+
+    let get_booking_data = await this.dataService.getInitialBookingdata();
+    get_booking_data.date = this.date;
+    get_booking_data.timing_id = id;
+
+    await this.dataService.setBookingData(get_booking_data)
+
+    console.log('get_booking_data--', get_booking_data)
+    console.log(this.date);
+    console.log(id);
+    
 
     setTimeout(() => {
       this.router.navigate(['/booking-summary'])
