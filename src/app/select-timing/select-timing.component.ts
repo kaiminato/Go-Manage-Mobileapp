@@ -5,6 +5,7 @@ import { PickerController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
 import { IonSlides} from '@ionic/angular';
+import { ApiDataService } from '../services/api-data.service';
 
 @Component({
   selector: 'app-select-timing',
@@ -60,7 +61,8 @@ export class SelectTimingComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private location: Location,
     private pickerCtrl: PickerController,
-    public dataService: DataService
+    public dataService: DataService,
+    public apiService: ApiDataService
     ) {
 
     }
@@ -81,6 +83,7 @@ export class SelectTimingComponent implements OnInit {
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
     await this.getDisabledDates();
+    await this.getDisabledhift();
     console.log('this.STAFF_BOOKING_LIST---', this.STAFF_BOOKING_LIST)
   }
 
@@ -166,19 +169,7 @@ export class SelectTimingComponent implements OnInit {
     
   }
 
-  // async disabledDates() {
-
-  //   this.options = {
-  //     daysConfig:  [{
-  //       date: new Date('2022-09-25'),
-  //       disable: true,
-  //   }, {
-  //     date: new Date('2022-09-27'),
-  //       disable: true,
-  //   }],
-  //   }
-    
-  // }
+  
 
   async onDateSelect ($event){
     
@@ -186,10 +177,43 @@ export class SelectTimingComponent implements OnInit {
     
     let [year , month , date] = this.date.split('-')
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
-
+    
     for (let index in this.DAYS_ARRAY){
 
       let create_date = `${year}-${parseInt(month) < 10 ? '0'+month : month}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+      
+      let is_exist_in_disbaled = await this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
+
+      const today = new Date()
+      const yesterday = new Date(today)
+      yesterday.setDate(yesterday.getDate() - 1)
+
+      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
+    }
+
+    
+    
+    let new_date = new Date(this.date)
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
+    this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
+    this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
+    
+    this.getDisabledhift()
+  }
+
+  async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
+
+    if (is_disabled) return;
+    
+    console.log(day, month, year);
+
+    this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
+
+    this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
+    
+    for (let index in this.DAYS_ARRAY){
+
+      let create_date = `${year}-${month < 10 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
       
       let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
@@ -200,67 +224,111 @@ export class SelectTimingComponent implements OnInit {
       this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
     }
 
+
     let new_date = new Date(this.date)
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
     this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
+      
+    this.getDisabledhift();
+  }
+
+  async getDisabledhift () {
     
-  }
+    this.ALL_SHIFT = await this.dataService.getShift();
+    console.log('selected date', this.date)
+  
 
-  async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
+    let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
+    console.log('selected_date_booking_list', selected_date_booking_list)
 
-    if (!is_disabled){
+    for (let index in this.ALL_SHIFT){
+
+      let new_date = new Date(`${this.date} ${this.ALL_SHIFT[index].value}`);
 
       
-      this.date = `${year}-${month < 10 ? '0'+month : month}-${day < 10 ? '0'+day : day}`;
-      this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
+      for (let value of selected_date_booking_list) {
 
-      for (let index in this.DAYS_ARRAY){
+        let start_time = new Date(value.startTime)
+        let end_time = new Date(value.endTime)
 
-        let create_date = `${year}-${month < 10 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
-        
-        let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
+        if (this.ALL_SHIFT[index].is_disabled == false) {
 
-        this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date() ? true : false);
-      }
-
-      let new_date = new Date(this.date)
-      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
-      this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
-      this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
-      
+          if ((start_time <= new_date && end_time >= new_date) ){
+            
+            this.ALL_SHIFT[index].is_disabled = true;
+          }
+        }
+      } 
+      console.log('new_date --------', this.ALL_SHIFT[index].time , this.ALL_SHIFT[index].is_disabled)
     }
+
+    this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
+    this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
+    console.log('new_date --------', this.ALL_SHIFT)
   }
 
-  async selectTiming (id: number , timing_type){
 
-    for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
+  async selectTiming (id: number , timing_type: any, is_disabled : any){
 
-    for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
+   
+    if (is_disabled) return ;
 
     let date_not_available = this.DISABLED_DATES_ARRAY.filter(data => data == this.date)
 
     if (date_not_available.length > 0) {
       
-      alert('please select a available date')
+      await this.apiService.presentAlert('Please select a available date')
       return
     }
 
+    let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.date;
     get_booking_data.timing_id = id;
 
+    console.log('selecetd_shift--', selecetd_shift)
+
+    let total_duration = 0;
+    for (let service of get_booking_data.servises){
+      
+      total_duration += service.serviceDuration;
+    }
+
+    let starting_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
+    let ending_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
+    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
+    ending_date_time = new Date(ending_date_time);
+
+    console.log('starting_date_time----', starting_date_time);
+    console.log('ending_date_time----', ending_date_time);
+
+    let is_passed = true;
+    for (let shift of this.ALL_SHIFT) {
+
+      let new_date = new Date(`${this.date} ${shift.value}`)
+      
+      if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
+        
+        is_passed = false;
+      }
+    }
+
+    if (!is_passed) {
+
+      await this.apiService.presentAlert('Shift not available')
+      return;
+    }
+
+    for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
+
+    for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
+
     await this.dataService.setBookingData(get_booking_data)
-
-    console.log('get_booking_data--', get_booking_data)
-    console.log(this.date);
-    console.log(id);
     
-
-    setTimeout(() => {
-      this.router.navigate(['/booking-summary'])
-    }, 200);
-    //this.router.navigate(['/booking-summary'])
+    console.log('get_booking_data>>>>>>>', get_booking_data)
+    setTimeout(() => { this.router.navigate(['/booking-summary']) }, 200);
+    
   }
 
   navigation() {

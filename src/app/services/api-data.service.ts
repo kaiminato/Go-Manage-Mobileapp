@@ -32,6 +32,11 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl+'bookings/retrieveBookings');
   }
 
+  async saveBooking (data : any) {
+
+    return await this.http.post(this.apiUrl+'bookings/saveBooking', data);
+  }
+
   async presentLoading() {
 
     this.isLoading = true;
