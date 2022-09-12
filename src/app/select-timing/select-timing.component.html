@@ -68,9 +68,9 @@
         size="4" 
         class="ion-text-center ion-margin-top" 
         *ngFor="let shift of MORNING_SHIFT"
-        (click)="selectTiming(shift.id , this.dataService.MORNING_SHIFT)"
+        (click)="selectTiming(shift.id , this.dataService.MORNING_SHIFT, shift.is_disabled)"
         >
-        <div [class.active] ="shift.is_active">
+        <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
           <ion-icon name="time-outline"></ion-icon>
           <ion-text class="time"> {{ shift.time }}</ion-text>
         </div>
@@ -85,9 +85,9 @@
         size="4" 
         class="ion-text-center ion-margin-top" 
         *ngFor="let shift of EVENING_SHIFT"
-        (click)="selectTiming(shift.id , this.dataService.EVENING_SHIFT)"
+        (click)="selectTiming(shift.id , this.dataService.EVENING_SHIFT, shift.is_disabled)"
         >
-        <div [class.active] ="shift.is_active">
+        <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
           <ion-icon name="time-outline"></ion-icon>
           <ion-text class="time"> {{ shift.time }}</ion-text>
         </div>

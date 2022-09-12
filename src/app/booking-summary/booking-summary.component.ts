@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
+import { ApiDataService } from '../services/api-data.service';
 
 @Component({
   selector: 'app-booking-summary',
@@ -25,6 +26,7 @@ export class BookingSummaryComponent implements OnInit {
     private location: Location,
     private dataService: DataService,
     public  imageService: ImageService,
+    private apiData: ApiDataService
     ) {
 
     }
@@ -34,6 +36,13 @@ export class BookingSummaryComponent implements OnInit {
   async ionViewWillEnter (){
 
     this.BOOKINGS_DETAILS = await this.dataService.getInitialBookingdata();
+
+    if (this.BOOKINGS_DETAILS == '') {
+
+      this.router.navigate(['/'])
+      return
+    }
+
     this.BOOKINGS_DETAILS.staff_details = await this.dataService.getStaffDetail(this.BOOKINGS_DETAILS.staff_id);
     let shift_timing_details = await this.dataService.getShift();
     this.BOOKINGS_DETAILS.shift_timing_details = await shift_timing_details.filter( data => data.id == this.BOOKINGS_DETAILS.timing_id);
@@ -47,6 +56,7 @@ export class BookingSummaryComponent implements OnInit {
       this.TOTAL_AMOUNT += service.servicePrice;
     }
     this.STUDIO_NAME = this.BOOKINGS_DETAILS.staff_details[0].firstName+" "+this.BOOKINGS_DETAILS.staff_details[0].lastName+ " "+this.STUDIO_NAME;
+
     let [year , month , day ] = this.BOOKINGS_DETAILS.date.split('-');
     let new_date = new Date(this.BOOKINGS_DETAILS.date);
     let get_month_name = await this.dataService.MONTHS_NAME[new_date.getMonth()]; 
@@ -54,10 +64,15 @@ export class BookingSummaryComponent implements OnInit {
     this.DATE = `${day} ${get_month_name} ${year}`;
 
     var now = new Date(`${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`);
+    console.log('from',now)
+   
     now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
+    
     now = new Date(now); // Date object
+   
+   
     let {without_space_time} = await this.formatAMPM(now)
-    this.ENDING_TIME = without_space_time
+    this.ENDING_TIME = without_space_time;
     console.log('cheing --- ',this.formatAMPM(now))
     
     console.log('BOOKINGS_DETAILS-- ',get_month_name, this.BOOKINGS_DETAILS)
@@ -75,6 +90,60 @@ export class BookingSummaryComponent implements OnInit {
     let str_time_without_space = hours + ':' + minutes + ampm;
     
     return await {with_space_time: str_time , without_space_time: str_time_without_space};
+  }
+
+  async saveBooking (){
+
+    console.clear();
+    console.log(this.BOOKINGS_DETAILS)
+
+    let starting_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`;
+    let new_date = new Date(starting_time);
+    new_date.setMinutes(new_date.getMinutes() + this.TOTAL_DURATION); // timestamp
+    
+
+    let ending_time = `${new_date.getFullYear()}-${new_date.getMonth()+1 < 10 ? '0'+(new_date.getMonth()+1) : new_date.getMonth()+1}-${new_date.getDate()}T${new_date.getHours()}:${new_date.getMinutes()}:00`;
+    
+
+    let data = {
+      employeeId: this.BOOKINGS_DETAILS.staff_id,
+      clientId: null,
+      description: '',
+      endTime: ending_time+".000Z",
+      startTime: starting_time+".000Z",
+      isAllDay: false,
+      customer: null,
+      service: this.BOOKINGS_DETAILS.servises[0].serviceName,
+      serviceId: this.BOOKINGS_DETAILS.servises[0].id,
+      firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
+      lastName:  this.BOOKINGS_DETAILS.staff_details[0].lastName,
+    }
+
+    console.log('data=>>>>>>>', data);
+    
+    await this.apiData.presentLoading();
+
+    (await this.apiData.saveBooking(data)).subscribe(
+      async (response: any) => {
+
+        console.log('response--', response)
+        await this.dataService.removeBookingdata()
+        await this.apiData.dismiss();
+
+        setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+      }, 
+      async (error: any) => {
+
+        console.log('error----', error)
+        console.log('error----', error.status)
+        
+        await this.dataService.removeBookingdata()
+        await this.apiData.dismiss();
+        setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+      }
+    );
+    console.log(data)
+    
   }
 
   navigation() {

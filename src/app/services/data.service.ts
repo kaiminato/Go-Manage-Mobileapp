@@ -42,7 +42,8 @@ export class DataService {
   }
 
   async getDays (month: any , year: any) {
-
+    
+    month = month.toString().length > 1 ? month : '0'+month
     let date = new Date();
     let firstDay = (new Date(parseInt(year), parseInt(month), 1)).getDate();
     let lastDay = (new Date(parseInt(year), parseInt(month) , 0)).getDate();
@@ -57,6 +58,7 @@ export class DataService {
       yesterday.setDate(yesterday.getDate() - 1)
 
       let status = new_date <= new Date(yesterday);
+      console.log(month)
 
       days_list.push({ day_number: i, is_disabled: status, is_active: false, month: month, year: year})
     }
@@ -67,18 +69,18 @@ export class DataService {
   async getShift (){
 
     return await [
-      { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false },
-      { id:2, time: '09:00 AM', value:'09:00:00', shift_type: this.MORNING_SHIFT, is_active: true },
-      { id:3, time: '09:30 AM', value:'09:30:00', shift_type: this.MORNING_SHIFT, is_active: false },
-      { id:4, time: '10:00 AM', value:'10:00:00', shift_type: this.MORNING_SHIFT, is_active: false },
-      { id:5, time: '10:30 AM', value:'10:30:00', shift_type: this.MORNING_SHIFT, is_active: false },
-      { id:6, time: '11:00 AM', value:'11:00:00', shift_type: this.MORNING_SHIFT, is_active: false },
-      { id:7, time: '05:30 PM', value:'17:30:00', shift_type: this.EVENING_SHIFT, is_active: false },
-      { id:8, time: '06:00 PM', value:'18:00:00', shift_type: this.EVENING_SHIFT, is_active: false },
-      { id:9, time: '06:30 PM', value:'18:30:00', shift_type: this.EVENING_SHIFT, is_active: false },
-      { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.EVENING_SHIFT, is_active: false },
-      { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.EVENING_SHIFT, is_active: false },
-      { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.EVENING_SHIFT, is_active: false },
+      { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false},
+      { id:2, time: '09:00 AM', value:'09:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:3, time: '09:30 AM', value:'09:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:4, time: '10:00 AM', value:'10:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:5, time: '10:30 AM', value:'10:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:6, time: '11:00 AM', value:'11:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:7, time: '05:30 PM', value:'17:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+      { id:8, time: '06:00 PM', value:'18:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+      { id:9, time: '06:30 PM', value:'18:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+      { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+      { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+      { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.EVENING_SHIFT, is_active: false  , is_disabled: false},
       
     ];
   }
@@ -165,6 +167,10 @@ export class DataService {
   async setBookingData (data: any){
     
     return await localStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
+  }
+
+  async removeBookingdata () {
+    return await localStorage.removeItem(this.BOOKING_KEY)
   }
  
 }
