@@ -45,7 +45,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.STAFF_DETAIL[0].comment = 'Quick bio on the worker of what they like & hobbies and what they are qualified in will be added here';
     this.HEADING = "Book with"+ this.STAFF_DETAIL[0].firstName + " " + this.STAFF_DETAIL[0].lastName;
 
-    this.getStaffBookingList();
+    await this.getStaffBookingList();
   }
 
   async getServiceList() {
