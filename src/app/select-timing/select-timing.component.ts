@@ -303,6 +303,7 @@ export class SelectTimingComponent implements OnInit {
     console.log('starting_date_time----', starting_date_time);
     console.log('ending_date_time----', ending_date_time);
 
+    
     let is_passed = true;
     for (let shift of this.ALL_SHIFT) {
 

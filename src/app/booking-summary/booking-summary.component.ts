@@ -102,7 +102,7 @@ export class BookingSummaryComponent implements OnInit {
     new_date.setMinutes(new_date.getMinutes() + this.TOTAL_DURATION); // timestamp
     
 
-    let ending_time = `${new_date.getFullYear()}-${new_date.getMonth()+1 < 10 ? '0'+(new_date.getMonth()+1) : new_date.getMonth()+1}-${new_date.getDate()}T${new_date.getHours()}:${new_date.getMinutes()}:00`;
+    let ending_time = `${new_date.getFullYear()}-${new_date.getMonth()+1 < 10 ? '0'+(new_date.getMonth()+1) : new_date.getMonth()+1}-${new_date.getDate()}T${new_date.getHours() < 10 ? '0'+new_date.getHours() : new_date.getHours()}:${new_date.getMinutes()}:00`;
     
 
     let data = {
@@ -148,6 +148,7 @@ export class BookingSummaryComponent implements OnInit {
 
   navigation() {
 
+    //this.router.navigate(['/select-a-time'])
     this.location.back();
   }
 } 
