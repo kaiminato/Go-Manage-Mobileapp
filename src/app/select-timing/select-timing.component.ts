@@ -236,12 +236,12 @@ export class SelectTimingComponent implements OnInit {
   async getDisabledhift () {
     
     this.ALL_SHIFT = await this.dataService.getShift();
-    console.log('selected date', this.date)
+    //console.log('selected date', this.STAFF_BOOKING_LIST)
   
 
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
-    console.log('selected_date_booking_list', selected_date_booking_list)
-
+    console.log('selected_date_booking_list', this.date, selected_date_booking_list)
+ 
     for (let index in this.ALL_SHIFT){
 
       let new_date = new Date(`${this.date} ${this.ALL_SHIFT[index].value}`);
@@ -260,7 +260,7 @@ export class SelectTimingComponent implements OnInit {
           }
         }
       } 
-      console.log('new_date --------', this.ALL_SHIFT[index].time , this.ALL_SHIFT[index].is_disabled)
+      //console.log('new_date --------', this.ALL_SHIFT[index].time , this.ALL_SHIFT[index].is_disabled)
     }
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
