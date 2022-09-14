@@ -17,17 +17,17 @@ export class SelectTimingComponent implements OnInit {
   @ViewChild('mySlider')  slides: IonSlides;
 
   ID: any = '';
-  HEADING: string = "Select a time";
+  HEADING: string = "step-3 / Select a time";
   CURRENT_MONTH: number = this.dataService.CURRENT_MONTH;
   CURRENT_YEAR: number = this.dataService.CURRENT_YEAR;
-  CURRENT_MONTH_VALUE: string = 'August';
+  CURRENT_MONTH_VALUE: string = '';
   DAYS_ARRAY : any = [];
   MORNING_SHIFT : any = [];
   EVENING_SHIFT : any = [];
   ALL_SHIFT : any = [];
   ACTIVE_DAY: number = 10;
   IS_STAFF: any = true;
-  IS_CALNDER_OPEN: boolean = false;
+  IS_CALNDER_OPEN: boolean = true;
   date: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
@@ -72,7 +72,7 @@ export class SelectTimingComponent implements OnInit {
   async ionViewWillEnter () {
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
     let booking_data = await this.dataService.getInitialBookingdata();
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     
@@ -173,6 +173,7 @@ export class SelectTimingComponent implements OnInit {
 
   async onDateSelect ($event){
     
+    this.IS_CALNDER_OPEN = false;
     this.date = $event.format('YYYY-MM-DD')
     
     let [year , month , date] = this.date.split('-')
@@ -194,7 +195,7 @@ export class SelectTimingComponent implements OnInit {
     
     
     let new_date = new Date(this.date)
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()] + " "+new_date.getFullYear()
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
     this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
     
