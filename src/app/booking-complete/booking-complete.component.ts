@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 
 @Component({
@@ -8,8 +9,25 @@ import { ImageService } from '../services/image.service';
 })
 export class BookingCompleteComponent implements OnInit {
 
-  constructor(public  imageService: ImageService) { }
+  NAME: string = '';
+  constructor(
+    public  imageService: ImageService,
+    private dataService: DataService,
+    ) { }
 
   ngOnInit() {}
+
+  async ionViewWillEnter (){
+
+    let data = await this.dataService.getInitialBookingdata();
+    let staff_details = await this.dataService.getStaffDetail(data.staff_id);
+
+    this.NAME = `${staff_details[0].firstName} ${staff_details[0].lastName}`
+  }
+
+  async ionViewWillLeave() {
+
+    await this.dataService.removeBookingdata();
+  }
 
 }

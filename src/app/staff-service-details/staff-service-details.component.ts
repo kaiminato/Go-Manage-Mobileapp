@@ -15,7 +15,8 @@ export class StaffServiceDetailsComponent implements OnInit {
   HEADING: string = "";
   TOTAL_SERVICE_SELECTED: any = 0;
   TOTAL_PRICE: any = 0;
-
+  DESCRIPTION_TEXT: string = 'hello';
+  isOpen: boolean = false
   STAFF_DETAIL: any = []
 
   CATEGORY_LIST: any = [];
@@ -43,7 +44,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.STAFF_DETAIL[0].image = this.imageService.DEFAULT_PERSON;
     this.STAFF_DETAIL[0].comment = 'Quick bio on the worker of what they like & hobbies and what they are qualified in will be added here';
-    this.HEADING = "Book with"+ this.STAFF_DETAIL[0].firstName + " " + this.STAFF_DETAIL[0].lastName;
+    this.HEADING = "Step-2 / Book with "+ this.STAFF_DETAIL[0].firstName + " " + this.STAFF_DETAIL[0].lastName;
 
     await this.getStaffBookingList();
   }
@@ -116,7 +117,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   async selectedServicesDetail (){
     
     let selected_service_details = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
-    console.log('selected_service_details--', selected_service_details)
+    
 
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
@@ -130,7 +131,6 @@ export class StaffServiceDetailsComponent implements OnInit {
 
     this.dataService.setSelectedServicesInBooking(selected_service_details);  
 
-    console.log(this.TOTAL_PRICE,this.TOTAL_SERVICE_SELECTED)
   }
 
 

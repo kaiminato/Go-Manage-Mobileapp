@@ -32,7 +32,6 @@
                 >
             
             <ion-text class="ion-text-uppercase"><b>{{value.day_number}} </b></ion-text>
-            
           </div>
        
         </ion-slide>
@@ -43,7 +42,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-grid class="request-tabs">
+  <!-- <ion-grid class="request-tabs">
     <ion-row class=" ion-margin-start  ion-margin-end">
       <ion-col size="6"  [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
         
@@ -59,7 +58,7 @@
         
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
 
   <ion-grid class="all_shift">
     <ion-row>
@@ -97,7 +96,8 @@
   </ion-grid>
 
   
-  <ion-modal [isOpen]="IS_CALNDER_OPEN" [breakpoints]="[0.1, 0.5, 1]" [initialBreakpoint]="0.5" trigger="topen-calender">
+  <ion-modal [isOpen]="IS_CALNDER_OPEN" [breakpoints]="[0.1, 0.5, 1]" [initialBreakpoint]="0.8" trigger="topen-calender">
+    
     <ng-template>
       <ion-calendar [(ngModel)]="date"
           (change)="onDateSelect($event)"

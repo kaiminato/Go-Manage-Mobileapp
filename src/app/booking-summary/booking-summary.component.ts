@@ -12,7 +12,7 @@ import { ApiDataService } from '../services/api-data.service';
 })
 export class BookingSummaryComponent implements OnInit {
 
-  HEADING: string = "Booking Summary";
+  HEADING: string = "Step-4 / Booking Summary";
   DATE: string;
   TOTAL_DURATION: any = 0;
   STARTING_TIME: string;
@@ -132,7 +132,7 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
 
         console.log('response--', response)
-        await this.dataService.removeBookingdata()
+        //await this.dataService.removeBookingdata()
         await this.apiData.dismiss();
 
         setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
@@ -142,7 +142,7 @@ export class BookingSummaryComponent implements OnInit {
         console.log('error----', error)
         console.log('error----', error.status)
         
-        await this.dataService.removeBookingdata()
+        //await this.dataService.removeBookingdata()
         await this.apiData.dismiss();
         setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
       }
