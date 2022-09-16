@@ -16,7 +16,7 @@ export class DataService {
   public STAFF_LIST_KEY: string  = 'staff_list';
   public SERVICE_LIST_KEY: string  = 'service_list';
   public STAFF_BOOKING_LIST_KEY: string  = 'staff_booking_list';
-  
+  public ALL_SHIFT: any = [];
   constructor() { }
 
   async getMonths () {
@@ -68,21 +68,76 @@ export class DataService {
 
   async getShift (){
 
-    return await [
-      { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false},
-      { id:2, time: '09:00 AM', value:'09:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:3, time: '09:30 AM', value:'09:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:4, time: '10:00 AM', value:'10:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:5, time: '10:30 AM', value:'10:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:6, time: '11:00 AM', value:'11:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:7, time: '05:30 PM', value:'17:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
-      { id:8, time: '06:00 PM', value:'18:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
-      { id:9, time: '06:30 PM', value:'18:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
-      { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
-      { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
-      { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.EVENING_SHIFT, is_active: false  , is_disabled: false},
+    this.ALL_SHIFT = [];
+    let get_booking_values = await this.getInitialBookingdata();
+    
+
+    let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
+
+    let first_start_time = staff_detail[0]?.startShiftTime;
+    let first_end_time = staff_detail[0]?.outOfOfficeFrom;
+    let second_start_time = staff_detail[0]?.outOfOfficeTo;
+    let second_end_time = staff_detail[0]?.endShiftTime;
+
+    await this.returnTimesInBetween(first_start_time , first_end_time);
+    await this.returnTimesInBetween(second_start_time , second_end_time);
+    return await this.ALL_SHIFT;
+    // return await [
+    //   { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false},
+    //   { id:2, time: '09:00 AM', value:'09:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:3, time: '09:30 AM', value:'09:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:4, time: '10:00 AM', value:'10:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:5, time: '10:30 AM', value:'10:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:6, time: '11:00 AM', value:'11:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:7, time: '05:30 PM', value:'17:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:8, time: '06:00 PM', value:'18:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:9, time: '06:30 PM', value:'18:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
+    //   { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.EVENING_SHIFT, is_active: false  , is_disabled: false},
       
-    ];
+    // ];
+  }
+
+
+  async returnTimesInBetween(start, end) {
+    var timesInBetween = [];
+    
+    console.log('time start', start ,'time end', end);
+
+    var startH = parseInt(start.split(":")[0]);
+    var startM = parseInt(start.split(":")[1]);
+    var endH = parseInt(end.split(":")[0]);
+    var endM = parseInt(end.split(":")[1]);
+  
+    if (startM == 30)
+      startH++;
+  
+    for (var i = startH; i < endH; i++) {
+      timesInBetween.push(i < 10 ? "0" + i + ":00" : i + ":00");
+      timesInBetween.push(i < 10 ? "0" + i + ":30" : i + ":30");
+    }
+  
+    timesInBetween.push(endH + ":00");
+    if (endM == 30)
+      timesInBetween.push(endH + ":30")
+  
+    return await timesInBetween.map(data => this.getGenTime(data));
+  }
+  
+  
+  async getGenTime (timeString: any)  {
+      
+    let value = timeString;
+    let H = +timeString.substr(0, 2);
+    let h = (H % 12) || 12;
+    let ampm = H < 12 ? " AM" : " PM";
+    timeString = h + timeString.substr(2, 3) + ampm;
+    let data = {id: this.ALL_SHIFT.length + 1 ,time: timeString , shift_type: this.MORNING_SHIFT ,  value: value, is_active: false, is_disabled: false};
+    this.ALL_SHIFT.push(data);
+    
+    return await data
+     
   }
 
   async setStaffList (data: any) {
