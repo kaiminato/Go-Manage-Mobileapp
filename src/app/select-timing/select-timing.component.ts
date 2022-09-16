@@ -6,6 +6,7 @@ import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
 import { IonSlides} from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-select-timing',
@@ -62,7 +63,8 @@ export class SelectTimingComponent implements OnInit {
     private location: Location,
     private pickerCtrl: PickerController,
     public dataService: DataService,
-    public apiService: ApiDataService
+    public apiService: ApiDataService,
+    private modalController: ModalController
     ) {
 
     }
@@ -71,6 +73,7 @@ export class SelectTimingComponent implements OnInit {
 
   async ionViewWillEnter () {
 
+   
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
     let booking_data = await this.dataService.getInitialBookingdata();
@@ -85,6 +88,12 @@ export class SelectTimingComponent implements OnInit {
     await this.getDisabledDates();
     await this.getDisabledhift();
     console.log('this.STAFF_BOOKING_LIST---', this.STAFF_BOOKING_LIST)
+  }
+
+  async ionViewWillLeave () {
+    
+    this.IS_CALNDER_OPEN = false;
+    this.modalController.dismiss();
   }
 
   async getDisabledDates (){

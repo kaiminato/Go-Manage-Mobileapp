@@ -7,19 +7,23 @@
 
       <ion-tab-button [routerLink]="['/']">
         <ion-icon name="home"></ion-icon>
+        <ion-text>Home</ion-text>
       </ion-tab-button>
 
       <ion-tab-button >
         <ion-icon name="calendar"></ion-icon>
+        <ion-text>Schedule</ion-text>
       </ion-tab-button>
       
 
       <ion-tab-button >
-        <ion-icon name="person"></ion-icon>
+        <ion-icon name="person" [routerLink]="['/logout']"></ion-icon>
+        <ion-text>Profile</ion-text>
       </ion-tab-button>
 
       <ion-tab-button >
-        <ion-icon name="notifications"></ion-icon>
+        <ion-icon name="notifications" [routerLink]="['/login']"></ion-icon>
+        <ion-text>alert</ion-text>
       </ion-tab-button>
 
     </ion-tab-bar>

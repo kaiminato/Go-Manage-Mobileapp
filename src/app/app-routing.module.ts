@@ -6,6 +6,8 @@ import { BookingCompleteComponent } from './booking-complete/booking-complete.co
 import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
 import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { LoginButtonComponent } from './login-button/login-button.component';
+import { LogoutButtonComponentComponent } from './logout-button-component/logout-button-component.component';
 import { MakeABookingComponent } from './make-a-booking/make-a-booking.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
@@ -45,12 +47,20 @@ const routes: Routes = [
     component: BuyVoucherComponent
   },
   {
-    path: 'about-us',
+    path: 'about-us/**',
     component: AboutUsComponent
   },
   {
     path: 'add-a-review',
     component: AddReviewComponent
+  },
+  {
+    path: 'login',
+    component: LoginButtonComponent
+  },
+  {
+    path: 'logout',
+    component: LogoutButtonComponentComponent
   },
   {
     path: '',

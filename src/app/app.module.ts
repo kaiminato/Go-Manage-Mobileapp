@@ -20,6 +20,14 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { AddReviewComponent } from './add-review/add-review.component';
 import { CalendarModule } from 'ion2-calendar';
 import { FormsModule } from '@angular/forms';
+import { AuthModule } from '@auth0/auth0-angular';
+import config from '../../capacitor.config';
+import { LoginButtonComponent } from './login-button/login-button.component';
+import { LogoutButtonComponentComponent } from './logout-button-component/logout-button-component.component';
+import { BookNowHeaderComponent } from './book-now-header/book-now-header.component';
+
+const redirectUri = `http://localhost:8100/about-us`;
+//alert(redirectUri); 
 
 @NgModule({
   declarations: [
@@ -34,7 +42,10 @@ import { FormsModule } from '@angular/forms';
     BookingCompleteComponent,
     BuyVoucherComponent,
     AboutUsComponent,
-    AddReviewComponent
+    AddReviewComponent,
+    LoginButtonComponent,
+    LogoutButtonComponentComponent,
+    BookNowHeaderComponent
   ],
   imports: [
     BrowserModule, 
@@ -42,7 +53,12 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     IonicModule.forRoot(), 
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule.forRoot({
+      domain: "go-manage-testing.eu.auth0.com",
+      clientId: "4ZAMH2lkhQfxjcKYXF7fN3KihrtlJNkY",
+      redirectUri
+    }),
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
