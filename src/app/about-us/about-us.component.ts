@@ -1,7 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , NgZone} from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { ImageService } from '../services/image.service';
+import { AuthService } from '@auth0/auth0-angular';
+import { mergeMap } from 'rxjs/operators';
+import { Browser } from '@capacitor/browser';
+import { App } from '@capacitor/app';
+import config from 'capacitor.config';
+
+const callbackUri = `${config.appId}://go-manage-testing.eu.auth0.com/capacitor/${config.appId}/about-us`;
 
 @Component({
   selector: 'app-about-us',
@@ -20,9 +27,36 @@ export class AboutUsComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
+    public auth: AuthService,
+    private ngZone: NgZone
   ) { }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    // Use Capacitor's App plugin to subscribe to the `appUrlOpen` event
+    App.addListener('appUrlOpen', ({ url }) => {
+      // Must run inside an NgZone for Angular to pick up the changes
+      // https://capacitorjs.com/docs/guides/angular
+      this.ngZone.run(() => {
+        if (url?.startsWith(callbackUri)) {
+          alert('done')
+          // If the URL is an authentication callback URL..
+          if (
+            url.includes('state=') &&
+            (url.includes('error=') || url.includes('code='))
+          ) {
+            // Call handleRedirectCallback and close the browser
+            alert('error')
+            this.auth
+              .handleRedirectCallback(url)
+              .pipe(mergeMap(() => Browser.close()))
+              .subscribe();
+          } else {
+            Browser.close();
+          }
+        }
+      });
+    });
+  }
 
   navigation() {
 

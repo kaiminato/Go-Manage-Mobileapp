@@ -12,7 +12,7 @@ import { DataService } from '../services/data.service';
 export class MakeABookingComponent implements OnInit {
 
   IS_STAFF: any = true;
-  HEADING: string = "Step-1 / Make a booking";
+  HEADING: string = "Staff";
 
   STAFF_LIST: any = [
     // {id:1, firstName: 'Jade', lastName: 'amber', image: this.imageService.DEFAULT_PERSON},
