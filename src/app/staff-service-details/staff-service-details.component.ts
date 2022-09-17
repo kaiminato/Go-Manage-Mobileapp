@@ -44,7 +44,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.STAFF_DETAIL[0].image = this.STAFF_DETAIL[0]?.employeeImg ? this.STAFF_DETAIL[0]?.employeeImg : this.imageService.DEFAULT_PERSON;
     //this.STAFF_DETAIL[0].comment = 'Quick bio on the worker of what they like & hobbies and what they are qualified in will be added here';
-    this.HEADING = "Book with "+ this.STAFF_DETAIL[0].firstName + " " + this.STAFF_DETAIL[0].lastName;
+    this.HEADING = "2"
 
     await this.getStaffBookingList();
   }

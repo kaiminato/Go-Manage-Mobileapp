@@ -47,7 +47,7 @@ const routes: Routes = [
     component: BuyVoucherComponent
   },
   {
-    path: 'about-us/**',
+    path: 'about-us',
     component: AboutUsComponent
   },
   {

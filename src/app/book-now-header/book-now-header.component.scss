@@ -32,6 +32,66 @@ ion-header {
             font: 20px Arial, sans-serif;
     
           }
+
+        .active {
+
+            border: 1px solid white;
+            background: #007573 !important;
+            color: white !important;
+        }
+        ul.headli {
+            padding: 0px;
+            margin: 0px;
+        }
+        ul.headli li {
+            display: inline-block;
+            padding: 0 6px;
+            width: 25%;
+            font-size: 12px;
+        }
+        span.material-symbols-outlined.rightli {
+            font-size: 20px !important;
+        }
+        span.headlitop {
+            padding: 4px 9px;
+            font-size: 14px;
+            background: #fff;
+            margin-bottom: 16px !important;
+            color: #000;
+            border-radius: 29px;
+            margin-right: 8px;
+        }
+        ul.headli  {
+            text-align: center;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        ul.headli li span.headlitop :before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #59524f;
+            height: 1px;
+            width: 100%;
+            margin: auto;
+            z-index: 1;
+        }
+        ul.headli li {
+            color: #595252;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
+
+        .ili3 {
+            display: flex;
+            padding: 0px;
+            margin-bottom: 5px;
+            padding-left: 2px;
+        }
+       
     }
-    
+   
 }
+
