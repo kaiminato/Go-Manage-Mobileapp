@@ -10,10 +10,55 @@
 
       <ion-col size="10">
         <div class="header-text">
-          <div class="circle" > 1</div>
-          <ion-text>
-            {{ this.HEADING_TEXT }}
-          </ion-text>
+        
+          <ul class="headli">
+            <li>
+              <div class="ili3">
+              <div class="ili">
+              <span class="headlitop" [class.active] ="HEADING_TEXT == 1">1</span> </div>
+              <div class="ili2">
+              <span class="material-symbols-outlined rightli" >
+                arrow_forward
+                </span>
+              </div>
+            </div>
+            <ion-text>
+              Staff
+            </ion-text></li>
+            <li>
+              <div class="ili3">
+                <div class="ili">
+                <span class="headlitop" [class.active] ="HEADING_TEXT == 2">2</span> </div>
+                <div class="ili2">
+                <span class="material-symbols-outlined rightli">
+                  arrow_forward
+                  </span>
+                </div>
+              </div>
+                 <ion-text>
+              Services
+            </ion-text></li>
+            <li>
+              <div class="ili3">
+                <div class="ili ">
+                <span class="headlitop" [class.active] ="HEADING_TEXT == 3" >3</span> </div>
+                <div class="ili2">
+                <span class="material-symbols-outlined rightli">
+                  arrow_forward
+                  </span>
+                </div>
+              </div>
+              <ion-text>
+              Date\Time
+            </ion-text></li>
+            <li><span class="headlitop" [class.active] ="HEADING_TEXT == 4">4</span> 
+              
+                <br><br>
+                <ion-text>
+              Confirm
+            </ion-text></li>
+
+          </ul>
         </div>
       </ion-col>
     

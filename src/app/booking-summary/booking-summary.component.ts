@@ -12,7 +12,7 @@ import { ApiDataService } from '../services/api-data.service';
 })
 export class BookingSummaryComponent implements OnInit {
 
-  HEADING: string = "Step-4 / Booking Summary";
+  HEADING: string = "4";
   DATE: string;
   TOTAL_DURATION: any = 0;
   STARTING_TIME: string;
@@ -110,21 +110,25 @@ export class BookingSummaryComponent implements OnInit {
     ending_time = new Date(ending_time);
     let ending_date_time = new Date(ending_time.getTime() - (ending_time.getTimezoneOffset() * 60000)).toISOString().replace(/\..+/, '');
 
-    let data = {
-      employeeId: this.BOOKINGS_DETAILS.staff_id,
-      clientId: null,
-      description: '',
-      endTime: ending_date_time+".000Z",
-      startTime: starting_date_time+".000Z",
-      isAllDay: false,
-      customer: null,
-      service: this.BOOKINGS_DETAILS.servises[0].serviceName,
-      serviceId: this.BOOKINGS_DETAILS.servises[0].id,
-      firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
-      lastName:  this.BOOKINGS_DETAILS.staff_details[0].lastName,
-    }
+    let data = [];
 
-    
+    for (let service of this.BOOKINGS_DETAILS.servises){
+
+      data.push ( {
+        employeeId: this.BOOKINGS_DETAILS.staff_id,
+        clientId: null,
+        description: '',
+        endTime: ending_date_time+".000Z",
+        startTime: starting_date_time+".000Z",
+        isAllDay: false,
+        customer: null,
+        service: service.serviceName,
+        serviceId: service.id,
+        firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
+        lastName:  this.BOOKINGS_DETAILS.staff_details[0].lastName,
+      })
+      
+    }
     
     await this.apiData.presentLoading();
 

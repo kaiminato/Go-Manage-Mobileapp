@@ -18,7 +18,7 @@ export class SelectTimingComponent implements OnInit {
   @ViewChild('mySlider')  slides: IonSlides;
 
   ID: any = '';
-  HEADING: string = "step-3 / Select a time";
+  HEADING: string = "3";
   CURRENT_MONTH: number = this.dataService.CURRENT_MONTH;
   CURRENT_YEAR: number = this.dataService.CURRENT_YEAR;
   CURRENT_MONTH_VALUE: string = '';
