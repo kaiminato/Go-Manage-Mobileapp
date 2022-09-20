@@ -211,6 +211,11 @@ export class DataService {
     return await data == undefined ? '' : JSON.parse(data);
   }
 
+  async resetDateTimeInitialBookingData (data: any) {
+
+    return await localStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
+  }
+
   async setSelectedServicesInBooking (selected_services_list : []) {
 
     let data = await this.getInitialBookingdata();

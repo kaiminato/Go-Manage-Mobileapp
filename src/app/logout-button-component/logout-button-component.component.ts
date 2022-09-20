@@ -3,6 +3,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { Browser } from '@capacitor/browser';
 import { tap } from 'rxjs/operators';
 import config from 'capacitor.config';
+import { Router } from '@angular/router';
 
 const returnTo = `http://localhost:8100`;
 
@@ -13,7 +14,12 @@ const returnTo = `http://localhost:8100`;
 })
 export class LogoutButtonComponentComponent implements OnInit {
 
-  constructor(public auth: AuthService) {}
+  HEADING: string = "Logout";
+
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    ) {}
 
   ngOnInit() {}
 
@@ -30,6 +36,12 @@ export class LogoutButtonComponentComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  navigation() {
+
+    console.log('back  button is triggered')
+    this.router.navigate(['/']);
   }
 
 }
