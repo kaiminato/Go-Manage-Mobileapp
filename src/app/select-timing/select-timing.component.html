@@ -100,7 +100,7 @@
     
     <ng-template>
       <ion-calendar [(ngModel)]="date"
-          (change)="onDateSelect($event)"
+          (change)="onDateSelect($event.format('YYYY-MM-DD'))"
           [options]="options"
           
           [type]="DATE_TYPE"

@@ -1,3 +1,5 @@
-<p>
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+  
   <ion-button (click)="logout()">Log out</ion-button>
-</p>
+</ion-content>

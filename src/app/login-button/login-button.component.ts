@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Browser } from '@capacitor/browser';
 import { mergeMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-button',
@@ -10,7 +11,12 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class LoginButtonComponent implements OnInit {
 
-  constructor(public auth: AuthService) {}
+  HEADING: string = "Login";
+
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    ) {}
 
   ngOnInit() {}
 
@@ -19,5 +25,11 @@ export class LoginButtonComponent implements OnInit {
       .buildAuthorizeUrl()
       .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
       .subscribe();
+  }
+
+  navigation() {
+
+    console.log('back  button is triggered')
+    this.router.navigate(['/']);
   }
 }

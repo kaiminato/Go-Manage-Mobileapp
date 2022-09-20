@@ -8,8 +8,8 @@ import { Browser } from '@capacitor/browser';
 import { App } from '@capacitor/app';
 import config from 'capacitor.config';
 
-const callbackUri = `${config.appId}://go-manage-testing.eu.auth0.com/capacitor/${config.appId}/about-us`;
-
+//const callbackUri = `${config.appId}://go-manage-testing.eu.auth0.com/capacitor/${config.appId}/about-us`;
+const callbackUri = `http://localhost:8100/about-us`;
 @Component({
   selector: 'app-about-us',
   templateUrl: './about-us.component.html',
@@ -34,11 +34,15 @@ export class AboutUsComponent implements OnInit {
   ngOnInit(): void {
     // Use Capacitor's App plugin to subscribe to the `appUrlOpen` event
     App.addListener('appUrlOpen', ({ url }) => {
+
+      console.log('login checking result=> ', url)
       // Must run inside an NgZone for Angular to pick up the changes
       // https://capacitorjs.com/docs/guides/angular
       this.ngZone.run(() => {
         if (url?.startsWith(callbackUri)) {
-          alert('done')
+          
+          alert('working ')
+          
           // If the URL is an authentication callback URL..
           if (
             url.includes('state=') &&
@@ -51,6 +55,7 @@ export class AboutUsComponent implements OnInit {
               .pipe(mergeMap(() => Browser.close()))
               .subscribe();
           } else {
+            
             Browser.close();
           }
         }

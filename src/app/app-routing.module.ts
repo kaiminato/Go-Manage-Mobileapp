@@ -9,6 +9,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { LoginButtonComponent } from './login-button/login-button.component';
 import { LogoutButtonComponentComponent } from './logout-button-component/logout-button-component.component';
 import { MakeABookingComponent } from './make-a-booking/make-a-booking.component';
+import { ProfileComponent } from './profile/profile.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
 
@@ -18,6 +19,7 @@ const routes: Routes = [
   //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   // },
 
+  
   {
     path: 'home',
     component: HomePageComponent
@@ -48,7 +50,7 @@ const routes: Routes = [
   },
   {
     path: 'about-us',
-    component: AboutUsComponent
+    component: AboutUsComponent,
   },
   {
     path: 'add-a-review',
@@ -63,10 +65,17 @@ const routes: Routes = [
     component: LogoutButtonComponentComponent
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
+    path: 'profile',
+    component: ProfileComponent
   },
+  {
+    path: '',
+    component: HomePageComponent
+  },
+  // {
+  //   path: '**',
+  //   component: AboutUsComponent
+  // },
 ];
 
 @NgModule({

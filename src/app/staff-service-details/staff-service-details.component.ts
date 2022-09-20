@@ -47,6 +47,15 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.HEADING = "2"
 
     await this.getStaffBookingList();
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+    if (booking_data.date != '') {
+
+      booking_data.date = '';
+      booking_data.timing_id = ''
+      await this.dataService.resetDateTimeInitialBookingData(booking_data);
+      
+    }
   }
 
   async getServiceList() {
@@ -138,8 +147,6 @@ export class StaffServiceDetailsComponent implements OnInit {
 
 
   navigation() {
-
-    console.log('back  button is triggered')
     this.router.navigate(['/make-a-booking']);
   }
 
