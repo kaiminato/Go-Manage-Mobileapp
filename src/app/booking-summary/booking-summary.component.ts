@@ -17,7 +17,7 @@ export class BookingSummaryComponent implements OnInit {
   TOTAL_DURATION: any = 0;
   STARTING_TIME: string;
   ENDING_TIME: string;
-  STUDIO_NAME: string = 'beauty studio Corogin galway';
+  STUDIO_NAME: string = 'beauty studio Corofin Tuam Galway';
   TOTAL_AMOUNT: any = 0;
   BOOKINGS_DETAILS: any;
 

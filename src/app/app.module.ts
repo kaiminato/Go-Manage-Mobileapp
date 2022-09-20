@@ -25,6 +25,7 @@ import config from '../../capacitor.config';
 import { LoginButtonComponent } from './login-button/login-button.component';
 import { LogoutButtonComponentComponent } from './logout-button-component/logout-button-component.component';
 import { BookNowHeaderComponent } from './book-now-header/book-now-header.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const redirectUri = `http://localhost:8100/about-us`;
 //alert(redirectUri); 
@@ -45,7 +46,8 @@ const redirectUri = `http://localhost:8100/about-us`;
     AddReviewComponent,
     LoginButtonComponent,
     LogoutButtonComponentComponent,
-    BookNowHeaderComponent
+    BookNowHeaderComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule, 

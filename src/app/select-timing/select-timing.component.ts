@@ -44,6 +44,7 @@ export class SelectTimingComponent implements OnInit {
   };
 
   options: CalendarModalOptions = {
+    //disableWeeks: [0, 6],
     daysConfig: [
         // {
         //   date: new Date('2022-09-20'),
@@ -87,13 +88,28 @@ export class SelectTimingComponent implements OnInit {
 
     await this.getDisabledDates();
     await this.getDisabledhift();
-    console.log('this.STAFF_BOOKING_LIST---', this.STAFF_BOOKING_LIST)
+    
+
+    if (booking_data.date != '') this.prefilleddata();
   }
 
   async ionViewWillLeave () {
     
     this.IS_CALNDER_OPEN = false;
     this.modalController.dismiss();
+  }
+
+  async prefilleddata () {
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+
+    this.date = booking_data.date;
+    await this.onDateSelect(this.date)
+    setTimeout(() => {
+      this.MORNING_SHIFT[booking_data.timing_id-1].is_active = true;
+    
+    }, 300);
+   
   }
 
   async getDisabledDates (){
@@ -180,10 +196,11 @@ export class SelectTimingComponent implements OnInit {
 
   
 
-  async onDateSelect ($event){
+  async onDateSelect (selected_date: any){
     
     this.IS_CALNDER_OPEN = false;
-    this.date = $event.format('YYYY-MM-DD')
+    //await this.modalController.dismiss();
+    this.date = selected_date
     
     let [year , month , date] = this.date.split('-')
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
@@ -300,18 +317,15 @@ export class SelectTimingComponent implements OnInit {
     console.log('selecetd_shift--', selecetd_shift)
 
     let total_duration = 0;
-    for (let service of get_booking_data.servises){
-      
-      total_duration += service.serviceDuration;
-    }
+
+    for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
 
     let starting_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
+
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
     ending_date_time = new Date(ending_date_time);
 
-    console.log('starting_date_time----', starting_date_time);
-    console.log('ending_date_time----', ending_date_time);
 
     
     let is_passed = true;
@@ -331,9 +345,10 @@ export class SelectTimingComponent implements OnInit {
       return;
     }
 
+    
     for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
 
-    for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
+    //for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
 
     await this.dataService.setBookingData(get_booking_data)
     

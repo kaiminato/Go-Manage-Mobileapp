@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ApiDataService } from '../services/api-data.service';
 import { ImageService } from '../services/image.service';
+
+const callbackUri = `http://localhost:8100/home`;
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
+
 export class HomePageComponent implements OnInit {
 
   LIST: any = [
@@ -34,11 +39,17 @@ export class HomePageComponent implements OnInit {
       },
     ],
   ];
-  constructor(public imageService: ImageService) {
+  constructor(
+    private router: Router,
+    private apiData: ApiDataService,
+    public imageService: ImageService,
+  ) {
 
     console.log('LIST----', this.LIST)
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
 }

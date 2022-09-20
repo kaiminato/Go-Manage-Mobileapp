@@ -10,6 +10,10 @@ ion-header {
 
         --background: #047473;
 
+        .back {
+            padding-top: 4px;
+        }
+
         .material-symbols-outlined {
             font-size: 35px;
             color: #fff;
@@ -89,6 +93,10 @@ ion-header {
             padding: 0px;
             margin-bottom: 5px;
             padding-left: 2px;
+        }
+
+        .ili4th {
+            padding-bottom: 12px;
         }
        
     }
