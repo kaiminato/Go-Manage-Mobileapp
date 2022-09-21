@@ -36,6 +36,7 @@ export class MakeABookingComponent implements OnInit {
    ) { 
     
     
+    
   }
 
   ngOnInit() {
@@ -44,6 +45,16 @@ export class MakeABookingComponent implements OnInit {
   }
 
   async ionViewWillEnter (){
+
+    (await this.apiData.getUser()).subscribe(
+      (response: any) => {
+
+        console.log('response---', response)
+      },
+      (error: any) => {
+        console.log('error---', error)  
+      }
+    );
     await this.getStaffList();
   }
 
