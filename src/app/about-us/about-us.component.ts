@@ -12,7 +12,15 @@ const callbackUri = `${config.appId}://go-manage-testing.eu.auth0.com/capacitor/
 
 @Component({
   selector: 'app-about-us',
-  templateUrl: './about-us.component.html',
+  //templateUrl: './about-us.component.html',
+  template: `
+  <div *ngIf="auth.user$ | async as user">
+    <ion-avatar class="avatar">
+      <img [src]="user.picture" [alt]="user.name" />
+    </ion-avatar>
+    <h2>{{ user.name }}</h2>
+    <p>{{ user.email }}</p>
+  </div>`,
   styleUrls: ['./about-us.component.scss'],
 })
 export class AboutUsComponent {
@@ -27,8 +35,29 @@ export class AboutUsComponent {
     private router: Router,
     public imageService: ImageService,
     public auth: AuthService,
-  ) { }
+    private apiDataService: ApiDataService
+  ) { 
 
+    
+    this.getUser()
+   }
+
+   async getUser() {
+
+   
+    await (await this.apiDataService.getUser()).subscribe(
+      (response: any) => {
+        console.log('response---', response)
+      },
+      (error: any) => {
+        console.log('error---', error)
+      }
+    )
+    await this.auth.user$.subscribe( data => {
+      console.log('cheking---', data)
+    })
+    //console.log('cheking---', await  this.auth.user$)
+   }
 
   navigation() {
 
