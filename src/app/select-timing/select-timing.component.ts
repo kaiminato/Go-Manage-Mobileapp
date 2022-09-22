@@ -74,14 +74,38 @@ export class SelectTimingComponent implements OnInit {
 
   async ionViewWillEnter () {
 
-   
+
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
+    
     let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+
+    if (staff_detail.length > 0) {
+
+      let weekly_off_days = [];
+
+      await this.dataService.DAYS_OFF_NUMBER.map( 
+        async (data) =>  {
+
+          let check_day_off = await staff_detail[0].staffDetailFormatted.filter(staff_days => staff_days.dayId == data)
+         
+            if(check_day_off.length == 0) {
+            
+              weekly_off_days.push(data == 7 ? 0 : data)
+            }
+        }
+      );
+
+      this.options.disableWeeks = weekly_off_days;
+
+      console.log('weekly_off_days----', weekly_off_days)
+    }
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     
-    
-    this.ALL_SHIFT = await this.dataService.getShift();
+    let current_date = await this.getCurrentDate();
+    this.ALL_SHIFT = await this.dataService.getShift(current_date);
+
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
@@ -98,6 +122,7 @@ export class SelectTimingComponent implements OnInit {
     this.IS_CALNDER_OPEN = false;
     this.modalController.dismiss();
   }
+
 
   async prefilleddata () {
 
@@ -174,15 +199,22 @@ export class SelectTimingComponent implements OnInit {
       
       let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
+      let booking_data = await this.dataService.getInitialBookingdata();
+      let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+
+      let is_date_off = await this.dataService.isDateOff(create_date);
+
       const today = new Date()
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
-      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
+
+
+      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) || is_date_off ? true : false);
     }
 
     this.slides.slideTo(new Date().getDate()-1,1000);//(index_number, speed_time)
     this.DAYS_ARRAY[new Date().getDate()-1].is_active = true;
-    
+    console.log('final dates---', this.DAYS_ARRAY)
   }
 
   
@@ -201,6 +233,8 @@ export class SelectTimingComponent implements OnInit {
     this.IS_CALNDER_OPEN = false;
     //await this.modalController.dismiss();
     this.date = selected_date
+
+    
     
     let [year , month , date] = this.date.split('-')
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
@@ -211,11 +245,16 @@ export class SelectTimingComponent implements OnInit {
       
       let is_exist_in_disbaled = await this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
+      let booking_data = await this.dataService.getInitialBookingdata();
+      let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+
+      let is_date_off = await this.dataService.isDateOff(create_date);
+
       const today = new Date()
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
 
-      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
+      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) || is_date_off ? true : false);
     }
 
     
@@ -236,6 +275,7 @@ export class SelectTimingComponent implements OnInit {
 
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
 
+    console.log('this.date now ----', this.date)
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
     
     for (let index in this.DAYS_ARRAY){
@@ -244,11 +284,13 @@ export class SelectTimingComponent implements OnInit {
       
       let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
+      let is_date_off = await this.dataService.isDateOff(create_date);
+
       const today = new Date()
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
 
-      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) ? true : false);
+      this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) || is_date_off ? true : false);
     }
 
 
@@ -262,17 +304,15 @@ export class SelectTimingComponent implements OnInit {
 
   async getDisabledhift () {
     
-    this.ALL_SHIFT = await this.dataService.getShift();
+    this.ALL_SHIFT = await this.dataService.getShift(this.date);
     //console.log('selected date', this.STAFF_BOOKING_LIST)
   
-
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     console.log('selected_date_booking_list', this.date, selected_date_booking_list)
  
     for (let index in this.ALL_SHIFT){
 
       let new_date = new Date(`${this.date} ${this.ALL_SHIFT[index].value}`);
-
       
       for (let value of selected_date_booking_list) {
 
@@ -298,7 +338,6 @@ export class SelectTimingComponent implements OnInit {
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){
 
-   
     if (is_disabled) return ;
 
     let date_not_available = this.DISABLED_DATES_ARRAY.filter(data => data == this.date)
@@ -355,6 +394,20 @@ export class SelectTimingComponent implements OnInit {
     console.log('get_booking_data>>>>>>>', get_booking_data)
     setTimeout(() => { this.router.navigate(['/booking-summary']) }, 200);
     
+  }
+
+  async getCurrentDate () {
+
+    let today_date = new Date();
+    let year: any = today_date.getFullYear();
+    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let day: any = today_date.getDate();
+
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+
+    return  year + '-' + month + '-' + day;
+  
   }
 
   navigation() {

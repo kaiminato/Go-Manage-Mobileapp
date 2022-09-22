@@ -127,7 +127,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     
     let selected_service_details = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
     
-
+    console.log('this.SERVICE_LIST++==', this.SERVICE_LIST)
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
