@@ -12,6 +12,7 @@ import { MakeABookingComponent } from './make-a-booking/make-a-booking.component
 import { ProfileComponent } from './profile/profile.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
+import { AuthGuard } from '@auth0/auth0-angular';
 
 const routes: Routes = [
   // {
@@ -22,55 +23,68 @@ const routes: Routes = [
   
   {
     path: 'home',
-    component: HomePageComponent
+    component: HomePageComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'make-a-booking',
-    component: MakeABookingComponent
+    component: MakeABookingComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'staff-service-details/:id',
-    component: StaffServiceDetailsComponent
+    component: StaffServiceDetailsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'select-a-time',
-    component: SelectTimingComponent
+    component: SelectTimingComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'booking-summary',
-    component: BookingSummaryComponent
+    component: BookingSummaryComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'booking-complete',
-    component: BookingCompleteComponent
+    component: BookingCompleteComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'buy-a-voucher',
-    component: BuyVoucherComponent
+    component: BuyVoucherComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'about-us',
     component: AboutUsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'add-a-review',
-    component: AddReviewComponent
+    component: AddReviewComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
-    component: LoginButtonComponent
+    component: LoginButtonComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'logout',
-    component: LogoutButtonComponentComponent
+    component: LogoutButtonComponentComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '',
-    component: HomePageComponent
+    component: HomePageComponent,
+    canActivate: [AuthGuard]
   },
   // {
   //   path: '**',
