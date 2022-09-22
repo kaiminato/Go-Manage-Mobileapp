@@ -55,7 +55,7 @@
   <div class="list">
     <ion-list lines="none" class="ion-margin-start ion-margin-end"  [class.ion-hide]="IS_STAFF" *ngFor="let service of CATEGORY_LIST; let service_index = index">
       
-      <ion-item button  class="service_detail"   detail="false" (click)="changeServiceStatus(service_index, service.is_open)">
+      <ion-item button  class="service_detail"   detail="false" (click)="changeCategoryStatus(service_index, service.is_open)">
           <ion-label> <h3>{{ service.category_name }}</h3>  </ion-label>
           <ion-text class="service_count">{{ service?.count }} Service </ion-text>
           <ion-icon 
@@ -69,10 +69,18 @@
           <ion-col size="11" >
             
             <ion-item class="service_detail ion-no-padding"   detail="false"  >
-              <ion-icon name="information-circle-outline"></ion-icon>
+              <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
+                <ion-icon name="information-circle-outline"  style="color: black;"></ion-icon>
+              </ion-button>
+
+              <ion-popover trigger="top-center-{{service_detail.id}}" side="right" size="auto" alignment="center">
+                <ng-template>
+                  <ion-content class="ion-padding"> {{ service_detail.serviceDescription }} </ion-content>
+                </ng-template>
+              </ion-popover>
               <ion-label> <h3>{{ service_detail.serviceName }}</h3>  </ion-label>
-              <ion-text class="service_count"> {{ service_detail.servicePrice }} </ion-text>
-              <ion-checkbox slot="end" ></ion-checkbox>
+              <ion-text class="service_count"> {{ service_detail.servicePrice | currency: 'EUR'}} </ion-text>
+              <ion-checkbox slot="end" (ionChange)="changeServiceStatus( service_detail.id)"></ion-checkbox>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -82,7 +90,22 @@
   </div>
 
 
-  
+  <ion-grid *ngIf="!IS_STAFF">
+    <ion-row class="book_now">
+      <ion-col size="6" class="ion-text-center service_selected_price">
+        <div>{{ TOTAL_SERVICE_SELECTED }} service selected</div>
+        <div>{{ TOTAL_PRICE | currency: 'EUR'}}</div>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block"  [disabled]="TOTAL_SERVICE_SELECTED == '0'">
+          Book now 
+          <span class="material-symbols-outlined booking-arrow">
+            arrow_forward
+          </span>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   
   
