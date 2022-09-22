@@ -1,4 +1,4 @@
-import { Component, OnInit , NgZone} from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { ImageService } from '../services/image.service';
@@ -23,7 +23,7 @@ const callbackUri = `http://localhost:8100/about-us`;
   </div>`,
   styleUrls: ['./about-us.component.scss'],
 })
-export class AboutUsComponent implements OnInit {
+export class AboutUsComponent {
 
   HEADING: string = "About us";
   STAFF_LIST: any = [
@@ -33,43 +33,31 @@ export class AboutUsComponent implements OnInit {
   ];
   constructor(
     private router: Router,
-    private apiData: ApiDataService,
     public imageService: ImageService,
-    // public auth: AuthService,
-    // private ngZone: NgZone
-  ) { }
+    public auth: AuthService,
+    private apiDataService: ApiDataService
+  ) { 
 
-  ngOnInit(): void {
-    // Use Capacitor's App plugin to subscribe to the `appUrlOpen` event
-    // App.addListener('appUrlOpen', ({ url }) => {
+    
+    this.getUser()
+   }
 
-    //   console.log('login checking result=> ', url)
-    //   // Must run inside an NgZone for Angular to pick up the changes
-    //   // https://capacitorjs.com/docs/guides/angular
-    //   // this.ngZone.run(() => {
-    //   //   if (url?.startsWith(callbackUri)) {
-          
-    //   //     alert('working ')
-          
-    //   //     // If the URL is an authentication callback URL..
-    //   //     if (
-    //   //       url.includes('state=') &&
-    //   //       (url.includes('error=') || url.includes('code='))
-    //   //     ) {
-    //   //       // Call handleRedirectCallback and close the browser
-    //   //       alert('error')
-    //   //       this.auth
-    //   //         .handleRedirectCallback(url)
-    //   //         .pipe(mergeMap(() => Browser.close()))
-    //   //         .subscribe();
-    //   //     } else {
-            
-    //   //       Browser.close();
-    //   //     }
-    //   //   }
-    //   // });
-    // });
-  }
+   async getUser() {
+
+   
+    await (await this.apiDataService.getUser()).subscribe(
+      (response: any) => {
+        console.log('response---', response)
+      },
+      (error: any) => {
+        console.log('error---', error)
+      }
+    )
+    await this.auth.user$.subscribe( data => {
+      console.log('cheking---', data)
+    })
+    //console.log('cheking---', await  this.auth.user$)
+   }
 
   navigation() {
 
