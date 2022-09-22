@@ -12,7 +12,15 @@ import config from 'capacitor.config';
 const callbackUri = `http://localhost:8100/about-us`;
 @Component({
   selector: 'app-about-us',
-  templateUrl: './about-us.component.html',
+  //templateUrl: './about-us.component.html',
+  template: `
+  <div *ngIf="auth.user$ | async as user">
+    <ion-avatar class="avatar">
+      <img [src]="user.picture" [alt]="user.name" />
+    </ion-avatar>
+    <h2>{{ user.name }}</h2>
+    <p>{{ user.email }}</p>
+  </div>`,
   styleUrls: ['./about-us.component.scss'],
 })
 export class AboutUsComponent implements OnInit {
@@ -27,40 +35,40 @@ export class AboutUsComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
-    public auth: AuthService,
-    private ngZone: NgZone
+    // public auth: AuthService,
+    // private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
     // Use Capacitor's App plugin to subscribe to the `appUrlOpen` event
-    App.addListener('appUrlOpen', ({ url }) => {
+    // App.addListener('appUrlOpen', ({ url }) => {
 
-      console.log('login checking result=> ', url)
-      // Must run inside an NgZone for Angular to pick up the changes
-      // https://capacitorjs.com/docs/guides/angular
-      this.ngZone.run(() => {
-        if (url?.startsWith(callbackUri)) {
+    //   console.log('login checking result=> ', url)
+    //   // Must run inside an NgZone for Angular to pick up the changes
+    //   // https://capacitorjs.com/docs/guides/angular
+    //   // this.ngZone.run(() => {
+    //   //   if (url?.startsWith(callbackUri)) {
           
-          alert('working ')
+    //   //     alert('working ')
           
-          // If the URL is an authentication callback URL..
-          if (
-            url.includes('state=') &&
-            (url.includes('error=') || url.includes('code='))
-          ) {
-            // Call handleRedirectCallback and close the browser
-            alert('error')
-            this.auth
-              .handleRedirectCallback(url)
-              .pipe(mergeMap(() => Browser.close()))
-              .subscribe();
-          } else {
+    //   //     // If the URL is an authentication callback URL..
+    //   //     if (
+    //   //       url.includes('state=') &&
+    //   //       (url.includes('error=') || url.includes('code='))
+    //   //     ) {
+    //   //       // Call handleRedirectCallback and close the browser
+    //   //       alert('error')
+    //   //       this.auth
+    //   //         .handleRedirectCallback(url)
+    //   //         .pipe(mergeMap(() => Browser.close()))
+    //   //         .subscribe();
+    //   //     } else {
             
-            Browser.close();
-          }
-        }
-      });
-    });
+    //   //       Browser.close();
+    //   //     }
+    //   //   }
+    //   // });
+    // });
   }
 
   navigation() {
