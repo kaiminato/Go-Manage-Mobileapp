@@ -37,6 +37,11 @@ export class ApiDataService {
     return await this.http.post(this.apiUrl+'bookings/saveBooking', data);
   }
 
+  async getUser () {
+
+    return await this.http.get('https://go-manage-testing.eu.auth0.com/api/v2/users-by-email?email=test@gmail.com');
+  }
+
   async presentLoading() {
 
     this.isLoading = true;

@@ -14,6 +14,7 @@ import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 
+
 const routes: Routes = [
   // {
   //   path: 'home',
