@@ -31,6 +31,7 @@ export class DataService {
   public ALL_SHIFT: any = [];
   public BOOKING_WITH_STAFF: Number = 1;
   public BOOKING_WITH_SERVICE: Number = 2;
+  public BOOKING_INITIAL_DATA: any  = { staff_id: '', servises: [], date: '', timing_id:'', booking_type: ''}
 
   constructor() { }
 
@@ -269,15 +270,9 @@ export class DataService {
    return await staff_list.filter( data => data.employeeId == staff_id && (new Date(yesterday) < new Date(data.endTime)));
   }
 
-  async setInitialBooking(id: any) {
+  async 
 
-    let data = {
-      staff_id: id,
-      servises: [],
-      date: '',
-      timing_id:'',
-      booking_type: this.BOOKING_WITH_STAFF
-    }
+  async setInitialBooking(data: any) {
 
     return await localStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
   }
