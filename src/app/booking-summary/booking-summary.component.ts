@@ -44,7 +44,7 @@ export class BookingSummaryComponent implements OnInit {
     }
 
     this.BOOKINGS_DETAILS.staff_details = await this.dataService.getStaffDetail(this.BOOKINGS_DETAILS.staff_id);
-    let shift_timing_details = await this.dataService.getShift();
+    let shift_timing_details = await this.dataService.getShift('');
     this.BOOKINGS_DETAILS.shift_timing_details = await shift_timing_details.filter( data => data.id == this.BOOKINGS_DETAILS.timing_id);
     let [start_time , am_pm] = this.BOOKINGS_DETAILS.shift_timing_details[0].time.split(' ')
 

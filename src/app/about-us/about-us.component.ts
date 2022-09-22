@@ -12,15 +12,15 @@ import config from 'capacitor.config';
 const callbackUri = `http://localhost:8100/about-us`;
 @Component({
   selector: 'app-about-us',
-  //templateUrl: './about-us.component.html',
-  template: `
-  <div *ngIf="auth.user$ | async as user">
-    <ion-avatar class="avatar">
-      <img [src]="user.picture" [alt]="user.name" />
-    </ion-avatar>
-    <h2>{{ user.name }}</h2>
-    <p>{{ user.email }}</p>
-  </div>`,
+  templateUrl: './about-us.component.html',
+  // template: `
+  // <div *ngIf="auth.user$ | async as user">
+  //   <ion-avatar class="avatar">
+  //     <img [src]="user.picture" [alt]="user.name" />
+  //   </ion-avatar>
+  //   <h2>{{ user.name }}</h2>
+  //   <p>{{ user.email }}</p>
+  // </div>`,
   styleUrls: ['./about-us.component.scss'],
 })
 export class AboutUsComponent {

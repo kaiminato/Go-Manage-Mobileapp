@@ -13,6 +13,8 @@ export class MakeABookingComponent implements OnInit {
 
   IS_STAFF: any = true;
   HEADING: string = "1";
+  TOTAL_SERVICE_SELECTED: any = 0;
+  TOTAL_PRICE: any = 0;
 
   STAFF_LIST: any = [
     // {id:1, firstName: 'Jade', lastName: 'amber', image: this.imageService.DEFAULT_PERSON},
@@ -20,13 +22,10 @@ export class MakeABookingComponent implements OnInit {
     // {id:3, firstName: 'Tester', lastName: 'amber', image:  this.imageService.DEFAULT_PERSON},
   ];
 
-  SERVICE_LIST: any = [
-    {id:1, name: 'Hair Service', image: this.imageService.DEFAULT_PERSON},
-    {id:2, name: 'Nail Service', image:  this.imageService.DEFAULT_PERSON},
-    {id:3, name: 'Waxing Service', image:  this.imageService.DEFAULT_PERSON},
-  ];
+  SERVICE_LIST: any = [];
 
   CATEGORY_LIST: any = [];
+  SELECTED_SERVICES: any = [];
 
   constructor(
     public imageService: ImageService,
@@ -93,11 +92,10 @@ export class MakeABookingComponent implements OnInit {
 
         if (response.length > 0){
 
-          console.log('services list----', response);
-
+          this.SERVICE_LIST = response;
+        
           let categorie_ids = [...new Set(response.map(data => data.categoryId))];
-          console.log('categories--------', categorie_ids)
-
+          
           this.CATEGORY_LIST = [];
 
           for(let category_id of categorie_ids){
@@ -135,10 +133,43 @@ export class MakeABookingComponent implements OnInit {
     this.router.navigate(['/staff-service-details',staff_id]);
   }
 
-  changeServiceStatus (service_id: any , status){
+  changeCategoryStatus (service_id: any , status){
 
     this.CATEGORY_LIST[service_id].is_open = !status ;
     
+  }
+
+  changeServiceStatus (service_id: any ){
+
+    let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
+
+    if (is_already_exist.length > 0) {
+
+      this.SELECTED_SERVICES = this.SELECTED_SERVICES.filter(data => data != service_id);
+    } else {
+      this.SELECTED_SERVICES.push(service_id);
+    }
+
+    this.selectedServicesDetail();
+
+  }
+
+  async selectedServicesDetail (){
+    
+    let selected_service_details = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
+
+    this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
+    this.TOTAL_PRICE = 0;
+    if (selected_service_details.length > 0) {
+
+      for (let service_detail of selected_service_details) {
+
+        this.TOTAL_PRICE += parseFloat(service_detail.servicePrice)
+      }
+    }
+
+    this.dataService.setSelectedServicesInBooking(selected_service_details);  
+
   }
   
   navigation() {
