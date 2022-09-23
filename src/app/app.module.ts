@@ -28,6 +28,8 @@ import { BookNowHeaderComponent } from './book-now-header/book-now-header.compon
 import { ProfileComponent } from './profile/profile.component';
 
 import { ApiDataService } from './services/api-data.service';
+import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
+import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 const redirectUri = `http://localhost:8100/about-us`;
 //alert(redirectUri); 
 
@@ -49,6 +51,8 @@ const redirectUri = `http://localhost:8100/about-us`;
     LogoutButtonComponentComponent,
     BookNowHeaderComponent,
     ProfileComponent,
+    SelectTimingWithServiceBookingComponent,
+    SelectStaffWithServiceBookingComponent
   ],
   imports: [
     BrowserModule, 

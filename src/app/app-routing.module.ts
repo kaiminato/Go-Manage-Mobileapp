@@ -13,6 +13,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
 import { AuthGuard } from '@auth0/auth0-angular';
+import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
+import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 
 
 const routes: Routes = [
@@ -80,6 +82,17 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'select-time-with-service-booking',
+    component: SelectTimingWithServiceBookingComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'select-staff-with-service-booking',
+    component: SelectStaffWithServiceBookingComponent,
     canActivate: [AuthGuard]
   },
   {

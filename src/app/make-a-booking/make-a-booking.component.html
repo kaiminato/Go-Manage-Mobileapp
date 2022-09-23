@@ -30,7 +30,7 @@
         >
         
           <ion-thumbnail slot="start">
-            <img [src]="this.imageService.DEFAULT_PERSON">
+            <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
           </ion-thumbnail>
           <ion-label> <h3>{{ value.firstName }} {{ value.lastName }}</h3>  </ion-label>
         
