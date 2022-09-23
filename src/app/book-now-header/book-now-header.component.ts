@@ -1,4 +1,5 @@
 import { Component, OnInit , Input ,  Output, EventEmitter } from '@angular/core';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-book-now-header',
@@ -10,9 +11,18 @@ export class BookNowHeaderComponent implements OnInit {
   @Output() navigation = new EventEmitter<string>();
   @Input() HEADING_TEXT = '';
   @Input() IS_BACK = '';
-  constructor() { }
+  constructor(public dataService: DataService) {
+   console.log('khkjh')
+   }
+
 
   ngOnInit() {}
+
+  async ionViewWillEnter (){
+    console.log('yesh')
+    let get_booking_data = await this.dataService.getInitialBookingdata();
+    console.log(get_booking_data)
+  }
 
   back() {
     this.navigation.emit();
