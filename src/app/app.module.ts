@@ -30,7 +30,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { ApiDataService } from './services/api-data.service';
 import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
 import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
-const redirectUri = `http://localhost:8100/about-us`;
+const redirectUri = window.location.origin+`/about-us`;
+
 //alert(redirectUri); 
 
 @NgModule({

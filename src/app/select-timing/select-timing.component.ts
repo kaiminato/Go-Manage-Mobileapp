@@ -103,13 +103,16 @@ export class SelectTimingComponent implements OnInit {
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
+    
+    console.clear();
+    console.log('teee-----------', this.ALL_SHIFT)
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
     await this.getDisabledDates();
-    await this.getDisabledhift();
+    await this.getDisabledShift();
     
 
     if (booking_data.date != '') this.prefilleddata();
@@ -262,7 +265,7 @@ export class SelectTimingComponent implements OnInit {
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
     this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
     
-    this.getDisabledhift()
+    this.getDisabledShift()
   }
 
   async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
@@ -297,10 +300,10 @@ export class SelectTimingComponent implements OnInit {
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
     this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
       
-    this.getDisabledhift();
+    this.getDisabledShift();
   }
 
-  async getDisabledhift () {
+  async getDisabledShift () {
     
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
     //console.log('selected date', this.STAFF_BOOKING_LIST)
