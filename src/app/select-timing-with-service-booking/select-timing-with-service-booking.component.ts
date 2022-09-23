@@ -57,7 +57,8 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     private router: Router,
     private pickerCtrl: PickerController,
     private modalController: ModalController,
-    private apiService: ApiDataService
+    private apiService: ApiDataService,
+    private apiData: ApiDataService
     ) { }
 
   ngOnInit() {}
@@ -77,6 +78,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     console.log('this.DAYS_ARRAY------',  this.DAYS_ARRAY)
 
     await this.preFilledData();
+    await this.getStaffBookingList();
   }
 
   async preFilledData () {
@@ -98,6 +100,22 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     
     this.IS_CALNDER_OPEN = false;
     this.modalController.dismiss();
+  }
+
+  async getStaffBookingList (){
+
+    (await this.apiData.getStaffBookingList()).subscribe(
+      (response: any) => {
+        
+        if (response.length >  0) {
+
+          this.dataService.setStaffBookingList(response)
+        }
+      },
+      (error: any) => {
+        alert(JSON.stringify(error))
+      }
+    );
   }
 
   async openPicker() {
