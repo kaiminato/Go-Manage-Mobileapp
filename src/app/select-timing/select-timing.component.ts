@@ -98,8 +98,6 @@ export class SelectTimingComponent implements OnInit {
       );
 
       this.options.disableWeeks = weekly_off_days;
-
-      console.log('weekly_off_days----', weekly_off_days)
     }
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     
@@ -295,7 +293,7 @@ export class SelectTimingComponent implements OnInit {
 
 
     let new_date = new Date(this.date)
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]+ ' '+ new_date.getFullYear()
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
     this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
       

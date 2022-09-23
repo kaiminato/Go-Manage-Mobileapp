@@ -77,21 +77,50 @@ export class DataService {
     
       let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
       let current_date_id = select_day[0].value;
+      let staff_available_date_id = [];
 
-      let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter( 
-        data => data.dayId == current_date_id
-      );
+      if (staff_available_date_id.length > 0){
+
+        staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter(  data => data.dayId == current_date_id );
+      }
+      
 
       const today = new Date()
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
-     
-      let status = new_date <= new Date(yesterday) || staff_available_date_id.length == 0? true : false;
+      let status = false;
+      if (get_booking_values.booking_type == this.BOOKING_WITH_STAFF) {
+
+        status = new_date <= new Date(yesterday) || staff_available_date_id.length == 0? true : false;
+      } else {
+        
+        status = new_date <= new Date(yesterday)
+      }
+      
 
       days_list.push({ day_number: i, is_disabled: status, is_active: false, month: month, year: year})
     }
     console.log('days_list---',days_list)
     return await days_list;
+  }
+
+  async getStaticShift () {
+
+    return await [
+      { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false},
+      { id:2, time: '09:00 AM', value:'09:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:3, time: '09:30 AM', value:'09:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:4, time: '10:00 AM', value:'10:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:5, time: '10:30 AM', value:'10:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:6, time: '11:00 AM', value:'11:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:7, time: '05:30 PM', value:'17:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:8, time: '06:00 PM', value:'18:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:9, time: '06:30 PM', value:'18:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
+      { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.MORNING_SHIFT, is_active: false  , is_disabled: false},
+      
+    ];
   }
 
   async getShift (date: string){
@@ -254,8 +283,8 @@ export class DataService {
 
   async getStaffBookingList () {
 
-    let service_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
-    return await service_list == undefined || service_list == null ? [] :  JSON.parse(service_list);
+    let booking_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+    return await booking_list == undefined || booking_list == null ? [] :  JSON.parse(booking_list);
   }
 
   async getStaffBookingDetail (staff_id: any) {

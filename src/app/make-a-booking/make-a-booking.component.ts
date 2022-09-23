@@ -197,7 +197,7 @@ export class MakeABookingComponent implements OnInit {
   async selectedServicesDetail (){
     
     let selected_service_details = await this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
-   console.log('bbbbbbbbbbbbbb', selected_service_details , this.SELECTED_SERVICES, this.SERVICE_LIST)
+   
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
@@ -212,7 +212,7 @@ export class MakeABookingComponent implements OnInit {
   }
 
   async setServicesInBooking () {
-    console.log('this.SELECTED_SERVICES--', this.SELECTED_SERVICES);
+    
     let selected_service = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
@@ -221,6 +221,7 @@ export class MakeABookingComponent implements OnInit {
     initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
 
     await this.dataService.setInitialBooking(initial_data);
+    this.router.navigate(['/select-time-with-service-booking'])
   }
   
   navigation() {

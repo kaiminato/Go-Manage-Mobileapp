@@ -50,7 +50,7 @@ export class StaffServiceDetailsComponent implements OnInit {
 
     let booking_data = await this.dataService.getInitialBookingdata();
     console.log('booking_data', booking_data)
-    if (booking_data?.date != '') {
+    if (booking_data.date != '') {
 
       booking_data.date = '';
       booking_data.timing_id = ''
