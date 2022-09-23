@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
 import { Router } from '@angular/router';
 import { ModalController, PickerController ,IonSlides } from '@ionic/angular';
+import { ApiDataService } from '../services/api-data.service';
 
 @Component({
   selector: 'app-select-timing-with-service-booking',
@@ -54,7 +55,9 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     private dataService: DataService,
     private router: Router,
     private pickerCtrl: PickerController,
-    private modalController: ModalController) { }
+    private modalController: ModalController,
+    private apiService: ApiDataService
+    ) { }
 
   ngOnInit() {}
 
@@ -114,6 +117,10 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     if (is_disabled) return ;
 
+    if (this.date == '') {
+      await this.apiService.presentAlert('Please select a available date');
+      return
+    }
 
     let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
     let get_booking_data = await this.dataService.getInitialBookingdata();

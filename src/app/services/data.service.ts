@@ -106,21 +106,30 @@ export class DataService {
 
   async getStaticShift () {
 
-    return await [
-      { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false},
-      { id:2, time: '09:00 AM', value:'09:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:3, time: '09:30 AM', value:'09:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:4, time: '10:00 AM', value:'10:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:5, time: '10:30 AM', value:'10:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:6, time: '11:00 AM', value:'11:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:7, time: '05:30 PM', value:'17:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:8, time: '06:00 PM', value:'18:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:9, time: '06:30 PM', value:'18:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false },
-      { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.MORNING_SHIFT, is_active: false  , is_disabled: false},
-      
-    ];
+    let staff_list = await this.getStaffList();
+
+    console.log('staff_list',staff_list)
+    let time_array = [];
+
+    for (let staff of staff_list) {
+
+      for (let staff_timing of staff.staffDetailFormatted) {
+
+        time_array.push(staff_timing.startShiftTime)
+        time_array.push(staff_timing.endShiftTime)
+      }
+    }
+
+    time_array.sort(function (a, b) { return a.localeCompare(b); });
+
+    this.ALL_SHIFT = [];
+
+    console.log('time_array', time_array)
+    let start_from = time_array[0];
+    let end_to = time_array[time_array.length - 1];
+    let data = await this.returnTimesInBetween(start_from , end_to)
+   
+    return this.ALL_SHIFT;
   }
 
   async getShift (date: string){
@@ -232,6 +241,23 @@ export class DataService {
     
     let booking_data = await this.getInitialBookingdata();
       let staff_detail = await this.getStaffDetail(booking_data.staff_id);
+
+      let d = new Date(date_value);
+      let day_name = this.DAYS_NAME[d.getDay()];
+    
+      let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
+      let current_date_id = select_day[0].value;
+      
+      let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter( 
+        data => data.dayId == current_date_id
+      );
+
+      return await staff_available_date_id.length == 0 ? true : false;
+  }
+
+  async isStaffDateOff (date_value: any , staff_id: any) {
+    
+      let staff_detail = await this.getStaffDetail(staff_id);
 
       let d = new Date(date_value);
       let day_name = this.DAYS_NAME[d.getDay()];
