@@ -11,6 +11,7 @@ import { ApiDataService } from '../services/api-data.service';
   templateUrl: './select-timing-with-service-booking.component.html',
   styleUrls: ['./select-timing-with-service-booking.component.scss'],
 })
+
 export class SelectTimingWithServiceBookingComponent implements OnInit {
 
   @ViewChild('mySlider')  slides: IonSlides;
@@ -70,7 +71,27 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     this.ALL_SHIFT = await this.dataService.getStaticShift();
     this.MORNING_SHIFT = [... this.ALL_SHIFT]
-    console.log('this.DAYS_ARRAY------',this.DAYS_ARRAY)
+    let new_date = new Date();
+    this.slides.slideTo(new_date.getDate()-1,1000);
+   
+    console.log('this.DAYS_ARRAY------',  this.DAYS_ARRAY)
+
+    await this.preFilledData();
+  }
+
+  async preFilledData () {
+
+    let get_booking_data = await this.dataService.getInitialBookingdata();
+
+    if (get_booking_data.timing_id  != '') {
+
+      this.date = get_booking_data.date;
+      await this.onDateSelect(this.date)
+      setTimeout(() => {
+        this.MORNING_SHIFT[get_booking_data.timing_id-1].is_active = true;
+      
+      }, 300);
+    }
   }
 
   async ionViewWillLeave () {
@@ -107,6 +128,8 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     if (is_disabled) return;
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
     console.log(this.date)
+
+    this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
 
     let new_date = new Date(this.date)
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]+ ' '+ new_date.getFullYear()

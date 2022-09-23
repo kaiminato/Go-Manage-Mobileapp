@@ -20,6 +20,7 @@ export class BookingSummaryComponent implements OnInit {
   STUDIO_NAME: string = 'beauty studio Corofin Tuam Galway';
   TOTAL_AMOUNT: any = 0;
   BOOKINGS_DETAILS: any;
+  BOOKING_WITH_STAFF: any = true;
 
   constructor(
     private router: Router,
@@ -36,7 +37,7 @@ export class BookingSummaryComponent implements OnInit {
   async ionViewWillEnter (){
 
     this.BOOKINGS_DETAILS = await this.dataService.getInitialBookingdata();
-
+    this.BOOKING_WITH_STAFF = this.BOOKINGS_DETAILS.booking_type == this.dataService.BOOKING_WITH_STAFF ? true : false;
     if (this.BOOKINGS_DETAILS == '') {
 
       this.router.navigate(['/'])

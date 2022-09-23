@@ -164,6 +164,8 @@ export class SelectTimingComponent implements OnInit {
 
           let from_date = new Date(booking_detail.startTime);
           let to_date = new Date(booking_detail.endTime)
+          to_date.setMinutes(to_date.getMinutes() - 1)
+          
           let check_date = new Date(current_date+'T'+shift.value);
 
           if (check_date >= from_date && check_date <= to_date){  

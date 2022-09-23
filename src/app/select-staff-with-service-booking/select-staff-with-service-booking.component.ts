@@ -1,5 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 
@@ -20,6 +22,8 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     private location: Location,
     private dataService: DataService,
     public imageService: ImageService,
+    private router: Router,
+    public alertController: AlertController,
   ) { }
 
   ngOnInit() {}
@@ -56,16 +60,23 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
       let all_shift_booked = true;
       let shift_list = [ ...this.ALL_SHIFT ]
+
       for (let shift of shift_list){
 
         let check_date = new Date(booking_data.date+'T'+shift.value);
+
+        // Checking All shift is booked or not
 
         for (let booking_detail of staff_date_booked_data) {
 
           let from_date = new Date(booking_detail.startTime);
           let to_date = new Date(booking_detail.endTime);
+          to_date.setMinutes(to_date.getMinutes() - 1)
+          //console.log('to_date--', to_date)
 
-          if (check_date >= from_date && check_date <= to_date){  
+          if (check_date >= from_date && check_date <= to_date){ 
+
+            shift.is_disabled = true;
           } else {
 
             all_shift_booked = false;
@@ -73,19 +84,76 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
         }
 
         if (all_shift_booked) continue; // If Staff don't have any free time shift
-
-
-
       }
 
+      let selecetd_shift = await this.ALL_SHIFT.filter( data => data.id == booking_data.timing_id)
+      console.log('selecetd_shift0---', selecetd_shift)
 
+      let total_duration = 0;
 
+      for (let service of booking_data.servises) total_duration += service.serviceDuration;
+
+      let starting_date_time = new Date(`${booking_data.date} ${selecetd_shift[0].value}`);
+      let ending_date_time = new Date(`${booking_data.date} ${selecetd_shift[0].value}`);
+
+      ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
+      ending_date_time = new Date(ending_date_time);
+
+      let is_passed = true;
+
+      for (let shift of shift_list) {
+
+        let new_date = new Date(`${booking_data.date} ${shift.value}`)
+      
+        if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
+
+          is_passed = false;
+        }
+      }
+
+      if (is_passed) {
+        this.AVAILABLE_STAFF.push(staff);
+      }
+
+      
+
+      // console.clear()
+      // console.log('starting_date_time--', starting_date_time , 'ending_date_time', ending_date_time)
+
+      // console.log('booking_data.servises', booking_data.servises)
+      // console.log('shift_list---' , 'total_duration', total_duration, shift_list)
     }
+    
+    if (this.AVAILABLE_STAFF.length == 0) this.presentAlert('No staff is free for the selected date and time')
+
+  }
+
+  async presentAlert (message: any) {
+
+    await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Alert',
+      message: message,
+      buttons: ['OK']
+    }).then((res) => {
+      
+      res.present();
+      res.onDidDismiss().then((dis) => {
+
+        this.navigation()
+      })
+    });
   }
 
   async SelectStaff (staff_id: any){
 
     console.log('staff id ', staff_id)
+    let booking_data = await this.dataService.getInitialBookingdata();
+    booking_data.staff_id = staff_id;
+    await this.dataService.setBookingData(booking_data)
+    this.router.navigate(['/booking-summary'])
+    
+    console.log('booking_data--', booking_data)
   }
 
   navigation() {
