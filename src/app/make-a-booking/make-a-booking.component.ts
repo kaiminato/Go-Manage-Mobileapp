@@ -32,12 +32,11 @@ export class MakeABookingComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     private dataService: DataService,
-   ) { 
-    
-    
-    
-  }
+   ) { }
 
+  test (){
+    this.IS_STAFF != this.IS_STAFF
+  }
   ngOnInit() {
 
     
@@ -146,13 +145,25 @@ export class MakeABookingComponent implements OnInit {
               
               category.is_open = true;
               
-              for(let categorie_service of category.services)  categorie_service.is_checked = categorie_service.id == service.id ? true : false; 
+              for(let categorie_service of category.services)  {
+               
+                if (categorie_service.id == service.id) {
+                 
+                  categorie_service.is_checked =  true ;
+                }
+                
+              } 
               
             }
           }
 
-          await this.selectedServicesDetail()
+          
         }
+
+        console.log('qqqqqqqqqqq',this.CATEGORY_LIST)
+        await this.selectedServicesDetail()
+
+        
       } else {
         this.SELECTED_SERVICES = []
         this.TOTAL_SERVICE_SELECTED = 0;
@@ -197,7 +208,7 @@ export class MakeABookingComponent implements OnInit {
   async selectedServicesDetail (){
     
     let selected_service_details = await this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
-   
+    console.log('doinng-------', this.SELECTED_SERVICES , selected_service_details)
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {

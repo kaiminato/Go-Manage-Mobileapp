@@ -132,6 +132,10 @@ export class DataService {
     return this.ALL_SHIFT;
   }
 
+  async getStaffOnDateAllShift (staff_id: any , date: any) {
+
+  }
+
   async getShift (date: string){
 
     
@@ -140,7 +144,6 @@ export class DataService {
     
     let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
 
-    console.log('select_day----', select_day)
     let selected_day_id = select_day.length > 0 ? select_day[0].value : 0;
 
     this.ALL_SHIFT = [];

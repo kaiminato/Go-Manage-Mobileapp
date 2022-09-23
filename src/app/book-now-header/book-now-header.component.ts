@@ -11,6 +11,7 @@ export class BookNowHeaderComponent implements OnInit {
   @Output() navigation = new EventEmitter<string>();
   @Input() HEADING_TEXT = '';
   @Input() IS_BACK = '';
+  @Input() BOOKING_WITH_STAFF = '';
   constructor(public dataService: DataService) {
    console.log('khkjh')
    }

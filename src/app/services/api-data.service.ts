@@ -78,7 +78,7 @@ export class ApiDataService {
         message: message,
         buttons: ['OK']
       }).then((res) => {
-  
+        
         res.present();
         res.onDidDismiss().then((dis) => {
   
