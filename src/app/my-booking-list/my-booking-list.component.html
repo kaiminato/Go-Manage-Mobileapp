@@ -1,0 +1,55 @@
+<ion-content>
+  <app-header (navigation)="navigation()"  [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" ></app-header>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button 
+          fill="clear" 
+          class="ion-float-right ion-margin-end"
+          [routerLink]="['/make-a-booking']"
+          ><ion-text class="new_booking">+ New Booking</ion-text></ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="booking-header-grid-section ion-margin-start ion-margin-end">
+    <ion-row>
+      <ion-col size="12" class="booking-header-section">
+        <div 
+          class="booking-selection future ion-text-center "
+          [class.active-booking-selection]="IS_FUTURE_BOOKING_active"
+          (click)="IS_FUTURE_BOOKING_active = true"
+          >Future Bookings
+        </div>
+        
+        <div  
+          class="booking-selection future ion-text-center"
+          [class.active-booking-selection]="!IS_FUTURE_BOOKING_active"
+          (click)="IS_FUTURE_BOOKING_active = false"
+          >Recent Bookings</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card class="booking_list" *ngFor="let booking of FUTURE_BOOKING_LIST">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-icon name="calendar"></ion-icon> {{booking.date_time}}
+      </ion-card-subtitle>
+      <ion-card-content>
+        <div class="card-content">
+          <div class="booking-content service_info">
+            {{booking.service_name}}
+          </div>
+  
+          <div class="booking-content rescheduling_info">
+            content
+          </div>
+        </div>
+        
+      </ion-card-content>
+      
+    </ion-card-header>
+  </ion-card>
+</ion-content>

@@ -45,6 +45,11 @@ export class ApiDataService {
     return await this.http.get(url,{headers: header});
   }
 
+  async getMyProfile (){
+    
+    return await this.http.get('https://91.250.249.133:4601/user/retrieveUserDetails?email=test@gmail.com');
+  }
+
   async presentLoading() {
 
     this.isLoading = true;

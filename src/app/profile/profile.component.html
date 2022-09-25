@@ -1,4 +1,279 @@
 <ion-content>
-  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" [PROFILE_HEADER_DATA]="PROFILE_HEADER"></app-header>
-  </ion-content>
+  <app-header (navigation)="navigation()" (updateUser)="updateUser()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" [PROFILE_HEADER_DATA]="PROFILE_HEADER"></app-header>
+  
+  <!------------------------ Show Profile --------------------------->
+
+    <div class="scroll-bar" *ngIf="!EDIT_PROFILE">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <div class="user-name">
+              <ion-text>JA</ion-text>
+            </div>
+
+            <ion-button (click)="showForm()">Edit</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      
+
+      
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+              <ion-item detail="false">
+                <ion-label>
+                  <ion-text>First Name</ion-text>
+                </ion-label>
+                <ion-text >{{ FIRST_NAME }}</ion-text>
+                <div>
+                  <ion-input [(ngModel)]="FIRST_NAME" *ngIf="EDIT_PROFILE"></ion-input>
+                </div>
+                
+                
+              </ion-item>
+
+              
+
+              <ion-item detail="false">
+                <ion-label>
+                  <ion-text>Last Name</ion-text>
+                </ion-label>
+                <ion-text>{{ LAST_NAME }}</ion-text>
+              </ion-item>
+
+              <ion-item detail="false">
+                <ion-label>
+                  <ion-text>Gender</ion-text>
+                </ion-label>
+                <ion-text>{{ GENDER }}</ion-text>
+              </ion-item>
+
+              <ion-item detail="false">
+                <ion-label>
+                  <ion-text>Birthday</ion-text>
+                </ion-label>
+                <ion-text>{{ BIRTHDAY }}</ion-text>
+              </ion-item>
+
+              <ion-item detail="false" lines="none">
+                <ion-label>
+                  <ion-text>About Me</ion-text>
+                </ion-label>
+                <ion-text>{{ ABOUT_ME }}</ion-text>
+              </ion-item>
+
+            </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+            <ion-item detail="false">
+              <ion-label>
+                <ion-text>Unit of Measure</ion-text>
+              </ion-label>
+              <ion-text>{{ UNIT_OF_MEASURE }}</ion-text>
+            </ion-item>
+
+            <ion-item detail="false">
+              <ion-label>
+                <ion-text>Height</ion-text>
+              </ion-label>
+              <ion-text>{{ HEIGHT }}</ion-text>
+            </ion-item>
+
+            <ion-item detail="false" lines="none">
+              <ion-label>
+                <ion-text>Weight</ion-text>
+              </ion-label>
+              <ion-text>{{ WEIGHT }}</ion-text>
+            </ion-item>
+          </ion-list>
+
+
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+              <ion-item detail="false" lines="none">
+                <ion-label>
+                  <ion-text>Email</ion-text>
+                </ion-label>
+                <ion-text>{{ EMAIL }}</ion-text>
+              </ion-item>
+            </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+              <ion-item detail="false" lines="none">
+                <ion-label>
+                  <ion-text>Home Location</ion-text>
+                </ion-label>
+                <ion-text>{{ HOME_LOCATION }}</ion-text>
+              </ion-item>
+            </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!------------------------ Edit Profile --------------------------->
+
+
+    <div class="scroll-bar" *ngIf="EDIT_PROFILE">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <div class="user-name">
+              <ion-text>JA</ion-text>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      
+
+      
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+
+              <ion-item detail="false">
+                <ion-label position="fixed"><ion-text>First Name</ion-text></ion-label>
+                <ion-input [(ngModel)]="FIRST_NAME"></ion-input>
+              </ion-item>
+
+              <ion-item detail="false">
+                <ion-label position="fixed"> <ion-text>Last Name</ion-text> </ion-label>
+                <ion-input [(ngModel)]="LAST_NAME"></ion-input>
+              </ion-item>
+
+
+              <ion-item detail="false">
+                <ion-label position="fixed"><ion-text>Gender</ion-text></ion-label>
+                <ion-input [(ngModel)]="GENDER"></ion-input>
+              </ion-item>
+
+              <ion-item detail="false">
+                <ion-label position="fixed"><ion-text>Birthday</ion-text></ion-label>
+                <ion-input type="date" [(ngModel)]="BIRTHDAY"></ion-input>
+              </ion-item>
+
+              <ion-item detail="false" lines="none">
+                <ion-label position="fixed"><ion-text>About Me</ion-text></ion-label>
+                <ion-input [(ngModel)]="ABOUT_ME"></ion-input>
+              </ion-item>
+
+            </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+            
+              <ion-item detail="false">
+                <ion-label position="fixed"><ion-text>Unit of Measure</ion-text></ion-label>
+                <ion-input [(ngModel)]="UNIT_OF_MEASURE"></ion-input>
+              </ion-item>
+
+              <ion-item detail="false">
+                <ion-label position="fixed"><ion-text>Height</ion-text></ion-label>
+                <ion-input [(ngModel)]="HEIGHT"></ion-input>
+              </ion-item>
+
+            <ion-item detail="false" lines="none">
+              <ion-label position="fixed"><ion-text>Weight</ion-text></ion-label>
+              <ion-input [(ngModel)]="WEIGHT"></ion-input>
+            </ion-item>
+
+          </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+
+              <ion-item detail="false" lines="none">
+                <ion-label position="fixed"><ion-text>Email</ion-text></ion-label>
+                <ion-input [(ngModel)]="EMAIL"></ion-input>
+              </ion-item>
+
+            </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!------------ Divider --------------->
+      <div class="divider"></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list>
+              
+              <ion-item detail="false" lines="none">
+                <ion-label position="fixed"><ion-text>Home Location</ion-text></ion-label>
+                <ion-input [(ngModel)]="HOME_LOCATION"></ion-input>
+              </ion-item>
+
+            </ion-list>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+</ion-content>
+
 <app-footer></app-footer>
