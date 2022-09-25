@@ -1,5 +1,12 @@
+
+.alert-title{
+    color: #047473 !important;
+}
 ion-content {
 
+    
+    
+    
     .new_booking {
         //font-weight: bold;
         color : #047473;
@@ -31,9 +38,14 @@ ion-content {
         }
     }
 
+    .list_0 {
+
+        margin-top: -5px !important;
+    }
     .booking_list {
 
         .card-content {
+            margin-top: 10px;
             display: flex;
 
             .booking-content {
@@ -43,10 +55,39 @@ ion-content {
 
             .service_info {
                 
+                line-height: 20px;  
+                .service_name {
+                    font-weight: bold;
+                }
+
+                .service_duration {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .owner_name {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
             }
 
             .rescheduling_info {
 
+                .rescheduling-button {
+
+                    --background: #047473;
+                    color: #fff;
+                    //font-size: 8px;
+                    height: 26px;
+                }
+
+                .cancel-button {
+                    color: #047473;
+                    --background: #ebe8e8;
+                    //font-size: 8px;
+                    height: 26px;
+                }
+                
             }
         }
     }

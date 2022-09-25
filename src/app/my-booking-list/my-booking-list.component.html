@@ -32,19 +32,33 @@
     </ion-row>
   </ion-grid>
 
-  <ion-card class="booking_list" *ngFor="let booking of FUTURE_BOOKING_LIST">
+  <ion-card class="booking_list list_{{i}}" *ngFor="let booking of FUTURE_BOOKING_LIST; let i = index" >
     <ion-card-header>
       <ion-card-subtitle>
         <ion-icon name="calendar"></ion-icon> {{booking.date_time}}
       </ion-card-subtitle>
-      <ion-card-content>
+      <ion-card-content class="ion-no-padding">
         <div class="card-content">
           <div class="booking-content service_info">
-            {{booking.service_name}}
+            <div class="service_name"> {{booking.service_name}}</div>
+            <div class="service_duration"> {{booking.service_duration}} </div>
+            <div class="owner_name"> Jade Amber </div>
+            
           </div>
   
           <div class="booking-content rescheduling_info">
-            content
+            <ion-button 
+              expand="full" 
+              size="small" 
+              class="rescheduling-button"
+              >Rescheduling booking</ion-button>
+
+            <ion-button
+              expand="full" 
+              size="small" 
+              class="cancel-button ion-margin-top"
+              (click)="cancelBooking(booking.id)"
+              >Cancel booking</ion-button>
           </div>
         </div>
         
