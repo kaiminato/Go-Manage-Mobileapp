@@ -11,8 +11,15 @@
       <ion-col size="10">
         <div class="header-text">
           <ion-text>
-            {{ this.HEADING_TEXT }}
+            {{ this.HEADING_TEXT }} 
           </ion-text>
+          <ion-button 
+            *ngIf="PROFILE_HEADER_DATA.is_profile"
+            class="save ion-float-right ion ion-no-margin ion-no-padding ion-margin-end" 
+            fill="clear" 
+            [disabled]="!PROFILE_HEADER_DATA.edit_profile"
+            (click)="saveProfile()"
+            >Save</ion-button>
         </div>
       </ion-col>
     

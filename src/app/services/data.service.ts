@@ -107,8 +107,6 @@ export class DataService {
   async getStaticShift () {
 
     let staff_list = await this.getStaffList();
-
-    console.log('staff_list',staff_list)
     let time_array = [];
 
     for (let staff of staff_list) {
@@ -124,11 +122,10 @@ export class DataService {
 
     this.ALL_SHIFT = [];
 
-    console.log('time_array', time_array)
     let start_from = time_array[0];
     let end_to = time_array[time_array.length - 1];
     let data = await this.returnTimesInBetween(start_from , end_to)
-   
+    
     return this.ALL_SHIFT;
   }
 
@@ -180,6 +177,7 @@ export class DataService {
       await this.returnTimesInBetween(first_start_time , second_end_time);
     }
 
+    
    
     return await this.ALL_SHIFT;
     // return await [
@@ -328,7 +326,17 @@ export class DataService {
    return await staff_list.filter( data => data.employeeId == staff_id && (new Date(yesterday) < new Date(data.endTime)));
   }
 
-  async 
+  async getStaffBookingDetailWithDate (staff_id: any, date: any) {
+
+    let staff_list: any = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+    staff_list = staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
+
+    
+
+   return await staff_list.filter( data => data.employeeId == staff_id && data.startTime.includes(date));
+  }
+
+  
 
   async setInitialBooking(data: any) {
 

@@ -10,9 +10,17 @@ export class HeaderComponent implements OnInit {
   @Output() navigation = new EventEmitter<string>();
   @Input() HEADING_TEXT = '';
   @Input() IS_BACK = '';
-  constructor() { }
+  @Input() PROFILE_HEADER_DATA = '';
+  constructor() {
+    
+   }
 
   ngOnInit() {}
+
+  saveProfile (){
+
+    console.log('plpaese save profile')
+  }
 
   back() {
     this.navigation.emit();
