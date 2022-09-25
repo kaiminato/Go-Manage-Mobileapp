@@ -15,6 +15,7 @@ import { StaffServiceDetailsComponent } from './staff-service-details/staff-serv
 import { AuthGuard } from '@auth0/auth0-angular';
 import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
 import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
+import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 
 
 const routes: Routes = [
@@ -93,6 +94,11 @@ const routes: Routes = [
   {
     path: 'select-staff-with-service-booking',
     component: SelectStaffWithServiceBookingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'my-booking-list',
+    component: MyBookingListComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -30,6 +30,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { ApiDataService } from './services/api-data.service';
 import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
 import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
+import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
+
 const redirectUri = window.location.origin+`/about-us`;
 
 //alert(redirectUri); 
@@ -53,7 +55,8 @@ const redirectUri = window.location.origin+`/about-us`;
     BookNowHeaderComponent,
     ProfileComponent,
     SelectTimingWithServiceBookingComponent,
-    SelectStaffWithServiceBookingComponent
+    SelectStaffWithServiceBookingComponent,
+    MyBookingListComponent
   ],
   imports: [
     BrowserModule, 

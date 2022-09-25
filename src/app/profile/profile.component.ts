@@ -15,6 +15,17 @@ export class ProfileComponent implements OnInit {
   EDIT_PROFILE: boolean = false;
   PROFILE_HEADER: any = {is_profile: this.IS_PROFILE_SCREEN , edit_profile: this.EDIT_PROFILE}
   
+  FIRST_NAME: string = 'Aonghus';
+  LAST_NAME: string = 'Tierney';
+  GENDER: string = 'MALE';
+  BIRTHDAY: string = '19 Sept 1990';
+  ABOUT_ME: string = '';
+  UNIT_OF_MEASURE: string = 'Imperial/U.S.';
+  HEIGHT: any = '';
+  WEIGHT: any = '';
+  EMAIL: string = 'Aonghusctierney@gmail.com';
+  HOME_LOCATION: string = 'Galway';
+
   constructor(
     private router: Router,
     private apiData: ApiDataService,
@@ -28,6 +39,19 @@ export class ProfileComponent implements OnInit {
 
   ionViewWillEnter () {
 
+  }
+
+  async showForm (){
+    this.EDIT_PROFILE = true;
+    this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE
+  }
+
+  updateUser() {
+
+    this.EDIT_PROFILE = false;
+    this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
+
+    console.log('user updated')
   }
 
   navigation() {
