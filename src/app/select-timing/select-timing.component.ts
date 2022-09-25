@@ -103,9 +103,6 @@ export class SelectTimingComponent implements OnInit {
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
-    
-    console.clear();
-    console.log('teee-----------', this.ALL_SHIFT)
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
@@ -159,7 +156,7 @@ export class SelectTimingComponent implements OnInit {
       for(let shift of this.ALL_SHIFT) {
 
         let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(current_date));
-
+        
         for(let booking_detail of current_date_booking) {
 
           let from_date = new Date(booking_detail.startTime);
@@ -311,7 +308,9 @@ export class SelectTimingComponent implements OnInit {
     //console.log('selected date', this.STAFF_BOOKING_LIST)
   
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
-    console.log('selected_date_booking_list', this.date, selected_date_booking_list)
+    
+    selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
+    console.log('selected_date_booking_list-----', this.date, selected_date_booking_list)
  
     for (let index in this.ALL_SHIFT){
 
@@ -321,6 +320,8 @@ export class SelectTimingComponent implements OnInit {
 
         let start_time = new Date(value.startTime)
         let end_time = new Date(value.endTime)
+        end_time.setMinutes(end_time.getMinutes() - 1)
+        
 
         if (this.ALL_SHIFT[index].is_disabled == false) {
 

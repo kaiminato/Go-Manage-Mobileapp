@@ -22,7 +22,8 @@ export class BookingCompleteComponent implements OnInit {
     let data = await this.dataService.getInitialBookingdata();
     let staff_details = await this.dataService.getStaffDetail(data.staff_id);
 
-    this.NAME = `${staff_details[0].firstName} ${staff_details[0].lastName}`
+    //this.NAME = `${staff_details[0].firstName} ${staff_details[0].lastName}`
+    this.NAME = 'Jade Amber'
   }
 
   async ionViewWillLeave() {

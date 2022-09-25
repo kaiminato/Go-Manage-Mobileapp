@@ -13,8 +13,8 @@ export class BookNowHeaderComponent implements OnInit {
   @Input() IS_BACK = '';
   @Input() BOOKING_WITH_STAFF = '';
   constructor(public dataService: DataService) {
-   console.log('khkjh')
-   }
+   
+  }
 
 
   ngOnInit() {}

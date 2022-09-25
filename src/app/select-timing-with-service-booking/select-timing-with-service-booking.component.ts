@@ -130,6 +130,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     console.log('selected_date---', selected_date)
     this.date = selected_date;
     this.IS_CALNDER_OPEN = false;
+    this.modalController.dismiss();
     let [year , month , date] = this.date.split('-')
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
@@ -139,6 +140,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
     this.slides.slideTo(new_date.getDate()-1,1000);//(index_number, speed_time)
     
+    await this.checkAllShiftStatus(this.date);
   }
 
   async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
@@ -152,6 +154,46 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let new_date = new Date(this.date)
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]+ ' '+ new_date.getFullYear()
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
+
+    await this.checkAllShiftStatus(this.date);
+  }
+
+  async checkAllShiftStatus (date: any) {
+
+    let all_shift = await this.dataService.getStaticShift();
+    let all_staff = await this.dataService.getStaffList();
+    console.log('shift', all_shift)
+
+    for (let shift of all_shift) {
+      
+      let check_date_time = new Date(`${date} ${shift.value}`);
+      shift.staff_ids = [];
+      
+      for (let staff of all_staff){
+ 
+        let staff_date_booking = await this.dataService.getStaffBookingDetailWithDate(staff.id, date)
+        staff_date_booking.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); }); // sort array in ascending order
+        
+        if (staff_date_booking.length == 0) continue;
+
+        for (let booking of staff_date_booking) {
+
+          let start_date_time = new Date(booking.startTime);
+          let end_date_time = new Date(booking.endTime)
+          end_date_time = new Date(end_date_time.setMinutes(end_date_time.getMinutes() - 1))
+          
+          if (check_date_time >= start_date_time && check_date_time <= end_date_time) shift.staff_ids.push(staff.id);
+          
+        }
+       
+      }
+
+      shift.all_staff_id = [... new Set(shift.staff_ids)]
+      shift.is_disabled = shift.all_staff_id.length == all_staff.length;
+      
+    }
+
+    this.MORNING_SHIFT = all_shift;
   }
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){

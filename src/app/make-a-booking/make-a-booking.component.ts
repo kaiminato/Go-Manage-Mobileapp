@@ -44,6 +44,14 @@ export class MakeABookingComponent implements OnInit {
 
   async ionViewWillEnter (){
 
+    this.SELECTED_SERVICES = []
+    this.TOTAL_SERVICE_SELECTED = 0;
+    this.TOTAL_PRICE = 0;
+    this.STAFF_LIST = [];
+    this.SERVICE_LIST = [];
+    this.CATEGORY_LIST = [];
+    this.IS_STAFF = true;
+
     await this.getStaffList();
   }
 
