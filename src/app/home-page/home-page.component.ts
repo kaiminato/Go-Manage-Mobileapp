@@ -43,6 +43,7 @@ export class HomePageComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
+  
   ) {
 
     console.log('LIST----', this.LIST)
@@ -50,6 +51,13 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit() {
     
+  }
+
+  async navigate (link: any) {
+
+    console.log('link', link)
+    await this.router.navigate([link])
+
   }
 
 }

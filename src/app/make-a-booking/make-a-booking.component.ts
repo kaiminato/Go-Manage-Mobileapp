@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../services/image.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
+
 
 @Component({
   selector: 'app-make-a-booking',
@@ -15,6 +16,7 @@ export class MakeABookingComponent implements OnInit {
   HEADING: string = "1";
   TOTAL_SERVICE_SELECTED: any = 0;
   TOTAL_PRICE: any = 0;
+  CANCEL_BOOKING_ID: number = 0;
 
   STAFF_LIST: any = [
     // {id:1, firstName: 'Jade', lastName: 'amber', image: this.imageService.DEFAULT_PERSON},
@@ -32,6 +34,7 @@ export class MakeABookingComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     private dataService: DataService,
+    private activateRoute: ActivatedRoute
    ) { }
 
   test (){
@@ -43,6 +46,14 @@ export class MakeABookingComponent implements OnInit {
   }
 
   async ionViewWillEnter (){
+
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+      }
+    );
 
     this.SELECTED_SERVICES = []
     this.TOTAL_SERVICE_SELECTED = 0;
@@ -189,7 +200,7 @@ export class MakeABookingComponent implements OnInit {
     initial_data.booking_type = await this.dataService.BOOKING_WITH_STAFF;
 
     await this.dataService.setInitialBooking(initial_data);
-    this.router.navigate(['/staff-service-details',staff_id]);
+    this.router.navigate(['/staff-service-details',staff_id ] ,{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } });
   }
 
   changeCategoryStatus (service_id: any , status){
@@ -240,7 +251,7 @@ export class MakeABookingComponent implements OnInit {
     initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
 
     await this.dataService.setInitialBooking(initial_data);
-    this.router.navigate(['/select-time-with-service-booking'])
+    this.router.navigate(['/select-time-with-service-booking'] ,{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
   }
   
   navigation() {
