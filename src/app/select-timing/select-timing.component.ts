@@ -27,6 +27,7 @@ export class SelectTimingComponent implements OnInit {
   EVENING_SHIFT : any = [];
   ALL_SHIFT : any = [];
   ACTIVE_DAY: number = 10;
+  CANCEL_BOOKING_ID: number = 0;
   IS_STAFF: any = true;
   IS_CALNDER_OPEN: boolean = true;
   date: string = '';
@@ -74,6 +75,14 @@ export class SelectTimingComponent implements OnInit {
 
   async ionViewWillEnter () {
 
+
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+      }
+    );
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
@@ -396,7 +405,7 @@ export class SelectTimingComponent implements OnInit {
     await this.dataService.setBookingData(get_booking_data)
     
     console.log('get_booking_data>>>>>>>', get_booking_data)
-    setTimeout(() => { this.router.navigate(['/booking-summary']) }, 200);
+    setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
     
   }
 

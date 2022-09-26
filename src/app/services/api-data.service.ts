@@ -45,9 +45,24 @@ export class ApiDataService {
     return await this.http.get(url,{headers: header});
   }
 
-  async getMyProfile (){
+  async getMyProfile (email: string){
+    let header = new HttpHeaders().set('Authorization','Bearer '+this.token)
+    //return await this.http.get('https://91.250.249.133:4601/user/retrieveUserDetails?email='+email);
+    return await this.http.get('https://go-manage-testing.eu.auth0.com/api/v2/users-by-email?email='+email, {headers: header});
+  }
+
+  async updateProfile (data: any) {
+
+    let header = new HttpHeaders().set('Authorization','Bearer '+this.token)
+    let url = 'https://91.250.249.133:4601/user/updateUserDetails?email=test@gmail.com';
+    console.log('header', header)
     
-    return await this.http.get('https://91.250.249.133:4601/user/retrieveUserDetails?email=test@gmail.com');
+    return await this.http.patch(url,data, {headers: header , })
+  }
+
+  async deleteBooking (id: any) {
+
+    return await this.http.delete(this.apiUrl+'bookings/deleteBooking/'+id)
   }
 
   async presentLoading() {

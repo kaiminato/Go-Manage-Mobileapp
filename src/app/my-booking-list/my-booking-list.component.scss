@@ -1,10 +1,11 @@
 
-.alert-title{
-    color: #047473 !important;
-}
+
 ion-content {
 
-    
+    .main-div {
+        max-height: 75%;
+        overflow: scroll;
+    }
     
     
     .new_booking {
@@ -77,7 +78,7 @@ ion-content {
 
                     --background: #047473;
                     color: #fff;
-                    //font-size: 8px;
+                    font-size: 10px;
                     height: 26px;
                 }
 

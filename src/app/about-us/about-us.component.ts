@@ -44,6 +44,16 @@ export class AboutUsComponent {
 
    async getUser() {
 
+    await this.auth.getUser().subscribe(
+      (response: any) => {
+        console.log('auth response', response)
+      },
+      (error:any) => {
+        console.log('auth error ', error)
+      }
+    )
+
+    return
    
     await (await this.apiDataService.getUser()).subscribe(
       (response: any) => {

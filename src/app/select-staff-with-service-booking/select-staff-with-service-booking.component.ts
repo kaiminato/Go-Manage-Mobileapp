@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute , Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
@@ -17,6 +17,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
   BOOKING_LIST: any = [];
   AVAILABLE_STAFF: any = [];
   ALL_SHIFT: any = [];
+  CANCEL_BOOKING_ID: number = 0;
 
   constructor(
     private location: Location,
@@ -24,11 +25,20 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     public imageService: ImageService,
     private router: Router,
     public alertController: AlertController,
+    private activateRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {}
 
   async ionViewWillEnter () {
+
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+      }
+    );
 
     this.STAFF_LIST = await this.dataService.getStaffList();
     this.BOOKING_LIST = await this.dataService.getStaffBookingList();
@@ -166,7 +176,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     booking_data.staff_id = staff_id;
     await this.dataService.setBookingData(booking_data)
-    this.router.navigate(['/booking-summary'])
+    this.router.navigate(['/booking-summary'],{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
     
     console.log('booking_data--', booking_data)
   }

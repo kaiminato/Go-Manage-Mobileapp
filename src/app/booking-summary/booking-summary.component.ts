@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router , ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
@@ -21,13 +21,15 @@ export class BookingSummaryComponent implements OnInit {
   TOTAL_AMOUNT: any = 0;
   BOOKINGS_DETAILS: any;
   BOOKING_WITH_STAFF: any = true;
+  CANCEL_BOOKING_ID: number = 0;
 
   constructor(
     private router: Router,
     private location: Location,
     private dataService: DataService,
     public  imageService: ImageService,
-    private apiData: ApiDataService
+    private apiData: ApiDataService,
+    private activateRoute: ActivatedRoute
     ) {
 
     }
@@ -35,6 +37,14 @@ export class BookingSummaryComponent implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter (){
+
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+      }
+    );
 
     this.BOOKINGS_DETAILS = await this.dataService.getInitialBookingdata();
     this.BOOKING_WITH_STAFF = this.BOOKINGS_DETAILS.booking_type == this.dataService.BOOKING_WITH_STAFF ? true : false;
@@ -149,11 +159,32 @@ export class BookingSummaryComponent implements OnInit {
         
         //await this.dataService.removeBookingdata()
         await this.apiData.dismiss();
+
+        if (this.CANCEL_BOOKING_ID != 0) {
+
+          await this.deleteBooking()
+        }
         setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
       }
     );
+
+    
     console.log(data)
     
+  }
+
+  async deleteBooking() {
+
+    (await this.apiData.deleteBooking(this.CANCEL_BOOKING_ID)).subscribe(
+      async (response: any) => {
+
+        console.log('response delete booking' , response)
+      },
+      async (error: any) => {
+        
+        console.log('error', error)
+      }
+    );
   }
 
   navigation() {
