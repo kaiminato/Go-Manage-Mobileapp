@@ -32,38 +32,43 @@
     </ion-row>
   </ion-grid>
 
-  <ion-card class="booking_list list_{{i}}" *ngFor="let booking of FUTURE_BOOKING_LIST; let i = index" >
-    <ion-card-header>
-      <ion-card-subtitle>
-        <ion-icon name="calendar"></ion-icon> {{booking.date_time}}
-      </ion-card-subtitle>
-      <ion-card-content class="ion-no-padding">
-        <div class="card-content">
-          <div class="booking-content service_info">
-            <div class="service_name"> {{booking.service_name}}</div>
-            <div class="service_duration"> {{booking.service_duration}} </div>
-            <div class="owner_name"> Jade Amber </div>
-            
-          </div>
-  
-          <div class="booking-content rescheduling_info">
-            <ion-button 
-              expand="full" 
-              size="small" 
-              class="rescheduling-button"
-              >Rescheduling booking</ion-button>
+  <div class="main-div">
+    <ion-card class="booking_list list_{{i}}" *ngFor="let booking of IS_FUTURE_BOOKING_active ? FUTURE_BOOKING_LIST : RECENT_BOOKING_LIST; let i = index" >
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-icon name="calendar"></ion-icon> {{booking.date_time}}
+        </ion-card-subtitle>
+        <ion-card-content class="ion-no-padding">
+          <div class="card-content">
+            <div class="booking-content service_info">
+              <div class="service_name"> {{booking.service_name}}</div>
+              <div class="service_duration"> {{booking.service_duration}} </div>
+              <div class="owner_name"> Jade Amber </div>
+              
+            </div>
+    
+            <div class="booking-content rescheduling_info" *ngIf="IS_FUTURE_BOOKING_active">
+              <ion-button 
+                expand="full" 
+                size="small" 
+                class="rescheduling-button"
+                [routerLink]="['/make-a-booking']"
+                [queryParams]="{id: booking.id}"
+                >Rescheduling booking</ion-button>
 
-            <ion-button
-              expand="full" 
-              size="small" 
-              class="cancel-button ion-margin-top"
-              (click)="cancelBooking(booking.id)"
-              >Cancel booking</ion-button>
+              <ion-button
+                expand="full" 
+                size="small" 
+                class="cancel-button ion-margin-top"
+                (click)="cancelBooking(booking.id)"
+                >Cancel booking</ion-button>
+            </div>
           </div>
-        </div>
+          
+        </ion-card-content>
         
-      </ion-card-content>
-      
-    </ion-card-header>
-  </ion-card>
+      </ion-card-header>
+    </ion-card>
+  </div>
+  
 </ion-content>

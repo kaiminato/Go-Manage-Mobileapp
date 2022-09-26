@@ -2,7 +2,7 @@ import { Component, OnInit , ViewChild} from '@angular/core';
 import { Location } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
-import { Router } from '@angular/router';
+import { Router , ActivatedRoute } from '@angular/router';
 import { ModalController, PickerController ,IonSlides } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
 
@@ -28,6 +28,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
   ACTIVE_DAY: number = 25;
   DATE_TYPE: 'object';
   MONTH_NAME_LIST: any = [];
+  CANCEL_BOOKING_ID: number = 0;
 
   slideOpts = {
     slidesPerView: 6,
@@ -58,12 +59,21 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     private pickerCtrl: PickerController,
     private modalController: ModalController,
     private apiService: ApiDataService,
-    private apiData: ApiDataService
+    private apiData: ApiDataService,
+    private activateRoute: ActivatedRoute
     ) { }
 
   ngOnInit() {}
 
   async ionViewWillEnter (){
+
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+      }
+    );
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR;
@@ -217,7 +227,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     await this.dataService.setBookingData(get_booking_data)
     
     console.log('get_booking_data>>>>>>>', get_booking_data)
-    setTimeout(() => { this.router.navigate(['/select-staff-with-service-booking']) }, 200);
+    setTimeout(() => { this.router.navigate(['/select-staff-with-service-booking'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
     
   }
 

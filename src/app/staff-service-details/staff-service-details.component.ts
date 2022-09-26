@@ -17,6 +17,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   TOTAL_PRICE: any = 0;
   DESCRIPTION_TEXT: string = 'hello';
   isOpen: boolean = false
+  CANCEL_BOOKING_ID: number = 0;
   STAFF_DETAIL: any = []
 
   CATEGORY_LIST: any = [];
@@ -40,6 +41,13 @@ export class StaffServiceDetailsComponent implements OnInit {
   async ionViewWillEnter() {
     
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+      }
+    );
 
     this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.STAFF_DETAIL[0].image = this.STAFF_DETAIL[0]?.employeeImg ? this.STAFF_DETAIL[0]?.employeeImg : this.imageService.DEFAULT_PERSON;

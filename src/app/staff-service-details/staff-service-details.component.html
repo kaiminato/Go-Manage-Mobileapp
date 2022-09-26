@@ -61,7 +61,7 @@
         <div>{{ TOTAL_PRICE | currency: 'EUR'}}</div>
       </ion-col>
       <ion-col size="6">
-        <ion-button expand="block" [routerLink]="['/select-a-time']" [disabled]="TOTAL_SERVICE_SELECTED == '0'">
+        <ion-button expand="block" [routerLink]="['/select-a-time']" [queryParams]="this.CANCEL_BOOKING_ID == 0 ? '' : {id: CANCEL_BOOKING_ID}"  [disabled]="TOTAL_SERVICE_SELECTED == '0'">
           Book now 
           <span class="material-symbols-outlined booking-arrow">
             arrow_forward

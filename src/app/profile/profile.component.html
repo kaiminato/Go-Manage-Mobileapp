@@ -8,9 +8,15 @@
         <ion-row>
           <ion-col size="12" class="ion-text-center">
             <div class="user-name">
-              <ion-text>JA</ion-text>
+              <ion-text class="usr_name">
+                {{SHORT_NAME}}
+                <span class="edit_icon"> 
+                  <ion-icon name="pencil" class="pencili-icon" (click)="showForm()"></ion-icon> 
+                </span>
+              </ion-text>
+ 
             </div>
-
+          
             <!-- <ion-button (click)="showForm()"><ion-icon name="pencil"></ion-icon></ion-button> -->
           </ion-col>
         </ion-row>
@@ -187,7 +193,12 @@
 
               <ion-item detail="false">
                 <ion-label position="fixed"><ion-text>Gender</ion-text></ion-label>
-                <ion-input [(ngModel)]="GENDER"></ion-input>
+                <!-- <ion-input [(ngModel)]="GENDER"></ion-input> -->
+                <ion-select [(ngModel)]="GENDER">
+                  <ion-select-option value="MALE">MALE</ion-select-option>
+                  <ion-select-option value="FEMALE">FEMALE</ion-select-option>
+                 
+                </ion-select>
               </ion-item>
 
               <ion-item detail="false">
@@ -237,7 +248,7 @@
 
 
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <!-- <div class="divider"></div>
 
       <ion-grid>
         <ion-row>
@@ -253,7 +264,7 @@
 
           </ion-col>
         </ion-row>
-      </ion-grid>
+      </ion-grid> -->
 
       <!------------ Divider --------------->
       <div class="divider"></div>
