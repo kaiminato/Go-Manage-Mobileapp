@@ -54,10 +54,14 @@ export class ApiDataService {
   async updateProfile (data: any) {
 
     let header = new HttpHeaders().set('Authorization','Bearer '+this.token)
+                                  .set('Cache-Control', 'no-cache')
+                                  .set('Content-Type' ,'application/json-patch+json')
+    
     let url = 'https://91.250.249.133:4601/user/updateUserDetails?email=test@gmail.com';
     console.log('header', header)
+    console.log('dd')
     
-    return await this.http.patch(url,data, {headers: header , })
+    return await this.http.patch(url,data, {headers: header,})
   }
 
   async deleteBooking (id: any) {

@@ -72,11 +72,12 @@ export class ProfileComponent implements OnInit {
               this.SHORT_NAME = name_array[0].charAt(0).toUpperCase();
             }
 
+            let [date , month , year] = user_details.user_metadata.dob.split('/')
 
 
             this.EMAIL = user_details.email;
             //this.GENDER = user_details.user_metadata.gender
-            this.BIRTHDAY = user_details.user_metadata.dob;
+            this.BIRTHDAY = `${year}-${month}-${date}`;
             this.ABOUT_ME = user_details.user_metadata.aboutMe;
             this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
             this.HEIGHT = user_details.user_metadata.height;
@@ -167,49 +168,80 @@ export class ProfileComponent implements OnInit {
       return
     }
 
+    let [year , month , date] = this.BIRTHDAY.split('-');
+    let D_O_B = `${date}/${month}/${year}`;
+
+    let dat = {
+      gender: this.GENDER,
+      birth: D_O_B,
+      about: this.ABOUT_ME,
+      UNIT_OF_MEASURE: this.UNIT_OF_MEASURE,
+      HEIGHT: this.HEIGHT,
+      WEIGHT: this.WEIGHT,
+      HOME_LOCATION: this.HOME_LOCATION
+    }
+
+    console.log('my data' , dat)
+
     // this.EDIT_PROFILE = false;
     // this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
     // await this.apiData.presentAlert("Profile updated successfully")
     // console.log('user updated')
-    let data = [   
+    let data = [ 
       {
-         "op": "replace",
-         "path": "/email",
-         "value": "test@gmail.com"
-     },
-     {
-         "op": "replace",
-         "path": "/name",
-         "value": "Tom Jones Jr."
-     },{
-         "op": "replace",
-         "path": "/nickname",
-         "value": "TommyJr"
-     },
-     {
-         "op": "replace",
-         "path": "/user_metadata/addresses/0",
-         "value": "{work_addresses:200 Industrial Way}, {home_address:200 suburbs Way}"
-     },
-     {
-         "op": "replace",
-         "path": "/user_metadata/gender",
-         "value": "{work_addresses:200 Industrial Way}, {home_address:200 suburbs Way}"
-     },
-     {
-         "op": "replace",
-         "path": "/user_metadata/height",
-         "value": 102.03
-     }
- 
+        "op": "replace",
+        "path": "/user_metadata/addresses/0",
+        "value": this.HOME_LOCATION
+    },
+    {
+        "op": "replace",
+        "path": "/user_metadata/gender",
+        "value": this.GENDER
+    },
+    {
+        "op": "replace",
+        "path": "/user_metadata/height",
+        "value": this.HEIGHT
+    },
+    {
+        "op": "replace",
+        "path": "/user_metadata/weight",
+        "value": this.WEIGHT
+    },
+    {
+      "op": "replace",
+      "path": "/user_metadata/unitOfMeasure",
+      "value": this.UNIT_OF_MEASURE
+    },
+    {
+        "op": "replace",
+        "path": "/user_metadata/aboutMe",
+        "value": this.ABOUT_ME
+    },
+    // {
+    //   "op": "replace",
+    //   "path": "/user_metadata/dob",
+    //   "dob": D_O_B
+    // }
   ];
 
-    (await this.apiData.updateProfile(data)).subscribe(
-      (response: any) => {
+  console.log('jsonparse' , JSON.stringify(data))
 
+  await this.apiData.presentLoading();
+
+    (await this.apiData.updateProfile(data)).subscribe(
+      async (response: any) => {
+
+        await this.apiData.dismiss();
+        await this.apiData.presentAlert('Profile updated successfully');
+        this.EDIT_PROFILE = false;
+        this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE
         console.log('getting data after update')
       },
-      (error: any) => {
+      async (error: any) => {
+
+        await this.apiData.dismiss();
+        await this.apiData.presentAlert('Server error, Please try again later');
         console.log('error during updating profile')
       }
     );
