@@ -68,8 +68,17 @@ export class ProfileComponent implements OnInit {
             if (name_array.length >1) {
 
               this.SHORT_NAME = name_array[0].charAt(0).toUpperCase() +""+ (name_array[1] ? name_array[1].charAt(0).toUpperCase() : '');
+              
+              this.LAST_NAME = '';
+              this.FIRST_NAME = name_array[0];
+              for(let i = 1; i < name_array.length; i++){
+
+                this.LAST_NAME += name_array[i]+ ' ';
+              }
+            
             } else {
               this.SHORT_NAME = name_array[0].charAt(0).toUpperCase();
+              this.FIRST_NAME = name_array[0];
             }
 
             let [date , month , year] = user_details.user_metadata.dob.split('/')
@@ -187,37 +196,42 @@ export class ProfileComponent implements OnInit {
     // this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
     // await this.apiData.presentAlert("Profile updated successfully")
     // console.log('user updated')
-    let data = [ 
+    let data = [
+      {
+        "op": "replace",
+        "path": "/name",
+        "value": this.FIRST_NAME+' '+this.LAST_NAME
+      }, 
       {
         "op": "replace",
         "path": "/user_metadata/addresses/0",
         "value": this.HOME_LOCATION
-    },
-    {
+      },
+      {
+          "op": "replace",
+          "path": "/user_metadata/gender",
+          "value": this.GENDER
+      },
+      {
+          "op": "replace",
+          "path": "/user_metadata/height",
+          "value": this.HEIGHT
+      },
+      {
+          "op": "replace",
+          "path": "/user_metadata/weight",
+          "value": this.WEIGHT
+      },
+      {
         "op": "replace",
-        "path": "/user_metadata/gender",
-        "value": this.GENDER
-    },
-    {
-        "op": "replace",
-        "path": "/user_metadata/height",
-        "value": this.HEIGHT
-    },
-    {
-        "op": "replace",
-        "path": "/user_metadata/weight",
-        "value": this.WEIGHT
-    },
-    {
-      "op": "replace",
-      "path": "/user_metadata/unitOfMeasure",
-      "value": this.UNIT_OF_MEASURE
-    },
-    {
-        "op": "replace",
-        "path": "/user_metadata/aboutMe",
-        "value": this.ABOUT_ME
-    },
+        "path": "/user_metadata/unitOfMeasure",
+        "value": this.UNIT_OF_MEASURE
+      },
+      {
+          "op": "replace",
+          "path": "/user_metadata/aboutMe",
+          "value": this.ABOUT_ME
+      },
     // {
     //   "op": "replace",
     //   "path": "/user_metadata/dob",
