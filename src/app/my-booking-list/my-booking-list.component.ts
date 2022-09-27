@@ -48,6 +48,7 @@ export class MyBookingListComponent implements OnInit {
 
         
         
+        response = response.filter( data => new Date() < new Date(data.endTime))
         console.log('response' , response)
 
         if (response.length >0) {
