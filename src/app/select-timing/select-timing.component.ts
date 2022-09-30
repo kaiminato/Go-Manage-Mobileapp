@@ -378,7 +378,6 @@ export class SelectTimingComponent implements OnInit {
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
     ending_date_time = new Date(ending_date_time);
 
-
     
     let is_passed = true;
     for (let shift of this.ALL_SHIFT) {
@@ -397,18 +396,26 @@ export class SelectTimingComponent implements OnInit {
       return;
     }
 
+    // Check services's time is under office timing
+
+    let office_last_shift = new Date (`${get_booking_data.date} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}` );
+    let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
+
+    if (ending_date_time > office_closed_time) {
+
+      await this.apiService.presentAlert('Sorry outside of business owner working days')
+      return
+    }
+
     
     for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
 
-    //for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
+  
 
     await this.dataService.setBookingData(get_booking_data)
-    
-    console.log('get_booking_data>>>>>>>', get_booking_data)
+  
+    console.log('get_booking_data routing' , get_booking_data)
 
-    console.log('get_booking_data' , get_booking_data)
-
-    //return
     setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
     
   }
