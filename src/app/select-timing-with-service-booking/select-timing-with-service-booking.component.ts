@@ -219,6 +219,24 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.date;
     get_booking_data.timing_id = id;
+
+    let total_duration = 0;
+
+    for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
+
+    let starting_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
+    let ending_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
+    ending_date_time = new Date(ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration));
+
+    let office_last_shift = new Date (`${get_booking_data.date} ${this.MORNING_SHIFT[this.MORNING_SHIFT.length - 1].value}` );
+    let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
+
+    if (ending_date_time > office_closed_time) {
+
+      await this.apiService.presentAlert('Sorry outside of business owner working days')
+      return
+    }
+    
     
     for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
 
@@ -226,7 +244,8 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     await this.dataService.setBookingData(get_booking_data)
     
-    console.log('get_booking_data>>>>>>>', get_booking_data)
+    console.log('get_booking_data>>>>>>>', this.MORNING_SHIFT , get_booking_data)
+
     setTimeout(() => { this.router.navigate(['/select-staff-with-service-booking'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
     
   }
