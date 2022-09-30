@@ -3,9 +3,6 @@ import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { ImageService } from '../services/image.service';
 import { AuthService } from '@auth0/auth0-angular';
-import { mergeMap } from 'rxjs/operators';
-import { Browser } from '@capacitor/browser';
-import { App } from '@capacitor/app';
 import config from 'capacitor.config';
 
 //const callbackUri = `${config.appId}://go-manage-testing.eu.auth0.com/capacitor/${config.appId}/about-us`;
