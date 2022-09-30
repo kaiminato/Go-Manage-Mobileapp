@@ -405,6 +405,10 @@ export class SelectTimingComponent implements OnInit {
     await this.dataService.setBookingData(get_booking_data)
     
     console.log('get_booking_data>>>>>>>', get_booking_data)
+
+    console.log('get_booking_data' , get_booking_data)
+
+    //return
     setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
     
   }
