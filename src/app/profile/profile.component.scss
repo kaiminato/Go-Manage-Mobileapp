@@ -45,23 +45,47 @@ ion-content {
 
     span.edit_icon {
         position: absolute;
-        background: #ccc;
+        background: #7e7e7e;
         line-height: 25px;
-        height: 25px;
-        width: 25px;
+        height: 30px;
+        width: 30px;
         border-radius: 100%;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        top: 1px;
-        right: -5px;
+        top: -2px;
+        right: 1px;
     }
     ion-text.usr_name.md.hydrated {
         position: relative;
     }
 }
 
+@media screen and (max-width: 2786px) {
+    span.edit_icon {
+        height: 41px ;
+        width: 41px ;
+        top: 10px ;
+        right: 18px ;
+    }
+    
+}    
+
+@media screen and (max-width: 786px) {
+    span.edit_icon {
+        top: -5px !important;
+        right: -3px !important;
+    }
+}
+   
+@media screen and (max-width: 580px) {
+    span.edit_icon {
+        top: -9px !important;
+        right: -4px !important;
+    }
+} 
+   
 @media screen and (max-width: 412px) {
       span.edit_icon {
         position: absolute;
@@ -74,7 +98,7 @@ ion-content {
         display: flex;
         align-items: center;
         justify-content: center;
-        top: -4px !important;
+
         font-size: 11px !important;
         right: -7px !important;
     }

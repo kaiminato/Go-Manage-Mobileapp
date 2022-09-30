@@ -15,17 +15,17 @@ export class ProfileComponent implements OnInit {
   IS_PROFILE_SCREEN: boolean = true;
   EDIT_PROFILE: boolean = false;
   PROFILE_HEADER: any = {is_profile: this.IS_PROFILE_SCREEN , edit_profile: this.EDIT_PROFILE}
-  SHORT_NAME: string = 'JA';
-  FIRST_NAME: string = 'Aonghus';
-  LAST_NAME: string = 'Tierney';
-  GENDER: string = 'MALE';
-  BIRTHDAY: string = '19 Sept 1990';
+  SHORT_NAME: string = '';
+  FIRST_NAME: string = '';
+  LAST_NAME: string = '';
+  GENDER: string = '';
+  BIRTHDAY: string = '';
   ABOUT_ME: string = '';
-  UNIT_OF_MEASURE: string = 'Imperial/U.S.';
+  UNIT_OF_MEASURE: string = '';
   HEIGHT: string = '';
   WEIGHT: string = '';
-  EMAIL: string = 'Aonghusctierney@gmail.com';
-  HOME_LOCATION: string = 'Galway';
+  EMAIL: string = '';
+  HOME_LOCATION: string = '';
   RESPONSE: any;
 
   constructor(

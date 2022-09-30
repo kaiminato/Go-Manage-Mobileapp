@@ -40,6 +40,8 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
       }
     );
 
+    this.AVAILABLE_STAFF = [];
+
     this.STAFF_LIST = await this.dataService.getStaffList();
     this.BOOKING_LIST = await this.dataService.getStaffBookingList();
     this.ALL_SHIFT = await this.dataService.getStaticShift();
