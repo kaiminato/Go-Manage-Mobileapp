@@ -55,6 +55,9 @@ export class HomePageComponent implements OnInit {
 
   async navigate (link: any) {
 
+    if (link == '/make-a-booking') {
+      
+    }
     console.log('link', link)
     await this.router.navigate([link])
 

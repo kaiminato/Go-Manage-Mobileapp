@@ -47,6 +47,9 @@ export class MakeABookingComponent implements OnInit {
 
   async ionViewWillEnter (){
 
+    this.STAFF_LIST = [];
+    this.SERVICE_LIST = [];
+
     this.activateRoute.queryParams
       .subscribe(params => {
 
