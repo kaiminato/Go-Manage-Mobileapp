@@ -1,0 +1,46 @@
+ion-content {
+
+    .choose_amount_heading {
+
+        color: #047473;
+        font-weight: bold;
+    }  
+
+    .gift-voucher-amount {
+
+        margin-top: 30px;
+        ion-col {
+            display: grid;
+            color: #047473;
+            line-height: 25px;
+
+            .choose_amount_heading {
+
+                color: #047473;
+                font-weight: bold;
+            } 
+        }
+        
+
+    }
+
+    .material-symbols-outlined {
+        font-size: 200px;
+        //color: #fff;
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 50,
+        'GRAD' 0,
+        'opsz' 48
+    }
+
+    ion-button {
+        --background: #047473;
+        --background-activated: #047473;
+
+        ion-text {
+            font-weight: bold;
+        }
+       
+    }
+}
