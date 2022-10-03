@@ -32,6 +32,9 @@ export class DataService {
   public BOOKING_WITH_STAFF: Number = 1;
   public BOOKING_WITH_SERVICE: Number = 2;
   public BOOKING_INITIAL_DATA: any  = { staff_id: '', servises: [], date: '', timing_id:'', booking_type: ''}
+  public VOUCHER_SEND_TYPE_ME: any = 1;
+  public VOUCHER_SEND_TYPE_SOME_ELSE: any = 2;
+  public VOUCHER_DATA_KEY: any = 'voucher_data';
 
   constructor() { }
 
@@ -373,6 +376,23 @@ export class DataService {
 
   async removeBookingdata () {
     return await localStorage.removeItem(this.BOOKING_KEY)
+  }
+
+  async  setVoucherData ( data : any) {
+
+    return await localStorage.setItem(this.VOUCHER_DATA_KEY , JSON.stringify(data))
+  }
+
+  async  getVoucherData ( ) {
+
+    let voucher_data: any = await localStorage.getItem(this.VOUCHER_DATA_KEY);
+    return await  voucher_data == undefined || voucher_data == null ? {} :  JSON.parse(voucher_data);
+    
+  }
+
+  async removeVoucherData () {
+
+    return await localStorage.removeItem(this.VOUCHER_DATA_KEY)
   }
  
 }

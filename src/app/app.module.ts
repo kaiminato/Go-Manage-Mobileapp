@@ -31,6 +31,7 @@ import { ApiDataService } from './services/api-data.service';
 import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
 import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
+import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 
 const redirectUri = window.location.origin+`/about-us`;
 
@@ -56,7 +57,8 @@ const redirectUri = window.location.origin+`/about-us`;
     ProfileComponent,
     SelectTimingWithServiceBookingComponent,
     SelectStaffWithServiceBookingComponent,
-    MyBookingListComponent
+    MyBookingListComponent,
+    VoucherSummaryComponent
   ],
   imports: [
     BrowserModule, 
