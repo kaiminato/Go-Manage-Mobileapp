@@ -52,18 +52,18 @@ export class AboutUsComponent {
 
     return
    
-    await (await this.apiDataService.getUser()).subscribe(
-      (response: any) => {
-        console.log('response---', response)
-      },
-      (error: any) => {
-        console.log('error---', error)
-      }
-    )
-    await this.auth.user$.subscribe( data => {
-      console.log('cheking---', data)
-    })
-    //console.log('cheking---', await  this.auth.user$)
+    // await (await this.apiDataService.getUser()).subscribe(
+    //   (response: any) => {
+    //     console.log('response---', response)
+    //   },
+    //   (error: any) => {
+    //     console.log('error---', error)
+    //   }
+    // )
+    // await this.auth.user$.subscribe( data => {
+    //   console.log('cheking---', data)
+    // })
+    // //console.log('cheking---', await  this.auth.user$)
    }
 
   navigation() {
