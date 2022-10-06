@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 import { ApiDataService } from '../services/api-data.service';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-booking-summary',
@@ -29,7 +30,8 @@ export class BookingSummaryComponent implements OnInit {
     private dataService: DataService,
     public  imageService: ImageService,
     private apiData: ApiDataService,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    public auth: AuthService,
     ) {
 
     }
@@ -122,54 +124,90 @@ export class BookingSummaryComponent implements OnInit {
     let ending_date_time = new Date(ending_time.getTime() - (ending_time.getTimezoneOffset() * 60000)).toISOString().replace(/\..+/, '');
 
     let data = [];
-
-    for (let service of this.BOOKINGS_DETAILS.servises){
-
-      data.push ( {
-        employeeId: this.BOOKINGS_DETAILS.staff_id,
-        clientId: null,
-        description: '',
-        endTime: ending_date_time+".000Z",
-        startTime: starting_date_time+".000Z",
-        isAllDay: false,
-        customer: null,
-        service: service.serviceName,
-        serviceId: service.id,
-        firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
-        lastName:  this.BOOKINGS_DETAILS.staff_details[0].lastName,
-      })
-      
-    }
     
+
     await this.apiData.presentLoading();
 
-    (await this.apiData.saveBooking(data)).subscribe(
-      async (response: any) => {
-
-        console.log('response--', response)
-        //await this.dataService.removeBookingdata()
-        await this.apiData.dismiss();
-
-        setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
-      }, 
-      async (error: any) => {
-
-        console.log('error----', error)
-        console.log('error----', error.status)
+    await this.auth.getUser().subscribe(
+      async (response: any) => { // Get auth data
         
-        //await this.dataService.removeBookingdata()
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          async (user_info: any) => { // Get current user data
+
+            console.log('user_info' , user_info)
+            
+            
+
+            for (let service of this.BOOKINGS_DETAILS.servises){
+
+              data.push ( {
+                employeeId: this.BOOKINGS_DETAILS.staff_id,
+                clientId: user_info.userGMID,
+                description: '',
+                endTime: ending_date_time+".000Z",
+                startTime: starting_date_time+".000Z",
+                isAllDay: false,
+                customer: null,
+                service: service.serviceName,
+                serviceId: service.id,
+                firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
+                lastName:  this.BOOKINGS_DETAILS.staff_details[0].lastName,
+                email: user_info.email
+              })
+              
+            }
+
+            console.log(data);
+
+            (await this.apiData.saveBooking(data)).subscribe(
+              async (response: any) => {
+        
+                console.log('response--', response)
+                //await this.dataService.removeBookingdata()
+                await this.apiData.dismiss();
+        
+                setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+              }, 
+              async (error: any) => {
+        
+                console.log('error----', error)
+                console.log('error----', error.status)
+
+               
+                
+                //await this.dataService.removeBookingdata()
+                await this.apiData.dismiss();
+                setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+        
+                if (this.CANCEL_BOOKING_ID != 0) {
+        
+                  await this.deleteBooking()
+                }
+                setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+              }
+            );
+          },
+          
+          async (error:any) => {
+            await this.apiData.dismiss();
+            console.log('profile error ', error)
+            await this.apiData.presentAlert('profile error'+ JSON.stringify(error))
+          }
+        )
+
+      },
+      async (error:any) => {
         await this.apiData.dismiss();
-
-        if (this.CANCEL_BOOKING_ID != 0) {
-
-          await this.deleteBooking()
-        }
-        setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+        console.log('auth error ', error)
+        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
 
+
     
-    console.log(data)
+
+    
+    
     
   }
 

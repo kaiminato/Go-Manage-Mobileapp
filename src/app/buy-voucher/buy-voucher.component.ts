@@ -57,8 +57,9 @@ export class BuyVoucherComponent implements OnInit {
     this.S_GIFTEE_EMAIL_MESSAGE = '';
 
     let prefilled_data = await this.dataService.getVoucherData();
+    console.log('prefilled_data' ,prefilled_data)
 
-    if (prefilled_data?.price != 0) return await this.preFilleddata()
+    if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
 
   async preFilleddata () {
