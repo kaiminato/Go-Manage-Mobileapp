@@ -60,38 +60,48 @@ export class ProfileComponent implements OnInit {
             await this.apiData.dismiss();
 
             console.log('user_info', user_info)
-            this.RESPONSE = user_info[0];
-            let user_details = user_info[0]
+            this.RESPONSE = user_info;
+            let user_details = user_info
 
             let name_array = user_details.name.split(' ');
 
-            if (name_array.length >1) {
+            if (user_details.givenName == 'null' && user_details.familyName == 'null'){
 
-              this.SHORT_NAME = name_array[0].charAt(0).toUpperCase() +""+ (name_array[1] ? name_array[1].charAt(0).toUpperCase() : '');
+              if (name_array.length >1) {
+
+                this.SHORT_NAME = name_array[0].charAt(0).toUpperCase() +""+ (name_array[1] ? name_array[1].charAt(0).toUpperCase() : '');
+                
+                this.LAST_NAME = '';
+                this.FIRST_NAME = name_array[0];
+                for(let i = 1; i < name_array.length; i++){
+  
+                  this.LAST_NAME += name_array[i]+ ' ';
+                }
               
-              this.LAST_NAME = '';
-              this.FIRST_NAME = name_array[0];
-              for(let i = 1; i < name_array.length; i++){
-
-                this.LAST_NAME += name_array[i]+ ' ';
+              } else {
+                this.SHORT_NAME = name_array[0].charAt(0).toUpperCase();
+                this.FIRST_NAME = name_array[0];
               }
-            
             } else {
-              this.SHORT_NAME = name_array[0].charAt(0).toUpperCase();
-              this.FIRST_NAME = name_array[0];
+
+              this.FIRST_NAME = user_details.givenName;
+              this.LAST_NAME = user_details.familyName;
             }
+
+            
 
             let [date , month , year] = user_details.user_metadata.dob.split('/')
 
 
             this.EMAIL = user_details.email;
-            //this.GENDER = user_details.user_metadata.gender
+            this.GENDER = user_details.user_metadata.gender.toUpperCase()
             this.BIRTHDAY = `${year}-${month}-${date}`;
             this.ABOUT_ME = user_details.user_metadata.aboutMe;
             this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
             this.HEIGHT = user_details.user_metadata.height;
             this.WEIGHT = user_details.user_metadata.weight;
-            //this.HOME_LOCATION = '';
+            let address_value = JSON.parse(user_details.user_metadata?.addresses[0])
+            this.HOME_LOCATION = address_value?.work_address;
             
             
             
@@ -191,59 +201,78 @@ export class ProfileComponent implements OnInit {
     }
 
     console.log('my data' , dat)
+   
 
     // this.EDIT_PROFILE = false;
     // this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
     // await this.apiData.presentAlert("Profile updated successfully")
     // console.log('user updated')
-    let data = [
-      {
-        "op": "replace",
-        "path": "/name",
-        "value": this.FIRST_NAME+' '+this.LAST_NAME
-      }, 
-      {
-        "op": "replace",
-        "path": "/user_metadata/addresses/0",
-        "value": this.HOME_LOCATION
-      },
-      {
-          "op": "replace",
-          "path": "/user_metadata/gender",
-          "value": this.GENDER
-      },
-      {
-          "op": "replace",
-          "path": "/user_metadata/height",
-          "value": this.HEIGHT
-      },
-      {
-          "op": "replace",
-          "path": "/user_metadata/weight",
-          "value": this.WEIGHT
-      },
-      {
-        "op": "replace",
-        "path": "/user_metadata/unitOfMeasure",
-        "value": this.UNIT_OF_MEASURE
-      },
-      {
-          "op": "replace",
-          "path": "/user_metadata/aboutMe",
-          "value": this.ABOUT_ME
-      },
-    // {
-    //   "op": "replace",
-    //   "path": "/user_metadata/dob",
-    //   "dob": D_O_B
-    // }
-  ];
+
+    let data = {
+      // email: this.EMAIL,
+      // givenName: this.FIRST_NAME,
+      // familyName: this.LAST_NAME,
+      user_metadata : {
+        aboutMe : this.ABOUT_ME,
+        //addresses : this.HOME_LOCATION,
+        addresses: {
+          work_address: this.HOME_LOCATION
+        },
+        gender: this.GENDER,
+        height: this.HEIGHT,
+        unitOfMeasure : this.UNIT_OF_MEASURE,
+        weight : this.WEIGHT,
+        dob: D_O_B,
+      }
+    }
+  //   let data = [
+  //     {
+  //       "op": "replace",
+  //       "path": "/name",
+  //       "value": this.FIRST_NAME+' '+this.LAST_NAME
+  //     }, 
+  //     {
+  //       "op": "replace",
+  //       "path": "/user_metadata/addresses/0",
+  //       "value": this.HOME_LOCATION
+  //     },
+  //     {
+  //         "op": "replace",
+  //         "path": "/user_metadata/gender",
+  //         "value": this.GENDER
+  //     },
+  //     {
+  //         "op": "replace",
+  //         "path": "/user_metadata/height",
+  //         "value": this.HEIGHT
+  //     },
+  //     {
+  //         "op": "replace",
+  //         "path": "/user_metadata/weight",
+  //         "value": this.WEIGHT
+  //     },
+  //     {
+  //       "op": "replace",
+  //       "path": "/user_metadata/unitOfMeasure",
+  //       "value": this.UNIT_OF_MEASURE
+  //     },
+  //     {
+  //         "op": "replace",
+  //         "path": "/user_metadata/aboutMe",
+  //         "value": this.ABOUT_ME
+  //     },
+  //   // {
+  //   //   "op": "replace",
+  //   //   "path": "/user_metadata/dob",
+  //   //   "dob": D_O_B
+  //   // }
+  // ];
 
   console.log('jsonparse' , JSON.stringify(data))
 
   await this.apiData.presentLoading();
 
-    (await this.apiData.updateProfile(data)).subscribe(
+    (await this.apiData.updateProfile(data , this.EMAIL)).subscribe(
       async (response: any) => {
 
         await this.apiData.dismiss();

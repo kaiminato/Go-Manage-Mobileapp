@@ -19,7 +19,7 @@ import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { AddReviewComponent } from './add-review/add-review.component';
 import { CalendarModule } from 'ion2-calendar';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthHttpInterceptor , AuthModule } from '@auth0/auth0-angular';
 import config from '../../capacitor.config';
 import { LoginButtonComponent } from './login-button/login-button.component';
@@ -64,6 +64,7 @@ const redirectUri = window.location.origin+`/about-us`;
     BrowserModule, 
     CalendarModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule.forRoot(), 
     AppRoutingModule,
     HttpClientModule,

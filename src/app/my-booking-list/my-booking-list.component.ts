@@ -13,7 +13,7 @@ import { DataService } from '../services/data.service';
 export class MyBookingListComponent implements OnInit {
 
   HEADING: string = "Your Bookings";
-  IS_FUTURE_BOOKING_active: boolean = true;
+  IS_FUTURE_BOOKING_active: boolean = false;
   FUTURE_BOOKING_LIST: any = [
     // {id: 1 , date_time: 'Thu, 15 Sep at 16:30', service_name: 'Yumi Lash Lift', service_duration: '30 minuts'},
     // {id: 2 , date_time: 'Thu, 15 Sep at 17:45', service_name: 'Brow Tint', service_duration: '30 minuts'},
@@ -42,100 +42,221 @@ export class MyBookingListComponent implements OnInit {
   async getBookings () {
 
     await this.apiData.presentLoading();
-    
-    (await this.apiData.getStaffBookingList()).subscribe(
-      async (response: any) => {
 
+    await this.auth.getUser().subscribe(
+      async (response: any) => { 
+
+        console.log('response' , response);
+
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          async (user_info: any) => { 
+
+            console.log('user_info' , user_info);
+
+            (await this.apiData.retrievSingleUserBooking(user_info.userGMID)).subscribe(
+              async (response: any) => {
         
-        response = response.filter( data => new Date() < new Date(data.endTime))
-        console.log('response' , response)
-
-        if (response.length >0) {
-
-          
-          if (response.length > 4) {
-            
-            let end_from = response.length -1;
-            let end_to = response.length -6;
-            console.log('yefyg', end_from ,end_to )
-
-            this.RECENT_BOOKING_LIST = []
-            this.FUTURE_BOOKING_LIST = []
-
-            for (let index = end_from; index > end_to; index--){
-
-              let start_date_time = new Date(response[index].startTime)
-              let end_date_time = new Date(response[index].endTime)
-              var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-              var resultInMinutes = Math.round(difference / 60000);
-              let data = {
-                service_name : response[index].service,
-                service_duration:resultInMinutes+" minuts",
-                id:response[index].id,
-                date_time: 'Thu, 15 Sep at 12:30'
                 
-              };
+                response = response.filter( data => new Date() < new Date(data.endTime))
+                console.log('response' , response)
+        
+                if (response.length >0) {
+        
+                  
+                  if (response.length > 4) {
+                    
+                    let end_from = response.length -1;
+                    let end_to = response.length -6;
+                    console.log('yefyg', end_from ,end_to )
+        
+                    this.RECENT_BOOKING_LIST = []
+                    this.FUTURE_BOOKING_LIST = []
+        
+                    for (let index = end_from; index > end_to; index--){
+        
+                      let start_date_time = new Date(response[index].startTime)
+                      let end_date_time = new Date(response[index].endTime)
+                      var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+                      var resultInMinutes = Math.round(difference / 60000);
+                      let data = {
+                        service_name : response[index].service,
+                        service_duration:resultInMinutes+" minuts",
+                        id:response[index].id,
+                        date_time: 'Thu, 15 Sep at 12:30'
+                        
+                      };
+        
+                      this.RECENT_BOOKING_LIST.push(data)
+                      console.log('index', index)              
+                    }
+        
+                    for (let index = 0; index < response.length -6; index++){
+        
+                      let start_date_time = new Date(response[index].startTime)
+                      let end_date_time = new Date(response[index].endTime)
+                      var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+                      var resultInMinutes = Math.round(difference / 60000);
+        
+                      let date_time = await this.getDateFormat(response[index].startTime)
+        
+                      let data = {
+                        service_name : response[index].service,
+                        service_duration:resultInMinutes+" minuts",
+                        id:response[index].id,
+                        date_time: date_time
+                        
+                      };
+        
+                      this.FUTURE_BOOKING_LIST.push(data)
+                    }
+        
+                    
+                  } else {
+        
+                    this.RECENT_BOOKING_LIST = []
+                    this.FUTURE_BOOKING_LIST = []
 
-              this.RECENT_BOOKING_LIST.push(data)
-              console.log('index', index)              
-            }
+                    console.log('hiting')
+        
+                    for (let index = 0; index < response.length; index++){
+        
+                      let start_date_time = new Date(response[index].startTime)
+                      let end_date_time = new Date(response[index].endTime)
+                      var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+                      var resultInMinutes = Math.round(difference / 60000);
+                      let date_time = await this.getDateFormat(response[index].startTime)
+        
+                      let data = {
+                        service_name : response[index].service,
+                        service_duration:resultInMinutes+" minuts",
+                        id:response[index].id,
+                        date_time: date_time
+                        
+                      };
+        
+                      this.RECENT_BOOKING_LIST.push(data)
+                    }
+        
+                  }
+                }
+        
+                await this.apiData.dismiss();
+              },
+              async (error: any) => {
+        
+                await this.apiData.dismiss();
+                console.log('error', error)
+              }
+            );
 
-            for (let index = 0; index < response.length -6; index++){
-
-              let start_date_time = new Date(response[index].startTime)
-              let end_date_time = new Date(response[index].endTime)
-              var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-              var resultInMinutes = Math.round(difference / 60000);
-
-              let date_time = await this.getDateFormat(response[index].startTime)
-
-              let data = {
-                service_name : response[index].service,
-                service_duration:resultInMinutes+" minuts",
-                id:response[index].id,
-                date_time: date_time
-                
-              };
-
-              this.FUTURE_BOOKING_LIST.push(data)
-            }
-
-            
-          } else {
-
-            this.RECENT_BOOKING_LIST = []
-            this.FUTURE_BOOKING_LIST = []
-
-            for (let index = 0; index < response.length -1; index++){
-
-              let start_date_time = new Date(response[index].startTime)
-              let end_date_time = new Date(response[index].endTime)
-              var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-              var resultInMinutes = Math.round(difference / 60000);
-              let date_time = await this.getDateFormat(response[index].startTime)
-
-              let data = {
-                service_name : response[index].service,
-                service_duration:resultInMinutes+" minuts",
-                id:response[index].id,
-                date_time: date_time
-                
-              };
-
-              this.RECENT_BOOKING_LIST.push(data)
-            }
-
+          },
+          async (error:any) => {
+            await this.apiData.dismiss();
+            console.log('profile error ', error)
+            await this.apiData.presentAlert('profile error'+ JSON.stringify(error))
           }
-        }
-
-        await this.apiData.dismiss();
+        )
       },
-      async (error: any) => {
-
+      async (error:any) => {
         await this.apiData.dismiss();
-        console.log('error', error)
+        console.log('auth error ', error)
+        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
+    
+    // (await this.apiData.getStaffBookingList()).subscribe(
+    //   async (response: any) => {
+
+        
+    //     response = response.filter( data => new Date() < new Date(data.endTime))
+    //     console.log('response' , response)
+
+    //     if (response.length >0) {
+
+          
+    //       if (response.length > 4) {
+            
+    //         let end_from = response.length -1;
+    //         let end_to = response.length -6;
+    //         console.log('yefyg', end_from ,end_to )
+
+    //         this.RECENT_BOOKING_LIST = []
+    //         this.FUTURE_BOOKING_LIST = []
+
+    //         for (let index = end_from; index > end_to; index--){
+
+    //           let start_date_time = new Date(response[index].startTime)
+    //           let end_date_time = new Date(response[index].endTime)
+    //           var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+    //           var resultInMinutes = Math.round(difference / 60000);
+    //           let data = {
+    //             service_name : response[index].service,
+    //             service_duration:resultInMinutes+" minuts",
+    //             id:response[index].id,
+    //             date_time: 'Thu, 15 Sep at 12:30'
+                
+    //           };
+
+    //           this.RECENT_BOOKING_LIST.push(data)
+    //           console.log('index', index)              
+    //         }
+
+    //         for (let index = 0; index < response.length -6; index++){
+
+    //           let start_date_time = new Date(response[index].startTime)
+    //           let end_date_time = new Date(response[index].endTime)
+    //           var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+    //           var resultInMinutes = Math.round(difference / 60000);
+
+    //           let date_time = await this.getDateFormat(response[index].startTime)
+
+    //           let data = {
+    //             service_name : response[index].service,
+    //             service_duration:resultInMinutes+" minuts",
+    //             id:response[index].id,
+    //             date_time: date_time
+                
+    //           };
+
+    //           this.FUTURE_BOOKING_LIST.push(data)
+    //         }
+
+            
+    //       } else {
+
+    //         this.RECENT_BOOKING_LIST = []
+    //         this.FUTURE_BOOKING_LIST = []
+
+    //         for (let index = 0; index < response.length -1; index++){
+
+    //           let start_date_time = new Date(response[index].startTime)
+    //           let end_date_time = new Date(response[index].endTime)
+    //           var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+    //           var resultInMinutes = Math.round(difference / 60000);
+    //           let date_time = await this.getDateFormat(response[index].startTime)
+
+    //           let data = {
+    //             service_name : response[index].service,
+    //             service_duration:resultInMinutes+" minuts",
+    //             id:response[index].id,
+    //             date_time: date_time
+                
+    //           };
+
+    //           this.RECENT_BOOKING_LIST.push(data)
+    //         }
+
+    //       }
+    //     }
+
+    //     await this.apiData.dismiss();
+    //   },
+    //   async (error: any) => {
+
+    //     await this.apiData.dismiss();
+    //     console.log('error', error)
+    //   }
+    // );
   }
 
   async getDateFormat (date_value: any) {

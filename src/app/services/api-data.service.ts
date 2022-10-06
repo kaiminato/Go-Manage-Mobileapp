@@ -42,31 +42,40 @@ export class ApiDataService {
 
     let header = new HttpHeaders().set('Authorization','Bearer '+this.token)
     let url = 'https://go-manage-testing.eu.auth0.com/api/v2/users-by-email?email=test@gmail.com'
-    return await this.http.get(url,{headers: header});
+    return await this.http.get(this.apiUrl+'user/retrieveUserDetails?email=test@gmail.com',{headers: header});
   }
 
   async getMyProfile (email: string){
     let header = new HttpHeaders().set('Authorization','Bearer '+this.token)
     //return await this.http.get('https://91.250.249.133:4601/user/retrieveUserDetails?email='+email);
-    return await this.http.get('https://go-manage-testing.eu.auth0.com/api/v2/users-by-email?email='+email, {headers: header});
+    return await this.http.get(this.apiUrl+'user/retrieveUserDetails?email='+email, {headers: header});
   }
 
-  async updateProfile (data: any) {
+  async updateProfile (data: any , email: string) {
 
     let header = new HttpHeaders().set('Authorization','Bearer '+this.token)
                                   .set('Cache-Control', 'no-cache')
                                   .set('Content-Type' ,'application/json-patch+json')
     
-    let url = 'https://91.250.249.133:4601/user/updateUserDetails?email=test@gmail.com';
     console.log('header', header)
     console.log('dd')
     
-    return await this.http.patch(url,data, {headers: header,})
+    return await this.http.post(this.apiUrl+'user/updateUserDetails?email='+email,data, {headers: header,})
   }
 
   async deleteBooking (id: any) {
 
     return await this.http.delete(this.apiUrl+'bookings/deleteBooking/'+id)
+  }
+
+  async retrievSingleUserBooking (user_id : any ){
+
+    return await this.http.get(this.apiUrl + 'bookings/retrieveSingleUserBookings?userId=' + user_id);
+  }
+
+  async purchaseVoucher (data: any) {
+
+    return await this.http.post('https://localhost:3001/my-testing' , data)
   }
 
   async presentLoading() {
