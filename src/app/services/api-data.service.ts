@@ -75,7 +75,7 @@ export class ApiDataService {
 
   async purchaseVoucher (data: any) {
 
-    return await this.http.post('https://localhost:3001/my-testing' , data)
+    return await this.http.post('http://localhost:3001/my-testing' , data)
   }
 
   async presentLoading() {
