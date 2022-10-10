@@ -17,6 +17,7 @@ import { SelectTimingWithServiceBookingComponent } from './select-timing-with-se
 import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
+import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
 
 
 const routes: Routes = [
@@ -105,6 +106,11 @@ const routes: Routes = [
   {
     path: 'my-booking-list',
     component: MyBookingListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'store-all-product',
+    component: StoreAllProductComponent,
     canActivate: [AuthGuard]
   },
   {
