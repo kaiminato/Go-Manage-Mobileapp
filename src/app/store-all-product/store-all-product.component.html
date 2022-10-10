@@ -1,0 +1,70 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+
+  <ion-grid class="search-cart-row">
+    <ion-row>
+      
+      <ion-col size="9" class="search-bar">
+        <ion-input placeholder="Search any product"></ion-input>
+        <!-- <ion-searchbar placeholder="Search here" color="light"></ion-searchbar> -->
+      </ion-col>
+      
+      <ion-col size="3" class="cart">
+        
+        <ion-tab-button class="ion-float-start">
+          <ion-icon name="cart-outline"></ion-icon>
+          <ion-badge color="primary">8</ion-badge>
+        </ion-tab-button>      
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid class="tags-category ion-no-padding">
+    <ion-row>
+      <ion-col size="12">
+        <ion-slides pager="false" [options]="slideOpts" #mySlider >
+          <ion-slide 
+            *ngFor="let category of CATEGORY_TAGS;let i = index"
+            >
+         
+              <ion-badge 
+                [class.active]="category.status" 
+                slot="end"
+                (click)="selectCategory(i)"
+                >
+                  <b>{{category.name}} </b>
+              </ion-badge>
+         
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+
+    
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-text>
+          <b>{{ SELECTED_CATEGORY}}</b>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+ 
+
+
+
+  
+
+
+
+
+</ion-content>
+
+<app-footer></app-footer>

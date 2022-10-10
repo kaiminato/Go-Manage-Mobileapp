@@ -32,6 +32,7 @@ import { SelectTimingWithServiceBookingComponent } from './select-timing-with-se
 import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
+import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
 
 const redirectUri = window.location.origin+`/about-us`;
 
@@ -58,7 +59,8 @@ const redirectUri = window.location.origin+`/about-us`;
     SelectTimingWithServiceBookingComponent,
     SelectStaffWithServiceBookingComponent,
     MyBookingListComponent,
-    VoucherSummaryComponent
+    VoucherSummaryComponent,
+    StoreAllProductComponent,
   ],
   imports: [
     BrowserModule, 
