@@ -33,6 +33,7 @@ import { SelectStaffWithServiceBookingComponent } from './select-staff-with-serv
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 const redirectUri = window.location.origin+`/about-us`;
 
@@ -61,6 +62,7 @@ const redirectUri = window.location.origin+`/about-us`;
     MyBookingListComponent,
     VoucherSummaryComponent,
     StoreAllProductComponent,
+    ProductDetailComponent
   ],
   imports: [
     BrowserModule, 

@@ -18,6 +18,7 @@ import { SelectStaffWithServiceBookingComponent } from './select-staff-with-serv
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 
 const routes: Routes = [
@@ -111,6 +112,11 @@ const routes: Routes = [
   {
     path: 'store-all-product',
     component: StoreAllProductComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'product-detail/:id',
+    component: ProductDetailComponent,
     canActivate: [AuthGuard]
   },
   {

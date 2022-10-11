@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
 import { IonSlides} from '@ionic/angular';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-store-all-product',
@@ -27,10 +28,20 @@ export class StoreAllProductComponent implements OnInit {
                           { id: 6 , name: "" , status: false },
                         ];
 
+  PRODUCT_LIST: any = [
+                        { id: 1 , image: this.imageService.PRODUCT_ONE , description: 'lorem ipsum' , rating: 3.5 , price: 40},
+                        { id: 2 , image: this.imageService.PRODUCT_TWO , description: 'lorem ipsum' , rating: 4.5 , price: 20},
+                        { id: 3 , image: this.imageService.PRODUCT_ONE , description: 'lorem ipsum' , rating: 5 , price: 70},
+                        { id: 4 , image: this.imageService.PRODUCT_TWO , description: 'lorem ipsum' , rating: 3.5 , price: 30},
+                        { id: 5 , image: this.imageService.PRODUCT_ONE , description: 'lorem ipsum' , rating: 2 , price: 20},
+                        { id: 6 , image: this.imageService.PRODUCT_TWO , description: 'lorem ipsum' , rating: 3.5 , price: 40},
+                      ];
+                      
+
             
 
   slideOpts: any = {
-    slidesPerView: 4,
+    slidesPerView: 5,
     initialSlide: 0,
     speed: 400,
     loop: false,
@@ -43,7 +54,8 @@ export class StoreAllProductComponent implements OnInit {
   constructor(
     private router: Router,
     private apiData: ApiDataService,
-    private dataService: DataService
+    private dataService: DataService,
+    private imageService: ImageService,
   ) { }
 
   ngOnInit() {}
