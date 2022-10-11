@@ -1,0 +1,35 @@
+ion-content {
+
+    --background: #f1f1f1;
+
+    .product-image-section {
+        margin-top: 5%;
+        
+        .cart {
+
+            ion-button {
+
+                color: black;
+
+                ion-badge {
+                    margin-top: -15px;
+                    font-size: 12px;
+                }
+            }
+
+            ion-tab-button  {
+                width: 100%;
+
+                ion-icon {
+                    font-size: 35px;
+                    margin-top: -143px;
+                }
+                ion-badge {
+                    margin-left: 2px;
+                    margin-top: -9px;
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+}
