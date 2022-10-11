@@ -1,6 +1,7 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
 
+  <!-- search bar and cart icon -->
   <ion-grid class="search-cart-row">
     <ion-row>
       
@@ -20,6 +21,7 @@
     </ion-row>
   </ion-grid>
 
+  <!-- Tags html -->
 
   <ion-grid class="tags-category ion-no-padding">
     <ion-row>
@@ -45,6 +47,7 @@
     
   </ion-grid>
 
+  <!-- Show selected categoy name -->
   <ion-grid>
     <ion-row>
       <ion-col size="12">
@@ -55,15 +58,31 @@
     </ion-row>
   </ion-grid>
 
+  <!-- Show products -->
+  <ion-grid class="all-products ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding" *ngFor="let product of PRODUCT_LIST">
+        <ion-card class="ion-no-padding">
+          <ion-card-content class="">
+            <ion-img [src]="product.image" [routerLink]="['/product-detail/', product.id]"></ion-img>
+            
+            <div class="description-rating">
+              <ion-text class="description"><b> {{ product.description }} </b></ion-text>
+              <ion-text class="rating"><ion-icon name="star"></ion-icon> {{ product.rating }} </ion-text>
+            </div>
 
- 
+            <div class="price-cart">
+              <div class="price"><ion-text><b> {{ product.price | currency: 'EUR'}} </b></ion-text></div>
+              <div class="add-cart"><ion-button class="ion-float-end" >ADD TO CART</ion-button></div>
+              
+              
+            </div>
 
-
-
-  
-
-
-
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
 

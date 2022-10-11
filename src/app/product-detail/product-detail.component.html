@@ -1,0 +1,29 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+
+  <ion-grid class="product-image-section">
+    <ion-row>
+      <ion-col size="9">
+        <ion-img [src]="this.imageService.PRODUCT_ONE"></ion-img>
+      </ion-col>
+      <ion-col size="3" class="carts">
+        
+        <!-- <ion-tab-button class="ion-float-start">
+          <ion-icon name="cart-outline"></ion-icon>
+          <ion-badge color="primary">8</ion-badge>
+        </ion-tab-button>       -->
+        <ion-button color="light" shape="round">
+          <ion-icon name="cart-outline" ></ion-icon>
+          <ion-badge color="dark">8</ion-badge>
+        </ion-button>
+
+        <div class="cart-div">
+          <ion-icon name="cart-outline" ></ion-icon>
+          <ion-badge color="dark">8</ion-badge>
+        </div>
+      </ion-col>
+      
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<app-footer></app-footer>
