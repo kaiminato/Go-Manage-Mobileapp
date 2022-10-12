@@ -13,6 +13,10 @@ export class ProductDetailComponent implements OnInit {
 
   HEADING: string = "Product info";
   PRODUCT_ID: any = '';
+  PRODUCT_PRICE: any = '20';
+  PRODUCT_TITLE: string = 'Prodduct title';
+  PRODUCT_SUBTITLE: string = 'Product sub title';
+  PRODUCT_CONTENT: string = 'Establishing who you are and how you communicate your brand voice will connect and build trust with the people within and outside of your company.'
 
   constructor(
     private router: Router,
