@@ -34,6 +34,8 @@ import { MyBookingListComponent } from './my-booking-list/my-booking-list.compon
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { CartInfoComponent } from './cart-info/cart-info.component';
+import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 
 const redirectUri = window.location.origin+`/about-us`;
 
@@ -62,7 +64,9 @@ const redirectUri = window.location.origin+`/about-us`;
     MyBookingListComponent,
     VoucherSummaryComponent,
     StoreAllProductComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    CartInfoComponent,
+    SelectDeliverComponent
   ],
   imports: [
     BrowserModule, 

@@ -1,0 +1,87 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+
+  <!-- Product list show -->
+
+  <ion-grid *ngFor="let product of PRODUCT_LIST" class="product-list">
+    <ion-card>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="4" class="product-image">
+            <ion-img [src]="product.image"></ion-img>
+          </ion-col>
+          <ion-col size="4" class="product-description">
+            <ion-text class="name bold-text"> {{ product.name }} </ion-text>
+            <ion-text class="availability"> in Stock </ion-text>
+            <ion-text class="price bold-text ion-margin-top"> {{ product.price | currency: 'EUR' }} </ion-text>
+          </ion-col>
+          <ion-col size="4" class="product-count">
+            <div class="close"> <ion-icon name="close-outline" class="ion-float-end"></ion-icon> </div>
+            <div class="count">
+              <ion-button size="small" color="light" class="ion-float-end"> + </ion-button>
+              <ion-text class="ion-float-end count-number"> {{ product.count }} </ion-text>
+              <ion-button size="small" color="light" class="ion-float-end"> - </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+
+
+  <!-- Summary detail -->
+
+  <ion-grid class="selected-product-info">
+    <ion-card>
+
+      <ion-card-content>
+        <ion-row class="summary">
+          <ion-col size="12" class=" bold-text">
+            <ion-text><b>ORDER SUMMARY</b></ion-text>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="info">
+          <ion-col size="6" class=" first-part">
+            <ion-text>1 ITEM</ion-text>
+            <ion-text> DELIVERY</ion-text>
+            <ion-text class="bold-text">TOTAL</ion-text>
+            <ion-text class="tax">Inclusive of tax {{ 200 | currency : 'EUR'}}</ion-text>
+          </ion-col>
+          <ion-col size="6" class=" second-part">
+            <ion-text>{{ 200 | currency : 'EUR'}}</ion-text>
+            <ion-text> FREE</ion-text>
+            <ion-text class="bold-text">{{ 200 | currency : 'EUR'}}</ion-text>
+          </ion-col>
+        </ion-row>
+
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+
+  <div class="divider"></div>
+
+  <!-- Show total -->
+
+  <ion-grid class="ion-margin-top">
+    <ion-row>
+      <ion-col size="6" class="ion-text-center">
+        <ion-text class="bold-text"> TOTAL </ion-text>
+      </ion-col>
+      <ion-col size="6" class="ion-text-center bold-text"> {{ 200.50 | currency : 'EUR' }} </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <!-- place order -->
+  
+  <ion-grid class="ion-margin-top place-order">
+    <ion-row>
+      <ion-col size="12" class="">
+        <ion-button expand="block" [routerLink]="['/select-deliver']">PLACE ORDER</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<app-footer></app-footer>
