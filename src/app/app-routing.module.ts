@@ -19,6 +19,8 @@ import { MyBookingListComponent } from './my-booking-list/my-booking-list.compon
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { CartInfoComponent } from './cart-info/cart-info.component';
+import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 
 
 const routes: Routes = [
@@ -117,6 +119,16 @@ const routes: Routes = [
   {
     path: 'product-detail/:id',
     component: ProductDetailComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'cart-detail',
+    component: CartInfoComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'select-deliver',
+    component: SelectDeliverComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -5,17 +5,22 @@
   <ion-grid class="search-cart-row">
     <ion-row>
       
-      <ion-col size="9" class="search-bar">
+      <ion-col size="10" class="search-bar">
         <ion-input placeholder="Search any product"></ion-input>
         <!-- <ion-searchbar placeholder="Search here" color="light"></ion-searchbar> -->
       </ion-col>
       
-      <ion-col size="3" class="cart">
+      <ion-col size="2" class="cart">
         
-        <ion-tab-button class="ion-float-start">
+        <!-- <ion-tab-button class="ion-float-start">
           <ion-icon name="cart-outline"></ion-icon>
           <ion-badge color="primary">8</ion-badge>
-        </ion-tab-button>      
+        </ion-tab-button>       -->
+
+        <div class="cart-div" [routerLink]="['/cart-detail']">
+          <ion-icon name="cart-outline" ></ion-icon>
+          <ion-badge color="dark">8</ion-badge>
+        </div>
       </ion-col>
 
     </ion-row>
