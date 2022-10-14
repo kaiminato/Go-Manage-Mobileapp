@@ -103,6 +103,8 @@ export class StaffServiceDetailsComponent implements OnInit {
 
   changeServiceStatus (service_id: any ){
 
+    console.log('this[[[[[[[[[[[=======' , this.CATEGORY_LIST)
+
     let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
 
     if (is_already_exist.length > 0) {
