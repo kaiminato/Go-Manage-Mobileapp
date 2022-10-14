@@ -12,6 +12,12 @@ ion-content {
         ion-card {
 
             height: 200px;
+
+            ion-card-content {
+
+                border: 1px solid;
+                height: 200px;
+            }
         }
     }
 }
