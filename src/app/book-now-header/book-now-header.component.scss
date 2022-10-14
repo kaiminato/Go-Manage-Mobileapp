@@ -40,8 +40,8 @@ ion-header {
         .active {
 
             border: 1px solid white;
-            background: #007573 !important;
-            color: white !important;
+            background: white !important;
+            color: #000 !important;
         }
         ul.headli {
             padding: 0px;
@@ -59,11 +59,12 @@ ion-header {
         span.headlitop {
             padding: 4px 9px;
             font-size: 14px;
-            background: #fff;
+            background: #047473;
             margin-bottom: 16px !important;
-            color: #000;
+            color: #fff;
             border-radius: 29px;
             margin-right: 8px;
+            border: 1px solid white;
         }
         ul.headli  {
             text-align: center;
