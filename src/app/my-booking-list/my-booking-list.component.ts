@@ -78,11 +78,13 @@ export class MyBookingListComponent implements OnInit {
                       let end_date_time = new Date(response[index].endTime)
                       var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
                       var resultInMinutes = Math.round(difference / 60000);
+                      let date_time = await this.getDateFormat(response[index].startTime)
+
                       let data = {
                         service_name : response[index].service,
                         service_duration:resultInMinutes+" minuts",
                         id:response[index].id,
-                        date_time: 'Thu, 15 Sep at 12:30'
+                        date_time: date_time
                         
                       };
         
@@ -90,7 +92,7 @@ export class MyBookingListComponent implements OnInit {
                       console.log('index', index)              
                     }
         
-                    for (let index = 0; index < response.length -6; index++){
+                    for (let index = 0; index < response.length; index++){
         
                       let start_date_time = new Date(response[index].startTime)
                       let end_date_time = new Date(response[index].endTime)
@@ -302,7 +304,7 @@ export class MyBookingListComponent implements OnInit {
                 await this.apiData.dismiss();
                 console.log('response', response)
                 let msg_alert = await this.alertController.create({
-                  header: 'You have successfully cancelled the session.',
+                  header: 'You have successfully cancelled this booking',
                   cssClass:'my-custom-class',
                   buttons: ['Ok']
                 }).then((res) => {
