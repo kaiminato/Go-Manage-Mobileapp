@@ -67,12 +67,7 @@
                 <ion-text>{{ BIRTHDAY }}</ion-text>
               </ion-item>
 
-              <ion-item detail="false" lines="none">
-                <ion-label>
-                  <ion-text>About Me</ion-text>
-                </ion-label>
-                <ion-text>{{ ABOUT_ME }}</ion-text>
-              </ion-item>
+              
 
             </ion-list>
 
@@ -80,40 +75,6 @@
         </ion-row>
       </ion-grid>
 
-      <!------------ Divider --------------->
-      <div class="divider"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-            <ion-item detail="false">
-              <ion-label>
-                <ion-text>Unit of Measure</ion-text>
-              </ion-label>
-              <ion-text>{{ UNIT_OF_MEASURE }}</ion-text>
-            </ion-item>
-
-            <ion-item detail="false">
-              <ion-label>
-                <ion-text>Height</ion-text>
-              </ion-label>
-              <ion-text>{{ HEIGHT }}</ion-text>
-            </ion-item>
-
-            <ion-item detail="false" lines="none">
-              <ion-label>
-                <ion-text>Weight</ion-text>
-              </ion-label>
-              <ion-text>{{ WEIGHT }}</ion-text>
-            </ion-item>
-          </ion-list>
-
-
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
 
 
       <!------------ Divider --------------->
@@ -206,11 +167,6 @@
                 <ion-input type="date" [(ngModel)]="BIRTHDAY"></ion-input>
               </ion-item>
 
-              <ion-item detail="false" lines="none">
-                <ion-label position="fixed"><ion-text>About Me</ion-text></ion-label>
-                <ion-input [(ngModel)]="ABOUT_ME"></ion-input>
-              </ion-item>
-
             </ion-list>
 
           </ion-col>
@@ -218,7 +174,7 @@
       </ion-grid>
 
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <!-- <div class="divider"></div>
 
       <ion-grid>
         <ion-row>
@@ -241,26 +197,6 @@
             </ion-item>
 
           </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-
-      <!------------ Divider --------------->
-      <!-- <div class="divider"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-
-              <ion-item detail="false" lines="none">
-                <ion-label position="fixed"><ion-text>Email</ion-text></ion-label>
-                <ion-input [(ngModel)]="EMAIL"></ion-input>
-              </ion-item>
-
-            </ion-list>
 
           </ion-col>
         </ion-row>

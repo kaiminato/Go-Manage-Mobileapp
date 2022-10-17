@@ -35,10 +35,12 @@ export class StaffServiceDetailsComponent implements OnInit {
   async ngOnInit() {
     
     console.log('ngOnInit--');
-    await this.getServiceList();
+    
   }
 
   async ionViewWillEnter() {
+
+    await this.getServiceList();
     
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
     this.activateRoute.queryParams
@@ -72,48 +74,58 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.SERVICE_LIST = await this.dataService.getServiceList(); 
     
     if (this.SERVICE_LIST.length > 0) {
+      
       let categorie_ids = [...new Set(this.SERVICE_LIST.map(data => data.categoryId))];
-          this.CATEGORY_LIST = [];
+      this.CATEGORY_LIST = [];
 
-          for(let category_id of categorie_ids){
-            let service_list = this.SERVICE_LIST.filter(service => service.categoryId == category_id);
-            
-            if (service_list.length > 0){
+      for(let category_id of categorie_ids){
+        let service_list = this.SERVICE_LIST.filter(service => service.categoryId == category_id);
+        
+        if (service_list.length > 0){
 
-              this.CATEGORY_LIST.push(
-                                      {
-                                        category_id: category_id,
-                                        category_name: service_list[0].categoryName,
-                                        is_open: false,
-                                        count:service_list.length,
-                                        services: service_list
-                                      }
-                                    );
-            }
-          }
+          this.CATEGORY_LIST.push(
+                                  {
+                                    category_id: category_id,
+                                    category_name: service_list[0].categoryName,
+                                    is_open: false,
+                                    count:service_list.length,
+                                    services: service_list
+                                  }
+                                );
+        }
+      }
     }
+
+
    
   }
 
   changeCategoryStatus (service_id: any , status){
 
     this.CATEGORY_LIST[service_id].is_open = !status ;
+    console.log('this.CATEGORY_LIST----', service_id, this.CATEGORY_LIST)
   }
 
 
-  changeServiceStatus (service_id: any ){
+  changeServiceStatus (service_id: any  , category_index: any , service_index_number: any){
 
-    console.log('this[[[[[[[[[[[=======' , this.CATEGORY_LIST)
+    console.log('checking======>' , service_id , category_index , service_index_number)
+
+      
 
     let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
 
     if (is_already_exist.length > 0) {
-
+      
+      this.CATEGORY_LIST[category_index].services[service_index_number].is_checked = false;
       this.SELECTED_SERVICES = this.SELECTED_SERVICES.filter(data => data != service_id);
     } else {
+      this.CATEGORY_LIST[category_index].services[service_index_number].is_checked = true;
       this.SELECTED_SERVICES.push(service_id);
     }
 
+    console.log('this[[[[[[[[[[[=======' , this.CATEGORY_LIST)
+ 
     this.selectedServicesDetail();
 
   }

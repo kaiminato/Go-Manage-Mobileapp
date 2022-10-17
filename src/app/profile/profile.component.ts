@@ -157,29 +157,7 @@ export class ProfileComponent implements OnInit {
       return
     }
 
-    if (this.ABOUT_ME.trim() == ''){
-
-      await this.apiData.presentAlert("Abiut me can't be empty")
-      return
-    }
-
-    if (this.UNIT_OF_MEASURE.trim() == ''){
-
-      await this.apiData.presentAlert("UNIT_OF_MEASURE can't be empty")
-      return
-    }
-
-    if (this.HEIGHT == ''){
-
-      await this.apiData.presentAlert("Height can't be empty")
-      return
-    }
-
-    if (this.WEIGHT == ''){
-
-      await this.apiData.presentAlert("Weight can't be empty")
-      return
-    }
+    
 
     if (this.HOME_LOCATION.trim() == ''){
 
@@ -193,10 +171,6 @@ export class ProfileComponent implements OnInit {
     let dat = {
       gender: this.GENDER,
       birth: D_O_B,
-      about: this.ABOUT_ME,
-      UNIT_OF_MEASURE: this.UNIT_OF_MEASURE,
-      HEIGHT: this.HEIGHT,
-      WEIGHT: this.WEIGHT,
       HOME_LOCATION: this.HOME_LOCATION
     }
 
@@ -213,15 +187,11 @@ export class ProfileComponent implements OnInit {
       // givenName: this.FIRST_NAME,
       // familyName: this.LAST_NAME,
       user_metadata : {
-        aboutMe : this.ABOUT_ME,
         //addresses : this.HOME_LOCATION,
         addresses: {
           work_address: this.HOME_LOCATION
         },
         gender: this.GENDER,
-        height: this.HEIGHT,
-        unitOfMeasure : this.UNIT_OF_MEASURE,
-        weight : this.WEIGHT,
         dob: D_O_B,
       }
     }
