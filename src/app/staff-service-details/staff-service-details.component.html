@@ -26,7 +26,7 @@
       </ion-item>
   
       <ion-grid *ngIf="service.is_open">
-        <ion-row *ngFor="let service_detail of service.services" class="service_order_list">
+        <ion-row *ngFor="let service_detail of service.services; let index_number = index" class="service_order_list">
           <ion-col size="1" ></ion-col>
           <ion-col size="11" >
              
@@ -43,7 +43,7 @@
               
               <ion-label> <h3>{{ service_detail.serviceName }}</h3>  </ion-label>
               <ion-text class="service_count"> {{ service_detail.servicePrice | currency: 'EUR'}} </ion-text>
-              <ion-checkbox slot="end" (ionChange)="changeServiceStatus( service_detail.id)" [checked]="false"></ion-checkbox>
+              <ion-checkbox slot="end" (ionChange)="changeServiceStatus( service_detail.id , service_index , index_number)" [checked]="service_detail.is_checked"></ion-checkbox>
             </ion-item>
           </ion-col>
         </ion-row>

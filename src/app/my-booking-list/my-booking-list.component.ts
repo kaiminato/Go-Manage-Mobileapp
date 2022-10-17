@@ -13,7 +13,7 @@ import { DataService } from '../services/data.service';
 export class MyBookingListComponent implements OnInit {
 
   HEADING: string = "Your Bookings";
-  IS_FUTURE_BOOKING_active: boolean = false;
+  IS_FUTURE_BOOKING_active: boolean = true;
   FUTURE_BOOKING_LIST: any = [
     // {id: 1 , date_time: 'Thu, 15 Sep at 16:30', service_name: 'Yumi Lash Lift', service_duration: '30 minuts'},
     // {id: 2 , date_time: 'Thu, 15 Sep at 17:45', service_name: 'Brow Tint', service_duration: '30 minuts'},

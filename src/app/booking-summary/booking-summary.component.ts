@@ -112,17 +112,9 @@ export class BookingSummaryComponent implements OnInit {
 
     console.log('startr---', `${this.BOOKINGS_DETAILS.date} ${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`)
 
-    let starting_time = new Date(`${this.BOOKINGS_DETAILS.date} ${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`);
-    let starting_date_time = new Date(starting_time.getTime() - (starting_time.getTimezoneOffset() * 60000)).toISOString().replace(/\..+/, '');
-
-    let new_date = new Date(starting_time);
-    new_date.setMinutes(new_date.getMinutes() + this.TOTAL_DURATION); // timestamp
-    
-
-    let ending_time: any = `${new_date.getFullYear()}-${new_date.getMonth()+1 < 10 ? '0'+(new_date.getMonth()+1) : new_date.getMonth()+1}-${new_date.getDate()} ${new_date.getHours() < 10 ? '0'+new_date.getHours() : new_date.getHours()}:${new_date.getMinutes()}:00`;
-    ending_time = new Date(ending_time);
-    let ending_date_time = new Date(ending_time.getTime() - (ending_time.getTimezoneOffset() * 60000)).toISOString().replace(/\..+/, '');
-
+    let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}:00.000Z`;
+    let end_time = await this.addHours(this.BOOKINGS_DETAILS.shift_timing_details[0].value , this.TOTAL_DURATION);
+    let ending_date_time = `${this.BOOKINGS_DETAILS.date}T${end_time}:00.000Z`;
     let data = [];
     
 
@@ -144,8 +136,8 @@ export class BookingSummaryComponent implements OnInit {
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
-                endTime: ending_date_time+".000Z",
-                startTime: starting_date_time+".000Z",
+                endTime: ending_date_time,
+                startTime: starting_date_time,
                 isAllDay: false,
                 customer: null,
                 service: service.serviceName,
@@ -223,6 +215,23 @@ export class BookingSummaryComponent implements OnInit {
         console.log('error', error)
       }
     );
+  }
+
+  async addHours (time: string , add_duration: number) {
+    
+    let [hours , minut] = time.split(':');
+    console.log(hours , minut)
+    
+
+    let total_minuts = parseInt(hours) * 60 + parseInt(minut) + add_duration
+    let h : any = ~~(total_minuts / 60)
+    let m : any = total_minuts % 60
+    h = h.toString().length == 1 ?'0'+h : h;
+    m = m.toString().length == 1 ?'0'+m : m;
+    time = `${h}:${m}`;
+
+    console.log('RETURN', time)
+    return time;
   }
 
   navigation() {
