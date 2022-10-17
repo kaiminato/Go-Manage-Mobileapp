@@ -19,12 +19,12 @@ export class HomePageComponent implements OnInit {
         id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking'
       },
       {
-        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/store-all-product'
+        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/'
       },
     ],
     [
       {
-        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',router_link: '/buy-a-voucher' 
+        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' 
       },
       {
         id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us'
