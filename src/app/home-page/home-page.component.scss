@@ -20,6 +20,12 @@ ion-content {
             font-weight: bold;
             font-size: 14px;
         }
+
+        ion-img {
+            margin-left: auto;
+            margin-right: auto;
+            width: 90px;
+        }
     }
 
     .some_space {
@@ -35,4 +41,6 @@ ion-content {
         'GRAD' 0,
         'opsz' 48
     }
+
+    
 }
