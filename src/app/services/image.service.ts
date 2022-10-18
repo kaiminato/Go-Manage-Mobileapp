@@ -11,5 +11,6 @@ export class ImageService {
   public PRODUCT_TWO: string = '../assets/images/product_1.jpg';
   public SHOE: string = '../assets/images/shoe.jpeg';
   public BEG: string = '../assets/images/beg.jpeg';
+  public COMING_SOON: string = '../assets/images/coming_soon.png';
   constructor() { }
 }

@@ -25,14 +25,20 @@ ion-content {
         //background-color: white;
         margin-top: 10px;
         .active {
-            background-color: #cccccc;
+            background-color: #047473;
+            color: #fff !important;
             border: 1px solid #047473 !important;
         }
 
         .disabled {
-            background-color: #b12323 !important;
+            background-color: #cccccc !important;
             border: 1px solid #047473 !important;
+            ion-text{
+                text-decoration: line-through;
+            }
+            
         }
+
         .date-range {
             border: 2px solid #047473;
             padding: 15%;
@@ -40,6 +46,11 @@ ion-content {
             color: #047473;
             font-weight: bold;
             width: 90%;
+
+            .day-name {
+
+                font-size: 15px;
+            }
         
         }
 

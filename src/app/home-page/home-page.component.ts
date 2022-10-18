@@ -16,26 +16,26 @@ export class HomePageComponent implements OnInit {
   LIST: any = [
     [
       {
-        id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking'
+        id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image: ''
       },
       {
-        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/'
-      },
-    ],
-    [
-      {
-        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' 
-      },
-      {
-        id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us'
+        id: 2 , is_icon: true, name:'store', text: 'Online Store' , router_link: '/' , image : this.imageService.COMING_SOON
       },
     ],
     [
       {
-        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,router_link: '/add-a-review'
+        id: 3 , is_icon: true, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' , image: this.imageService.COMING_SOON
       },
       {
-        id: 6 , is_icon: false, name:'person_add', text: 'Refer a friend' ,router_link: '/'
+        id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us', image: ''
+      },
+    ],
+    [
+      {
+        id: 5 , is_icon: true, name:'rate_review', text: 'Rate us' ,router_link: '/', image: this.imageService.COMING_SOON
+      },
+      {
+        id: 6 , is_icon: true, name:'person_add', text: 'Refer a friend' ,router_link: '/', image: this.imageService.COMING_SOON
       },
     ],
   ];
