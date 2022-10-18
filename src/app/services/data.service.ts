@@ -19,6 +19,7 @@ export class DataService {
 
   public DAYS_OFF_NUMBER: any = [ 1, 2, 3, 4, 5, 6, 7]; // ['monday, tuesdat .... respectivly]
   public DAYS_NAME: any = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  public SHORT_DAYS_NAME: any = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   public CURRENT_YEAR: number = new Date().getFullYear();
   public CURRENT_MONTH: number = new Date().getMonth() +1;
   public NO_OF_YEARS: number = 10;
@@ -75,6 +76,9 @@ export class DataService {
     for (let i = 1; i <= lastDay; i++){
 
       let new_date = new Date(`${year}-${month}-${ i < 10 ? '0'+i : i}`);
+      
+      var dayName = this.SHORT_DAYS_NAME[new_date.getDay()];
+
       let d = new Date(new_date);
       let day_name = this.DAYS_NAME[d.getDay()];
     
@@ -92,6 +96,7 @@ export class DataService {
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
       let status = false;
+
       if (get_booking_values.booking_type == this.BOOKING_WITH_STAFF) {
 
         status = new_date <= new Date(yesterday) || staff_available_date_id.length == 0? true : false;
@@ -101,7 +106,7 @@ export class DataService {
       }
       
 
-      days_list.push({ day_number: i, is_disabled: status, is_active: false, month: month, year: year})
+      days_list.push({ day_number: i, is_disabled: status, is_active: false, month: month, year: year , day_name: dayName})
     }
     console.log('days_list---',days_list)
     return await days_list;
