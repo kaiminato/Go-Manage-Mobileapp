@@ -107,25 +107,22 @@ export class StaffServiceDetailsComponent implements OnInit {
   }
 
 
-  changeServiceStatus (service_id: any  , category_index: any , service_index_number: any){
+  changeServiceStatus (service_id: any ){
 
-    console.log('checking======>' , service_id , category_index , service_index_number)
-
-      
 
     let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
 
     if (is_already_exist.length > 0) {
       
-      this.CATEGORY_LIST[category_index].services[service_index_number].is_checked = false;
+     
       this.SELECTED_SERVICES = this.SELECTED_SERVICES.filter(data => data != service_id);
     } else {
-      this.CATEGORY_LIST[category_index].services[service_index_number].is_checked = true;
+      
       this.SELECTED_SERVICES.push(service_id);
     }
 
-    console.log('this[[[[[[[[[[[=======' , this.CATEGORY_LIST)
- 
+    
+
     this.selectedServicesDetail();
 
   }
