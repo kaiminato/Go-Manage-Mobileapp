@@ -12,6 +12,7 @@ import { ImageService } from '../services/image.service';
 export class SelectDeliverComponent implements OnInit {
 
   HEADING: string = "Select delivery";
+  DELIVERY: boolean = false;
 
   constructor(
     private router: Router,

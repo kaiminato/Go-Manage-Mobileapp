@@ -54,6 +54,8 @@ export class ProfileComponent implements OnInit {
 
         console.log('auth response', response);
 
+        this.EMAIL = response.email;
+
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
 
@@ -90,18 +92,23 @@ export class ProfileComponent implements OnInit {
 
             
 
-            let [date , month , year] = user_details.user_metadata.dob.split('/')
+            if (user_details?.user_metadata) {
+
+              let [date , month , year] = user_details.user_metadata.dob.split('/')
 
 
-            this.EMAIL = user_details.email;
-            this.GENDER = user_details.user_metadata.gender.toUpperCase()
-            this.BIRTHDAY = `${year}-${month}-${date}`;
-            this.ABOUT_ME = user_details.user_metadata.aboutMe;
-            this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
-            this.HEIGHT = user_details.user_metadata.height;
-            this.WEIGHT = user_details.user_metadata.weight;
-            let address_value = JSON.parse(user_details.user_metadata?.addresses[0])
-            this.HOME_LOCATION = address_value?.work_address;
+              this.EMAIL = user_details.email;
+              this.GENDER = user_details.user_metadata.gender.toUpperCase()
+              this.BIRTHDAY = `${year}-${month}-${date}`;
+              this.ABOUT_ME = user_details.user_metadata.aboutMe;
+              this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
+              this.HEIGHT = user_details.user_metadata.height;
+              this.WEIGHT = user_details.user_metadata.weight;
+              let address_value = JSON.parse(user_details.user_metadata?.addresses[0])
+              this.HOME_LOCATION = address_value?.work_address;
+
+            }
+            
             
             
             
@@ -186,6 +193,7 @@ export class ProfileComponent implements OnInit {
       // email: this.EMAIL,
       // givenName: this.FIRST_NAME,
       // familyName: this.LAST_NAME,
+      //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
       user_metadata : {
         //addresses : this.HOME_LOCATION,
         addresses: {
