@@ -27,7 +27,7 @@ export class HomePageComponent implements OnInit {
         id: 3 , is_icon: true, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' , image: this.imageService.COMING_SOON
       },
       {
-        id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us', image: ''
+        id: 4 , is_icon: true, name:'groups', text: 'About us' ,router_link: '/', image: this.imageService.COMING_SOON
       },
     ],
     [

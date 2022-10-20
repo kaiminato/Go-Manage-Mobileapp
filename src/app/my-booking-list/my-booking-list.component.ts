@@ -58,38 +58,45 @@ export class MyBookingListComponent implements OnInit {
         
                 
                 response = response.filter( data => new Date() < new Date(data.endTime))
-                console.log('response' , response)
+                console.log('response after filter-----' , response)
         
                 if (response.length >0) {
         
-                  
-                  if (response.length > 4) {
-                    
                     let end_from = response.length -1;
                     let end_to = response.length -6;
-                    console.log('yefyg', end_from ,end_to )
+                    console.log('yefyg', end_from  )
         
                     this.RECENT_BOOKING_LIST = []
                     this.FUTURE_BOOKING_LIST = []
-        
-                    for (let index = end_from; index > end_to; index--){
-        
-                      let start_date_time = new Date(response[index].startTime)
-                      let end_date_time = new Date(response[index].endTime)
-                      var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-                      var resultInMinutes = Math.round(difference / 60000);
-                      let date_time = await this.getDateFormat(response[index].startTime)
 
-                      let data = {
-                        service_name : response[index].service,
-                        service_duration:resultInMinutes+" minuts",
-                        id:response[index].id,
-                        date_time: date_time
-                        
-                      };
+                    let count = 0;
+
         
-                      this.RECENT_BOOKING_LIST.push(data)
-                      console.log('index', index)              
+                    for (let index = end_from; index >= 0; index--){
+        
+                      console.log('counng')
+                      if (count < 6) {
+
+                        let start_date_time = new Date(response[index].startTime)
+                        let end_date_time = new Date(response[index].endTime)
+                        var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
+                        var resultInMinutes = Math.round(difference / 60000);
+                        let date_time = await this.getDateFormat(response[index].startTime)
+
+                        let data = {
+                          service_name : response[index].service,
+                          service_duration:resultInMinutes+" minutes",
+                          id:response[index].id,
+                          date_time: date_time
+                          
+                        };
+          
+                        this.RECENT_BOOKING_LIST.push(data)
+                        console.log('index', index)
+                      }
+
+                      ++count;
+                                    
                     }
         
                     for (let index = 0; index < response.length; index++){
@@ -103,7 +110,7 @@ export class MyBookingListComponent implements OnInit {
         
                       let data = {
                         service_name : response[index].service,
-                        service_duration:resultInMinutes+" minuts",
+                        service_duration:resultInMinutes+" minutes",
                         id:response[index].id,
                         date_time: date_time
                         
@@ -113,33 +120,6 @@ export class MyBookingListComponent implements OnInit {
                     }
         
                     
-                  } else {
-        
-                    this.RECENT_BOOKING_LIST = []
-                    this.FUTURE_BOOKING_LIST = []
-
-                    console.log('hiting')
-        
-                    for (let index = 0; index < response.length; index++){
-        
-                      let start_date_time = new Date(response[index].startTime)
-                      let end_date_time = new Date(response[index].endTime)
-                      var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-                      var resultInMinutes = Math.round(difference / 60000);
-                      let date_time = await this.getDateFormat(response[index].startTime)
-        
-                      let data = {
-                        service_name : response[index].service,
-                        service_duration:resultInMinutes+" minuts",
-                        id:response[index].id,
-                        date_time: date_time
-                        
-                      };
-        
-                      this.RECENT_BOOKING_LIST.push(data)
-                    }
-        
-                  }
                 }
         
                 await this.apiData.dismiss();
