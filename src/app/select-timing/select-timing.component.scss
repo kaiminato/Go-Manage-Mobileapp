@@ -117,6 +117,9 @@ ion-content {
             border-radius: 5px;
             color: #fff;
             padding: 4px;
+            ion-text{
+                text-decoration: line-through;
+            }
         }
         
     }
