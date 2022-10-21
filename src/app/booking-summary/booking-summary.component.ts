@@ -151,6 +151,10 @@ export class BookingSummaryComponent implements OnInit {
     let end_time = await this.addHours(this.BOOKINGS_DETAILS.shift_timing_details[0].value , this.TOTAL_DURATION);
     let ending_date_time = `${this.BOOKINGS_DETAILS.date}T${end_time}:00.000Z`;
     let data = [];
+
+    console.clear();
+
+   
     
 
     await this.apiData.presentLoading();
@@ -164,15 +168,31 @@ export class BookingSummaryComponent implements OnInit {
             console.log('user_info' , user_info)
             
             
-
+            let last_service_end_time = '';
             for (let service of this.BOOKINGS_DETAILS.servises){
+
+              let start_time = '';
+              let end_time = '';
+
+              if (last_service_end_time == ''){
+
+                start_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}:00.000Z`;
+                last_service_end_time = await this.addHours(this.BOOKINGS_DETAILS.shift_timing_details[0].value , service.serviceDuration);
+                end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
+
+              } else {
+
+                start_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
+                last_service_end_time = await this.addHours(last_service_end_time , service.serviceDuration);
+                end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
+              }
 
               data.push ( {
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
-                endTime: ending_date_time,
-                startTime: starting_date_time,
+                endTime: end_time,
+                startTime: start_time,
                 isAllDay: false,
                 customer: null,
                 service: service.serviceName,

@@ -80,7 +80,15 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
 
-    this.ALL_SHIFT = await this.dataService.getStaticShift();
+    await this.setNonWorkingDaysOff()
+    console.clear();
+    console.log('today_date---' , new Date().getDay())
+    
+
+    this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date().getDay());
+
+    console.log('------texting' ,this.ALL_SHIFT)
+
     this.MORNING_SHIFT = [... this.ALL_SHIFT]
     let new_date = new Date();
     this.slides.slideTo(new_date.getDate()-1,1000);
@@ -103,6 +111,36 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
         this.MORNING_SHIFT[get_booking_data.timing_id-1].is_active = true;
       
       }, 300);
+    }
+  }
+
+  async setNonWorkingDaysOff () {
+
+    let staff_list = await this.dataService.getStaffList();
+
+    console.log('staff_list----' , staff_list)
+
+    for (let current_date of this.DAYS_ARRAY){
+      
+      let created_date = new Date(`${current_date.year}-${current_date.month}-${current_date.day_number}`);
+      let is_date_disabled = true;
+
+      if (!current_date.is_disabled) {
+
+      
+        for(let staff of staff_list){
+
+          let get_working_day = staff.staffDetailFormatted.filter( data => data.dayId == created_date.getDay())
+
+          if (get_working_day.length > 0) { is_date_disabled = false; }
+
+        }
+
+        current_date.is_disabled = is_date_disabled;
+        
+        console.log('created_date------' , created_date , created_date.getDay())
+      }
+      
     }
   }
 
@@ -144,6 +182,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let [year , month , date] = this.date.split('-')
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
+    await this.setNonWorkingDaysOff()
 
     let new_date = new Date(this.date)
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()] + " "+new_date.getFullYear()
@@ -160,7 +199,8 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     console.log(this.date)
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
-
+    await this.setNonWorkingDaysOff()
+    
     let new_date = new Date(this.date)
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()]+ ' '+ new_date.getFullYear()
     this.DAYS_ARRAY[new_date.getDate()-1].is_active = true;
@@ -170,7 +210,9 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
   async checkAllShiftStatus (date: any) {
 
-    let all_shift = await this.dataService.getStaticShift();
+    let all_shift = await this.dataService.getNewStaticShift(new Date(date).getDay());
+    
+
     let all_staff = await this.dataService.getStaffList();
     console.log('shift', all_shift)
 

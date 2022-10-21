@@ -90,6 +90,9 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
+    console.log('testoinng-------' , this.dataService.DAYS_OFF_NUMBER)
+    
+
     if (staff_detail.length > 0) {
 
       let weekly_off_days = [];
@@ -109,6 +112,8 @@ export class SelectTimingComponent implements OnInit {
       this.options.disableWeeks = weekly_off_days;
     }
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
+
+    
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
@@ -155,6 +160,8 @@ export class SelectTimingComponent implements OnInit {
     }
 
     let uniq_dates = [...new Set(array)];
+
+    
 
     this.DISABLED_DATES_ARRAY = [];
 
@@ -212,6 +219,7 @@ export class SelectTimingComponent implements OnInit {
       let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
       let is_date_off = await this.dataService.isDateOff(create_date);
+      console.log('isDateOff------', is_date_off , create_date)
 
       const today = new Date()
       const yesterday = new Date(today)
