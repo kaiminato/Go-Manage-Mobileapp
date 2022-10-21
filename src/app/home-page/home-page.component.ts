@@ -1,6 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
+import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 
 const callbackUri = `http://localhost:8100/home`;
@@ -43,7 +44,7 @@ export class HomePageComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
-  
+    private dataService: DataService,
   ) {
 
     console.log('LIST----', this.LIST)
@@ -51,6 +52,26 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit() {
     
+  }
+
+  async ionViewWillEnter () {
+
+    console.log('texting.........')
+
+    await this.checkPreviousUrl();
+  }
+
+  async checkPreviousUrl () {
+
+    let get_previous_url = await this.dataService.getPreviousUrl()
+
+    if (get_previous_url != '') {
+      
+      let url = `/${get_previous_url}`
+      this.router.navigate([ url ]);
+      this.dataService.removePreviousUrl();
+    }
+    console.log('yes')
   }
 
   async navigate (link: any) {

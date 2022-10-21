@@ -31,6 +31,8 @@
           <ion-col size="11" >
              
             <ion-item class="service_detail ion-no-padding"   detail="false" >
+              
+              
               <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
                 <ion-icon name="information-circle-outline"  style="color: black;"></ion-icon>
               </ion-button>
@@ -40,10 +42,14 @@
                   <ion-content class="ion-padding"> {{ service_detail.serviceDescription }} </ion-content>
                 </ng-template>
               </ion-popover>
+
               
-              <ion-label > <h3>{{ service_detail.serviceName }}</h3>  
+              
+              <ion-label > 
+                <h3>{{ service_detail.serviceName }}</h3>  
                 <ion-text class="service_count"> {{ service_detail.servicePrice | currency: 'EUR'}} </ion-text>
-                <ion-checkbox slot="end"  (ionChange)="changeServiceStatus( service_detail.id )"></ion-checkbox></ion-label>
+                <ion-checkbox slot="end"  (ionChange)="changeServiceStatus( service_detail.id )"></ion-checkbox>
+              </ion-label>
               
             </ion-item>
           </ion-col>
