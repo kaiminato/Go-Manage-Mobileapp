@@ -14,16 +14,13 @@ ion-header {
             padding-top: 4px;
         }
 
-        .material-symbols-outlined {
-            font-size: 35px;
-            color: #fff;
-            font-variation-settings:
-            'FILL' 0,
-            'wght' 400,
-            'GRAD' 0,
-            'opsz' 48
+        .ili2 {
+            width: 100%;
+            border: 1px solid;
+            height: 1px;
+            top: 15px;
+            margin-top: 7px;
         }
-
         .circle {
             border-radius: 50%;
             width: 30px;
@@ -85,14 +82,24 @@ ion-header {
         }
         ul.headli li {
             color: #595252;
-            padding: 10px 15px;
+            padding: 12px 15px;
             font-weight: bold;
+        }
+
+        .material-symbols-outlined {
+            font-size: 35px;
+            color: #fff;
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 48
         }
 
         .ili3 {
             display: flex;
             padding: 0px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             padding-left: 2px;
         }
 
