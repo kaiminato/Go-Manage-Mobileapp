@@ -74,7 +74,6 @@ export class MyBookingListComponent implements OnInit {
         
                     for (let index = end_from; index >= 0; index--){
         
-                      console.log('counng')
                       if (count < 6) {
 
                         let start_date_time = new Date(response[index].startTime)
@@ -87,7 +86,8 @@ export class MyBookingListComponent implements OnInit {
                           service_name : response[index].service,
                           service_duration:resultInMinutes+" minutes",
                           id:response[index].id,
-                          date_time: date_time
+                          date_time: date_time,
+                          start_time: response[index].startTime
                           
                         };
           
@@ -112,12 +112,21 @@ export class MyBookingListComponent implements OnInit {
                         service_name : response[index].service,
                         service_duration:resultInMinutes+" minutes",
                         id:response[index].id,
-                        date_time: date_time
+                        date_time: date_time,
+                        start_time: response[index].startTime
                         
                       };
         
                       this.FUTURE_BOOKING_LIST.push(data)
                     }
+
+                    console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
+
+                    // Sort array
+                    
+                    this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
+
+                    console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
         
                     
                 }

@@ -5,6 +5,8 @@ import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 import { ApiDataService } from '../services/api-data.service';
 import { AuthService } from '@auth0/auth0-angular';
+import { mergeMap } from 'rxjs/operators';
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-booking-summary',
@@ -23,6 +25,7 @@ export class BookingSummaryComponent implements OnInit {
   BOOKINGS_DETAILS: any;
   BOOKING_WITH_STAFF: any = true;
   CANCEL_BOOKING_ID: number = 0;
+  IS_LOGIN: boolean = false;
 
   constructor(
     private router: Router,
@@ -89,6 +92,22 @@ export class BookingSummaryComponent implements OnInit {
     console.log('cheing --- ',this.formatAMPM(now))
     
     console.log('BOOKINGS_DETAILS-- ',get_month_name, this.BOOKINGS_DETAILS)
+
+    await this.checkLogin();
+  }
+
+  async checkLogin () {
+
+    await this.auth.getUser().subscribe(
+      (user_data: any) =>{
+        console.log('user_data' , user_data)
+
+        if (user_data !== undefined){
+          
+          this.IS_LOGIN = true;
+        }
+      }
+    );
   }
 
   async formatAMPM(date) {
@@ -109,6 +128,22 @@ export class BookingSummaryComponent implements OnInit {
 
     console.clear();
     console.log(this.BOOKINGS_DETAILS)
+
+    if (!this.IS_LOGIN) {
+
+      await this.dataService.setPreviousUrl('booking-summary');
+      this.auth
+      .buildAuthorizeUrl()
+      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+      .subscribe();
+
+      return
+    }
+
+    await this.dataService.removePreviousUrl()
+    
+
+    
 
     console.log('startr---', `${this.BOOKINGS_DETAILS.date} ${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`)
 
@@ -195,11 +230,6 @@ export class BookingSummaryComponent implements OnInit {
       }
     );
 
-
-    
-
-    
-    
     
   }
 

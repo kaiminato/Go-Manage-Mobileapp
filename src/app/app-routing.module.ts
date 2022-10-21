@@ -33,27 +33,27 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomePageComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'make-a-booking',
     component: MakeABookingComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'staff-service-details/:id',
     component: StaffServiceDetailsComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'select-a-time',
     component: SelectTimingComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'booking-summary',
     component: BookingSummaryComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'booking-complete',
@@ -98,13 +98,13 @@ const routes: Routes = [
   {
     path: 'select-time-with-service-booking',
     component: SelectTimingWithServiceBookingComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
 
   {
     path: 'select-staff-with-service-booking',
     component: SelectStaffWithServiceBookingComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'my-booking-list',
@@ -134,7 +134,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   // {
   //   path: '**',

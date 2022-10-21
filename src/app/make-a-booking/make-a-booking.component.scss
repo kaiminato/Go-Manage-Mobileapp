@@ -122,7 +122,10 @@ ion-content {
             margin-right: 32px;
         }
         ion-checkbox {
-            min-width: 18px;
+            min-width: 26px;
+                svg {
+                    border-radius: 2px;
+                }
         }
     }
 

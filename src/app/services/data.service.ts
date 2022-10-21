@@ -36,6 +36,7 @@ export class DataService {
   public VOUCHER_SEND_TYPE_ME: any = 1;
   public VOUCHER_SEND_TYPE_SOME_ELSE: any = 2;
   public VOUCHER_DATA_KEY: any = 'voucher_data';
+  public LOGGED_IN_PREVIOUS_URL_KEY = 'previous_url';
 
   constructor() { }
 
@@ -398,6 +399,22 @@ export class DataService {
   async removeVoucherData () {
 
     return await localStorage.removeItem(this.VOUCHER_DATA_KEY)
+  }
+
+  async setPreviousUrl (url: string) {
+
+      return await localStorage.setItem(this.LOGGED_IN_PREVIOUS_URL_KEY , url)
+  }
+
+  async getPreviousUrl () {
+
+    let previous_url: any = await localStorage.getItem(this.LOGGED_IN_PREVIOUS_URL_KEY);
+    return await  previous_url == undefined || previous_url == null ? '' :  previous_url;
+}
+
+  async removePreviousUrl () {
+
+    return await localStorage.removeItem(this.LOGGED_IN_PREVIOUS_URL_KEY)
   }
  
 }
