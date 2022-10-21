@@ -90,6 +90,11 @@ ion-content {
         }
     }
 
+    .itemBtns {
+        position: relative;
+        z-index: 4;
+    }
+
     .service_detail {
         margin: 5px;
         border-radius: 5px;
