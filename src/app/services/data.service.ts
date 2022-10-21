@@ -113,6 +113,37 @@ export class DataService {
     return await days_list;
   }
 
+  async getNewStaticShift (day_number: any) {
+
+    let staff_list = await this.getStaffList();
+    let time_array = [];
+
+    for (let staff of staff_list) {
+
+
+      let get_working_day = staff.staffDetailFormatted.filter( data => data.dayId == day_number);
+
+      if (get_working_day.length > 0) {
+
+        time_array.push(get_working_day[0].startShiftTime)
+        time_array.push(get_working_day[0].endShiftTime)
+      }
+      
+    }
+
+    console.log('time_array-----' , time_array)
+
+    time_array.sort(function (a, b) { return a.localeCompare(b); });
+
+    this.ALL_SHIFT = [];
+
+    let start_from = time_array[0];
+    let end_to = time_array[time_array.length - 1];
+    let data = await this.returnTimesInBetween(start_from , end_to)
+    
+    return this.ALL_SHIFT;
+  }
+
   async getStaticShift () {
 
     let staff_list = await this.getStaffList();
@@ -126,6 +157,8 @@ export class DataService {
         time_array.push(staff_timing.endShiftTime)
       }
     }
+
+    console.log('time_array-----' , time_array)
 
     time_array.sort(function (a, b) { return a.localeCompare(b); });
 
