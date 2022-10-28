@@ -7,6 +7,9 @@ import { CalendarModalOptions } from 'ion2-calendar';
 import { IonSlides} from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
 import { ModalController } from '@ionic/angular';
+import { AuthService } from '@auth0/auth0-angular';
+import { mergeMap } from 'rxjs/operators';
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-select-timing',
@@ -36,6 +39,7 @@ export class SelectTimingComponent implements OnInit {
   COMPAREBLE_DATES: any = [];
   MONTH_NAME_LIST: any = [];
   DISABLED_DATES_ARRAY: any = [];
+  IS_LOGIN: boolean = false;
   
   slideOpts = {
     slidesPerView: 6,
@@ -66,7 +70,9 @@ export class SelectTimingComponent implements OnInit {
     private pickerCtrl: PickerController,
     public dataService: DataService,
     public apiService: ApiDataService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    public auth: AuthService,
+    private apiData: ApiDataService
     ) {
 
     }
@@ -122,11 +128,13 @@ export class SelectTimingComponent implements OnInit {
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
+    await this.checkLogin();
     await this.getDisabledDates();
     await this.getDisabledShift();
     
 
     if (booking_data.date != '') this.prefilleddata();
+    
   }
 
   async ionViewWillLeave () {
@@ -148,6 +156,7 @@ export class SelectTimingComponent implements OnInit {
     }, 300);
    
   }
+  
 
   async getDisabledDates (){
 
@@ -219,7 +228,6 @@ export class SelectTimingComponent implements OnInit {
       let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
       let is_date_off = await this.dataService.isDateOff(create_date);
-      console.log('isDateOff------', is_date_off , create_date)
 
       const today = new Date()
       const yesterday = new Date(today)
@@ -374,7 +382,9 @@ export class SelectTimingComponent implements OnInit {
     get_booking_data.date = this.date;
     get_booking_data.timing_id = id;
 
-    console.log('selecetd_shift--', selecetd_shift)
+    console.clear()
+
+    console.log('selecetd_shift--', get_booking_data)
 
     let total_duration = 0;
 
@@ -386,7 +396,11 @@ export class SelectTimingComponent implements OnInit {
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
     ending_date_time = new Date(ending_date_time);
 
-    
+    let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
+    let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
+    console.log('starting_date_time---' ,create_pending_booking_start_time)
+    console.log('ending_date_time---' ,create_pending_booking_end_time)
+
     let is_passed = true;
     for (let shift of this.ALL_SHIFT) {
 
@@ -404,6 +418,17 @@ export class SelectTimingComponent implements OnInit {
       return;
     }
 
+    if (!this.IS_LOGIN) {
+
+      await this.dataService.setPreviousUrl('select-a-time');
+      this.auth
+      .buildAuthorizeUrl()
+      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+      .subscribe();
+
+      return
+    }
+
     // Check services's time is under office timing
 
     let office_last_shift = new Date (`${get_booking_data.date} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}` );
@@ -419,12 +444,91 @@ export class SelectTimingComponent implements OnInit {
     for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
 
   
+    await this.apiData.presentLoading();
 
-    await this.dataService.setBookingData(get_booking_data)
-  
-    console.log('get_booking_data routing' , get_booking_data)
+    await this.auth.getUser().subscribe(
+      async (response: any) => { 
 
-    setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          async (user_info: any) => { 
+
+            
+            console.log('user_info' , user_info)
+
+            let data = {
+                          "userId": user_info.userGMID,
+                          "staffId": 1,
+                          "isPending": 1,
+                          "startTime": create_pending_booking_start_time,
+                          "endTime": create_pending_booking_end_time,
+                          "serviceId": get_booking_data.servises[0].id
+                      };
+
+            (await this.apiData.createPendingAppointment(data)).subscribe(
+              async (response: any) => {
+
+                await this.apiData.dismiss();
+                console.log('response-------pppppppp' , response)
+              },
+              async (error:any) => {
+                await this.apiData.dismiss();
+
+                if (error.status == 200) {
+
+                  await this.dataService.setBookingData(get_booking_data)
+                
+                  setTimeout(async () => { // remove temprary booking after 5 minutes = 300000
+                    
+
+                    (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
+                      (response: any) => {
+
+                        console.log('hiddin---' , response)
+                      },
+
+                      (error: any) => {
+
+                        console.log('error---' , error)
+                      }
+                    );
+                  }, 300000);
+
+                  setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
+                  
+                } else if (error.status == 201){
+
+                  await this.apiService.presentAlert('Shift not available')
+                  return
+                
+                } else {
+
+                  
+                  await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
+                }
+
+                console.log('pending booking server error ', error)
+                
+              }
+            );
+
+
+          },
+          
+          async (error:any) => {
+            await this.apiData.dismiss();
+            console.log('profile error ', error)
+            await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
+          }
+        )
+
+      },
+      async (error:any) => {
+        await this.apiData.dismiss();
+        console.log('auth error ', error)
+        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+      }
+    );
+
     
   }
 
@@ -440,6 +544,38 @@ export class SelectTimingComponent implements OnInit {
 
     return  year + '-' + month + '-' + day;
   
+  }
+
+  async returnDateTimeFormat (date_time){
+
+    let today_date = new Date(date_time);
+    let year: any = today_date.getFullYear();
+    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let day: any = today_date.getDate();
+    let hours: any = today_date.getHours();
+    let minutes: any = today_date.getMinutes();
+
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+    if (hours < 10) hours = '0' + hours;
+    if (minutes < 10) minutes = '0' + minutes;
+
+    return  await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes +':00.000Z';
+  }
+
+
+  async checkLogin () {
+
+    await this.auth.getUser().subscribe(
+      (user_data: any) =>{
+        console.log('user_data' , user_data)
+
+        if (user_data !== undefined){
+          
+          this.IS_LOGIN = true;
+        }
+      }
+    );
   }
 
   navigation() {

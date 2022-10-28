@@ -78,6 +78,16 @@ export class ApiDataService {
     return await this.http.post('http://localhost:3001/my-testing' , data)
   }
 
+  async createPendingAppointment (data: any) {
+
+    return await this.http.post(this.apiUrl+'bookings/pendingBooking' , data)
+  }
+
+  async removeUserPendingBoking (user_id: any) {
+
+    return await this.http.get(this.apiUrl + 'bookings/removeUsersPendingBooking?userId=' + user_id);
+  }
+
   async presentLoading() {
 
     this.isLoading = true;

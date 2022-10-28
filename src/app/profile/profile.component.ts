@@ -53,7 +53,7 @@ export class ProfileComponent implements OnInit {
       async (response: any) => {
 
         console.log('auth response', response);
-
+        //response.email = 'gomanageTest@gmail.com';
         this.EMAIL = response.email;
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
@@ -85,7 +85,8 @@ export class ProfileComponent implements OnInit {
                 this.FIRST_NAME = name_array[0];
               }
             } else {
-
+              
+              this.SHORT_NAME = (<any> Array.from(user_details.givenName)[0]).toUpperCase() +""+(<any> Array.from(user_details.familyName)[0]).toUpperCase();
               this.FIRST_NAME = user_details.givenName;
               this.LAST_NAME = user_details.familyName;
             }

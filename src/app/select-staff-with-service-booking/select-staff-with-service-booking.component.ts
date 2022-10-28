@@ -4,6 +4,10 @@ import { ActivatedRoute , Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
+import { AuthService } from '@auth0/auth0-angular';
+import { mergeMap, retry } from 'rxjs/operators';
+import { Browser } from '@capacitor/browser';
+import { ApiDataService } from '../services/api-data.service';
 
 @Component({
   selector: 'app-select-staff-with-service-booking',
@@ -18,6 +22,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
   AVAILABLE_STAFF: any = [];
   ALL_SHIFT: any = [];
   CANCEL_BOOKING_ID: number = 0;
+  IS_LOGIN: boolean = false;
 
   constructor(
     private location: Location,
@@ -25,12 +30,15 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     public imageService: ImageService,
     private router: Router,
     public alertController: AlertController,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    public auth: AuthService,
+    private apiData: ApiDataService
   ) { }
 
   ngOnInit() {}
 
   async ionViewWillEnter () {
+
 
     this.activateRoute.queryParams
       .subscribe(params => {
@@ -40,13 +48,20 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
       }
     );
 
+    await this.checkLogin();
+
     this.AVAILABLE_STAFF = [];
 
     this.STAFF_LIST = await this.dataService.getStaffList();
     this.BOOKING_LIST = await this.dataService.getStaffBookingList();
-    this.ALL_SHIFT = await this.dataService.getStaticShift();
+    //this.ALL_SHIFT = await this.dataService.getStaticShift();
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let date = booking_data.date;
+    this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date(date).getDay());
+    
   
     console.log('this.STAFF_LIST-----', this.STAFF_LIST, this.ALL_SHIFT)
+    
     await this.filterStaffList();
   }
 
@@ -175,12 +190,182 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
   async SelectStaff (staff_id: any){
 
     console.log('staff id ', staff_id)
-    let booking_data = await this.dataService.getInitialBookingdata();
-    booking_data.staff_id = staff_id;
-    await this.dataService.setBookingData(booking_data)
-    this.router.navigate(['/booking-summary'],{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
+
+    console.log('this.IS_LOGIN-----' , this.IS_LOGIN)
+
+    if (!this.IS_LOGIN) {
+
+      await this.dataService.setPreviousUrl('select-a-time');
+      this.auth
+      .buildAuthorizeUrl()
+      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+      .subscribe();
+
+      return
+    }
+
+   
+    let get_booking_data = await this.dataService.getInitialBookingdata();
+    get_booking_data.staff_id = staff_id;
+    await this.dataService.setBookingData(get_booking_data)
+
+    let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == get_booking_data.timing_id);
+
+    let date = await this.getCurrentDate()
+    let total_duration = 0;
+
+    for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
+
+    let starting_date_time = new Date(`${date} ${selecetd_shift[0].value}`);
+    let ending_date_time = new Date(`${date} ${selecetd_shift[0].value}`);
+
+    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
+    ending_date_time = new Date(ending_date_time);
+
+    let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
+    let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
+    console.log('starting_date_time---' ,create_pending_booking_start_time)
+    console.log('ending_date_time---' ,create_pending_booking_end_time)
+
+
+    // console.log('booking_data-----' , get_booking_data)
+    // console.log('starting_date_time-----' , starting_date_time)
+    // console.log('ending_date_time-----' , ending_date_time)
+    // console.log('ending_date_time-----' , this.ALL_SHIFT)
+
+    await this.apiData.presentLoading();
+
+    await this.auth.getUser().subscribe(
+      async (response: any) => { 
+
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          async (user_info: any) => { 
+
+            
+            console.log('user_info' , user_info)
+
+            let data = {
+                          "userId": user_info.userGMID,
+                          "staffId": 1,
+                          "isPending": 1,
+                          "startTime": create_pending_booking_start_time,
+                          "endTime": create_pending_booking_end_time,
+                          "serviceId": get_booking_data.servises[0].id
+                      };
+
+            (await this.apiData.createPendingAppointment(data)).subscribe(
+              async (response: any) => {
+
+                await this.apiData.dismiss();
+                console.log('response-------pppppppp' , response)
+              },
+              async (error:any) => {
+                await this.apiData.dismiss();
+
+                if (error.status == 200) {
+
+                  setTimeout(async () => { // remove temprary booking after 5 minutes = 300000
+                    
+
+                    (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
+                      (response: any) => {
+
+                        console.log('hiddin---' , response)
+                      },
+
+                      (error: any) => {
+
+                        console.log('error---' , error)
+                      }
+                    );
+                  }, 300000);
+
+                  this.router.navigate(['/booking-summary'],{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
+                  
+                } else if (error.status == 201){
+
+                  await this.apiData.presentAlert('Selected Shift timing not available')
+                  return
+                
+                } else {
+
+                  await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
+                }
+
+                console.log('pending booking server error ', error)
+                
+              }
+            );
+
+
+          },
+          
+          async (error:any) => {
+            await this.apiData.dismiss();
+            console.log('profile error ', error)
+            await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
+          }
+        )
+
+      },
+      async (error:any) => {
+        await this.apiData.dismiss();
+        console.log('auth error ', error)
+        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+      }
+    );
+
     
-    console.log('booking_data--', booking_data)
+    return
+    // this.router.navigate(['/booking-summary'],{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
+    
+    // console.log('booking_data--', booking_data)
+  }
+
+
+  async getCurrentDate () {
+
+    let today_date = new Date();
+    let year: any = today_date.getFullYear();
+    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let day: any = today_date.getDate();
+
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+
+    return  year + '-' + month + '-' + day;
+  
+  }
+
+  async returnDateTimeFormat (date_time){
+
+    let today_date = new Date(date_time);
+    let year: any = today_date.getFullYear();
+    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let day: any = today_date.getDate();
+    let hours: any = today_date.getHours();
+    let minutes: any = today_date.getMinutes();
+
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+    if (hours < 10) hours = '0' + hours;
+    if (minutes < 10) minutes = '0' + minutes;
+
+    return  await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes +':00.000Z';
+  }
+
+  async checkLogin () {
+
+    await this.auth.getUser().subscribe(
+      (user_data: any) =>{
+        console.log('user_data' , user_data)
+
+        if (user_data !== undefined){
+          
+          this.IS_LOGIN = true;
+        }
+      }
+    );
   }
 
   navigation() {

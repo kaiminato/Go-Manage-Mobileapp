@@ -81,22 +81,18 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
 
     await this.setNonWorkingDaysOff()
-    console.clear();
-    console.log('today_date---' , new Date().getDay())
     
 
     this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date().getDay());
 
-    console.log('------texting' ,this.ALL_SHIFT)
-
     this.MORNING_SHIFT = [... this.ALL_SHIFT]
     let new_date = new Date();
     this.slides.slideTo(new_date.getDate()-1,1000);
-   
-    console.log('this.DAYS_ARRAY------',  this.DAYS_ARRAY)
 
+    await this.getWeeklyDaysOff();
     await this.preFilledData();
     await this.getStaffBookingList();
+
   }
 
   async preFilledData () {
@@ -144,6 +140,33 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     }
   }
 
+  async getWeeklyDaysOff() {
+    
+    let all_staff = await this.dataService.getStaffList();
+    let days_number = await this.dataService.DAYS_OFF_NUMBER;
+
+    let days_off = [];
+
+    for(let value of days_number){
+
+      let day_num = value-1;
+      let is_day_off = false;
+
+      for (let index in all_staff) {
+
+        let is_day_working = all_staff[index].staffDetailFormatted.filter( data => data.dayId == day_num);
+
+        if (is_day_working.length > 0) { is_day_off = true; }
+      }
+
+      if (!is_day_off) { days_off.push(day_num)  }
+    }
+
+    this.options.disableWeeks = days_off;
+
+  }
+
+
   async ionViewWillLeave () {
     
     this.IS_CALNDER_OPEN = false;
@@ -175,7 +198,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
   async onDateSelect (selected_date: any){
     
-    console.log('selected_date---', selected_date)
+    console.log('selected_date---this', selected_date)
     this.date = selected_date;
     this.IS_CALNDER_OPEN = false;
     this.modalController.dismiss();
@@ -196,7 +219,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     if (is_disabled) return;
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
-    console.log(this.date)
+    console.log(this.date , '>>>>>>>>>>>')
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
     await this.setNonWorkingDaysOff()
@@ -246,6 +269,8 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     }
 
     this.MORNING_SHIFT = all_shift;
+    console.clear()
+    console.log('this-------------' ,this.MORNING_SHIFT)
   }
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){
