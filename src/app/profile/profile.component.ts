@@ -53,7 +53,8 @@ export class ProfileComponent implements OnInit {
       async (response: any) => {
 
         console.log('auth response', response);
-        //response.email = 'gomanageTest@gmail.com';
+        //response.email = 'gomanageTest@gmail.com'.toLowerCase();
+        response.email = response.email.toLowerCase();
         this.EMAIL = response.email;
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
