@@ -23,6 +23,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
   ALL_SHIFT: any = [];
   CANCEL_BOOKING_ID: number = 0;
   IS_LOGIN: boolean = false;
+  PENDING_BOOKING_TIMEOUT: any;
 
   constructor(
     private location: Location,
@@ -195,7 +196,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     if (!this.IS_LOGIN) {
 
-      await this.dataService.setPreviousUrl('select-a-time');
+      await this.dataService.setPreviousUrl('select-staff-with-service-booking');
       this.auth
       .buildAuthorizeUrl()
       .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
@@ -227,12 +228,6 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     console.log('starting_date_time---' ,create_pending_booking_start_time)
     console.log('ending_date_time---' ,create_pending_booking_end_time)
 
-
-    // console.log('booking_data-----' , get_booking_data)
-    // console.log('starting_date_time-----' , starting_date_time)
-    // console.log('ending_date_time-----' , ending_date_time)
-    // console.log('ending_date_time-----' , this.ALL_SHIFT)
-
     await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
@@ -246,7 +241,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
             let data = {
                           "userId": user_info.userGMID,
-                          "staffId": 1,
+                          "staffId": staff_id,
                           "isPending": 1,
                           "startTime": create_pending_booking_start_time,
                           "endTime": create_pending_booking_end_time,
@@ -264,20 +259,10 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
                 if (error.status == 200) {
 
-                  setTimeout(async () => { // remove temprary booking after 5 minutes = 300000
+                  this.PENDING_BOOKING_TIMEOUT = setTimeout(async () => { // remove temprary booking after 5 minutes = 300000
                     
 
-                    (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
-                      (response: any) => {
-
-                        console.log('hiddin---' , response)
-                      },
-
-                      (error: any) => {
-
-                        console.log('error---' , error)
-                      }
-                    );
+                    this.removePendingBooking();
                   }, 300000);
 
                   this.router.navigate(['/booking-summary'],{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
@@ -322,6 +307,45 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     // console.log('booking_data--', booking_data)
   }
 
+  async removePendingBooking () {
+
+    await this.auth.getUser().subscribe(
+      async (response: any) => { 
+
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          async (user_info: any) => { 
+
+            console.log('user_info' , user_info);
+
+              (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
+                (response: any) => {
+
+                  console.log('hiddin---' , response)
+                },
+
+                (error: any) => {
+
+                  console.log('error---' , error)
+                }
+              );
+          },
+          
+          async (error:any) => {
+            await this.apiData.dismiss();
+            // console.log('profile error ', error)
+            // await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
+          }
+        )
+
+      },
+      async (error:any) => {
+        await this.apiData.dismiss();
+        // console.log('auth error ', error)
+        // await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+      }
+    );
+  }
+
 
   async getCurrentDate () {
 
@@ -357,12 +381,14 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
   async checkLogin () {
 
     await this.auth.getUser().subscribe(
-      (user_data: any) =>{
+      async (user_data: any) =>{
         console.log('user_data' , user_data)
 
         if (user_data !== undefined){
           
           this.IS_LOGIN = true;
+          await this.removePendingBooking();
+          clearTimeout(this.PENDING_BOOKING_TIMEOUT)
         }
       }
     );

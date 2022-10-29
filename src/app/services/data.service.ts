@@ -131,8 +131,6 @@ export class DataService {
       
     }
 
-    console.log('time_array-----' , time_array)
-
     time_array.sort(function (a, b) { return a.localeCompare(b); });
 
     this.ALL_SHIFT = [];
@@ -140,6 +138,7 @@ export class DataService {
     let start_from = time_array[0];
     let end_to = time_array[time_array.length - 1];
     let data = await this.returnTimesInBetween(start_from , end_to)
+    
     
     return this.ALL_SHIFT;
   }
@@ -219,7 +218,19 @@ export class DataService {
       await this.returnTimesInBetween(first_start_time , second_end_time);
     }
 
+    console.clear()
     
+
+    for(let index in this.ALL_SHIFT) {
+
+      if (<any>(new Date().getTime()) > (new Date(`${date} ${this.ALL_SHIFT[index].value}`) )){
+
+        this.ALL_SHIFT[index].is_disabled = true
+        console.log('expire' , this.ALL_SHIFT[index].value)
+      }
+    }
+
+    console.log('sata service ==>',this.ALL_SHIFT)
    
     return await this.ALL_SHIFT;
     // return await [
