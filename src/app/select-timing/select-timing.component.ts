@@ -40,6 +40,7 @@ export class SelectTimingComponent implements OnInit {
   MONTH_NAME_LIST: any = [];
   DISABLED_DATES_ARRAY: any = [];
   IS_LOGIN: boolean = false;
+  PENDING_BOOKING_TIMEOUT: any;
   
   slideOpts = {
     slidesPerView: 6,
@@ -335,6 +336,7 @@ export class SelectTimingComponent implements OnInit {
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
+    
     console.log('selected_date_booking_list-----', this.date, selected_date_booking_list)
  
     for (let index in this.ALL_SHIFT){
@@ -366,6 +368,13 @@ export class SelectTimingComponent implements OnInit {
 
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){
+    
+    console.log('cliked')
+    clearTimeout(this.PENDING_BOOKING_TIMEOUT);
+    this.PENDING_BOOKING_TIMEOUT = setTimeout(() => {
+      alert('hiting after 10 seconds')
+    }, 10000);
+    return
 
     if (is_disabled) return ;
 
@@ -476,21 +485,12 @@ export class SelectTimingComponent implements OnInit {
                 if (error.status == 200) {
 
                   await this.dataService.setBookingData(get_booking_data)
-                
-                  setTimeout(async () => { // remove temprary booking after 5 minutes = 300000
+                  
+                  // remove temprary booking after 5 minutes = 300000
+
+                  this.PENDING_BOOKING_TIMEOUT =  setTimeout(async () => { 
                     
-
-                    (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
-                      (response: any) => {
-
-                        console.log('hiddin---' , response)
-                      },
-
-                      (error: any) => {
-
-                        console.log('error---' , error)
-                      }
-                    );
+                    this.removePendingBooking();
                   }, 300000);
 
                   setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
@@ -532,6 +532,46 @@ export class SelectTimingComponent implements OnInit {
     
   }
 
+
+  async removePendingBooking () {
+
+    await this.auth.getUser().subscribe(
+      async (response: any) => { 
+
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          async (user_info: any) => { 
+
+            console.log('user_info' , user_info);
+
+              (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
+                (response: any) => {
+
+                  console.log('hiddin---' , response)
+                },
+
+                (error: any) => {
+
+                  console.log('error---' , error)
+                }
+              );
+          },
+          
+          async (error:any) => {
+            await this.apiData.dismiss();
+            // console.log('profile error ', error)
+            // await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
+          }
+        )
+
+      },
+      async (error:any) => {
+        await this.apiData.dismiss();
+        // console.log('auth error ', error)
+        // await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+      }
+    );
+  }
+
   async getCurrentDate () {
 
     let today_date = new Date();
@@ -567,12 +607,15 @@ export class SelectTimingComponent implements OnInit {
   async checkLogin () {
 
     await this.auth.getUser().subscribe(
-      (user_data: any) =>{
+      async (user_data: any) =>{
         console.log('user_data' , user_data)
 
         if (user_data !== undefined){
           
           this.IS_LOGIN = true;
+
+          await this.removePendingBooking();
+          clearTimeout(this.PENDING_BOOKING_TIMEOUT)
         }
       }
     );

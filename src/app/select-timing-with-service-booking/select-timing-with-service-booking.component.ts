@@ -235,9 +235,12 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     let all_shift = await this.dataService.getNewStaticShift(new Date(date).getDay());
     
+    console.clear()
+    
 
     let all_staff = await this.dataService.getStaffList();
-    console.log('shift', all_shift)
+    
+    
 
     for (let shift of all_shift) {
       
@@ -268,8 +271,19 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       
     }
 
+    for(let index in all_shift) {
+
+      if (<any>(new Date().getTime()) > (new Date(`${date} ${all_shift[index].value}`) )){
+
+        all_shift[index].is_disabled = true
+        console.log('expire' , all_shift[index].value)
+      }
+    }
+
     this.MORNING_SHIFT = all_shift;
-    console.clear()
+    console.log('shift------------', this.MORNING_SHIFT)
+    console.log('clearpppppppppppp')
+    return
     console.log('this-------------' ,this.MORNING_SHIFT)
   }
 

@@ -192,8 +192,8 @@ export class ProfileComponent implements OnInit {
 
     let data = {
       // email: this.EMAIL,
-      // givenName: this.FIRST_NAME,
-      // familyName: this.LAST_NAME,
+      givenName: this.FIRST_NAME,
+      familyName: this.LAST_NAME,
       //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
       user_metadata : {
         //addresses : this.HOME_LOCATION,
