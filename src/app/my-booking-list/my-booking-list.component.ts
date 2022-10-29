@@ -14,6 +14,7 @@ export class MyBookingListComponent implements OnInit {
 
   HEADING: string = "Your Bookings";
   IS_FUTURE_BOOKING_active: boolean = true;
+  ALL_BOOKING_LIST: any = [];
   FUTURE_BOOKING_LIST: any = [
     // {id: 1 , date_time: 'Thu, 15 Sep at 16:30', service_name: 'Yumi Lash Lift', service_duration: '30 minuts'},
     // {id: 2 , date_time: 'Thu, 15 Sep at 17:45', service_name: 'Brow Tint', service_duration: '30 minuts'},
@@ -57,48 +58,16 @@ export class MyBookingListComponent implements OnInit {
               async (response: any) => {
         
                 
-                response = response.filter( data => new Date() < new Date(data.endTime))
+                //response = response.filter( data => new Date() < new Date(data.endTime))
                 console.log('response after filter-----' , response)
-        
+                
                 if (response.length >0) {
         
-                    let end_from = response.length -1;
-                    let end_to = response.length -6;
-                    console.log('yefyg', end_from  )
-        
+                    
                     this.RECENT_BOOKING_LIST = []
                     this.FUTURE_BOOKING_LIST = []
+                    this.ALL_BOOKING_LIST = []
 
-                    let count = 0;
-
-        
-                    for (let index = end_from; index >= 0; index--){
-        
-                      if (count < 6) {
-
-                        let start_date_time = new Date(response[index].startTime)
-                        let end_date_time = new Date(response[index].endTime)
-                        var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-                        var resultInMinutes = Math.round(difference / 60000);
-                        let date_time = await this.getDateFormat(response[index].startTime)
-
-                        let data = {
-                          service_name : response[index].service,
-                          service_duration:resultInMinutes+" minutes",
-                          id:response[index].id,
-                          date_time: date_time,
-                          start_time: response[index].startTime
-                          
-                        };
-          
-                        this.RECENT_BOOKING_LIST.push(data)
-                        console.log('index', index)
-                      }
-
-                      ++count;
-                                    
-                    }
-        
                     for (let index = 0; index < response.length; index++){
         
                       let start_date_time = new Date(response[index].startTime)
@@ -113,25 +82,30 @@ export class MyBookingListComponent implements OnInit {
                         service_duration:resultInMinutes+" minutes",
                         id:response[index].id,
                         date_time: date_time,
-                        start_time: response[index].startTime
+                        start_time: response[index].startTime,
+                        endTime: response[index].endTime,
+                        compare_date_time: (response[index].endTime.split('T')[0])
                         
                       };
         
-                      this.FUTURE_BOOKING_LIST.push(data)
+                      this.ALL_BOOKING_LIST.push(data)
                     }
 
-                    
 
-                    // Sort array
-                    
-                    this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
-
-                   
-        
-                    
                 }
 
-                console.clear()
+                const today = new Date()
+                const tomorrow = new Date(today)
+                tomorrow.setDate(tomorrow.getDate() + 1)
+
+                this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => new Date(tomorrow) > new Date(data.compare_date_time))
+                this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => new Date(tomorrow) < new Date(data.compare_date_time))
+
+                // Sort array
+                    
+                this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
+                
+                console.log('this.ALL_BOOKING_LIST---' , this.ALL_BOOKING_LIST)
                 console.log('this.RECENT_BOOKING_LIST---' , this.RECENT_BOOKING_LIST)
                 console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
         
@@ -159,99 +133,7 @@ export class MyBookingListComponent implements OnInit {
       }
     );
     
-    // (await this.apiData.getStaffBookingList()).subscribe(
-    //   async (response: any) => {
-
-        
-    //     response = response.filter( data => new Date() < new Date(data.endTime))
-    //     console.log('response' , response)
-
-    //     if (response.length >0) {
-
-          
-    //       if (response.length > 4) {
-            
-    //         let end_from = response.length -1;
-    //         let end_to = response.length -6;
-    //         console.log('yefyg', end_from ,end_to )
-
-    //         this.RECENT_BOOKING_LIST = []
-    //         this.FUTURE_BOOKING_LIST = []
-
-    //         for (let index = end_from; index > end_to; index--){
-
-    //           let start_date_time = new Date(response[index].startTime)
-    //           let end_date_time = new Date(response[index].endTime)
-    //           var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-    //           var resultInMinutes = Math.round(difference / 60000);
-    //           let data = {
-    //             service_name : response[index].service,
-    //             service_duration:resultInMinutes+" minuts",
-    //             id:response[index].id,
-    //             date_time: 'Thu, 15 Sep at 12:30'
-                
-    //           };
-
-    //           this.RECENT_BOOKING_LIST.push(data)
-    //           console.log('index', index)              
-    //         }
-
-    //         for (let index = 0; index < response.length -6; index++){
-
-    //           let start_date_time = new Date(response[index].startTime)
-    //           let end_date_time = new Date(response[index].endTime)
-    //           var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-    //           var resultInMinutes = Math.round(difference / 60000);
-
-    //           let date_time = await this.getDateFormat(response[index].startTime)
-
-    //           let data = {
-    //             service_name : response[index].service,
-    //             service_duration:resultInMinutes+" minuts",
-    //             id:response[index].id,
-    //             date_time: date_time
-                
-    //           };
-
-    //           this.FUTURE_BOOKING_LIST.push(data)
-    //         }
-
-            
-    //       } else {
-
-    //         this.RECENT_BOOKING_LIST = []
-    //         this.FUTURE_BOOKING_LIST = []
-
-    //         for (let index = 0; index < response.length -1; index++){
-
-    //           let start_date_time = new Date(response[index].startTime)
-    //           let end_date_time = new Date(response[index].endTime)
-    //           var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-    //           var resultInMinutes = Math.round(difference / 60000);
-    //           let date_time = await this.getDateFormat(response[index].startTime)
-
-    //           let data = {
-    //             service_name : response[index].service,
-    //             service_duration:resultInMinutes+" minuts",
-    //             id:response[index].id,
-    //             date_time: date_time
-                
-    //           };
-
-    //           this.RECENT_BOOKING_LIST.push(data)
-    //         }
-
-    //       }
-    //     }
-
-    //     await this.apiData.dismiss();
-    //   },
-    //   async (error: any) => {
-
-    //     await this.apiData.dismiss();
-    //     console.log('error', error)
-    //   }
-    // );
+    
   }
 
   async getDateFormat (date_value: any) {
@@ -265,7 +147,7 @@ export class MyBookingListComponent implements OnInit {
     let date = date_val.getDate();
     let time = (date_val.getHours() < 10 ? '0'+date_val.getHours() : date_val.getHours()) + ':' + (date_val.getMinutes() < 10 ? '0'+date_val.getMinutes() : date_val.getMinutes());
 
-    return  `${day}, ${date} ${mon} at ${time}`;
+    return  `${day}, ${date} ${mon} ${date_val.getFullYear()} at ${time}`;
   }
 
   async cancelBooking (id: any) {
