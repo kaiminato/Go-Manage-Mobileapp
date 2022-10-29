@@ -120,16 +120,20 @@ export class MyBookingListComponent implements OnInit {
                       this.FUTURE_BOOKING_LIST.push(data)
                     }
 
-                    console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
+                    
 
                     // Sort array
                     
                     this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
 
-                    console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
+                   
         
                     
                 }
+
+                console.clear()
+                console.log('this.RECENT_BOOKING_LIST---' , this.RECENT_BOOKING_LIST)
+                console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
         
                 await this.apiData.dismiss();
               },
@@ -259,7 +263,7 @@ export class MyBookingListComponent implements OnInit {
     let day = day_name[date_val.getDay()];
     let mon = month_name[date_val.getMonth()];
     let date = date_val.getDate();
-    let time = date_val.getHours() + ':' + date_val.getMinutes();
+    let time = (date_val.getHours() < 10 ? '0'+date_val.getHours() : date_val.getHours()) + ':' + (date_val.getMinutes() < 10 ? '0'+date_val.getMinutes() : date_val.getMinutes());
 
     return  `${day}, ${date} ${mon} at ${time}`;
   }

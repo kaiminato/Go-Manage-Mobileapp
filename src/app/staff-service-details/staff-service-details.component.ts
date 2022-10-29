@@ -92,12 +92,51 @@ export class StaffServiceDetailsComponent implements OnInit {
                                     services: service_list
                                   }
                                 );
+
+          
         }
+        
       }
+
+      let booking_data = await this.dataService.getInitialBookingdata();
+
+
+      if (booking_data.servises.length > 0)  await this.__preFilledData();
+     
+          console.log('this.CATEGORY_LIST ------------',this.CATEGORY_LIST)
     }
 
 
    
+  }
+
+  async __preFilledData () {
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+
+    for (let category of this.CATEGORY_LIST){
+
+
+      for (let service of category.services) {
+
+        let checking_data = await booking_data.servises.filter( data => data.id == service.id)
+
+        if (checking_data.length > 0) {
+          category.is_open = true;
+          service.is_checked = true;
+          console.log('inside' , service)
+        }
+      }
+    }
+
+    this.SELECTED_SERVICES = [];
+
+    for (let service of booking_data.servises) {
+
+      this.SELECTED_SERVICES.push(service.id)
+    }
+
+    await this.selectedServicesDetail();
   }
 
   changeCategoryStatus (service_id: any , status){
@@ -121,7 +160,6 @@ export class StaffServiceDetailsComponent implements OnInit {
       this.SELECTED_SERVICES.push(service_id);
     }
 
-    
 
     this.selectedServicesDetail();
 
