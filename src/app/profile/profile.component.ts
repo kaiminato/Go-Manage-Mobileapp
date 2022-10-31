@@ -141,26 +141,26 @@ export class ProfileComponent implements OnInit {
 
    
 
-    if (this.FIRST_NAME.trim() == ''){
+    if (this.FIRST_NAME == ''){
 
       await this.apiData.presentAlert("First name can't be empty")
       return
     }
 
-    if (this.LAST_NAME.trim() == ''){
+    if (this.LAST_NAME == ''){
 
       await this.apiData.presentAlert("Last name can't be empty")
       return
     }
 
-    if (this.GENDER.trim() == ''){
+    if (this.GENDER == ''){
 
       await this.apiData.presentAlert("Gender can't be empty")
       return
     }
     
 
-    if (this.BIRTHDAY.trim() == ''){
+    if (this.BIRTHDAY == ''){
 
       await this.apiData.presentAlert("Birthday can't be empty")
       return
@@ -168,7 +168,7 @@ export class ProfileComponent implements OnInit {
 
     
 
-    if (this.HOME_LOCATION.trim() == ''){
+    if (this.HOME_LOCATION == ''){
 
       await this.apiData.presentAlert("Home location can't be empty")
       return
