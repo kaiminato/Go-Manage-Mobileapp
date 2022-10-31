@@ -408,11 +408,7 @@ export class SelectTimingComponent implements OnInit {
   async selectTiming (id: number , timing_type: any, is_disabled : any){
     
     console.log('cliked')
-    clearTimeout(this.PENDING_BOOKING_TIMEOUT);
-    this.PENDING_BOOKING_TIMEOUT = setTimeout(() => {
-      alert('hiting after 10 seconds')
-    }, 10000);
-    return
+    
 
     if (is_disabled) return ;
 
