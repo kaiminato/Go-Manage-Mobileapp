@@ -118,7 +118,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     for (let current_date of this.DAYS_ARRAY){
       
-      let created_date = new Date(`${current_date.year}-${current_date.month}-${current_date.day_number}`);
+      let created_date = new Date(`${current_date.year}-${current_date.month}-${current_date.day_number < 10 ? '0'+current_date.day_number : current_date.day_number}`);
       let is_date_disabled = true;
 
       if (!current_date.is_disabled) {
