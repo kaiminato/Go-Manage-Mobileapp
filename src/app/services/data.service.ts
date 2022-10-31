@@ -133,6 +133,11 @@ export class DataService {
 
     time_array.sort(function (a, b) { return a.localeCompare(b); });
 
+    if (time_array.length == 0) {
+
+      return this.ALL_SHIFT = [];
+    }
+
     this.ALL_SHIFT = [];
 
     let start_from = time_array[0];
@@ -161,6 +166,11 @@ export class DataService {
 
     time_array.sort(function (a, b) { return a.localeCompare(b); });
 
+    if (time_array.length == 0) {
+
+      return this.ALL_SHIFT = [];
+    }
+    
     this.ALL_SHIFT = [];
 
     let start_from = time_array[0];
