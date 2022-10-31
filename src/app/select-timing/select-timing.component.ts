@@ -97,7 +97,8 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
-    console.log('testoinng-------' , this.dataService.DAYS_OFF_NUMBER)
+    console.log('staff_detail-------' , this.dataService.DAYS_OFF_NUMBER , staff_detail)
+    
     
 
     if (staff_detail.length > 0) {
@@ -107,17 +108,22 @@ export class SelectTimingComponent implements OnInit {
       await this.dataService.DAYS_OFF_NUMBER.map( 
         async (data) =>  {
 
+          data = data-1;
           let check_day_off = await staff_detail[0].staffDetailFormatted.filter(staff_days => staff_days.dayId == data)
          
             if(check_day_off.length == 0) {
             
-              weekly_off_days.push(data == 7 ? 0 : data)
+              weekly_off_days.push(data)
             }
         }
       );
 
+      console.log('weekly_off_days-----' , weekly_off_days)
+
       this.options.disableWeeks = weekly_off_days;
     }
+
+    
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
 
     
@@ -129,8 +135,10 @@ export class SelectTimingComponent implements OnInit {
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
+    
     await this.checkLogin();
     await this.getDisabledDates();
+   
     await this.getDisabledShift();
     
 
@@ -214,6 +222,36 @@ export class SelectTimingComponent implements OnInit {
       this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
 
     }
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+
+    console.log('staff_detail-------' , this.dataService.DAYS_OFF_NUMBER , staff_detail)
+    
+    
+
+    if (staff_detail.length > 0) {
+
+      let weekly_off_days = [];
+
+      await this.dataService.DAYS_OFF_NUMBER.map( 
+        async (data) =>  {
+
+          data = data-1;
+          let check_day_off = await staff_detail[0].staffDetailFormatted.filter(staff_days => staff_days.dayId == data)
+         
+            if(check_day_off.length == 0) {
+            
+              weekly_off_days.push(data)
+            }
+        }
+      );
+
+      console.log('weekly_off_days-----' , weekly_off_days)
+
+      this.options.disableWeeks = weekly_off_days;
+    }
+    
 
     //  Set Date and Slider range values
 
