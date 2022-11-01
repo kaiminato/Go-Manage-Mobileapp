@@ -307,7 +307,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     let starting_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
-    ending_date_time = new Date(ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration));
+    ending_date_time = new Date(ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1));
 
     let office_last_shift = new Date (`${get_booking_data.date} ${this.MORNING_SHIFT[this.MORNING_SHIFT.length - 1].value}` );
     let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
