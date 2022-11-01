@@ -95,11 +95,14 @@ export class MyBookingListComponent implements OnInit {
                 }
 
                 const today = new Date()
-                const tomorrow = new Date(today)
-                tomorrow.setDate(tomorrow.getDate() + 1)
+                let tomorrow: any = new Date(today)
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow = tomorrow.getFullYear()+'-'+(tomorrow.getMonth()+1)+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
+                console.log('tomorrow---' , tomorrow)
 
-                this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => new Date(tomorrow) > new Date(data.compare_date_time))
-                this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => new Date(tomorrow) < new Date(data.compare_date_time))
+
+                this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => <any>new Date(tomorrow).getTime() > <any>new Date(data.compare_date_time).getTime())
+                this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (<any>new Date(tomorrow).getTime() <= <any>new Date(data.compare_date_time).getTime()) )
 
                 // Sort array
                     
