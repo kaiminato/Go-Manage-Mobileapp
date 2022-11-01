@@ -60,7 +60,8 @@ ion-header {
             margin-bottom: 16px !important;
             color: #fff;
             border-radius: 29px;
-            margin-right: 8px;
+            margin-right: 5px;
+            margin-left: 3px;
             border: 1px solid white;
         }
         ul.headli  {
@@ -96,13 +97,16 @@ ion-header {
             'opsz' 48
         }
 
+       .headcontentst {
+            padding-left: 8px;
+        }
         .ili3 {
             display: flex;
             padding: 0px;
             margin-bottom: 10px;
             padding-left: 2px;
         }
-
+        
         .ili4th {
             padding-bottom: 12px;
         }
