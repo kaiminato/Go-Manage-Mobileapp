@@ -53,7 +53,7 @@ export class ProfileComponent implements OnInit {
       async (response: any) => {
 
         console.log('auth response', response);
-        //response.email = 'gomanageTest@gmail.com'.toLowerCase();
+        //response.email = 'DeclanMacDonnell@gmail.com'.toLowerCase();
         response.email = response.email.toLowerCase();
         this.EMAIL = response.email;
 
@@ -193,8 +193,8 @@ export class ProfileComponent implements OnInit {
 
     let data = {
       // email: this.EMAIL,
-      givenName: this.FIRST_NAME,
-      familyName: this.LAST_NAME,
+      given_name: this.FIRST_NAME,
+      family_name: this.LAST_NAME,
       //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
       user_metadata : {
         //addresses : this.HOME_LOCATION,
@@ -259,7 +259,7 @@ export class ProfileComponent implements OnInit {
         await this.apiData.presentAlert('Profile updated successfully');
         this.EDIT_PROFILE = false;
         this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE
-        console.log('getting data after update')
+        console.log('getting data after update--' , response)
       },
       async (error: any) => {
 

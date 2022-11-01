@@ -496,7 +496,7 @@ export class SelectTimingComponent implements OnInit {
           async (user_info: any) => { 
 
             
-            console.log('user_info' , user_info)
+            console.log('user_info' , user_info);
 
             let data = {
                           "userId": user_info.userGMID,
@@ -507,11 +507,12 @@ export class SelectTimingComponent implements OnInit {
                           "serviceId": get_booking_data.servises[0].id
                       };
 
+            
             (await this.apiData.createPendingAppointment(data)).subscribe(
               async (response: any) => {
 
                 await this.apiData.dismiss();
-                console.log('response-------pppppppp' , response)
+                console.log('response-------pppppppp' , response.status)
               },
               async (error:any) => {
                 await this.apiData.dismiss();
