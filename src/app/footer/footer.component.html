@@ -21,9 +21,14 @@
         <ion-text>Profile</ion-text>
       </ion-tab-button>
 
-      <ion-tab-button [routerLink]="['/logout']">
-        <ion-icon name="notifications" ></ion-icon>
-        <ion-text>Alert</ion-text>
+      <ion-tab-button (click)="logout()" *ngIf="IS_LOGIN">
+        <ion-icon name="log-out" ></ion-icon>
+        <ion-text>Logout</ion-text>
+      </ion-tab-button>
+
+      <ion-tab-button (click)="login()" *ngIf="!IS_LOGIN">
+        <ion-icon name="log-in" ></ion-icon>
+        <ion-text>Login</ion-text>
       </ion-tab-button>
 
     </ion-tab-bar>
