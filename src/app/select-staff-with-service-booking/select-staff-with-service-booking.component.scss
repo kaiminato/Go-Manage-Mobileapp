@@ -4,6 +4,7 @@ ion-content {
         max-height: 65%;
         min-height: 65%;
         overflow: scroll;   
+        overflow-x: hidden; 
     }
 
     .staff_list {
