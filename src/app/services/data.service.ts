@@ -110,7 +110,6 @@ export class DataService {
 
       days_list.push({ day_number: i, is_disabled: status, is_active: false, month: month, year: year , day_name: dayName})
     }
-    console.log('days_list---',days_list)
     return await days_list;
   }
 
@@ -163,7 +162,6 @@ export class DataService {
       }
     }
 
-    console.log('time_array-----' , time_array)
 
     time_array.sort(function (a, b) { return a.localeCompare(b); });
 
@@ -212,7 +210,7 @@ export class DataService {
       return [];
     }
 
-    console.log('staff_detail----------->' , staff_detail)
+
    
 
     let first_start_time = staff_available_date_id[0]?.startShiftTime;
@@ -229,19 +227,16 @@ export class DataService {
       await this.returnTimesInBetween(first_start_time , second_end_time);
     }
 
-    console.clear()
-    
 
     for(let index in this.ALL_SHIFT) {
 
       if (<any>(new Date().getTime()) > (new Date(`${date} ${this.ALL_SHIFT[index].value}`) )){
 
         this.ALL_SHIFT[index].is_disabled = true
-        console.log('expire' , this.ALL_SHIFT[index].value)
+        
       }
     }
 
-    console.log('sata service ==>',this.ALL_SHIFT)
    
     return await this.ALL_SHIFT;
     // return await [

@@ -21,6 +21,7 @@ import { StoreAllProductComponent } from './store-all-product/store-all-product.
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
+import { StripeTestComponent } from './stripe-test/stripe-test.component';
 
 
 const routes: Routes = [
@@ -130,6 +131,10 @@ const routes: Routes = [
     path: 'select-deliver',
     component: SelectDeliverComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'stripe',
+    component: StripeTestComponent,
   },
   {
     path: '',

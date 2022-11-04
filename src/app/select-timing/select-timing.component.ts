@@ -32,7 +32,7 @@ export class SelectTimingComponent implements OnInit {
   ACTIVE_DAY: number = 10;
   CANCEL_BOOKING_ID: number = 0;
   IS_STAFF: any = true;
-  IS_CALNDER_OPEN: boolean = true;
+  IS_CALNDER_OPEN: boolean = false;
   date: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
@@ -82,7 +82,7 @@ export class SelectTimingComponent implements OnInit {
 
   async ionViewWillEnter () {
 
-
+    
     this.activateRoute.queryParams
       .subscribe(params => {
 
@@ -97,7 +97,6 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
-    console.log('staff_detail-------' , this.dataService.DAYS_OFF_NUMBER , staff_detail)
     
     
 
@@ -118,7 +117,6 @@ export class SelectTimingComponent implements OnInit {
         }
       );
 
-      console.log('weekly_off_days-----' , weekly_off_days)
 
       this.options.disableWeeks = weekly_off_days;
     }
@@ -140,9 +138,14 @@ export class SelectTimingComponent implements OnInit {
     await this.getDisabledDates();
    
     await this.getDisabledShift();
-    
 
-    if (booking_data.date != '') this.prefilleddata();
+    if (booking_data.date != '') {
+      this.prefilleddata();
+    } else {
+
+      this.IS_CALNDER_OPEN = true;
+    }
+
     
   }
 
@@ -155,14 +158,21 @@ export class SelectTimingComponent implements OnInit {
 
   async prefilleddata () {
 
-    let booking_data = await this.dataService.getInitialBookingdata();
-
-    this.date = booking_data.date;
-    await this.onDateSelect(this.date)
-    setTimeout(() => {
-      this.MORNING_SHIFT[booking_data.timing_id-1].is_active = true;
     
-    }, 300);
+    this.IS_CALNDER_OPEN = false;
+    let booking_data = await this.dataService.getInitialBookingdata();
+    
+    this.date = booking_data.date;
+    
+    await this.onDateSelect(this.date)
+
+    if (booking_data.timing_id != ''){
+      setTimeout(() => {
+        this.MORNING_SHIFT[booking_data.timing_id-1].is_active = true;
+      
+      }, 300);
+    }
+    
    
   }
   
@@ -226,8 +236,6 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
-    console.log('staff_detail-------' , this.dataService.DAYS_OFF_NUMBER , staff_detail)
-    
     
 
     if (staff_detail.length > 0) {
@@ -247,7 +255,6 @@ export class SelectTimingComponent implements OnInit {
         }
       );
 
-      console.log('weekly_off_days-----' , weekly_off_days)
 
       this.options.disableWeeks = weekly_off_days;
     }
@@ -272,13 +279,12 @@ export class SelectTimingComponent implements OnInit {
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
 
-
       this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) || is_date_off ? true : false);
     }
 
     this.slides.slideTo(new Date().getDate()-1,1000);//(index_number, speed_time)
     this.DAYS_ARRAY[new Date().getDate()-1].is_active = true;
-    console.log('final dates---', this.DAYS_ARRAY)
+   
   }
 
   
@@ -298,7 +304,6 @@ export class SelectTimingComponent implements OnInit {
     //await this.modalController.dismiss();
     this.date = selected_date
 
-    
     
     let [year , month , date] = this.date.split('-')
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
@@ -320,8 +325,6 @@ export class SelectTimingComponent implements OnInit {
 
       this.DAYS_ARRAY[index].is_disabled = is_exist_in_disbaled.length > 0 ? true : (new Date(create_date) < new Date(yesterday) || is_date_off ? true : false);
     }
-
-    
     
     let new_date = new Date(this.date)
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[new_date.getMonth()] + " "+new_date.getFullYear()
@@ -335,11 +338,10 @@ export class SelectTimingComponent implements OnInit {
 
     if (is_disabled) return;
     
-    console.log(day, month, year);
 
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
 
-    console.log('this.date now ----', this.date)
+
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
     
     for (let index in this.DAYS_ARRAY){
@@ -369,13 +371,12 @@ export class SelectTimingComponent implements OnInit {
   async getDisabledShift () {
     
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
-    //console.log('selected date', this.STAFF_BOOKING_LIST)
+    
   
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
     
-    console.log('selected_date_booking_list-----', this.date, selected_date_booking_list)
  
     for (let index in this.ALL_SHIFT){
 
@@ -396,18 +397,15 @@ export class SelectTimingComponent implements OnInit {
           }
         }
       } 
-      //console.log('new_date --------', this.ALL_SHIFT[index].time , this.ALL_SHIFT[index].is_disabled)
     }
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
-    console.log('new_date --------', this.ALL_SHIFT)
+    
   }
 
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){
-    
-    console.log('cliked')
     
 
     if (is_disabled) return ;
@@ -423,11 +421,11 @@ export class SelectTimingComponent implements OnInit {
     let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.date;
+
+    await this.dataService.setBookingData(get_booking_data)
+
     get_booking_data.timing_id = id;
 
-    console.clear()
-
-    console.log('selecetd_shift--', get_booking_data)
 
     let total_duration = 0;
 
@@ -644,7 +642,6 @@ export class SelectTimingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (user_data: any) =>{
-        console.log('user_data' , user_data)
 
         if (user_data !== undefined){
           
