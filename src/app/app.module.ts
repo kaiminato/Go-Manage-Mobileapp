@@ -36,6 +36,7 @@ import { StoreAllProductComponent } from './store-all-product/store-all-product.
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
+import { StripeTestComponent } from './stripe-test/stripe-test.component';
 
 const redirectUri = window.location.origin+`/about-us`;
 
@@ -66,7 +67,8 @@ const redirectUri = window.location.origin+`/about-us`;
     StoreAllProductComponent,
     ProductDetailComponent,
     CartInfoComponent,
-    SelectDeliverComponent
+    SelectDeliverComponent,
+    StripeTestComponent
   ],
   imports: [
     BrowserModule, 

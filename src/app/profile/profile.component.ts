@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   WEIGHT: string = '';
   EMAIL: string = '';
   HOME_LOCATION: string = '';
+  PHONE: string = '';
   RESPONSE: any;
 
   constructor(
@@ -92,7 +93,7 @@ export class ProfileComponent implements OnInit {
               this.LAST_NAME = user_details.familyName;
             }
 
-            
+            this.PHONE = user_details.phoneMobile;
 
             if (user_details?.user_metadata) {
 
@@ -158,6 +159,12 @@ export class ProfileComponent implements OnInit {
       await this.apiData.presentAlert("Gender can't be empty")
       return
     }
+
+    if (this.PHONE == ''){
+
+      await this.apiData.presentAlert("Phone can't be empty")
+      return
+    }
     
 
     if (this.BIRTHDAY == ''){
@@ -196,6 +203,7 @@ export class ProfileComponent implements OnInit {
       given_name: this.FIRST_NAME,
       family_name: this.LAST_NAME,
       //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
+      phone_number: this.PHONE,
       user_metadata : {
         //addresses : this.HOME_LOCATION,
         addresses: {
