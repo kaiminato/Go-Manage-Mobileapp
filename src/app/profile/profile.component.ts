@@ -203,7 +203,7 @@ export class ProfileComponent implements OnInit {
       given_name: this.FIRST_NAME,
       family_name: this.LAST_NAME,
       //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
-      phone_number: this.PHONE,
+      phone_number: this.PHONE.toString(),
       user_metadata : {
         //addresses : this.HOME_LOCATION,
         addresses: {
