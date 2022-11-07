@@ -36,6 +36,19 @@ export class ProfileComponent implements OnInit {
     public auth: AuthService,
   ) { }
 
+ 
+
+  numberOnlyValidation(event: any) {
+    const pattern = /[0-9.,]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    console.log('event--' , event.target.value)
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
+
 
   async ngOnInit() {
     //console.log('getting user --', await this.auth.getUser())
@@ -193,11 +206,6 @@ export class ProfileComponent implements OnInit {
     console.log('my data' , dat)
    
 
-    // this.EDIT_PROFILE = false;
-    // this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
-    // await this.apiData.presentAlert("Profile updated successfully")
-    // console.log('user updated')
-
     let data = {
       // email: this.EMAIL,
       given_name: this.FIRST_NAME,
@@ -213,48 +221,7 @@ export class ProfileComponent implements OnInit {
         dob: D_O_B,
       }
     }
-  //   let data = [
-  //     {
-  //       "op": "replace",
-  //       "path": "/name",
-  //       "value": this.FIRST_NAME+' '+this.LAST_NAME
-  //     }, 
-  //     {
-  //       "op": "replace",
-  //       "path": "/user_metadata/addresses/0",
-  //       "value": this.HOME_LOCATION
-  //     },
-  //     {
-  //         "op": "replace",
-  //         "path": "/user_metadata/gender",
-  //         "value": this.GENDER
-  //     },
-  //     {
-  //         "op": "replace",
-  //         "path": "/user_metadata/height",
-  //         "value": this.HEIGHT
-  //     },
-  //     {
-  //         "op": "replace",
-  //         "path": "/user_metadata/weight",
-  //         "value": this.WEIGHT
-  //     },
-  //     {
-  //       "op": "replace",
-  //       "path": "/user_metadata/unitOfMeasure",
-  //       "value": this.UNIT_OF_MEASURE
-  //     },
-  //     {
-  //         "op": "replace",
-  //         "path": "/user_metadata/aboutMe",
-  //         "value": this.ABOUT_ME
-  //     },
-  //   // {
-  //   //   "op": "replace",
-  //   //   "path": "/user_metadata/dob",
-  //   //   "dob": D_O_B
-  //   // }
-  // ];
+  
 
   console.log('jsonparse' , JSON.stringify(data))
 

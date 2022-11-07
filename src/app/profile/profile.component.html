@@ -171,7 +171,7 @@
 
               <ion-item detail="false">
                 <ion-label position="fixed"> <ion-text>Phone</ion-text> </ion-label>
-                <ion-input [(ngModel)]="PHONE" type="number"></ion-input>
+                <ion-input [(ngModel)]="PHONE" type="number" (keypress)="numberOnlyValidation($event)"></ion-input>
               </ion-item>
 
               <ion-item detail="false">
