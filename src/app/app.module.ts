@@ -14,13 +14,13 @@ import { StaffServiceDetailsComponent } from './staff-service-details/staff-serv
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
-import { HttpClientModule , HTTP_INTERCEPTORS} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { AddReviewComponent } from './add-review/add-review.component';
 import { CalendarModule } from 'ion2-calendar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthHttpInterceptor , AuthModule } from '@auth0/auth0-angular';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import config from '../../capacitor.config';
 import { LoginButtonComponent } from './login-button/login-button.component';
 import { LogoutButtonComponentComponent } from './logout-button-component/logout-button-component.component';
@@ -38,7 +38,7 @@ import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 import { StripeTestComponent } from './stripe-test/stripe-test.component';
 
-const redirectUri = window.location.origin+`/about-us`;
+const redirectUri = window.location.origin + `/about-us`;
 
 //alert(redirectUri); 
 
@@ -71,33 +71,28 @@ const redirectUri = window.location.origin+`/about-us`;
     StripeTestComponent
   ],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     CalendarModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule.forRoot(), 
+    IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
     AuthModule.forRoot(
       {
-        "domain": "go-manage-testing.eu.auth0.com",
-        "clientId": "4ZAMH2lkhQfxjcKYXF7fN3KihrtlJNkY",
-        "audience": "https://go-manage-testing.eu.auth0.com/api/v2/",
+        "domain": "go-manage-production.eu.auth0.com",
+        "clientId": "AIESJbUsDo652vga4tdCRcg8hPOGy9zu",
+        "audience": "https://go-manage-production.eu.auth0.com/api/v2/",
         redirectUri,
         cacheLocation: 'localstorage',
         httpInterceptor: {
-          allowedList : ['http://localhost:8100'],
+          allowedList: ['http://localhost:8100'],
         },
-  
+
       },
-      
-      
+
+
     ),
-    // AuthModule.forRoot({
-    //   domain: "go-manage-testing.eu.auth0.com",
-    //   clientId: "4ZAMH2lkhQfxjcKYXF7fN3KihrtlJNkY",
-    //   redirectUri
-    // }),
   ],
   providers: [
     ApiDataService,
@@ -116,4 +111,4 @@ const redirectUri = window.location.origin+`/about-us`;
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
