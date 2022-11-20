@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "https://release-mobile.gomanage.dev:4801",
+  apiUrl: "https://release-sleet.gomanage.dev:4801",
 };
