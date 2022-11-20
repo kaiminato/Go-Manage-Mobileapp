@@ -1,11 +1,11 @@
 // This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+// `ng build --configuration production` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
   production: false,
   //apiUrl : "https://91.250.249.133:4601/",
-  apiUrl: "https://91.250.249.133:4801",
+  apiUrl: "https://release-mobile.gomanage.dev:4801",
 };
 
 /*
