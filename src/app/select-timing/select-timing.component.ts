@@ -485,6 +485,7 @@ export class SelectTimingComponent implements OnInit {
     
     for (let m_shift of this.MORNING_SHIFT) m_shift.is_active = m_shift.id == id ? true : false;
 
+  
     await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
@@ -632,12 +633,6 @@ export class SelectTimingComponent implements OnInit {
     if (month < 10) month = '0' + month;
     if (hours < 10) hours = '0' + hours;
     if (minutes < 10) minutes = '0' + minutes;
-
-    // console.log('giving---' , date_time)
-
-    // console.log('returnDateTimeFormat---' , today_date)
-
-    // console.log('')
 
     return  await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes +':00.000Z';
   }

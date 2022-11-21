@@ -220,10 +220,6 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     let starting_date_time = new Date(`${date}T${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${date}T${selecetd_shift[0].value}`);
 
-    console.log('starting_date_time---' , starting_date_time)
-    console.log('ending_date_time---' , ending_date_time)
-    
-
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
     ending_date_time = new Date(ending_date_time);
 
