@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Stripe for PWA
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid text-center>
+    <ion-row>
+      <ion-col>
+        Use this Pay button in your PWA's payment page with the attached logic.
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card class="welcome-card">
+    <ion-img src="/assets/stripe.png"></ion-img>
+    <ion-card-header>
+      <ion-card-subtitle>Get Started</ion-card-subtitle>
+      <ion-card-title>Stripe Sample</ion-card-title>
+      <ion-row>
+        <ion-col>Total Payment</ion-col>
+        <ion-col> {{currencyIcon}}{{paymentAmount}} </ion-col>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      <form action="/" method="post" id="payment-form">
+        <div class="form-row">
+          <div id="card-element">
+              </div> 
+          <!-- Used to display Element errors -->
+          <div id="card-errors" role="alert"></div>
+        </div>
+        <ion-button type="submit" color="success" expand="full">Make Payment</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

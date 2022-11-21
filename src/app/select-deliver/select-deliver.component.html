@@ -1,0 +1,40 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+
+
+    <ion-row class="select-text ion-no-margin ion-no-padding">
+      <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
+        <ion-text>Please select one</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <!-- Select delivary type -->
+
+    <ion-row class="select-dilivery-type ion-no-margin ion-no-padding">
+      <ion-col size="6" class="free ion-no-margin ion-no-padding" >
+        
+        <ion-card [class.active]="!DELIVERY" (click)="DELIVERY = false">
+          <ion-card-content>
+            <ion-icon name="checkmark" *ngIf="!DELIVERY"></ion-icon>
+            <div><ion-text> Pickup </ion-text></div>
+            No charges
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" class="paid ion-no-margin ion-no-padding">
+        <ion-card [class.active]="DELIVERY" (click)="DELIVERY = true">
+          <ion-card-content>
+            <ion-icon name="checkmark" *ngIf="DELIVERY"></ion-icon>
+            <div><ion-text> Delivery </ion-text></div>
+
+            {{ 4.99 | currency: 'EUR' }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Information -->
+
+
+</ion-content>
+<app-footer></app-footer>

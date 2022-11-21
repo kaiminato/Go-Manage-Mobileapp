@@ -1,0 +1,48 @@
+ion-content {
+
+    .app-logo {
+
+        height: 25%;
+    }
+
+    ion-card {
+
+        background-color: #047473;
+        margin-left: 10px;
+        margin-right: 10px;
+        cursor: pointer;
+
+        ion-icon {
+            font-size: 50px;
+            color: #fff;
+        }
+
+        ion-text {
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        ion-img {
+            margin-left: auto;
+            margin-right: auto;
+            width: 90px;
+        }
+    }
+
+    .some_space {
+        margin-top: 30px;
+    }
+
+    .material-symbols-outlined {
+        font-size: 50px;
+        color: #fff;
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48
+    }
+
+    
+}

@@ -1,0 +1,204 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+
+  <ion-grid class="ion-no-margin ion-no-padding">
+
+    <ion-row class="ion-no-margin ion-no-padding">
+      <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
+        <span class="material-symbols-outlined">
+          card_giftcard
+          </span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-margin ion-no-padding">
+      <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
+        <ion-text class="choose_amount_heading">Voucher Summary</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="gift-voucher-amount ion-margin">
+      <ion-col size="12" class="ion-text-center ">
+        <ion-text class="choose_amount_heading">Gift voucher amount</ion-text>
+        <ion-text > {{ TOTAL_AMOUNT | currency: 'EUR'}} </ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="gift-voucher-amount ion-margin">
+      <ion-col size="12" class="ion-text-center ">
+        <ion-text class="choose_amount_heading">Send receipt to:</ion-text>
+        <ion-text > {{ SEND_REEIPT_TO }} </ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="gift-voucher-amount ion-margin">
+      <ion-col size="12" class="ion-text-center ">
+        <ion-text class="choose_amount_heading">Send voucher to:</ion-text>
+        <ion-text > {{SEND_VOUCHER_TO}} </ion-text>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-grid class="ion-no-margin ion-no-padding">
+    <ion-row class="ion-margin-top ion-margin-start ion-margin-end">
+      <ion-col size="6" class="ion-margin-top">
+        <label >Total: {{ TOTAL_AMOUNT | currency: 'EUR'}}</label>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" class="" id="open-modal" (click)="buy()"> <ion-text>Buy Now</ion-text></ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
+  <ion-modal #modal trigger="open-modal">
+    <ng-template>
+      <ion-content>
+        <ion-toolbar>
+          <ion-title>Payment</ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="closeModel()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <form [formGroup]="form" (ngSubmit)="payPayment()">
+          <ion-list>
+
+            <ion-row>
+              <ion-col size="12">
+                <ion-item>
+                  <ion-label>
+                    <span class="material-symbols-outlined credit_card_icons">
+                      credit_card
+                      </span>
+                  
+                  </ion-label>
+                  <ion-input 
+                    formControlName="caredit_card_number" 
+                    placeholder="Card number" 
+                    maxlength="16" 
+                    type="tel" 
+                    pattern="[0-9]*" 
+                    inputmode="numeric"
+                    ></ion-input>
+                </ion-item>
+
+                <div *ngIf="form.get('caredit_card_number').invalid && (form.get('caredit_card_number').dirty ||form.get('caredit_card_number').touched )" class="error">
+                  <div *ngIf="(form.get('caredit_card_number')).errors?.required">Card number is required</div>
+                  <!--question mark(?) is a safe navigation operator-->
+                  <div *ngIf="(form.get('caredit_card_number')).errors?.minlength">Card number should be contain 16 digit.</div>
+                  <div *ngIf="(form.get('caredit_card_number')).errors?.maxlength">Card number can contain 16 digit.</div>
+                  <div *ngIf="(form.get('caredit_card_number')).errors?.pattern">Numeric value only.</div>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label>
+                  
+                      <span class="material-symbols-outlined credit_card_icons">
+                        calendar_month
+                        </span>
+                  
+                  </ion-label>
+                  <ion-input 
+                    formControlName="credit_month" 
+                    placeholder="Month"
+                    maxlength="2" 
+                    type="tel" 
+                    pattern="[0-9]*" 
+                    inputmode="numeric"
+                    ></ion-input>
+                </ion-item>
+
+                <div *ngIf="form.get('credit_month').invalid && (form.get('credit_month').dirty ||form.get('credit_month').touched )" class="error">
+                  <div *ngIf="(form.get('credit_month')).errors?.required">Card month is required</div>
+                  <!--question mark(?) is a safe navigation operator-->
+                  
+                  <div *ngIf="(form.get('credit_month')).errors?.maxlength">Card month can contain 2 digit.</div>
+                  <div *ngIf="(form.get('credit_month')).errors?.pattern">Numeric value only.</div>
+                </div>
+
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label>
+                  
+                      <span class="material-symbols-outlined credit_card_icons">
+                        calendar_today
+                        </span>
+                  
+                  </ion-label>
+                  <ion-input 
+                    formControlName="caredit_year" 
+                    placeholder="Year"
+                    maxlength="4" 
+                    type="tel" 
+                    pattern="[0-9]*" 
+                    inputmode="numeric"
+                    ></ion-input>
+                </ion-item>
+
+                <div *ngIf="form.get('caredit_year').invalid && (form.get('caredit_year').dirty ||form.get('caredit_year').touched )" class="error">
+                  <div *ngIf="(form.get('caredit_year')).errors?.required">Card year is required</div>
+                  <!--question mark(?) is a safe navigation operator-->
+                  <div *ngIf="(form.get('caredit_year')).errors?.minlength">Card year can contain minimum 4 digit.</div>
+                  <div *ngIf="(form.get('caredit_year')).errors?.maxlength">Card year can contain 2 digit.</div>
+                  <div *ngIf="(form.get('caredit_year')).errors?.pattern">Numeric value only.</div>
+                </div>
+              </ion-col>
+
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <ion-item>
+                  <ion-label>
+                    <span class="material-symbols-outlined credit_card_icons">
+                      lock
+                      </span>
+                  
+                  </ion-label>
+                  <ion-input 
+                    formControlName="caredit_cvc" 
+                    placeholder="CVC"
+                    maxlength="3" 
+                    type="tel" 
+                    pattern="[0-9]*" 
+                    inputmode="numeric"
+                    ></ion-input>
+                </ion-item>
+
+                <div *ngIf="form.get('caredit_cvc').invalid && (form.get('caredit_cvc').dirty ||form.get('caredit_cvc').touched )" class="error">
+                  <div *ngIf="(form.get('caredit_cvc')).errors?.required">Card cvc is required</div>
+                  <!--question mark(?) is a safe navigation operator-->
+                  <div *ngIf="(form.get('caredit_cvc')).errors?.minlength">Card cvc can contain minimum 3 digit.</div>
+                  <div *ngIf="(form.get('caredit_cvc')).errors?.maxlength">Card cvc can contain 3 digit.</div>
+                  <div *ngIf="(form.get('caredit_cvc')).errors?.pattern">Numeric value only.</div>
+                </div>
+
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="12">
+                <ion-button expand="block" class="" type="submit" [disabled]="!form.valid"> <ion-text>Pay {{ TOTAL_AMOUNT | currency : 'EUR'}}</ion-text></ion-button>
+              </ion-col>
+            </ion-row>
+            
+            
+            
+
+          </ion-list>
+
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+<app-footer></app-footer>

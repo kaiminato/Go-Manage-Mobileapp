@@ -1,0 +1,26 @@
+ion-content {
+
+    .list {
+        max-height: 65%;
+        min-height: 65%;
+        overflow: scroll;   
+        overflow-x: hidden; 
+    }
+
+    .staff_list {
+        margin: 25px;
+        border-radius: 5px;
+        --background: #047473;
+        color: #fff;
+
+        ion-thumbnail {
+            border-radius: 50% !important;
+            overflow: hidden;
+        }
+
+        h3{
+            font-weight: bold;
+            font-size: 15px;
+        }
+    }
+}

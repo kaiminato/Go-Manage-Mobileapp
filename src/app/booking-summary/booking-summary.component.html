@@ -1,0 +1,59 @@
+<ion-content>
+  <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
+
+  <ion-list lines="none" class="ion-margin-top" >
+    
+    <ion-item button  class="details ion-margin-top"   detail="false">
+          
+      <ion-text class="ion-margin-bottom "> {{ DATE }} at {{ STARTING_TIME }} 
+        <br/>
+        <ion-text>{{ TOTAL_DURATION }} minutes duration, ends at {{ ENDING_TIME }}</ion-text>
+      </ion-text>
+        
+    </ion-item>
+
+
+    <ion-item button  class="details ion-margin-top"   detail="false">
+          
+      
+      <ion-text class="ion-margin-bottom"> {{ STUDIO_NAME }}</ion-text>
+      <ion-img slot="end" [src]="this.imageService.LOGO" class="ion-margin-bottom"></ion-img>
+    </ion-item>
+
+    <ion-item button  class="details ion-margin-top"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
+          
+      
+      <ion-text class="ion-margin-bottom"> {{ service.serviceName }}
+        <br/>
+        <ion-text>{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text>
+      </ion-text>
+
+      <ion-text slot="end" class="ion-margin-bottom"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
+
+    </ion-item>
+
+
+    <ion-item button  class="details_no_border ion-no-border ion-margin-top"   detail="false">
+          
+      
+      <ion-text class="ion-margin-bottom ion-margin-top"> Total
+      </ion-text>
+
+      <ion-text slot="end" class="ion-margin-bottom ion-margin-top"> {{ TOTAL_AMOUNT | currency: 'EUR'}}</ion-text>
+
+    </ion-item>
+
+    <ion-item button  class="details_no_border ion-no-border ion-margin-top"   detail="false">
+          
+      
+      
+
+      <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="saveBooking()"> Confirm</ion-button>
+
+    </ion-item>
+
+    
+  </ion-list>
+</ion-content>
+
+<app-footer></app-footer>

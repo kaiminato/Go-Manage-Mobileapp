@@ -1,0 +1,30 @@
+ion-content {
+
+    .app-logo {
+        margin-top: 25%;
+        height: 30%;
+    }
+
+    .thankyou_section {
+
+        margin-top: 20%;
+        padding: 5%;
+        ion-text {
+            color: #047473;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .return_home_section {
+
+            margin-top: 20%;
+            ion-button {
+                --background:#047473;
+                width: 56%;
+                height: 50px;
+            }
+        }
+        
+    }
+    
+}

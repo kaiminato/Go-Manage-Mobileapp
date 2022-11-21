@@ -1,0 +1,82 @@
+ion-content {
+
+    .choose_amount_heading {
+
+        color: #047473;
+        font-weight: bold;
+    }  
+
+    .gift-voucher-amount {
+
+        margin-top: 30px;
+        ion-col {
+            display: grid;
+            color: #047473;
+            line-height: 25px;
+
+            .choose_amount_heading {
+
+                color: #047473;
+                font-weight: bold;
+            } 
+        }
+        
+
+    }
+
+    .material-symbols-outlined {
+        font-size: 200px;
+        //color: #fff;
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 50,
+        'GRAD' 0,
+        'opsz' 48
+    }
+
+    ion-button {
+        --background: #047473;
+        --background-activated: #047473;
+
+        ion-text {
+            font-weight: bold;
+        }
+       
+    }
+
+    .credit_card_icons {
+        font-size: 30px;
+    }
+
+    
+
+    
+}
+
+
+// CSS for model
+
+ion-modal {
+    --height: 60%;
+    --border-radius: 16px;
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    .error {
+        color: red;
+        line-height: 20px;
+    }
+  }
+  
+  ion-modal::part(backdrop) {
+    background: rgba(209, 213, 219);
+    opacity: 1;
+  }
+  
+  ion-modal ion-toolbar {
+    --background: rgb(14 116 144);
+    --color: white;
+  }
+
+  .inner-scroll {
+        overflow-y: hidden !important;
+    }

@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+      
+      <ion-col size="2">
+        <span class="material-symbols-outlined back" (click)="back()" *ngIf="IS_BACK">
+          arrow_back
+        </span>
+      </ion-col>
+
+      <ion-col size="10" *ngIf="BOOKING_WITH_STAFF">
+        <div class="header-text">
+        
+          <ul class="headli">
+            <li>
+              <div class="ili3">
+                <div class="ili">
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 1">1</span> 
+                </div>
+                <div class="ili2">
+                  <!-- <span class="material-symbols-outlined rightli" >
+                    arrow_forward
+                  </span> -->
+                </div>
+              </div>
+              <ion-text class="headcontentst"> Staff </ion-text>
+            </li>
+
+            <li>
+              <div class="ili3">
+                <div class="ili">
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 2">2</span> 
+                </div>
+                <div class="ili2">
+                  <!-- <span class="material-symbols-outlined rightli">
+                    arrow_forward
+                  </span> -->
+                </div>
+              </div>
+              <ion-text> Services </ion-text>
+            </li>
+
+            <li>
+              <div class="ili3">
+                <div class="ili ">
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 3" >3</span> 
+                </div>
+                <div class="ili2">
+                  <!-- <span class="material-symbols-outlined rightli">
+                    arrow_forward
+                  </span> -->
+                </div>
+              </div>
+              <ion-text> Date\Time </ion-text>
+            </li>
+            <li>
+              <div class="ili4th">
+              <span class="headlitop" [class.active] ="HEADING_TEXT == 4">4</span> 
+             </div>
+             <div class="ili4send">
+              <ion-text> Confirm </ion-text>
+             </div>
+            </li>
+
+          </ul>
+        </div>
+      </ion-col>
+
+      <ion-col size="10" *ngIf="!BOOKING_WITH_STAFF">
+        <div class="header-text">
+        
+          <ul class="headli">
+            <li>
+              <div class="ili3">
+                <div class="ili">
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 1">1</span> 
+                </div>
+                <div class="ili2">
+                  <!-- <span class="material-symbols-outlined rightli" >
+                    arrow_forward
+                  </span> -->
+                </div>
+              </div>
+              <ion-text class="headcontent"> Services </ion-text>
+            </li>
+
+            <li>
+              <div class="ili3">
+                <div class="ili">
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 2">2</span> 
+                </div>
+                <div class="ili2">
+                  <!-- <span class="material-symbols-outlined rightli">
+                    arrow_forward
+                  </span> -->
+                </div>
+              </div>
+              <ion-text  class="headcontent"> Date\Time  </ion-text>
+            </li>
+
+            <li>
+              <div class="ili3">
+                <div class="ili ">
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 3" >3</span> 
+                </div>
+                <div class="ili2">
+                  <!-- <span class="material-symbols-outlined rightli">
+                    arrow_forward
+                  </span> -->
+                </div>
+              </div>
+              <ion-text class="headcontentst"> Staff </ion-text>
+            </li>
+            <li>
+              <div class="ili4th">
+              <span class="headlitop" [class.active] ="HEADING_TEXT == 4">4</span> 
+             </div>
+             <div class="ili4send">
+              <ion-text  class="headcontent"> Confirm </ion-text>
+             </div>
+            </li>
+
+          </ul>
+        </div>
+      </ion-col>
+    
+    </ion-row>
+    
+  </ion-toolbar>
+</ion-header>

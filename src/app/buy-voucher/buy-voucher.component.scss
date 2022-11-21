@@ -1,0 +1,133 @@
+ion-content {
+
+    .choose_amount_heading {
+
+        color: #047473;
+        font-weight: bold;
+    }      
+    
+    .select-amount-row {
+
+        
+
+        .inactive {
+            --background: #f7f8fb;
+            border: 2px solid #c9c9cb;
+            border-radius: 7px;
+            margin: 5px;
+            height: 42px;
+            --background-activated: #f7f8fb;
+           
+    
+            ion-text {
+                font-weight: bold;
+                color: #047473;
+            }
+        }
+
+        ion-input {
+            margin: 5px;
+        }
+
+        .active{
+
+            --background: #047473 !important;
+            --background-activated: #047473;
+            border: 2px solid #047473 !important;
+            border-radius: 7px;
+            margin: 5px;
+            height: 42px;
+        
+    
+            ion-text {
+                font-weight: bold;
+                color: #f7f8fb !important;
+            }    
+        }
+        
+    }
+
+    .request-tabs {
+
+        padding-left: 0px;
+        padding-right: 0px;
+        
+        ion-row {
+            box-shadow: 0px 3px 3px #bdbcbc;
+            text-align: center;
+            color: #047473;
+
+            div {
+                margin-bottom: 10px;
+            }
+            .active {
+                border-bottom: 4px solid #047473;
+                font-weight: bold;
+                
+            }
+    
+            .inactive {
+                //border-bottom: 3px solid #bdbcbc;
+            }
+    
+            ion-text {
+                margin-left: 5px;
+            }
+        }
+        
+    }
+
+    ion-input,ion-textarea {
+        border: 2px solid #d0cbdd;
+        background-color: #eeeeef;
+        border-radius: 5px;
+    }
+
+    label {
+        font-weight: bolder;
+        color: #047473;
+    }
+
+    .add_cart_button {
+        margin-top: 18px;
+    }
+
+    ion-button {
+        --background: #047473;
+        --background-activated: #047473;
+
+        ion-text {
+            font-weight: bold;
+        }
+       
+    }
+
+    .divider {
+
+        width: 100%;
+        border: 2px solid rgb(173 171 171);
+        margin-top: 30px;
+    }
+
+    .material-symbols-outlined {
+        font-size: 150px;
+        //color: #fff;
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 50,
+        'GRAD' 0,
+        'opsz' 48
+    }
+
+    ion-button {
+        --background: #047473;
+        --background-activated: #047473;
+
+        ion-text {
+            font-weight: bold;
+        }
+       
+    }
+
+    
+}

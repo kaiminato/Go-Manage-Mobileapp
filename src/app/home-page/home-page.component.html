@@ -1,0 +1,34 @@
+<ion-content>
+ 
+  <ion-img [src]="this.imageService.LOGO" class="app-logo ion-margin-top"></ion-img>
+ 
+  <ion-grid *ngFor="let row_value of this.LIST; let i = index">
+    <ion-row [class.some_space]=" i == 0 ">
+      <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value">
+       
+        <ion-card class="ion-text-center ion-no-margin " (click)="navigate(value.router_link)">
+          
+          <ion-card-content >
+
+            <ion-img [src]="value.image" *ngIf="value.is_icon">
+
+            </ion-img>
+
+            <span class="material-symbols-outlined" *ngIf="!value.is_icon">
+              {{value.name}}
+            </span>
+
+            <div>
+              <ion-text >{{ value.text }}</ion-text>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  
+</ion-content>
+<app-footer></app-footer>
