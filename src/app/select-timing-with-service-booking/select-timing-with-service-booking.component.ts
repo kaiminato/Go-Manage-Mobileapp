@@ -305,7 +305,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
 
-
     let starting_date_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
     ending_date_time = new Date(ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1));
