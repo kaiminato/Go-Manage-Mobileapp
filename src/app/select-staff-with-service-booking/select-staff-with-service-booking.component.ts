@@ -217,8 +217,8 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
 
-    let starting_date_time = new Date(`${date} ${selecetd_shift[0].value}`);
-    let ending_date_time = new Date(`${date} ${selecetd_shift[0].value}`);
+    let starting_date_time = new Date(`${date}T${selecetd_shift[0].value}`);
+    let ending_date_time = new Date(`${date}T${selecetd_shift[0].value}`);
 
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
     ending_date_time = new Date(ending_date_time);
