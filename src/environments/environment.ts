@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   //apiUrl : "https://91.250.249.133:4601/",
-  apiUrl: "https://release-sleet.gomanage.dev:4801",
+  apiUrl: "https://release-sleet.gomanage.dev",
 };
 
 /*
