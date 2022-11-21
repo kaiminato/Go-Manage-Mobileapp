@@ -296,7 +296,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       return
     }
 
-    let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
+    let selecetd_shift = this.MORNING_SHIFT.filter(data => data.id == id);
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.date;
     get_booking_data.timing_id = id;
@@ -305,8 +305,9 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
 
-    let starting_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
-    let ending_date_time = new Date(`${this.date} ${selecetd_shift[0].value}`);
+
+    let starting_date_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
+    let ending_date_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
     ending_date_time = new Date(ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1));
 
     let office_last_shift = new Date (`${get_booking_data.date} ${this.MORNING_SHIFT[this.MORNING_SHIFT.length - 1].value}` );
