@@ -1,0 +1,128 @@
+ion-popover {
+        --background: rgba(40, 173, 218, 0.6);
+        --backdrop-opacity: 0.6;
+        --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.6);
+        --color: white;
+        --width: 300px;
+      }
+      
+      ion-popover ion-content {
+        //--background: rgba(40, 173, 218, 0.6);
+        --color: #047473;
+      }
+      
+      ion-popover::part(backdrop) {
+        //background-color: rgb(6, 14, 106);
+      }
+
+ion-content {
+    
+    
+    
+    .staff-details {
+        
+        color: #047473;
+        font-weight: bold;
+        font-size: 13px;
+
+        ion-avatar {
+            width:70% !important;  
+            height : 75% !important;  
+            max-width: 100px !important;  //any size
+            max-height: 100px !important;
+            margin: 10px;
+        }
+
+        .comment {
+            margin-right: 30px;
+        }
+    }
+
+    .service-list {
+        max-height: 54%;
+        overflow: scroll;
+
+        .service_detail {
+            margin: 5px;
+            border-radius: 5px;
+            --background: #f6f5fa;
+            color: #047473;
+            border: 2px solid;
+            .service_count {
+                font-size: 15px;
+            }
+    
+            h3{
+                font-weight: bold;
+                font-size: 15px;
+            }
+    
+            .toggle {
+                color: #000;
+                margin-left: 15px;
+            }
+    
+        }
+
+        .itemBtns {
+            position: relative;
+            z-index: 4;
+        }
+
+        ion-label {
+            display: flex;
+            align-items: center;
+            margin-top: 0;
+            margin-bottom: 0;
+            ion-text {
+                margin-left: auto;
+                margin-right: 32px;
+            }
+            ion-checkbox {
+                min-width: 26px;
+                svg {
+                    border-radius: 2px;
+                }
+            }
+        }
+    }
+
+    
+
+    .service_order_list {
+
+        ion-icon {
+            margin-left: 0px;
+            margin-left: 5px;
+        }
+        ion-label {
+            margin-left: 5px;
+            
+        }
+
+        ion-checkbox {
+
+            --background-checked: #047473;
+        }
+        
+    }
+
+    .book_now {
+
+        .service_selected_price {
+            font-weight: bold;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+        ion-button {
+            --background:  #047473;
+            --background-activated: #047473;
+
+            .booking-arrow {
+                margin-left: 20px;
+                font-size: 25px;
+            }
+        }
+    }
+    
+}

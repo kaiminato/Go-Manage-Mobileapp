@@ -1,0 +1,75 @@
+<ion-content>
+  <app-header (navigation)="navigation()"  [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" ></app-header>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button 
+          fill="clear" 
+          class="ion-float-right ion-margin-end"
+          [routerLink]="['/make-a-booking']"
+          ><ion-text class="new_booking">+ New Booking</ion-text></ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="booking-header-grid-section ion-margin-start ion-margin-end">
+    <ion-row>
+      <ion-col size="12" class="booking-header-section">
+        <div 
+          class="booking-selection future ion-text-center "
+          [class.active-booking-selection]="IS_FUTURE_BOOKING_active"
+          (click)="IS_FUTURE_BOOKING_active = true"
+          >Future Bookings
+        </div>
+        
+        <div  
+          class="booking-selection future ion-text-center"
+          [class.active-booking-selection]="!IS_FUTURE_BOOKING_active"
+          (click)="IS_FUTURE_BOOKING_active = false"
+          >Previous Bookings</div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="main-div">
+    <ion-card class="booking_list list_{{i}}" *ngFor="let booking of IS_FUTURE_BOOKING_active ? FUTURE_BOOKING_LIST : RECENT_BOOKING_LIST; let i = index" >
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-icon name="calendar"></ion-icon> {{booking.date_time}}
+        </ion-card-subtitle>
+        <ion-card-content class="ion-no-padding">
+          <div class="card-content">
+            <div class="booking-content service_info">
+              <div class="service_name"> {{booking.service_name}}</div>
+              <div class="service_duration"> {{booking.service_duration}} </div>
+              <div class="owner_name"> Jade Amber </div>
+              
+            </div>
+    
+            <div class="booking-content rescheduling_info" *ngIf="IS_FUTURE_BOOKING_active">
+              <ion-button 
+                expand="full" 
+                size="small" 
+                class="rescheduling-button"
+                [routerLink]="['/make-a-booking']"
+                [queryParams]="{id: booking.id}"
+                >Rescheduling booking</ion-button>
+
+              <ion-button
+                expand="full" 
+                size="small" 
+                class="cancel-button ion-margin-top"
+                (click)="cancelBooking(booking.id)"
+                >Cancel booking</ion-button>
+            </div>
+          </div>
+          
+        </ion-card-content>
+        
+      </ion-card-header>
+    </ion-card>
+  </div>
+  
+</ion-content>
+<app-footer></app-footer>

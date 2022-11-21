@@ -1,0 +1,136 @@
+<ion-content>
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+  
+  <ion-grid class="ion-no-margin ion-no-padding">
+
+    <ion-row class="ion-no-margin ion-no-padding">
+      <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
+        <span class="material-symbols-outlined">
+          card_giftcard
+          </span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-margin ion-no-padding">
+      <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
+        <ion-text class="choose_amount_heading">Choose your amount</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin select-amount-row">
+      
+      <ion-col size="3" class="ion-text-center" *ngFor="let price_detail of PRICE_LIST">
+        
+        <ion-button 
+          expand="block" 
+          size="small" 
+          *ngIf="price_detail.is_button"
+          [class.active]="price_detail.is_active"
+          [class.inactive]="!price_detail.is_active"
+          (click)="selectPrice(price_detail.id)"
+          >
+          <ion-text> {{ price_detail.price | currency: 'EUR'}}</ion-text>
+        </ion-button>
+
+        
+        <ion-input 
+          placeholder="Custom" 
+          [class.active]="price_detail.is_active"
+          [class.inactive]="!price_detail.is_active"
+          *ngIf="!price_detail.is_button"
+          (click)="selectPrice(price_detail.id)"
+          [(ngModel)]="CUSTOM_PRICE"
+          >
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="request-tabs ion-no-margin ion-no-padding">
+    <ion-row>
+      <ion-col size="6"  [class]="SEND_TO_ME  ? 'active' : 'inactive'" (click)="SEND_TO_ME = true;">
+        
+        <div>
+          <ion-text  class="app-text-color ion-margin-start">Send to me</ion-text>
+        </div>
+      </ion-col>
+      
+      <ion-col size="6"  [class]=" !SEND_TO_ME  ? 'active' : 'inactive'" (click)="SEND_TO_ME = false;">
+        <div>
+        <ion-text  class="app-text-color ion-margin-start">Send someone else</ion-text>
+        </div>
+        
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="send_to_me ion-no-margin" *ngIf="SEND_TO_ME">
+    <ion-row class="ion-margin">
+      <ion-col size="6">
+        <label>First Name</label>
+        <ion-input type="text" [(ngModel)]="F_FIRST_NAME"></ion-input>
+      </ion-col>
+
+      <ion-col size="6">
+        <label>Last Name</label>
+        <ion-input type="text" [(ngModel)]="F_LAST_NAME"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin">
+      <ion-col size="12">
+        <label>Email</label>
+        <ion-input type="text" [(ngModel)]="F_EMAIL"></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="send_to_me" *ngIf="!SEND_TO_ME">
+    <ion-row class="ion-margin">
+      <ion-col size="6">
+        <label>Your First Name</label>
+        <ion-input type="text" [(ngModel)]="S_FIRST_NAME"></ion-input>
+      </ion-col>
+
+      <ion-col size="6">
+        <label>Your Last Name</label>
+        <ion-input type="text" [(ngModel)]="S_LAST_NAME"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin">
+      <ion-col size="12">
+        <label>Your Email</label>
+        <ion-input type="text" [(ngModel)]="S_EMAIL"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin">
+      <ion-col size="12">
+        <label>Giftee Email</label>
+        <ion-input type="text" [(ngModel)]="S_GIFTEE_EMAIL"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-margin">
+      <ion-col size="12">
+        <label>Message to giftee</label>
+        <ion-input type="text" [(ngModel)]="S_GIFTEE_EMAIL_MESSAGE"></ion-input>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+    
+  <ion-grid class="ion-no-margin ion-no-padding">
+    <ion-row class="ion-margin-top ion-margin-start ion-margin-end">
+      <ion-col size="6" class="ion-margin-top">
+        <label >Total: {{ (this.SELECTED_PRICE[0]?.is_button == true ? this.SELECTED_PRICE[0].price  : CUSTOM_PRICE) | currency: 'EUR'}}</label>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" class="" (click)="confirm()"> <ion-text>Confirm</ion-text></ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+<app-footer></app-footer>
