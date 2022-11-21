@@ -1,0 +1,105 @@
+ion-content {
+
+    .scroll-bar {
+        overflow: scroll;
+        max-height: 92%;
+
+        .user-name {
+            padding: 10%;
+    
+            ion-text {
+                //border: 2px solid;
+                padding: 5%;
+                border-radius: 50%;
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+        }
+    
+        .divider {
+            width: 100%;
+            height: 12px;
+            background-color: #f2f2f2;
+        }
+    
+        ion-list {
+    
+            //margin-top: -9px;
+            ion-item {
+    
+            
+                ion-label {
+                    color: grey;
+                }
+
+                ion-input {
+                    color: #000;
+                }
+        
+                ion-text {
+                    font-size: 95%;
+                }
+            }
+        }
+    }
+
+    span.edit_icon {
+        position: absolute;
+        background: #7e7e7e;
+        line-height: 25px;
+        height: 30px;
+        width: 30px;
+        border-radius: 100%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: -2px;
+        right: 1px;
+    }
+    ion-text.usr_name {
+        position: relative;
+    }
+}
+
+@media screen and (max-width: 2786px) {
+    span.edit_icon {
+        height: 41px ;
+        width: 41px ;
+        top: 10px ;
+        right: 18px ;
+    }
+    
+}    
+
+@media screen and (max-width: 786px) {
+    span.edit_icon {
+        top: -5px !important;
+        right: -3px !important;
+    }
+}
+   
+@media screen and (max-width: 580px) {
+    span.edit_icon {
+        top: -9px !important;
+        right: -4px !important;
+    }
+} 
+   
+@media screen and (max-width: 412px) {
+      span.edit_icon {
+        position: absolute;
+        background: #ccc;
+        line-height: 21px !important;
+        height: 21px !important;
+        width: 21px !important; 
+        border-radius: 100%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 11px !important;
+        right: -7px !important;
+    }
+}

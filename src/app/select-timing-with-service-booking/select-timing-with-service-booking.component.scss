@@ -1,0 +1,128 @@
+ion-content {
+    
+    .calender_section {
+        ion-icon {
+
+            font-size: 40px;
+        }
+        
+        ion-text {
+            margin-top: 45px;
+            margin-right: -50px;
+            font-size: 13px;
+        }
+    }
+
+    .month_name {
+
+        margin-top: -30px;
+        font-weight: bold;
+        color: #047473;
+    }
+
+    .date-range-picker {
+        
+        //background-color: white;
+        margin-top: 10px;
+        .active {
+            background-color: #047473;
+            color: #fff !important;
+            border: 1px solid #047473 !important;
+        }
+
+        .disabled {
+            background-color: #cccccc !important;
+            border: 1px solid #047473 !important;
+            ion-text{
+                text-decoration: line-through;
+            }
+            
+        }
+
+        .date-range {
+            border: 2px solid #047473;
+            padding: 15%;
+            font-size: 20px;
+            color: #047473;
+            font-weight: bold;
+            width: 90%;
+
+            .day-name {
+
+                font-size: 15px;
+            }
+        
+        }
+
+        
+    }
+
+    .request-tabs {
+
+        padding-left: 0px;
+        padding-right: 0px;
+        
+        ion-row {
+            //box-shadow: 0px 3px 3px #bdbcbc;
+            text-align: center;
+            color: #047473;
+            margin-top: 15px;
+
+            div {
+                margin-bottom: 10px;
+            }
+            .active {
+                border-bottom: 4px solid #000;
+                font-weight: bold;
+                
+            }
+    
+            .inactive {
+                //border-bottom: 3px solid #bdbcbc;
+            }
+    
+            ion-text {
+                margin-left: 5px;
+            }
+        }
+        
+    }
+
+    .all_shift {
+
+        .heading {
+            color: #383a3e;
+            font-weight: bold;
+        }
+
+        ion-icon {
+            margin-top: 5px;
+        }
+        
+       .time {
+            margin-left: 5px;
+            font-size: 16px;
+        }
+
+        .active {
+            border: 1px solid #047473;
+            border-radius: 5px;
+            background-color: #047473;
+            color: #fff;
+            padding: 4px;
+        }
+
+        .disbaled_shift {
+            background-color: #6e7474 !important;
+            border: 1px solid #047473;
+            border-radius: 5px;
+            color: #fff;
+            padding: 4px;
+            ion-text{
+                text-decoration: line-through;
+            }
+        }
+        
+    }
+    
+}

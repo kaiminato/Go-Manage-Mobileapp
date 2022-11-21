@@ -1,0 +1,97 @@
+
+
+ion-content {
+
+    .main-div {
+        max-height: 75%;
+        min-height: 75%;
+        overflow: scroll;
+    }
+    
+    
+    .new_booking {
+        //font-weight: bold;
+        color : #047473;
+    }
+
+    .booking-header-grid-section {
+        margin-top: -20px;
+
+        .booking-header-section {
+
+            display: flex;
+            
+            .booking-selection {
+    
+                width: 50%;
+                font-size: 12px;
+                color:  #047473;
+                border: 2px solid #047473;
+                height: 30px;
+                padding: 5px;
+                cursor: pointer;
+            }
+    
+            .active-booking-selection {
+                background-color: #047473;
+                font-weight: bold;
+                color: #fff;
+            }
+        }
+    }
+
+    .list_0 {
+
+        margin-top: -5px !important;
+    }
+    .booking_list {
+
+        .card-content {
+            margin-top: 10px;
+            display: flex;
+
+            .booking-content {
+                width: 50%;
+                color: #047473;
+            }
+
+            .service_info {
+                
+                line-height: 20px;  
+                .service_name {
+                    font-weight: bold;
+                }
+
+                .service_duration {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+
+                .owner_name {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+
+            .rescheduling_info {
+
+                .rescheduling-button {
+
+                    --background: #047473;
+                    color: #fff;
+                    font-size: 10px;
+                    height: 26px;
+                }
+
+                .cancel-button {
+                    color: #047473;
+                    --background: #ebe8e8;
+                    //font-size: 8px;
+                    height: 26px;
+                }
+                
+            }
+        }
+    }
+    
+}

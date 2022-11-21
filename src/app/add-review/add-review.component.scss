@@ -1,0 +1,24 @@
+ion-content {
+
+    ion-card {
+        margin-top: 20%;
+        background: #047473;
+        color: #fff;
+        height: 50%;
+        
+        ion-card-title {
+            color: #fff;
+        }
+        
+        ion-card-subtitle {
+            color: #fff;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        ion-textarea {
+            background-color: #fff;
+            color: #000;
+        }
+    }
+}

@@ -1,0 +1,130 @@
+ion-content {
+
+    --background: #f1f1f1;
+
+    .search-cart-row {
+
+        ion-input {
+            border: 1px solid #fbfbfb;
+            border-radius: 12px;
+            background: #fbfbfb;
+            text-indent: 10px;
+        }
+
+        .cart {
+
+            ion-tab-button  {
+                width: 100%;
+
+                ion-icon {
+                    font-size: 35px;
+                }
+                ion-badge {
+                    margin-left: 2px;
+                    margin-top: -9px;
+                    font-size: 10px;
+                }
+            }
+
+            .cart-div {
+
+                cursor: pointer;
+                background: #fff;
+                height: 35px;
+                width: 35px;
+                // box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                position: relative;
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: -34x;
+                    left: -4px;
+                    width: 125%;
+                    height: 125%;
+                    background: #eae9ee;
+                    z-index: -1;
+                }
+    
+                ion-icon {
+                    font-size: 22px;
+                }
+    
+                ion-badge {
+                    position: absolute;
+                    top: -8px;
+                    right: -9px;
+                    /* width: 95%; */
+                    z-index: 2;
+                }
+    
+            }
+        }
+    }
+
+    .tags-category {
+        
+        margin-top: 10px;
+
+        ion-slide {
+            margin-left: 5%;
+        }
+
+        .active {
+            background: #ffc409 !important;
+           
+        }
+
+        ion-badge {
+            padding: 14px;
+            border-radius: 27px;
+            background: #fbfbfb;
+            color: #000;
+        }
+    }
+
+    .all-products {
+
+        .description-rating {
+            
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+            
+            .description {
+                
+                color: #000;
+            }
+            .rating {
+                color: #ffc409;
+            }
+        }
+
+        .price-cart {
+            
+            width: 100;
+            display: flex;
+            .price {
+                margin-top: 5%;
+                ion-text {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+            
+
+            .add-cart {
+                width: 100%;
+                ion-button {
+                    --background: #047473;
+                    --background-activated: #047473;
+                    font-size: 10px;
+                }
+            }
+           
+        }
+    }
+}
