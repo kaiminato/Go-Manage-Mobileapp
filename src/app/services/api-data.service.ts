@@ -46,9 +46,8 @@ export class ApiDataService {
   }
 
   async getMyProfile(email: string) {
-    let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
     //return await this.http.get('https://91.250.249.133:4601/user/retrieveUserDetails?email='+email);
-    return await this.http.get(this.apiUrl + 'user/retrieveUserDetails?email=' + email, { headers: header });
+    return await this.http.get(this.apiUrl + 'user/retrieveUserDetails?email=' + email);
   }
 
   async updateProfile(data: any, email: string) {
