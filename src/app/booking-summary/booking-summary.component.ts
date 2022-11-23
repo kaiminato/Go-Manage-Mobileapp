@@ -47,11 +47,13 @@ export class BookingSummaryComponent implements OnInit {
         // Get auth data
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
+          
           async (user_info: any) => {
-            if (
-              user_info.familyName == 'null' ||
-              user_info.familyName == 'null'
+
+            if ( user_info.givenName == 'null' || user_info.familyName == 'null' || user_info.givenName == undefined || user_info.familyName == undefined
             ) {
+
+              
               this.presentAlert(response.email);
             } else {
               this._onEnterData();
