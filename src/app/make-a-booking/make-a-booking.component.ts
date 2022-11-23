@@ -82,6 +82,7 @@ export class MakeABookingComponent implements OnInit {
         if (response.length > 0){
 
           this.STAFF_LIST = response
+          console.log('this.STAFF_LIST----' , this.STAFF_LIST)
           await this.dataService.setStaffList(response)
         }
         console.log(response);
@@ -197,6 +198,9 @@ export class MakeABookingComponent implements OnInit {
   }
 
   async SelectStaff (staff_id: any) {
+
+    console.log('staff_id---' , staff_id);
+    return
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
     initial_data.staff_id = staff_id;
