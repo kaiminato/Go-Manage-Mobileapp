@@ -80,7 +80,7 @@ export class FooterComponent implements OnInit {
 
   async login () {
 
-    await this.dataService.setPreviousUrl('select-a-time');
+    //await this.dataService.setPreviousUrl('select-a-time');
       this.auth
       .buildAuthorizeUrl()
       .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
