@@ -50,7 +50,8 @@ export class BookingSummaryComponent implements OnInit {
           
           async (user_info: any) => {
 
-            if ( user_info.givenName == 'null' || user_info.familyName == 'null' || user_info.givenName == undefined || user_info.familyName == undefined
+            console.log('user_info---' , user_info)
+            if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
             ) {
 
               
@@ -157,6 +158,11 @@ export class BookingSummaryComponent implements OnInit {
           placeholder: 'Enter your last name',
           name: 'last_name',
         },
+        {
+          label: 'Phone',
+          placeholder: 'Enter your phone number',
+          name: 'phone',
+        },
       ],
       buttons: [
         {
@@ -165,8 +171,9 @@ export class BookingSummaryComponent implements OnInit {
           handler: (save_data) => {
             if (
               save_data.first_name.trim() != '' ||
-              save_data.last_name.trim() != ''
+              save_data.last_name.trim() != '' || save_data.phone.trim() != ''
             ) {
+
               console.log('not blank');
               this._updateClient(save_data, email);
               //this.test()
@@ -187,6 +194,7 @@ export class BookingSummaryComponent implements OnInit {
       // email: this.EMAIL,
       given_name: save_data.first_name,
       family_name: save_data.last_name,
+      phone_number: save_data.phone,
     };
 
     await this.apiData.presentLoading();
