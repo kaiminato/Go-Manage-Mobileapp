@@ -101,9 +101,16 @@ export class ProfileComponent implements OnInit {
               }
             } else {
               
-              this.SHORT_NAME = (<any> Array.from(user_details.givenName)[0]).toUpperCase() +""+(<any> Array.from(user_details.familyName)[0]).toUpperCase();
-              this.FIRST_NAME = user_details.givenName;
-              this.LAST_NAME = user_details.familyName;
+              if (user_details.hasOwnProperty('givenName')) {
+
+                this.SHORT_NAME = (<any> Array.from(user_details.givenName)[0]).toUpperCase() +""+(<any> Array.from(user_details.familyName)[0]).toUpperCase();
+                this.FIRST_NAME = user_details.givenName;
+                this.LAST_NAME = user_details.familyName;
+              } else {
+                this.SHORT_NAME = (<any> Array.from(user_details.name)[0]).toUpperCase();
+                this.FIRST_NAME = user_details.name;
+              }
+              
             }
 
             this.PHONE = user_details.phoneMobile;
