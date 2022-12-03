@@ -310,7 +310,7 @@ export class SelectTimingComponent implements OnInit {
     
     for (let index in this.DAYS_ARRAY){
 
-      let create_date = `${year}-${parseInt(month) < 10 ? '0'+month : month}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+      let create_date = `${year}-${month.length < 2 ? '0'+month : month}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
       
       let is_exist_in_disbaled = await this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
