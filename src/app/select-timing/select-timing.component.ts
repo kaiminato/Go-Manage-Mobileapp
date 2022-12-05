@@ -117,18 +117,17 @@ export class SelectTimingComponent implements OnInit {
         }
       );
 
-
+      
       this.options.disableWeeks = weekly_off_days;
     }
 
     
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
-
-    
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
 
+    
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
@@ -136,7 +135,6 @@ export class SelectTimingComponent implements OnInit {
     
     await this.checkLogin();
     await this.getDisabledDates();
-   
     await this.getDisabledShift();
 
     if (booking_data.date != '') {
@@ -181,14 +179,23 @@ export class SelectTimingComponent implements OnInit {
 
     let array = [];
 
+    let mon = [];
+    for(let value of this.STAFF_BOOKING_LIST){
+      if (value.startTime.includes('2022-12')) { 
+        mon.push(value)
+      }
+    }
+
     for(let value of this.STAFF_BOOKING_LIST){
         
       let [date, time] = value.startTime.split('T');
       array.push(date)
     }
 
+    
     let uniq_dates = [...new Set(array)];
 
+    console.log('this.STAFF_BOOKING_LIST--' , JSON.stringify(mon))
     
 
     this.DISABLED_DATES_ARRAY = [];
@@ -196,10 +203,11 @@ export class SelectTimingComponent implements OnInit {
     for(let current_date of uniq_dates) {
 
       let all_booked = true;
-
+      let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(current_date));
+        
+      console.log('current_date---' , current_date , current_date_booking);
       for(let shift of this.ALL_SHIFT) {
 
-        let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(current_date));
         
         for(let booking_detail of current_date_booking) {
 
@@ -212,12 +220,14 @@ export class SelectTimingComponent implements OnInit {
           if (check_date >= from_date && check_date <= to_date){  
           } else {
             all_booked = false;
+            console.log('all_booked---');
           }
         }
       }
 
       if (all_booked) { this.DISABLED_DATES_ARRAY.push(current_date) }
       
+      break;
     }
 
     
@@ -230,9 +240,9 @@ export class SelectTimingComponent implements OnInit {
       }
 
       this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
-
+      console.log('daysConfig--' , daysConfig)
     }
-
+    
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
@@ -371,8 +381,13 @@ export class SelectTimingComponent implements OnInit {
   async getDisabledShift () {
     
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
-    
-  
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+    console.clear()
+    console.log('date--' , this.date , staff_detail)
+    let day_num = new Date(this.date).getDay();
+    let is_selected_day_off = await staff_detail[0].staffDetailFormatted.filter( data => data.dayId == day_num);
+
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
@@ -380,23 +395,34 @@ export class SelectTimingComponent implements OnInit {
  
     for (let index in this.ALL_SHIFT){
 
-      let new_date = new Date(`${this.date} ${this.ALL_SHIFT[index].value}`);
-      
-      for (let value of selected_date_booking_list) {
 
-        let start_time = new Date(value.startTime)
-        let end_time = new Date(value.endTime)
-        end_time.setMinutes(end_time.getMinutes() - 1)
-        
 
-        if (this.ALL_SHIFT[index].is_disabled == false) {
+      let new_date = new Date(`${this.date}T${this.ALL_SHIFT[index].value}`);
+      console.log('new_datessssss' , `${this.date}T${this.ALL_SHIFT[index].value}`);
 
-          if ((start_time <= new_date && end_time >= new_date) ){
-            
-            this.ALL_SHIFT[index].is_disabled = true;
+      if (is_selected_day_off.length == 0) {
+
+        // If selected date  is non-working day then all shift will be disabled
+        this.ALL_SHIFT[index].is_disabled = true;
+      } else {
+
+        for (let value of selected_date_booking_list) {
+
+          let start_time = new Date(value.startTime)
+          let end_time = new Date(value.endTime)
+          end_time.setMinutes(end_time.getMinutes() - 1)
+          
+          
+          if (this.ALL_SHIFT[index].is_disabled == false) {
+  
+            if ((start_time <= new_date && end_time >= new_date) ){
+              
+              this.ALL_SHIFT[index].is_disabled = true;
+            }
           }
-        }
-      } 
+        } 
+      }
+      
     }
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
