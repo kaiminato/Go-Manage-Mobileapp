@@ -72,7 +72,7 @@ export class DataService {
 
     let get_booking_values = await this.getInitialBookingdata();
     let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
-
+    console.log('staff_detail----' , staff_detail)
     let days_list = [];
 
     for (let i = 1; i <= lastDay; i++){
@@ -88,18 +88,17 @@ export class DataService {
       let current_date_id = select_day[0].value;
       let staff_available_date_id = [];
 
-      if (staff_available_date_id.length > 0){
+      if (staff_detail.length > 0){ // If selected staff find
 
         staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter(  data => data.dayId == current_date_id );
       }
-      
 
       const today = new Date()
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
       let status = false;
 
-      if (get_booking_values.booking_type == this.BOOKING_WITH_STAFF) {
+      if (get_booking_values.booking_type == this.BOOKING_WITH_STAFF) { // when booking via staff
 
         status = new_date <= new Date(yesterday) || staff_available_date_id.length == 0? true : false;
       } else {
@@ -204,14 +203,14 @@ export class DataService {
                                       data => data.dayId == selected_day_id
                                     );
 
-    
     if (staff_available_date_id.length == 0) {
-
-      return [];
+      
+      // If current day is off day then take first working day from  staffDetailFormatted array
+      
+      staff_available_date_id =   [await staff_detail[0].staffDetailFormatted[0]]; 
+      //return [];
     }
 
-
-   
 
     let first_start_time = staff_available_date_id[0]?.startShiftTime;
     let first_end_time = staff_available_date_id[0]?.outOfOfficeFrom;
