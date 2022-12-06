@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  //apiUrl : "https://91.250.249.133:4601/",
   apiUrl: "https://10001-Sleet.gomanage.io/",
 };
 
