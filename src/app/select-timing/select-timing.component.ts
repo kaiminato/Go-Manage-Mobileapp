@@ -117,18 +117,17 @@ export class SelectTimingComponent implements OnInit {
         }
       );
 
-
+      
       this.options.disableWeeks = weekly_off_days;
     }
 
     
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
-
-    
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
 
+    
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
@@ -136,7 +135,6 @@ export class SelectTimingComponent implements OnInit {
     
     await this.checkLogin();
     await this.getDisabledDates();
-   
     await this.getDisabledShift();
 
     if (booking_data.date != '') {
@@ -181,25 +179,25 @@ export class SelectTimingComponent implements OnInit {
 
     let array = [];
 
+
     for(let value of this.STAFF_BOOKING_LIST){
         
       let [date, time] = value.startTime.split('T');
       array.push(date)
     }
 
-    let uniq_dates = [...new Set(array)];
-
     
+    let uniq_dates = [...new Set(array)];
 
     this.DISABLED_DATES_ARRAY = [];
 
     for(let current_date of uniq_dates) {
 
       let all_booked = true;
-
+      let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(current_date));
+        
       for(let shift of this.ALL_SHIFT) {
 
-        let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(current_date));
         
         for(let booking_detail of current_date_booking) {
 
@@ -232,7 +230,7 @@ export class SelectTimingComponent implements OnInit {
       this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
 
     }
-
+    
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
@@ -310,7 +308,7 @@ export class SelectTimingComponent implements OnInit {
     
     for (let index in this.DAYS_ARRAY){
 
-      let create_date = `${year}-${parseInt(month) < 10 ? '0'+month : month}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+      let create_date = `${year}-${month.length < 2 ? '0'+month : month}-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
       
       let is_exist_in_disbaled = await this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
@@ -371,8 +369,11 @@ export class SelectTimingComponent implements OnInit {
   async getDisabledShift () {
     
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
-    
-  
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+    let day_num = new Date(this.date).getDay();
+    let is_selected_day_off = await staff_detail[0].staffDetailFormatted.filter( data => data.dayId == day_num);
+
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
@@ -380,23 +381,31 @@ export class SelectTimingComponent implements OnInit {
  
     for (let index in this.ALL_SHIFT){
 
-      let new_date = new Date(`${this.date} ${this.ALL_SHIFT[index].value}`);
-      
-      for (let value of selected_date_booking_list) {
+      let new_date = new Date(`${this.date}T${this.ALL_SHIFT[index].value}`);
+     
+      if (is_selected_day_off.length == 0) {
 
-        let start_time = new Date(value.startTime)
-        let end_time = new Date(value.endTime)
-        end_time.setMinutes(end_time.getMinutes() - 1)
-        
+        // If selected date  is non-working day then all shift will be disabled
+        this.ALL_SHIFT[index].is_disabled = true;
+      } else {
 
-        if (this.ALL_SHIFT[index].is_disabled == false) {
+        for (let value of selected_date_booking_list) {
 
-          if ((start_time <= new_date && end_time >= new_date) ){
-            
-            this.ALL_SHIFT[index].is_disabled = true;
+          let start_time = new Date(value.startTime)
+          let end_time = new Date(value.endTime)
+          end_time.setMinutes(end_time.getMinutes() - 1)
+          
+          
+          if (this.ALL_SHIFT[index].is_disabled == false) {
+  
+            if ((start_time <= new_date && end_time >= new_date) ){
+              
+              this.ALL_SHIFT[index].is_disabled = true;
+            }
           }
-        }
-      } 
+        } 
+      }
+      
     }
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
