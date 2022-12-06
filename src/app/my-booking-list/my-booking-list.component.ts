@@ -40,6 +40,15 @@ export class MyBookingListComponent implements OnInit {
     await this.getBookings();
   }
 
+  async ionViewWillLeave () {
+
+    this.RECENT_BOOKING_LIST = [];
+    this.FUTURE_BOOKING_LIST = [];
+    this.ALL_BOOKING_LIST = [];
+
+    console.log('leaving')
+  }
+
   async getBookings () {
 
     await this.apiData.presentLoading();
@@ -64,9 +73,9 @@ export class MyBookingListComponent implements OnInit {
                 if (response.length >0) {
         
                     
-                    this.RECENT_BOOKING_LIST = []
-                    this.FUTURE_BOOKING_LIST = []
-                    this.ALL_BOOKING_LIST = []
+                    this.RECENT_BOOKING_LIST = [];
+                    this.FUTURE_BOOKING_LIST = [];
+                    this.ALL_BOOKING_LIST = [];
 
                     for (let index = 0; index < response.length; index++){
         
