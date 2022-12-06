@@ -445,6 +445,11 @@ export class SelectTimingComponent implements OnInit {
     let starting_date_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
 
+    let pen_book_end_time = new Date(`${this.date}T${selecetd_shift[0].value}`);
+    pen_book_end_time.setMinutes(pen_book_end_time.getMinutes() + total_duration)
+    pen_book_end_time = new Date(pen_book_end_time);
+    pen_book_end_time = <any> await this.returnDateTimeFormat(pen_book_end_time);
+
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1)
     ending_date_time = new Date(ending_date_time);
 
@@ -507,17 +512,17 @@ export class SelectTimingComponent implements OnInit {
 
             
             console.log('user_info' , user_info);
-
+            
             let data = {
                           "userId": user_info.userGMID,
                           "staffId": 1,
                           "isPending": 1,
                           "startTime": create_pending_booking_start_time,
-                          "endTime": create_pending_booking_end_time,
+                          "endTime": pen_book_end_time,
                           "serviceId": get_booking_data.servises[0].id
                       };
 
-            
+
             (await this.apiData.createPendingAppointment(data)).subscribe(
               async (response: any) => {
 
