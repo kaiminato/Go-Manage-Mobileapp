@@ -43,10 +43,10 @@ export class AboutUsComponent {
 
     await this.auth.getUser().subscribe(
       (response: any) => {
-        console.log('auth response', response)
+        //console.log('auth response', response)
       },
       (error:any) => {
-        console.log('auth error ', error)
+        //console.log('auth error ', error)
       }
     )
 
@@ -68,7 +68,7 @@ export class AboutUsComponent {
 
   navigation() {
 
-    console.log('back  button is triggered')
+    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 }
