@@ -58,6 +58,8 @@ export class MyBookingListComponent implements OnInit {
 
         console.log('response' , response);
 
+        //response.email = 'gomanagetest@gmail.com';
+        
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
 
@@ -106,7 +108,7 @@ export class MyBookingListComponent implements OnInit {
                 const today = new Date()
                 let tomorrow: any = new Date(today)
                 tomorrow.setDate(tomorrow.getDate() + 1);
-                tomorrow = tomorrow.getFullYear()+'-'+(tomorrow.getMonth()+1)+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
+                tomorrow = tomorrow.getFullYear()+'-'+((tomorrow.getMonth()+1) < 10 ? `0${(tomorrow.getMonth()+1)}` : (tomorrow.getMonth()+1))+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
                 console.log('tomorrow---' , tomorrow)
 
 

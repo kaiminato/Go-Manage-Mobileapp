@@ -69,6 +69,7 @@ export class ProfileComponent implements OnInit {
         console.log('auth response', response);
         //response.email = 'DeclanMacDonnell@gmail.com'.toLowerCase();
         response.email = response.email.toLowerCase();
+        //response.email = 'gomanagetest@gmail.com';
         this.EMAIL = response.email;
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
@@ -79,11 +80,14 @@ export class ProfileComponent implements OnInit {
             console.log('user_info', user_info)
             this.RESPONSE = user_info;
             let user_details = user_info
-
-            let name_array = user_details.name.split(' ');
-
+            console.log('cmoing----------->')
+            
+           
+          
             if (user_details.givenName == 'null' && user_details.familyName == 'null'){
 
+
+              let name_array = user_details.name.split(' ');
               if (name_array.length >1) {
 
                 this.SHORT_NAME = name_array[0].charAt(0).toUpperCase() +""+ (name_array[1] ? name_array[1].charAt(0).toUpperCase() : '');
@@ -100,6 +104,7 @@ export class ProfileComponent implements OnInit {
                 this.FIRST_NAME = name_array[0];
               }
             } else {
+              
               
               if (user_details.hasOwnProperty('givenName')) {
 
