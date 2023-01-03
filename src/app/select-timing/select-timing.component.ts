@@ -87,7 +87,7 @@ export class SelectTimingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
       }
     );
 
@@ -228,7 +228,7 @@ export class SelectTimingComponent implements OnInit {
       }
 
       this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
-      console.log('daysConfig--' , daysConfig)
+      //console.log('daysConfig--' , daysConfig)
     }
     
     let booking_data = await this.dataService.getInitialBookingdata();
@@ -371,8 +371,8 @@ export class SelectTimingComponent implements OnInit {
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    console.clear()
-    console.log('date--' , this.date , staff_detail)
+    //console.clear()
+    //console.log('date--' , this.date , staff_detail)
     let day_num = new Date(this.date).getDay();
     let is_selected_day_off = await staff_detail[0].staffDetailFormatted.filter( data => data.dayId == day_num);
 
@@ -455,8 +455,8 @@ export class SelectTimingComponent implements OnInit {
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
     let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
-    console.log('starting_date_time---' ,create_pending_booking_start_time)
-    console.log('ending_date_time---' ,create_pending_booking_end_time)
+    //console.log('starting_date_time---' ,create_pending_booking_start_time)
+    //console.log('ending_date_time---' ,create_pending_booking_end_time)
 
     let is_passed = true;
     for (let shift of this.ALL_SHIFT) {
@@ -513,7 +513,7 @@ export class SelectTimingComponent implements OnInit {
           async (user_info: any) => { 
 
             
-            console.log('user_info' , user_info);
+            //console.log('user_info' , user_info);
             
             let data = {
                           "userId": user_info.userGMID,
@@ -529,7 +529,7 @@ export class SelectTimingComponent implements OnInit {
               async (response: any) => {
 
                 await this.apiData.dismiss();
-                console.log('response-------pppppppp' , response.status)
+                //console.log('response-------pppppppp' , response.status)
               },
               async (error:any) => {
                 await this.apiData.dismiss();
@@ -558,7 +558,7 @@ export class SelectTimingComponent implements OnInit {
                   await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
                 }
 
-                console.log('pending booking server error ', error)
+                //console.log('pending booking server error ', error)
                 
               }
             );
@@ -568,7 +568,7 @@ export class SelectTimingComponent implements OnInit {
           
           async (error:any) => {
             await this.apiData.dismiss();
-            console.log('profile error ', error)
+            //console.log('profile error ', error)
             await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
           }
         )
@@ -576,7 +576,7 @@ export class SelectTimingComponent implements OnInit {
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        console.log('auth error ', error)
+        //console.log('auth error ', error)
         await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
@@ -593,17 +593,17 @@ export class SelectTimingComponent implements OnInit {
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
 
-            console.log('user_info' , user_info);
+            //console.log('user_info' , user_info);
 
               (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
                 (response: any) => {
 
-                  console.log('hiddin---' , response)
+                  //console.log('hiddin---' , response)
                 },
 
                 (error: any) => {
 
-                  console.log('error---' , error)
+                  //console.log('error---' , error)
                 }
               );
           },
