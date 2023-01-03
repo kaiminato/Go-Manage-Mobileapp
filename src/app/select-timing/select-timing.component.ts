@@ -507,6 +507,8 @@ export class SelectTimingComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => { 
 
+        //response.email = 'gomanagetest@gmail.com';
+
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
 
