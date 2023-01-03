@@ -56,8 +56,8 @@ export class ApiDataService {
       .set('Cache-Control', 'no-cache')
       .set('Content-Type', 'application/json-patch+json')
 
-    console.log('header', header)
-    console.log('dd')
+    // console.log('header', header)
+    // console.log('dd')
 
     return await this.http.post(this.apiUrl + 'user/updateUserDetails?email=' + email, data, { headers: header, })
   }
@@ -100,7 +100,7 @@ export class ApiDataService {
       res.present();
 
       res.onDidDismiss().then((dis) => {
-        console.log("loader dismiss");
+        //console.log("loader dismiss");
       })
     });
 
@@ -124,7 +124,8 @@ export class ApiDataService {
       res.present();
       res.onDidDismiss().then((dis) => {
 
-        console.log("alert closed");
+        
+        //console.log("alert closed");
       })
     });
 

@@ -72,7 +72,7 @@ export class DataService {
 
     let get_booking_values = await this.getInitialBookingdata();
     let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
-    console.log('staff_detail----' , staff_detail)
+    //console.log('staff_detail----' , staff_detail)
     let days_list = [];
 
     for (let i = 1; i <= lastDay; i++){
@@ -259,7 +259,7 @@ export class DataService {
   async returnTimesInBetween(start, end) {
     var timesInBetween = [];
     
-    console.log('time start', start ,'time end', end);
+    //console.log('time start', start ,'time end', end);
 
     var startH = parseInt(start.split(":")[0]);
     var startM = parseInt(start.split(":")[1]);
