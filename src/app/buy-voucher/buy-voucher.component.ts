@@ -57,7 +57,7 @@ export class BuyVoucherComponent implements OnInit {
     this.S_GIFTEE_EMAIL_MESSAGE = '';
 
     let prefilled_data = await this.dataService.getVoucherData();
-    console.log('prefilled_data' ,prefilled_data)
+    //console.log('prefilled_data' ,prefilled_data)
 
     if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
@@ -86,7 +86,7 @@ export class BuyVoucherComponent implements OnInit {
       this.S_GIFTEE_EMAIL_MESSAGE = prefilled_data.info.giftee_email_message;
     }
 
-    console.log()
+    //console.log()
 
   }
 
@@ -96,8 +96,8 @@ export class BuyVoucherComponent implements OnInit {
     this.SELECTED_PRICE = this.PRICE_LIST.filter( data => data.id == price_id);
 
     if (this.SELECTED_PRICE[0].is_button == true) this.CUSTOM_PRICE = '';
-    console.log('price_id' , price_id ,this.PRICE_LIST)
-    console.log(this.CUSTOM_PRICE)
+    //console.log('price_id' , price_id ,this.PRICE_LIST)
+    //console.log(this.CUSTOM_PRICE)
     //this.CUSTOM_PRICE = 0
   }
   
@@ -113,7 +113,7 @@ export class BuyVoucherComponent implements OnInit {
     if (this.SELECTED_PRICE.length == 0) return await this.apiData.presentAlert("Please select price first") 
 
     if (this.SELECTED_PRICE[0].is_button == false){
-      console.log()
+      //console.log()
       data.price = this.CUSTOM_PRICE;
     } else {
 
@@ -163,13 +163,13 @@ export class BuyVoucherComponent implements OnInit {
 
     this.router.navigate(['/voucher-summary']);
 
-    console.log('set data' , data)
+    //console.log('set data' , data)
 
   }
 
   navigation() {
 
-    console.log('back  button is triggered')
+    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 

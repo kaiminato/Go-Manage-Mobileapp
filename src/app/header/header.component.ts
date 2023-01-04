@@ -21,11 +21,11 @@ export class HeaderComponent implements OnInit {
   saveProfile (){
 
     this.updateUser.emit();
-    console.log('plpaese save profile')
+    //console.log('plpaese save profile')
   }
 
   back() {
     this.navigation.emit();
-    console.log('cliked')
+    //console.log('cliked')
   }
 }
