@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   //apiUrl : "https://91.250.249.133:4601/",
   //apiUrl: "https://release-sleet.gomanage.dev/",
   //apiUrl: "https://uat-sleet.gomanage.dev/",
