@@ -34,7 +34,7 @@ export class StaffServiceDetailsComponent implements OnInit {
 
   async ngOnInit() {
     
-    console.log('ngOnInit--');
+    //console.log('ngOnInit--');
     
   }
 
@@ -47,7 +47,7 @@ export class StaffServiceDetailsComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
       }
     );
 
@@ -59,7 +59,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     await this.getStaffBookingList();
 
     let booking_data = await this.dataService.getInitialBookingdata();
-    console.log('booking_data', booking_data)
+    //console.log('booking_data', booking_data)
     if (booking_data.date != '') {
 
       booking_data.date = '';
@@ -103,7 +103,7 @@ export class StaffServiceDetailsComponent implements OnInit {
 
       if (booking_data.servises.length > 0)  await this.__preFilledData();
      
-          console.log('this.CATEGORY_LIST ------------',this.CATEGORY_LIST)
+          //console.log('this.CATEGORY_LIST ------------',this.CATEGORY_LIST)
     }
 
 
@@ -124,7 +124,7 @@ export class StaffServiceDetailsComponent implements OnInit {
         if (checking_data.length > 0) {
           category.is_open = true;
           service.is_checked = true;
-          console.log('inside' , service)
+          //console.log('inside' , service)
         }
       }
     }
@@ -142,7 +142,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   changeCategoryStatus (service_id: any , status){
 
     this.CATEGORY_LIST[service_id].is_open = !status ;
-    console.log('this.CATEGORY_LIST----', service_id, this.CATEGORY_LIST)
+    //console.log('this.CATEGORY_LIST----', service_id, this.CATEGORY_LIST)
   }
 
 
@@ -185,7 +185,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     
     let selected_service_details = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
     
-    console.log('this.SERVICE_LIST++==', this.SERVICE_LIST)
+    //console.log('this.SERVICE_LIST++==', this.SERVICE_LIST)
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
