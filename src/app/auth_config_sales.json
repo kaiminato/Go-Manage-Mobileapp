@@ -1,0 +1,8 @@
+{
+  "domain": "go-manage-testing.eu.auth0.com",
+  "clientId": "hE8IRocaP3Ypv8DyBfRusMVKBMOOTzly",
+  "audience": "https://go-manage-testing.eu.auth0.com/",
+  "apiUri": "https://sales-sleet.gomanage.dev",
+  "appUri": "https://91.250.249.133:4400",
+  "errorPath": "/error"
+}
