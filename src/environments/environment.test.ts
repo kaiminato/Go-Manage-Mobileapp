@@ -2,7 +2,7 @@
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-import config from '../app/auth_config.json';
+import config from '../app/auth_config_test.json';
 
 const { domain, clientId, audience, apiUri, errorPath } = config as {
   domain: string;
@@ -13,12 +13,12 @@ const { domain, clientId, audience, apiUri, errorPath } = config as {
 };
 
 export const environment = {
-  production: false,
+  production: true,
 
   auth: {
     domain,
     clientId,
-    ...(audience && audience !== 'http://localhost:4301' ? { audience } : null),
+    ...(audience && audience !== 'https://dev-3h98vtcx.us.auth0.com/' ? { audience } : null),
     redirectUri: window.location.origin,
     errorPath,
     apiUri,
