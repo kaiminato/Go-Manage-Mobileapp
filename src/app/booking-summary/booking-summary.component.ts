@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router , ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
@@ -7,6 +7,7 @@ import { ApiDataService } from '../services/api-data.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { mergeMap } from 'rxjs/operators';
 import { Browser } from '@capacitor/browser';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-booking-summary',
@@ -14,8 +15,7 @@ import { Browser } from '@capacitor/browser';
   styleUrls: ['./booking-summary.component.scss'],
 })
 export class BookingSummaryComponent implements OnInit {
-
-  HEADING: string = "4";
+  HEADING: string = '4';
   DATE: string;
   TOTAL_DURATION: any = 0;
   STARTING_TIME: string;
@@ -31,163 +31,271 @@ export class BookingSummaryComponent implements OnInit {
     private router: Router,
     private location: Location,
     private dataService: DataService,
-    public  imageService: ImageService,
+    public imageService: ImageService,
     private apiData: ApiDataService,
     private activateRoute: ActivatedRoute,
     public auth: AuthService,
-    ) {
-
-    }
+    private alertController: AlertController
+  ) {}
 
   ngOnInit() {}
 
-  async ionViewWillEnter (){
+  async ionViewWillEnter() {
+    //console.log('my datttttttttttt----------');
+    await this.auth.getUser().subscribe(
+      async (response: any) => {
+        // Get auth data
 
-    this.activateRoute.queryParams
-      .subscribe(params => {
+        (await this.apiData.getMyProfile(response.email)).subscribe(
+          
+          async (user_info: any) => {
 
-        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+            //console.log('user_info---' , user_info)
+            if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
+            ) {
+
+              
+              this.presentAlert(response.email);
+            } else {
+              this._onEnterData();
+            }
+          },
+          (error: any) => {
+            //console.log('back-end-error');
+          }
+        );
+      },
+      (error: any) => {
+        //console.log('auth-error');
       }
     );
+  }
+
+  async _onEnterData() {
+    this.activateRoute.queryParams.subscribe((params) => {
+      this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+      //console.log('params', params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+    });
 
     this.BOOKINGS_DETAILS = await this.dataService.getInitialBookingdata();
-    this.BOOKING_WITH_STAFF = this.BOOKINGS_DETAILS.booking_type == this.dataService.BOOKING_WITH_STAFF ? true : false;
+    this.BOOKING_WITH_STAFF =
+      this.BOOKINGS_DETAILS.booking_type == this.dataService.BOOKING_WITH_STAFF
+        ? true
+        : false;
     if (this.BOOKINGS_DETAILS == '') {
-
-      this.router.navigate(['/'])
-      return
+      this.router.navigate(['/']);
+      return;
     }
 
-    this.BOOKINGS_DETAILS.staff_details = await this.dataService.getStaffDetail(this.BOOKINGS_DETAILS.staff_id);
-    let shift_timing_details = await this.dataService.getShift(this.BOOKINGS_DETAILS.date);
-    this.BOOKINGS_DETAILS.shift_timing_details = await shift_timing_details.filter( data => data.id == this.BOOKINGS_DETAILS.timing_id);
-    let [start_time , am_pm] = this.BOOKINGS_DETAILS.shift_timing_details[0].time.split(' ')
+    this.BOOKINGS_DETAILS.staff_details = await this.dataService.getStaffDetail(
+      this.BOOKINGS_DETAILS.staff_id
+    );
+    let shift_timing_details = await this.dataService.getShift(
+      this.BOOKINGS_DETAILS.date
+    );
+    this.BOOKINGS_DETAILS.shift_timing_details =
+      await shift_timing_details.filter(
+        (data) => data.id == this.BOOKINGS_DETAILS.timing_id
+      );
+    let [start_time, am_pm] =
+      this.BOOKINGS_DETAILS.shift_timing_details[0].time.split(' ');
 
     this.STARTING_TIME = `${start_time}${am_pm}`;
 
-    for (let service of this.BOOKINGS_DETAILS.servises){
-      
+    for (let service of this.BOOKINGS_DETAILS.servises) {
       this.TOTAL_DURATION += service.serviceDuration;
       this.TOTAL_AMOUNT += service.servicePrice;
     }
     //this.STUDIO_NAME = this.BOOKINGS_DETAILS.staff_details[0].firstName+" "+this.BOOKINGS_DETAILS.staff_details[0].lastName+ " "+this.STUDIO_NAME;
 
-    let [year , month , day ] = this.BOOKINGS_DETAILS.date.split('-');
+    let [year, month, day] = this.BOOKINGS_DETAILS.date.split('-');
     let new_date = new Date(this.BOOKINGS_DETAILS.date);
-    let get_month_name = await this.dataService.MONTHS_NAME[new_date.getMonth()]; 
+    let get_month_name = await this.dataService.MONTHS_NAME[
+      new_date.getMonth()
+    ];
 
     this.DATE = `${day} ${get_month_name} ${year}`;
 
-    var now = new Date(`${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`);
-    console.log('from',now)
-   
+    var now = new Date(
+      `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`
+    );
+    //console.log('from', now);
+
     now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
-    
+
     now = new Date(now); // Date object
-   
-   
-    let {without_space_time} = await this.formatAMPM(now)
+
+    let { without_space_time } = await this.formatAMPM(now);
     this.ENDING_TIME = without_space_time;
-    console.log('cheing --- ',this.formatAMPM(now))
-    
-    console.log('BOOKINGS_DETAILS-- ',get_month_name, this.BOOKINGS_DETAILS)
+    //console.log('cheing --- ', this.formatAMPM(now));
+
+    //console.log('BOOKINGS_DETAILS-- ', get_month_name, this.BOOKINGS_DETAILS);
 
     await this.checkLogin();
   }
 
-  async checkLogin () {
+  async checkLogin() {
+    await this.auth.getUser().subscribe((user_data: any) => {
+      //console.log('user_data', user_data);
 
-    await this.auth.getUser().subscribe(
-      (user_data: any) =>{
-        console.log('user_data' , user_data)
+      if (user_data !== undefined) {
+        this.IS_LOGIN = true;
+      }
+    });
+  }
 
-        if (user_data !== undefined){
-          
-          this.IS_LOGIN = true;
-        }
+  async presentAlert(email: string) {
+    const alert = await this.alertController.create({
+      header: 'Please enter your info',
+      inputs: [
+        {
+          label: 'First Name',
+          placeholder: 'Enter your first name ',
+          name: 'first_name',
+        },
+        {
+          label: 'Last Name',
+          placeholder: 'Enter your last name',
+          name: 'last_name',
+        },
+        {
+          label: 'Phone',
+          placeholder: 'Enter your phone number',
+          name: 'phone',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Save',
+          cssClass: 'secondary',
+          handler: (save_data) => {
+            if (
+              save_data.first_name.trim() != '' ||
+              save_data.last_name.trim() != '' || save_data.phone.trim() != ''
+            ) {
+
+              //console.log('not blank');
+              this._updateClient(save_data, email);
+              //this.test()
+            } else {
+              //console.log(' blank');
+              return false;
+            }
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async _updateClient(save_data: any, email: string) {
+    let data = {
+      // email: this.EMAIL,
+      given_name: save_data.first_name,
+      family_name: save_data.last_name,
+      phone_number: save_data.phone,
+    };
+
+    await this.apiData.presentLoading();
+
+    (await this.apiData.updateProfile(data, email)).subscribe(
+      async (response: any) => {
+        await this.apiData.dismiss();
+        //console.log('getting data after update--', response);
+
+        this._onEnterData();
+        return true;
+      },
+      async (error: any) => {
+        await this.apiData.dismiss();
+        await this.apiData.presentAlert('Server error, Please try again later');
+        //console.log('error during updating profile');
       }
     );
   }
 
   async formatAMPM(date) {
-    
     let hours = date.getHours();
     let minutes = date.getMinutes();
     let ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
     let str_time = hours + ':' + minutes + ' ' + ampm;
     let str_time_without_space = hours + ':' + minutes + ampm;
-    
-    return await {with_space_time: str_time , without_space_time: str_time_without_space};
+
+    return await {
+      with_space_time: str_time,
+      without_space_time: str_time_without_space,
+    };
   }
 
-  async saveBooking (){
-
-    console.clear();
-    console.log(this.BOOKINGS_DETAILS)
+  async saveBooking() {
+    //console.clear();
+    //console.log(this.BOOKINGS_DETAILS);
 
     if (!this.IS_LOGIN) {
-
       await this.dataService.setPreviousUrl('booking-summary');
       this.auth
-      .buildAuthorizeUrl()
-      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-      .subscribe();
+        .buildAuthorizeUrl()
+        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+        .subscribe();
 
-      return
+      return;
     }
 
-    await this.dataService.removePreviousUrl()
-    
+    await this.dataService.removePreviousUrl();
 
-    
-
-    console.log('startr---', `${this.BOOKINGS_DETAILS.date} ${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`)
+    // console.log(
+    //   'startr---',
+    //   `${this.BOOKINGS_DETAILS.date} ${this.BOOKINGS_DETAILS.shift_timing_details[0].value}`
+    // );
 
     let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}:00.000Z`;
-    let end_time = await this.addHours(this.BOOKINGS_DETAILS.shift_timing_details[0].value , this.TOTAL_DURATION);
+    let end_time = await this.addHours(
+      this.BOOKINGS_DETAILS.shift_timing_details[0].value,
+      this.TOTAL_DURATION
+    );
     let ending_date_time = `${this.BOOKINGS_DETAILS.date}T${end_time}:00.000Z`;
     let data = [];
 
     console.clear();
 
-   
-    
-
     await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
-      async (response: any) => { // Get auth data
-        
+      async (response: any) => {
+        // Get auth data
+
         (await this.apiData.getMyProfile(response.email)).subscribe(
-          async (user_info: any) => { // Get current user data
+          async (user_info: any) => {
+            // Get current user data
 
-            console.log('user_info' , user_info)
-            
-            
+            //console.log('user_info', user_info);
+
             let last_service_end_time = '';
-            for (let service of this.BOOKINGS_DETAILS.servises){
-
+            for (let service of this.BOOKINGS_DETAILS.servises) {
               let start_time = '';
               let end_time = '';
 
-              if (last_service_end_time == ''){
-
+              if (last_service_end_time == '') {
                 start_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.shift_timing_details[0].value}:00.000Z`;
-                last_service_end_time = await this.addHours(this.BOOKINGS_DETAILS.shift_timing_details[0].value , service.serviceDuration);
+                last_service_end_time = await this.addHours(
+                  this.BOOKINGS_DETAILS.shift_timing_details[0].value,
+                  service.serviceDuration
+                );
                 end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
-
               } else {
-
                 start_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
-                last_service_end_time = await this.addHours(last_service_end_time , service.serviceDuration);
+                last_service_end_time = await this.addHours(
+                  last_service_end_time,
+                  service.serviceDuration
+                );
                 end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
               }
 
-              data.push ( {
+              data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
@@ -198,95 +306,90 @@ export class BookingSummaryComponent implements OnInit {
                 service: service.serviceName,
                 serviceId: service.id,
                 firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
-                lastName:  this.BOOKINGS_DETAILS.staff_details[0].lastName,
-                email: user_info.email
-              })
-              
+                lastName: this.BOOKINGS_DETAILS.staff_details[0].lastName,
+                email: user_info.email,
+              });
             }
 
-            console.log(data);
+            //console.log(data);
 
             (await this.apiData.saveBooking(data)).subscribe(
               async (response: any) => {
-        
-                console.log('response--', response)
+                //console.log('response--', response);
                 //await this.dataService.removeBookingdata()
                 await this.apiData.dismiss();
-        
-                setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
-              }, 
-              async (error: any) => {
-        
-                console.log('error----', error)
-                console.log('error----', error.status)
 
-               
-                
+                setTimeout(() => {
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
+              },
+              async (error: any) => {
+                //console.log('error----', error);
+                //console.log('error----', error.status);
+
                 //await this.dataService.removeBookingdata()
                 await this.apiData.dismiss();
-                setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
-        
+                setTimeout(() => {
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
+
                 if (this.CANCEL_BOOKING_ID != 0) {
-        
-                  await this.deleteBooking()
+                  await this.deleteBooking();
                 }
-                setTimeout(() => { this.router.navigate(['/booking-complete']) }, 300);
+                setTimeout(() => {
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
               }
             );
           },
-          
-          async (error:any) => {
-            await this.apiData.dismiss();
-            console.log('profile error ', error)
-            await this.apiData.presentAlert('profile error'+ JSON.stringify(error))
-          }
-        )
 
+          async (error: any) => {
+            await this.apiData.dismiss();
+            //console.log('profile error ', error);
+            await this.apiData.presentAlert(
+              'profile error' + JSON.stringify(error)
+            );
+          }
+        );
       },
-      async (error:any) => {
+      async (error: any) => {
         await this.apiData.dismiss();
-        console.log('auth error ', error)
-        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+        //console.log('auth error ', error);
+        await this.apiData.presentAlert(
+          'auth api error' + JSON.stringify(error)
+        );
       }
     );
-
-    
   }
 
   async deleteBooking() {
-
     (await this.apiData.deleteBooking(this.CANCEL_BOOKING_ID)).subscribe(
       async (response: any) => {
-
-        console.log('response delete booking' , response)
+        //console.log('response delete booking', response);
       },
       async (error: any) => {
-        
-        console.log('error', error)
+        //console.log('error', error);
       }
     );
   }
 
-  async addHours (time: string , add_duration: number) {
-    
-    let [hours , minut] = time.split(':');
-    console.log(hours , minut)
-    
+  async addHours(time: string, add_duration: number) {
+    let [hours, minut] = time.split(':');
+    //console.log(hours, minut);
 
-    let total_minuts = parseInt(hours) * 60 + parseInt(minut) + add_duration
-    let h : any = ~~(total_minuts / 60)
-    let m : any = total_minuts % 60
-    h = h.toString().length == 1 ?'0'+h : h;
-    m = m.toString().length == 1 ?'0'+m : m;
+    let total_minuts = parseInt(hours) * 60 + parseInt(minut) + add_duration;
+    let h: any = ~~(total_minuts / 60);
+    let m: any = total_minuts % 60;
+    h = h.toString().length == 1 ? '0' + h : h;
+    m = m.toString().length == 1 ? '0' + m : m;
     time = `${h}:${m}`;
 
-    console.log('RETURN', time)
+    //console.log('RETURN', time);
     return time;
   }
 
   navigation() {
-
     //this.router.navigate(['/select-a-time'])
     this.location.back();
   }
-} 
+}

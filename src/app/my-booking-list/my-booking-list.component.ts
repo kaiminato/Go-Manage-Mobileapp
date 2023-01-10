@@ -40,6 +40,15 @@ export class MyBookingListComponent implements OnInit {
     await this.getBookings();
   }
 
+  async ionViewWillLeave () {
+
+    this.RECENT_BOOKING_LIST = [];
+    this.FUTURE_BOOKING_LIST = [];
+    this.ALL_BOOKING_LIST = [];
+
+    //console.log('leaving')
+  }
+
   async getBookings () {
 
     await this.apiData.presentLoading();
@@ -47,26 +56,28 @@ export class MyBookingListComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => { 
 
-        console.log('response' , response);
+        //console.log('response' , response);
 
+        //response.email = 'gomanagetest@gmail.com';
+        
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
 
-            console.log('user_info' , user_info);
+            //console.log('user_info' , user_info);
 
             (await this.apiData.retrievSingleUserBooking(user_info.userGMID)).subscribe(
               async (response: any) => {
         
                 
                 //response = response.filter( data => new Date() < new Date(data.endTime))
-                console.log('response after filter-----' , response)
+                //console.log('response after filter-----' , response)
                 
                 if (response.length >0) {
         
                     
-                    this.RECENT_BOOKING_LIST = []
-                    this.FUTURE_BOOKING_LIST = []
-                    this.ALL_BOOKING_LIST = []
+                    this.RECENT_BOOKING_LIST = [];
+                    this.FUTURE_BOOKING_LIST = [];
+                    this.ALL_BOOKING_LIST = [];
 
                     for (let index = 0; index < response.length; index++){
         
@@ -97,8 +108,8 @@ export class MyBookingListComponent implements OnInit {
                 const today = new Date()
                 let tomorrow: any = new Date(today)
                 tomorrow.setDate(tomorrow.getDate() + 1);
-                tomorrow = tomorrow.getFullYear()+'-'+(tomorrow.getMonth()+1)+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
-                console.log('tomorrow---' , tomorrow)
+                tomorrow = tomorrow.getFullYear()+'-'+((tomorrow.getMonth()+1) < 10 ? `0${(tomorrow.getMonth()+1)}` : (tomorrow.getMonth()+1))+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
+                //console.log('tomorrow---' , tomorrow)
 
 
                 this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => <any>new Date(tomorrow).getTime() > <any>new Date(data.compare_date_time).getTime())
@@ -108,30 +119,30 @@ export class MyBookingListComponent implements OnInit {
                     
                 this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
                 
-                console.log('this.ALL_BOOKING_LIST---' , this.ALL_BOOKING_LIST)
-                console.log('this.RECENT_BOOKING_LIST---' , this.RECENT_BOOKING_LIST)
-                console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
+                // console.log('this.ALL_BOOKING_LIST---' , this.ALL_BOOKING_LIST)
+                // console.log('this.RECENT_BOOKING_LIST---' , this.RECENT_BOOKING_LIST)
+                // console.log('this.FUTURE_BOOKING_LIST---' , this.FUTURE_BOOKING_LIST)
         
                 await this.apiData.dismiss();
               },
               async (error: any) => {
         
                 await this.apiData.dismiss();
-                console.log('error', error)
+                //console.log('error', error)
               }
             );
 
           },
           async (error:any) => {
             await this.apiData.dismiss();
-            console.log('profile error ', error)
+            //console.log('profile error ', error)
             await this.apiData.presentAlert('profile error'+ JSON.stringify(error))
           }
         )
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        console.log('auth error ', error)
+        //console.log('auth error ', error)
         await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
@@ -155,7 +166,7 @@ export class MyBookingListComponent implements OnInit {
 
   async cancelBooking (id: any) {
 
-    console.log(id)
+    //console.log(id)
 
     const alert = await this.alertController.create({
       header: 'Do you want cancel this booking ?',
@@ -166,7 +177,7 @@ export class MyBookingListComponent implements OnInit {
           text: 'No',
           role: 'cancel',
           handler: () => {
-           console.log('cancel');
+           //console.log('cancel');
           },
         },
         {
@@ -180,7 +191,7 @@ export class MyBookingListComponent implements OnInit {
               async (response: any) => {
 
                 await this.apiData.dismiss();
-                console.log('response', response)
+                //console.log('response', response)
                 let msg_alert = await this.alertController.create({
                   header: 'You have successfully cancelled this booking',
                   cssClass:'my-custom-class',
@@ -199,7 +210,7 @@ export class MyBookingListComponent implements OnInit {
               async (error: any) => {
 
                 await this.apiData.dismiss();
-                console.log('error', error)
+                //console.log('error', error)
               }
             );
 
@@ -218,7 +229,7 @@ export class MyBookingListComponent implements OnInit {
 
   navigation() {
 
-    console.log('back  button is triggered')
+    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 
