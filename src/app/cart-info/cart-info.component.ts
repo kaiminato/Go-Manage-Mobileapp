@@ -31,7 +31,7 @@ export class CartInfoComponent implements OnInit {
 
   navigation() {
 
-    console.log('back  button is triggered')
+    //console.log('back  button is triggered')
     this.location.back();
   }
 

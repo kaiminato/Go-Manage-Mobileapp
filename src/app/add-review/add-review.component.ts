@@ -22,7 +22,7 @@ export class AddReviewComponent implements OnInit {
 
   navigation() {
 
-    console.log('back  button is triggered')
+    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 }
