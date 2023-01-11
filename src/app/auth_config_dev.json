@@ -2,7 +2,7 @@
   "domain": "dev-3h98vtcx.us.auth0.com",
   "clientId": "zqZNjeGcp8P5nkjRQA2ErbzKsh0RKdlj",
   "audience": "https://dev-3h98vtcx.us.auth0.com/",
-  "apiUri": "https://uat-sleet.gomanage.dev",
+  "apiUri": "https://uat-sleet.gomanage.dev/",
   "appUri": "http://localhost:4300",
   "errorPath": "/error"
 }
