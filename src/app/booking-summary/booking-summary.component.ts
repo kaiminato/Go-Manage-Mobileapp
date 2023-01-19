@@ -192,9 +192,9 @@ export class BookingSummaryComponent implements OnInit {
   async _updateClient(save_data: any, email: string) {
     let data = {
       // email: this.EMAIL,
-      given_name: save_data.first_name,
-      family_name: save_data.last_name,
-      phone_number: save_data.phone,
+      givenName: save_data.first_name,
+      familyName: save_data.last_name,
+      phoneMobile: save_data.phone,
     };
 
     await this.apiData.presentLoading();
