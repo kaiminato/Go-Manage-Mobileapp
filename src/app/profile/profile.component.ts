@@ -14,7 +14,7 @@ export class ProfileComponent implements OnInit {
   HEADING: string = "My Profile";
   IS_PROFILE_SCREEN: boolean = true;
   EDIT_PROFILE: boolean = false;
-  PROFILE_HEADER: any = {is_profile: this.IS_PROFILE_SCREEN , edit_profile: this.EDIT_PROFILE}
+  PROFILE_HEADER: any = { is_profile: this.IS_PROFILE_SCREEN, edit_profile: this.EDIT_PROFILE }
   SHORT_NAME: string = '';
   FIRST_NAME: string = '';
   LAST_NAME: string = '';
@@ -218,13 +218,14 @@ export class ProfileComponent implements OnInit {
     //console.log('my data' , dat)
    
 
+
     let data = {
       // email: this.EMAIL,
-      given_name: this.FIRST_NAME,
-      family_name: this.LAST_NAME,
+      givenName: this.FIRST_NAME,
+      familyName: this.LAST_NAME,
       //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
-      phone_number: this.PHONE.toString(),
-      user_metadata : {
+      phoneMobile: this.PHONE.toString(),
+      user_metadata: {
         //addresses : this.HOME_LOCATION,
         addresses: {
           work_address: this.HOME_LOCATION
