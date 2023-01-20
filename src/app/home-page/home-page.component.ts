@@ -58,6 +58,8 @@ export class HomePageComponent implements OnInit {
 
     //console.log('texting.........')
 
+    await this.apiData._updateUserId();
+
     await this.checkPreviousUrl();
   }
 
