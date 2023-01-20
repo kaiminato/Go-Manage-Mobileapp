@@ -67,7 +67,6 @@ export class MakeABookingComponent implements OnInit {
     this.IS_STAFF = true;
 
     await this.getStaffList();
-    await this.apiData._updateUserId();
   }
 
   async  getStaffList (){
