@@ -41,7 +41,8 @@ export class BookingSummaryComponent implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter() {
-    //console.log('my datttttttttttt----------');
+    
+    await this.apiData._updateUserId();
     await this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
@@ -147,6 +148,7 @@ export class BookingSummaryComponent implements OnInit {
   async presentAlert(email: string) {
     const alert = await this.alertController.create({
       header: 'Please enter your info',
+      backdropDismiss: false,
       inputs: [
         {
           label: 'First Name',
