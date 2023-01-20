@@ -67,6 +67,7 @@ export class MakeABookingComponent implements OnInit {
     this.IS_STAFF = true;
 
     await this.getStaffList();
+    await this.apiData._updateUserId();
   }
 
   async  getStaffList (){
@@ -199,7 +200,6 @@ export class MakeABookingComponent implements OnInit {
 
   async SelectStaff (staff_id: any) {
 
-   
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
     initial_data.staff_id = staff_id;
