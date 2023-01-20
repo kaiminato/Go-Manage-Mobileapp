@@ -56,6 +56,7 @@ export class ProfileComponent implements OnInit {
 
   async ionViewWillEnter () {
 
+    await this.apiData._updateUserId();
     await this._getUserInfo();
   }
 
