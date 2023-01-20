@@ -241,7 +241,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let all_staff = await this.dataService.getStaffList();
     
     
-
     for (let shift of all_shift) {
       
       let check_date_time = new Date(`${date} ${shift.value}`);
@@ -249,7 +248,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       
       for (let staff of all_staff){
  
-        let staff_date_booking = await this.dataService.getStaffBookingDetailWithDate(staff.id, date)
+        let staff_date_booking = await this.dataService.getStaffBookingDetailWithDate(staff.employee_id, date)
         staff_date_booking.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); }); // sort array in ascending order
         
         if (staff_date_booking.length == 0) continue;
@@ -296,7 +295,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       return
     }
 
-    let selecetd_shift = this.MORNING_SHIFT.filter(data => data.id == id);
+    let selecetd_shift = await this.MORNING_SHIFT.filter(data => data.id == id);
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.date;
     get_booking_data.timing_id = id;
