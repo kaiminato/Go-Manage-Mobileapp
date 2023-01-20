@@ -517,13 +517,12 @@ export class SelectTimingComponent implements OnInit {
             
             let data = {
                           "userId": user_info.userGMID,
-                          "staffId": 1,
+                          "staffId": get_booking_data.staff_id,
                           "isPending": 1,
                           "startTime": create_pending_booking_start_time,
                           "endTime": pen_book_end_time,
                           "serviceId": get_booking_data.servises[0].id
                       };
-
 
             (await this.apiData.createPendingAppointment(data)).subscribe(
               async (response: any) => {

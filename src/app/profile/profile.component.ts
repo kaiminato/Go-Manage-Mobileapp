@@ -78,15 +78,13 @@ export class ProfileComponent implements OnInit {
 
             await this.apiData.dismiss();
 
-            //console.log('user_info', user_info)
+            console.log('user_info', user_info)
             this.RESPONSE = user_info;
             let user_details = user_info
             //console.log('cmoing----------->')
             
            
-          
             if (user_details.givenName == 'null' && user_details.familyName == 'null'){
-
 
               let name_array = user_details.name.split(' ');
               if (name_array.length >1) {
@@ -106,12 +104,16 @@ export class ProfileComponent implements OnInit {
               }
             } else {
               
-              
+              console.log('testing---' , )
+
               if (user_details.hasOwnProperty('givenName')) {
 
                 this.SHORT_NAME = (<any> Array.from(user_details.givenName)[0]).toUpperCase() +""+(<any> Array.from(user_details.familyName)[0]).toUpperCase();
                 this.FIRST_NAME = user_details.givenName;
                 this.LAST_NAME = user_details.familyName;
+              } else if (!user_details.hasOwnProperty('name')) {
+
+                this.SHORT_NAME = (<any> Array.from(user_details.email)[0]).toUpperCase();
               } else {
                 this.SHORT_NAME = (<any> Array.from(user_details.name)[0]).toUpperCase();
                 this.FIRST_NAME = user_details.name;
@@ -221,15 +223,13 @@ export class ProfileComponent implements OnInit {
 
     let data = {
       // email: this.EMAIL,
-      given_name: this.FIRST_NAME,
-      family_name: this.LAST_NAME,
+      givenName: this.FIRST_NAME,
+      familyName: this.LAST_NAME,
       //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
-      phone_number: this.PHONE.toString(),
+      phoneMobile: this.PHONE.toString(),
       user_metadata : {
         //addresses : this.HOME_LOCATION,
-        addresses: {
-          work_address: this.HOME_LOCATION
-        },
+        addresses: [this.HOME_LOCATION],
         gender: this.GENDER,
         dob: D_O_B,
       }
