@@ -178,9 +178,6 @@ export class DataService {
     return this.ALL_SHIFT;
   }
 
-  async getStaffOnDateAllShift (staff_id: any , date: any) {
-
-  }
 
   async getShift (date: string){
 
@@ -357,7 +354,7 @@ export class DataService {
     let staff_list: any = await localStorage.getItem(this.STAFF_LIST_KEY);
     staff_list = staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
 
-   return await staff_list.filter( data => data.id == staff_id);
+   return await staff_list.filter( data => data.employee_id == staff_id);
   }
 
   async getServiceList () {
