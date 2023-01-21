@@ -178,9 +178,6 @@ export class DataService {
     return this.ALL_SHIFT;
   }
 
-  async getStaffOnDateAllShift (staff_id: any , date: any) {
-
-  }
 
   async getShift (date: string){
 
