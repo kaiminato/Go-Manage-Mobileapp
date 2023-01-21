@@ -58,6 +58,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     //this.ALL_SHIFT = await this.dataService.getStaticShift();
     let booking_data = await this.dataService.getInitialBookingdata();
     let date = booking_data.date;
+    
     this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date(date).getDay());
     
   
@@ -75,14 +76,14 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
       //if (staff.id == 1 || staff.id == 5) continue
       //console.log(booking_data.date , staff.id)
-      let is_date_off = await this.dataService.isStaffDateOff(booking_data.date , staff.id)
+      let is_date_off = await this.dataService.isStaffDateOff(booking_data.date , staff.employee_id)
       
       //console.log('is_date_off---', is_date_off)
 
       // If Staff have selected date as off day
       if (is_date_off) continue; 
         
-      let staff_date_booked_data = this.BOOKING_LIST.filter ( data => data.employeeId == staff.id && data.startTime.includes(booking_data.date))
+      let staff_date_booked_data = this.BOOKING_LIST.filter ( data => data.employeeId == staff.employee_id && data.startTime.includes(booking_data.date))
       
       // ascending order
       staff_date_booked_data.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
