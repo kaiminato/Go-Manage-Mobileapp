@@ -199,7 +199,6 @@ export class MakeABookingComponent implements OnInit {
 
   async SelectStaff (staff_id: any) {
 
-   
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
     initial_data.staff_id = staff_id;
