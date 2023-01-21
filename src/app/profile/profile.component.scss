@@ -7,6 +7,9 @@ ion-content {
         .user-name {
             padding: 10%;
     
+            ion-icon {
+                cursor: pointer;
+            }
             ion-text {
                 //border: 2px solid;
                 padding: 5%;
