@@ -1,0 +1,8 @@
+{
+  "domain": "go-manage-production.eu.auth0.com",
+  "clientId": "EiOmmd6tGJRKBAcwfOTuXa2gliFFBchM",
+  "audience": "https://go-manage-production.eu.auth0.com/",
+  "apiUri": "https://10001-Sleet.gomanage.io/",
+  "appUri": "https://194.26.213.165:4300",
+  "errorPath": "/error"
+}
