@@ -340,14 +340,15 @@ export class SelectTimingComponent implements OnInit {
     
 
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
-
+    
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
     
     for (let index in this.DAYS_ARRAY){
 
-      let create_date = `${year}-${month < 10 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
-      
+      let create_date = `${year}-${month.length < 2 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+     
+
       let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
       let is_date_off = await this.dataService.isDateOff(create_date);
@@ -373,7 +374,7 @@ export class SelectTimingComponent implements OnInit {
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    //console.clear()
+    
     
     let day_num = new Date(this.date).getDay();
     let is_selected_day_off = await staff_detail[0].staffDetailFormatted.filter( data => data.dayId == day_num);
@@ -381,12 +382,10 @@ export class SelectTimingComponent implements OnInit {
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
-    
 
     let break_start_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
     let break_end_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
     break_end_time.setMinutes(break_end_time.getMinutes() - 1);
-
 
     for (let index in this.ALL_SHIFT){
 
