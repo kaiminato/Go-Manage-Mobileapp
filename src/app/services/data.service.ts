@@ -18,7 +18,7 @@ export class DataService {
                             { name: 'Sunday'    , value: 7}, 
                           ];
 
-  public DAYS_OFF_NUMBER: any = [ 1, 2, 3, 4, 5, 6, 7]; // ['monday, tuesdat .... respectivly]
+  public DAYS_OFF_NUMBER: any = [ 1, 2, 3, 4, 5, 6, 7]; // ['monday, tuesday .... respectivly]
   public DAYS_NAME: any = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   public SHORT_DAYS_NAME: any = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   public CURRENT_YEAR: number = new Date().getFullYear();
