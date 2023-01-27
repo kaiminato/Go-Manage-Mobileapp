@@ -382,7 +382,6 @@ export class SelectTimingComponent implements OnInit {
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
     
- 
 
     let break_start_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
     let break_end_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
@@ -400,23 +399,32 @@ export class SelectTimingComponent implements OnInit {
       } else {
 
        
-        
-        for (let value of selected_date_booking_list) {
+        if (selected_date_booking_list.length > 0) {
+          
+          for (let value of selected_date_booking_list) {
 
-          let start_time = new Date(value.startTime)
-          let end_time = new Date(value.endTime)
-          end_time.setMinutes(end_time.getMinutes() - 1)
-          
-          
-          
-          if (this.ALL_SHIFT[index].is_disabled == false) {
-  
-            if ((start_time <= new_date && end_time >= new_date) || (break_start_time <= new_date && break_end_time >= new_date)){
-              
-              this.ALL_SHIFT[index].is_disabled = true;
+            let start_time = new Date(value.startTime)
+            let end_time = new Date(value.endTime)
+            end_time.setMinutes(end_time.getMinutes() - 1)
+            
+            
+            if (this.ALL_SHIFT[index].is_disabled == false) {
+    
+              if ((start_time <= new_date && end_time >= new_date) || (break_start_time <= new_date && break_end_time >= new_date)){
+                
+                this.ALL_SHIFT[index].is_disabled = true;
+              }
             }
+          } 
+
+        } else {
+          if (break_start_time <= new_date && break_end_time >= new_date){
+                
+            this.ALL_SHIFT[index].is_disabled = true;
           }
-        } 
+        }
+        
+        
       }
       
     }

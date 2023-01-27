@@ -260,25 +260,35 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
         break_end_time.setMinutes(break_end_time.getMinutes() - 1);
         
 
-        if (staff_date_booking.length == 0) continue;
+        if (staff_date_booking.length > 0){
 
-        for (let booking of staff_date_booking) {
+          for (let booking of staff_date_booking) {
 
-          let start_date_time = new Date(booking.startTime);
-          let end_date_time = new Date(booking.endTime)
-          end_date_time = new Date(end_date_time.setMinutes(end_date_time.getMinutes() - 1))
-
-          
-
-          // if (check_date_time >= start_date_time && check_date_time <= end_date_time) shift.staff_ids.push(staff.id);
-
-          if ((check_date_time >= start_date_time && check_date_time <= end_date_time) || (break_start_time <= check_date_time && break_end_time >= check_date_time)
-          ) {
+            let start_date_time = new Date(booking.startTime);
+            let end_date_time = new Date(booking.endTime)
+            end_date_time = new Date(end_date_time.setMinutes(end_date_time.getMinutes() - 1))
+  
             
-              shift.staff_ids.push(staff.id);
-
+  
+            // if (check_date_time >= start_date_time && check_date_time <= end_date_time) shift.staff_ids.push(staff.id);
+  
+            if ((check_date_time >= start_date_time && check_date_time <= end_date_time) || (break_start_time <= check_date_time && break_end_time >= check_date_time)
+            ) {
+              
+                shift.staff_ids.push(staff.id);
+  
+            }
           }
+        } else {
+
+          if (break_start_time <= check_date_time && break_end_time >= check_date_time){
+              
+                shift.staff_ids.push(staff.id);
+  
+            }
         }
+
+        
        
       }
 
@@ -297,9 +307,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     }
 
     this.MORNING_SHIFT = all_shift;
-
-    console.log('shift------------', this.MORNING_SHIFT)
-    console.log('clearpppppppppppp')
     return
     //console.log('this-------------' ,this.MORNING_SHIFT)
   }
