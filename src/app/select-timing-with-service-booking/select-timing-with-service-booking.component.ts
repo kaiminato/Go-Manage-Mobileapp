@@ -248,9 +248,18 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       
       for (let staff of all_staff){
  
+        
         let staff_date_booking = await this.dataService.getStaffBookingDetailWithDate(staff.employee_id, date)
         staff_date_booking.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); }); // sort array in ascending order
         
+        let day_num = new Date(date).getDay();
+        let is_selected_day_off = await staff.staffDetailFormatted.filter( data => data.dayId == day_num);
+          
+        let break_start_time = new Date(`${date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
+        let break_end_time = new Date(`${date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
+        break_end_time.setMinutes(break_end_time.getMinutes() - 1);
+        
+
         if (staff_date_booking.length == 0) continue;
 
         for (let booking of staff_date_booking) {
@@ -258,9 +267,17 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
           let start_date_time = new Date(booking.startTime);
           let end_date_time = new Date(booking.endTime)
           end_date_time = new Date(end_date_time.setMinutes(end_date_time.getMinutes() - 1))
+
           
-          if (check_date_time >= start_date_time && check_date_time <= end_date_time) shift.staff_ids.push(staff.id);
-          
+
+          // if (check_date_time >= start_date_time && check_date_time <= end_date_time) shift.staff_ids.push(staff.id);
+
+          if ((check_date_time >= start_date_time && check_date_time <= end_date_time) || (break_start_time <= check_date_time && break_end_time >= check_date_time)
+          ) {
+            
+              shift.staff_ids.push(staff.id);
+
+          }
         }
        
       }
@@ -280,8 +297,9 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     }
 
     this.MORNING_SHIFT = all_shift;
-    //console.log('shift------------', this.MORNING_SHIFT)
-    //console.log('clearpppppppppppp')
+
+    console.log('shift------------', this.MORNING_SHIFT)
+    console.log('clearpppppppppppp')
     return
     //console.log('this-------------' ,this.MORNING_SHIFT)
   }
