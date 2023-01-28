@@ -66,13 +66,14 @@ export class DataService {
   async getDays (month: any , year: any) {
     
     month = month.toString().length > 1 ? month : '0'+month
+    
     let date = new Date();
     let firstDay = (new Date(parseInt(year), parseInt(month), 1)).getDate();
     let lastDay = (new Date(parseInt(year), parseInt(month) , 0)).getDate();
 
     let get_booking_values = await this.getInitialBookingdata();
     let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
-    //console.log('staff_detail----' , staff_detail)
+    
     let days_list = [];
 
     for (let i = 1; i <= lastDay; i++){
@@ -81,8 +82,7 @@ export class DataService {
       
       var dayName = this.SHORT_DAYS_NAME[new_date.getDay()];
 
-      let d = new Date(new_date);
-      let day_name = this.DAYS_NAME[d.getDay()];
+      let day_name = this.DAYS_NAME[new_date.getDay()];
     
       let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
       let current_date_id = select_day[0].value;
