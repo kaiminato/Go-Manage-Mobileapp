@@ -94,10 +94,10 @@ export class SelectTimingComponent implements OnInit {
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
     
+    
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
-    
     
 
     if (staff_detail.length > 0) {
@@ -116,6 +116,8 @@ export class SelectTimingComponent implements OnInit {
             }
         }
       );
+
+      
 
       
       this.options.disableWeeks = weekly_off_days;
@@ -189,6 +191,7 @@ export class SelectTimingComponent implements OnInit {
     
     let uniq_dates = [...new Set(array)];
 
+
     this.DISABLED_DATES_ARRAY = [];
 
     for(let current_date of uniq_dates) {
@@ -204,6 +207,7 @@ export class SelectTimingComponent implements OnInit {
           let from_date = new Date(booking_detail.startTime);
           let to_date = new Date(booking_detail.endTime)
           to_date.setMinutes(to_date.getMinutes() - 1)
+          
           
           let check_date = new Date(current_date+'T'+shift.value);
 
