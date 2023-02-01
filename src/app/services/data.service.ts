@@ -286,7 +286,15 @@ export class DataService {
     let h = (H % 12) || 12;
     let ampm = H < 12 ? " AM" : " PM";
     timeString = h + timeString.substr(2, 3) + ampm;
-    let data = {id: this.ALL_SHIFT.length + 1 ,time: timeString , shift_type: this.MORNING_SHIFT ,  value: value, is_active: false, is_disabled: false};
+    let data = {
+                  id: this.ALL_SHIFT.length + 1 ,
+                  time: timeString , 
+                  shift_type: this.MORNING_SHIFT ,  
+                  value: value, 
+                  is_active: false, 
+                  is_disabled: false,
+                  soft_disabled: false
+                };
     this.ALL_SHIFT.push(data);
     
     return await data
