@@ -387,8 +387,6 @@ export class SelectTimingComponent implements OnInit {
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
 
-    console.log('selected_date_booking_list----' , selected_date_booking_list);
-
     let break_start_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
     let break_end_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
     break_end_time.setMinutes(break_end_time.getMinutes() - 1);
@@ -435,16 +433,18 @@ export class SelectTimingComponent implements OnInit {
     }
 
 
-    console.log('all shift-----' , this.ALL_SHIFT);
-
     let booking_total_duration = 0;
     let total_shift_will_count = 1;
 
     for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
 
+    booking_total_duration = booking_total_duration - 1;
+    console.log('booking_total_duration---' , booking_total_duration);
+
+
     total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
 
-    // console.log('total_shift_will_count--' , total_shift_will_count);
+    console.log('total_shift_will_count--' , total_shift_will_count);
 
     if (total_shift_will_count != 1) {
 
@@ -454,30 +454,22 @@ export class SelectTimingComponent implements OnInit {
         
         if (this.ALL_SHIFT[index]['is_disabled'] == false) {
 
-          console.log('outside',  this.ALL_SHIFT[index]);
           for (let i = 1; i < total_shift_will_count; i++) {
             
             let num = Number(index)+i;
-            console.log('num---' , num)
+           
 
             if (typeof this.ALL_SHIFT[num] !== 'undefined') {
 
               if (this.ALL_SHIFT[num]['is_disabled'] == true && checked_pass == true) {
               
-                console.log('yess------------------------')
                 checked_pass = false;
               }
-              console.log('ii', i, Number(index) + i, this.ALL_SHIFT[ Number(index) + i]);
   
             } else {
 
               checked_pass = false;
             }
-           
-            console.log('')
-            console.log('')
-            console.log('')
-            
           }
 
           if (!checked_pass) {
@@ -488,9 +480,6 @@ export class SelectTimingComponent implements OnInit {
         }
       }
     }    
-
-  
-    console.log('finally list----' , this.ALL_SHIFT)
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);    
@@ -556,9 +545,7 @@ export class SelectTimingComponent implements OnInit {
     }
 
     
-    console.log('end----')
-
-    return ;
+    
 
     if (!this.IS_LOGIN) {
 
@@ -627,6 +614,8 @@ export class SelectTimingComponent implements OnInit {
                     
                     this.removePendingBooking();
                   }, 300000);
+
+                  
 
                   setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
                   

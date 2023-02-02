@@ -214,6 +214,12 @@ export class DataService {
     let second_start_time = staff_available_date_id[0]?.timeAwayTo;
     let second_end_time = staff_available_date_id[0]?.endShiftTime;
     
+    second_end_time  = new Date(`${date}T${second_end_time}`);
+    second_end_time.setMinutes(second_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
+
+    second_end_time = second_end_time.getHours() + ':' + (second_end_time.getMinutes() == 0 ? '00' : second_end_time.getMinutes())+":"+(second_end_time.getSeconds() == 0 ? '00': second_end_time.getSeconds())
+    
+   
     if (first_end_time != null && second_start_time != null ) {
 
       await this.returnTimesInBetween(first_start_time , first_end_time);
@@ -255,9 +261,7 @@ export class DataService {
 
   async returnTimesInBetween(start, end) {
     var timesInBetween = [];
-    
-    //console.log('time start', start ,'time end', end);
-
+   
     var startH = parseInt(start.split(":")[0]);
     var startM = parseInt(start.split(":")[1]);
     var endH = parseInt(end.split(":")[0]);
@@ -274,6 +278,7 @@ export class DataService {
     timesInBetween.push(endH + ":00");
     if (endM == 30)
       timesInBetween.push(endH + ":30")
+
   
     return await timesInBetween.map(data => this.getGenTime(data));
   }
