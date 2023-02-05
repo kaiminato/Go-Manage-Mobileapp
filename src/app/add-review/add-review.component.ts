@@ -21,8 +21,6 @@ export class AddReviewComponent implements OnInit {
   ngOnInit() {}
 
   navigation() {
-
-    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 }

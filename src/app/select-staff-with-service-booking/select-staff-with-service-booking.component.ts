@@ -45,7 +45,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+        
       }
     );
 
@@ -61,24 +61,19 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     
     this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date(date).getDay());
     
-  
-    //console.log('this.STAFF_LIST-----', this.STAFF_LIST, this.ALL_SHIFT)
-    
     await this.filterStaffList();
   }
 
   async filterStaffList () {
 
     let booking_data = await this.dataService.getInitialBookingdata();
-    //console.log('booking_data----', booking_data)
-
+    
     for (let staff of this.STAFF_LIST) {
 
       //if (staff.id == 1 || staff.id == 5) continue
-      //console.log(booking_data.date , staff.id)
+      
       let is_date_off = await this.dataService.isStaffDateOff(booking_data.date , staff.employee_id)
       
-      //console.log('is_date_off---', is_date_off)
 
       // If Staff have selected date as off day
       if (is_date_off) continue; 
@@ -87,8 +82,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
       
       // ascending order
       staff_date_booked_data.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
-      //console.log('staff_date_booked_data-----', staff_date_booked_data)
- 
+      
       // If staff don't have any booking on selected date
 
       if (staff_date_booked_data.length == 0) { 
@@ -112,8 +106,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
           let from_date = new Date(booking_detail.startTime);
           let to_date = new Date(booking_detail.endTime);
           to_date.setMinutes(to_date.getMinutes() - 1)
-          //console.log('to_date--', to_date)
-
+          
           if (check_date >= from_date && check_date <= to_date){ 
 
             shift.is_disabled = true;
@@ -142,30 +135,19 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
       let is_passed = true;
     
-      //console.log('is_passed' , is_passed , shift_list.filter(data => data.is_disabled == true))
       for (let shift of shift_list) {
 
         let new_date = new Date(`${booking_data.date} ${shift.value}`)
-        //console.log('checking here', new_date)
+        
         if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
-
-          //console.log('shift.is_disabled', shift)
           is_passed = false;
         }
       }
       
-      //console.log('is_passed' , is_passed)
       if (is_passed) {
         this.AVAILABLE_STAFF.push(staff);
       }
 
-      
-
-      // console.clear()
-      // console.log('starting_date_time--', starting_date_time , 'ending_date_time', ending_date_time)
-
-      // console.log('booking_data.servises', booking_data.servises)
-      // console.log('shift_list---' , 'total_duration', total_duration, shift_list)
     }
     
     if (this.AVAILABLE_STAFF.length == 0) this.presentAlert('No staff is free for the selected date and time')
@@ -190,10 +172,6 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
   }
 
   async SelectStaff (staff_id: any){
-
-    //console.log('staff id ', staff_id)
-
-    //console.log('this.IS_LOGIN-----' , this.IS_LOGIN)
 
     if (!this.IS_LOGIN) {
 
@@ -226,9 +204,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
     let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
-    // console.log('starting_date_time---' ,create_pending_booking_start_time)
-    // console.log('ending_date_time---' ,create_pending_booking_end_time)
-
+    
     await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
@@ -236,9 +212,6 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
-
-            
-            //console.log('user_info' , user_info)
 
             let data = {
                           "userId": user_info.userGMID,
@@ -253,7 +226,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
               async (response: any) => {
 
                 await this.apiData.dismiss();
-                //console.log('response-------pppppppp' , response)
+                
               },
               async (error:any) => {
                 await this.apiData.dismiss();
@@ -277,8 +250,6 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
                   await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
                 }
-
-                //console.log('pending booking server error ', error)
                 
               }
             );
@@ -288,7 +259,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
           
           async (error:any) => {
             await this.apiData.dismiss();
-            //console.log('profile error ', error)
+            
             await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
           }
         )
@@ -296,7 +267,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        //console.log('auth error ', error)
+        
         await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
@@ -305,7 +276,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     return
     // this.router.navigate(['/booking-summary'],{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
     
-    // console.log('booking_data--', booking_data)
+    
   }
 
   async removePendingBooking () {
@@ -316,24 +287,21 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
 
-            //console.log('user_info' , user_info);
 
               (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
                 (response: any) => {
 
-                  //console.log('hiddin---' , response)
                 },
 
                 (error: any) => {
 
-                  //console.log('error---' , error)
                 }
               );
           },
           
           async (error:any) => {
             await this.apiData.dismiss();
-            // console.log('profile error ', error)
+            
             // await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
           }
         )
@@ -341,7 +309,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        // console.log('auth error ', error)
+        
         // await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
@@ -383,8 +351,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (user_data: any) =>{
-        //console.log('user_data' , user_data)
-
+        
         if (user_data !== undefined){
           
           this.IS_LOGIN = true;

@@ -25,7 +25,6 @@ export class SelectDeliverComponent implements OnInit {
 
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/cart-detail'])
   }
 }

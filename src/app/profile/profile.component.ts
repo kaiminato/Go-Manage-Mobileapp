@@ -42,7 +42,6 @@ export class ProfileComponent implements OnInit {
     const pattern = /[0-9.,]/;
     let inputChar = String.fromCharCode(event.charCode);
 
-    //console.log('event--' , event.target.value)
     if (!pattern.test(inputChar)) {
       // invalid character, prevent input
       event.preventDefault();
@@ -51,7 +50,7 @@ export class ProfileComponent implements OnInit {
 
 
   async ngOnInit() {
-    //console.log('getting user --', await this.auth.getUser())
+    
   }
 
   async ionViewWillEnter () {
@@ -67,10 +66,8 @@ export class ProfileComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
 
-        //console.log('auth response', response);
-        //response.email = 'DeclanMacDonnell@gmail.com'.toLowerCase();
         response.email = response.email.toLowerCase();
-        //response.email = 'gomanagetest@gmail.com';
+        
         this.EMAIL = response.email;
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
@@ -78,11 +75,9 @@ export class ProfileComponent implements OnInit {
 
             await this.apiData.dismiss();
 
-            console.log('user_info', user_info)
             this.RESPONSE = user_info;
             let user_details = user_info
-            //console.log('cmoing----------->')
-            
+           
            
             if (user_details.givenName == 'null' && user_details.familyName == 'null'){
 
@@ -104,7 +99,6 @@ export class ProfileComponent implements OnInit {
               }
             } else {
               
-              console.log('testing---' , )
 
               if (user_details.hasOwnProperty('givenName')) {
 
@@ -148,14 +142,14 @@ export class ProfileComponent implements OnInit {
 
             await this.apiData.dismiss();
             await this.apiData.presentAlert('Get profile api error'+ JSON.stringify(error))
-            //console.log('get user info error', error)
+            
           }
         );
 
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        //console.log('auth error ', error)
+        
         await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     )
@@ -218,10 +212,6 @@ export class ProfileComponent implements OnInit {
       HOME_LOCATION: this.HOME_LOCATION
     }
 
-    //console.log('my data' , dat)
-   
-
-
     let data = {
       // email: this.EMAIL,
       givenName: this.FIRST_NAME,
@@ -235,9 +225,6 @@ export class ProfileComponent implements OnInit {
         dob: D_O_B,
       }
     }
-  
-
-  //console.log('jsonparse' , JSON.stringify(data))
 
   await this.apiData.presentLoading();
 
@@ -248,13 +235,13 @@ export class ProfileComponent implements OnInit {
         await this.apiData.presentAlert('Profile updated successfully');
         this.EDIT_PROFILE = false;
         this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE
-        //console.log('getting data after update--' , response)
+        
       },
       async (error: any) => {
 
         await this.apiData.dismiss();
         await this.apiData.presentAlert('Server error, Please try again later');
-        //console.log('error during updating profile')
+        
       }
     );
 
@@ -262,7 +249,6 @@ export class ProfileComponent implements OnInit {
 
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 

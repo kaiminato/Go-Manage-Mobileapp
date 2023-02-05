@@ -43,32 +43,18 @@ export class AboutUsComponent {
 
     await this.auth.getUser().subscribe(
       (response: any) => {
-        //console.log('auth response', response)
+        
       },
       (error:any) => {
-        //console.log('auth error ', error)
+       
       }
     )
 
     return
-   
-    // await (await this.apiDataService.getUser()).subscribe(
-    //   (response: any) => {
-    //     console.log('response---', response)
-    //   },
-    //   (error: any) => {
-    //     console.log('error---', error)
-    //   }
-    // )
-    // await this.auth.user$.subscribe( data => {
-    //   console.log('cheking---', data)
-    // })
-    // //console.log('cheking---', await  this.auth.user$)
    }
 
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 }

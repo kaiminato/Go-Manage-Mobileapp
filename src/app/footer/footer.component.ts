@@ -47,7 +47,7 @@ export class FooterComponent implements OnInit {
           text: 'No',
           role: 'cancel',
           handler: () => {
-           //console.log('cancel');
+           
           },
         },
         {
@@ -93,11 +93,8 @@ export class FooterComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (user_data: any) =>{
         
-        //console.log('user_data' , user_data)
-  
         this.IS_LOGIN = user_data !== undefined ? true : false;
         
-        //console.log('check login--' , this.IS_LOGIN)
       }
     );
   }
