@@ -29,7 +29,6 @@ export class LoginButtonComponent implements OnInit {
 
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 }

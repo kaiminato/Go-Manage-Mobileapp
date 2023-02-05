@@ -20,14 +20,14 @@ export class BookNowHeaderComponent implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter (){
-    //console.log('yesh')
+   
     let get_booking_data = await this.dataService.getInitialBookingdata();
-    //console.log(get_booking_data)
+    
   }
 
   back() {
     this.navigation.emit();
-    //console.log('cliked')
+    
   }
 
 }

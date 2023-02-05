@@ -31,12 +31,11 @@ export class ProductDetailComponent implements OnInit {
   async ionViewWillEnter (){
 
     this.PRODUCT_ID = this.activatedRoute.snapshot.params['id'];
-    //console.log('PRODUCT_ID--' , this.PRODUCT_ID)
+    
   }
 
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/store-all-product']);
   }
 
