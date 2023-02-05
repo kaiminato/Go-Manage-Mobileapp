@@ -71,7 +71,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+        
       }
     );
 
@@ -84,9 +84,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     
 
     this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date().getDay());
-
-    console.log('new static-shift---' , this.ALL_SHIFT)
-    
 
     this.MORNING_SHIFT = [... this.ALL_SHIFT]
     let new_date = new Date();
@@ -117,8 +114,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     let staff_list = await this.dataService.getStaffList();
 
-    //console.log('staff_list----' , staff_list)
-
     for (let current_date of this.DAYS_ARRAY){
       
       let created_date = new Date(`${current_date.year}-${current_date.month}-${current_date.day_number < 10 ? '0'+current_date.day_number : current_date.day_number}`);
@@ -137,7 +132,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
         current_date.is_disabled = is_date_disabled;
         
-        //console.log('created_date------' , created_date , created_date.getDay())
       }
       
     }
@@ -201,7 +195,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
   async onDateSelect (selected_date: any){
     
-    //console.log('selected_date---this', selected_date)
+    
     this.date = selected_date;
     this.IS_CALNDER_OPEN = false;
     this.modalController.dismiss();
@@ -222,7 +216,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     if (is_disabled) return;
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
-    //console.log(this.date , '>>>>>>>>>>>')
+    
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
     await this.setNonWorkingDaysOff()
@@ -305,13 +299,12 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       if (<any>(new Date().getTime()) > (new Date(`${date} ${all_shift[index].value}`) )){
 
         all_shift[index].is_disabled = true
-        //console.log('expire' , all_shift[index].value)
+        
       }
     }
 
     this.MORNING_SHIFT = all_shift;
     return
-    //console.log('this-------------' ,this.MORNING_SHIFT)
   }
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){
@@ -351,8 +344,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     //for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
 
     await this.dataService.setBookingData(get_booking_data)
-    
-    //console.log('get_booking_data>>>>>>>', this.MORNING_SHIFT , get_booking_data)
 
     setTimeout(() => { this.router.navigate(['/select-staff-with-service-booking'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
     

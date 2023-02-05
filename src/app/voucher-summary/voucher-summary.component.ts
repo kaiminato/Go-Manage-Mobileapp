@@ -84,7 +84,7 @@ export class VoucherSummaryComponent implements OnInit {
   async payPayment () {
 
     this.submitted = true;
-    //console.log('payment')
+    
     // stop here if form is invalid
     if (this.form.invalid) return;
       
@@ -98,7 +98,6 @@ export class VoucherSummaryComponent implements OnInit {
       amount: this.TOTAL_AMOUNT,
     };
 
-    //console.log('data=======>' , data);
 
     await this.apiData.presentLoading();
 
@@ -106,7 +105,6 @@ export class VoucherSummaryComponent implements OnInit {
       async (response: any) => {
 
         await this.apiData.dismiss();
-        //console.log('response' , response)
 
         if (response.code == 200){
           
@@ -117,12 +115,11 @@ export class VoucherSummaryComponent implements OnInit {
       },
       async (error : any) => {
         await this.apiData.dismiss();
-        //console.log('response' , error)
+        
         await this.apiData.presentAlert('Please start node js first for payment')
       }
     );
 
-    //console.log('values---' , this.form.value);
   }
 
   async alertPresent(msg) {
@@ -144,13 +141,10 @@ export class VoucherSummaryComponent implements OnInit {
 
 
   async buy () {
-
-    //console.log('buy a voucer')
   }
 
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/buy-a-voucher']);
   }
 
