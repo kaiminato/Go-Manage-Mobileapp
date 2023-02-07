@@ -85,6 +85,9 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date().getDay());
 
+    console.log('new static-shift---' , this.ALL_SHIFT)
+    
+
     this.MORNING_SHIFT = [... this.ALL_SHIFT]
     let new_date = new Date();
     this.slides.slideTo(new_date.getDate()-1,1000);

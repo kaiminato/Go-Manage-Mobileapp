@@ -128,7 +128,7 @@ export class SelectTimingComponent implements OnInit {
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
-
+    
     
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
@@ -138,6 +138,7 @@ export class SelectTimingComponent implements OnInit {
     await this.checkLogin();
     await this.getDisabledDates();
     await this.getDisabledShift();
+    
 
     if (booking_data.date != '') {
       this.prefilleddata();
@@ -386,9 +387,12 @@ export class SelectTimingComponent implements OnInit {
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
+    
+    
+    let break_start_time = new Date(`${this.date}T${ is_selected_day_off.length > 0 ? is_selected_day_off[0]['outOfOfficeFrom'] : '00:00:00'}`)
+    let break_end_time = new Date(`${this.date}T${ is_selected_day_off.length > 0 ? is_selected_day_off[0]['outOfOfficeTo'] : '00:00:00'}`)
 
-    let break_start_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
-    let break_end_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
+    
     break_end_time.setMinutes(break_end_time.getMinutes() - 1);
 
     for (let index in this.ALL_SHIFT){
@@ -431,7 +435,6 @@ export class SelectTimingComponent implements OnInit {
       }
       
     }
-
 
     let booking_total_duration = 0;
     let total_shift_will_count = 1;
