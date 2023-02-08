@@ -18,7 +18,7 @@ export class DataService {
                             { name: 'Sunday'    , value: 7}, 
                           ];
 
-  public DAYS_OFF_NUMBER: any = [ 1, 2, 3, 4, 5, 6, 7]; // ['monday, tuesdat .... respectivly]
+  public DAYS_OFF_NUMBER: any = [ 1, 2, 3, 4, 5, 6, 7]; // ['monday, tuesday .... respectivly]
   public DAYS_NAME: any = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   public SHORT_DAYS_NAME: any = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   public CURRENT_YEAR: number = new Date().getFullYear();
@@ -66,13 +66,14 @@ export class DataService {
   async getDays (month: any , year: any) {
     
     month = month.toString().length > 1 ? month : '0'+month
+    
     let date = new Date();
     let firstDay = (new Date(parseInt(year), parseInt(month), 1)).getDate();
     let lastDay = (new Date(parseInt(year), parseInt(month) , 0)).getDate();
 
     let get_booking_values = await this.getInitialBookingdata();
     let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
-    //console.log('staff_detail----' , staff_detail)
+    
     let days_list = [];
 
     for (let i = 1; i <= lastDay; i++){
@@ -81,8 +82,7 @@ export class DataService {
       
       var dayName = this.SHORT_DAYS_NAME[new_date.getDay()];
 
-      let d = new Date(new_date);
-      let day_name = this.DAYS_NAME[d.getDay()];
+      let day_name = this.DAYS_NAME[new_date.getDay()];
     
       let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
       let current_date_id = select_day[0].value;
