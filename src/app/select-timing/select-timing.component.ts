@@ -94,10 +94,10 @@ export class SelectTimingComponent implements OnInit {
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
     
+    
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
-    
     
 
     if (staff_detail.length > 0) {
@@ -116,6 +116,8 @@ export class SelectTimingComponent implements OnInit {
             }
         }
       );
+
+      
 
       
       this.options.disableWeeks = weekly_off_days;
@@ -189,6 +191,7 @@ export class SelectTimingComponent implements OnInit {
     
     let uniq_dates = [...new Set(array)];
 
+
     this.DISABLED_DATES_ARRAY = [];
 
     for(let current_date of uniq_dates) {
@@ -204,6 +207,7 @@ export class SelectTimingComponent implements OnInit {
           let from_date = new Date(booking_detail.startTime);
           let to_date = new Date(booking_detail.endTime)
           to_date.setMinutes(to_date.getMinutes() - 1)
+          
           
           let check_date = new Date(current_date+'T'+shift.value);
 
@@ -303,8 +307,10 @@ export class SelectTimingComponent implements OnInit {
     this.date = selected_date
 
     
+    
     let [year , month , date] = this.date.split('-')
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
+    
     
     for (let index in this.DAYS_ARRAY){
 
@@ -338,14 +344,15 @@ export class SelectTimingComponent implements OnInit {
     
 
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
-
+    
 
     this.DAYS_ARRAY =  await this.dataService.getDays(month , year);
     
     for (let index in this.DAYS_ARRAY){
 
-      let create_date = `${year}-${month < 10 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
-      
+      let create_date = `${year}-${month.length < 2 ? '0'+month : month }-${this.DAYS_ARRAY[index].day_number < 10 ? '0'+this.DAYS_ARRAY[index].day_number : this.DAYS_ARRAY[index].day_number}`
+     
+
       let is_exist_in_disbaled = this.DISABLED_DATES_ARRAY.filter(data => data == create_date);
 
       let is_date_off = await this.dataService.isDateOff(create_date);
@@ -371,16 +378,19 @@ export class SelectTimingComponent implements OnInit {
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    //console.clear()
-    //console.log('date--' , this.date , staff_detail)
+    
+    
     let day_num = new Date(this.date).getDay();
     let is_selected_day_off = await staff_detail[0].staffDetailFormatted.filter( data => data.dayId == day_num);
 
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
-    
- 
+
+    let break_start_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
+    let break_end_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
+    break_end_time.setMinutes(break_end_time.getMinutes() - 1);
+
     for (let index in this.ALL_SHIFT){
 
       let new_date = new Date(`${this.date}T${this.ALL_SHIFT[index].value}`);
@@ -391,28 +401,42 @@ export class SelectTimingComponent implements OnInit {
         this.ALL_SHIFT[index].is_disabled = true;
       } else {
 
-        for (let value of selected_date_booking_list) {
+       
+        if (selected_date_booking_list.length > 0) {
+          
+          for (let value of selected_date_booking_list) {
 
-          let start_time = new Date(value.startTime)
-          let end_time = new Date(value.endTime)
-          end_time.setMinutes(end_time.getMinutes() - 1)
-          
-          
-          if (this.ALL_SHIFT[index].is_disabled == false) {
-  
-            if ((start_time <= new_date && end_time >= new_date) ){
-              
-              this.ALL_SHIFT[index].is_disabled = true;
+            let start_time = new Date(value.startTime)
+            let end_time = new Date(value.endTime)
+            end_time.setMinutes(end_time.getMinutes() - 1)
+            
+            
+            if (this.ALL_SHIFT[index].is_disabled == false) {
+    
+              if ((start_time <= new_date && end_time >= new_date) || (break_start_time <= new_date && break_end_time >= new_date)){
+                
+                this.ALL_SHIFT[index].is_disabled = true;
+              }
             }
+          } 
+
+        } else {
+          if (break_start_time <= new_date && break_end_time >= new_date){
+                
+            this.ALL_SHIFT[index].is_disabled = true;
           }
-        } 
+        }
+        
+        
       }
       
     }
 
+
+
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
-    
+       
   }
 
 
@@ -455,8 +479,7 @@ export class SelectTimingComponent implements OnInit {
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
     let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
-    //console.log('starting_date_time---' ,create_pending_booking_start_time)
-    //console.log('ending_date_time---' ,create_pending_booking_end_time)
+   
 
     let is_passed = true;
     for (let shift of this.ALL_SHIFT) {
@@ -474,6 +497,8 @@ export class SelectTimingComponent implements OnInit {
       await this.apiService.presentAlert('Shift not available')
       return;
     }
+
+    
 
 
     if (!this.IS_LOGIN) {
