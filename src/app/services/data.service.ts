@@ -141,10 +141,31 @@ export class DataService {
 
     let start_from = time_array[0];
     let end_to = time_array[time_array.length - 1];
+
+    let current_date = await this.getCurrentDate()
+    end_to  = new Date(`${current_date}T${end_to}`);
+    
+    end_to.setMinutes(end_to.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
+
+    end_to = end_to.getHours() + ':' + (end_to.getMinutes() == 0 ? '00' : end_to.getMinutes())+":"+(end_to.getSeconds() == 0 ? '00': end_to.getSeconds())
+    
     let data = await this.returnTimesInBetween(start_from , end_to)
     
-    
     return this.ALL_SHIFT;
+  }
+
+  async getCurrentDate () {
+
+    let today_date = new Date();
+    let year: any = today_date.getFullYear();
+    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let day: any = today_date.getDate();
+
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+
+    return  year + '-' + month + '-' + day;
+  
   }
 
   async getStaticShift () {
@@ -173,6 +194,14 @@ export class DataService {
 
     let start_from = time_array[0];
     let end_to = time_array[time_array.length - 1];
+
+    let current_date = await this.getCurrentDate()
+    end_to  = new Date(`${current_date}T${end_to}`);
+    
+    end_to.setMinutes(end_to.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
+
+    end_to = end_to.getHours() + ':' + (end_to.getMinutes() == 0 ? '00' : end_to.getMinutes())+":"+(end_to.getSeconds() == 0 ? '00': end_to.getSeconds())
+    
     let data = await this.returnTimesInBetween(start_from , end_to)
     
     return this.ALL_SHIFT;
@@ -214,6 +243,12 @@ export class DataService {
     let second_start_time = staff_available_date_id[0]?.timeAwayTo;
     let second_end_time = staff_available_date_id[0]?.endShiftTime;
     
+    second_end_time  = new Date(`${date}T${second_end_time}`);
+    second_end_time.setMinutes(second_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
+
+    second_end_time = second_end_time.getHours() + ':' + (second_end_time.getMinutes() == 0 ? '00' : second_end_time.getMinutes())+":"+(second_end_time.getSeconds() == 0 ? '00': second_end_time.getSeconds())
+    
+   
     if (first_end_time != null && second_start_time != null ) {
 
       await this.returnTimesInBetween(first_start_time , first_end_time);
@@ -255,9 +290,7 @@ export class DataService {
 
   async returnTimesInBetween(start, end) {
     var timesInBetween = [];
-    
-    //console.log('time start', start ,'time end', end);
-
+   
     var startH = parseInt(start.split(":")[0]);
     var startM = parseInt(start.split(":")[1]);
     var endH = parseInt(end.split(":")[0]);
@@ -274,6 +307,7 @@ export class DataService {
     timesInBetween.push(endH + ":00");
     if (endM == 30)
       timesInBetween.push(endH + ":30")
+
   
     return await timesInBetween.map(data => this.getGenTime(data));
   }
@@ -286,7 +320,15 @@ export class DataService {
     let h = (H % 12) || 12;
     let ampm = H < 12 ? " AM" : " PM";
     timeString = h + timeString.substr(2, 3) + ampm;
-    let data = {id: this.ALL_SHIFT.length + 1 ,time: timeString , shift_type: this.MORNING_SHIFT ,  value: value, is_active: false, is_disabled: false};
+    let data = {
+                  id: this.ALL_SHIFT.length + 1 ,
+                  time: timeString , 
+                  shift_type: this.MORNING_SHIFT ,  
+                  value: value, 
+                  is_active: false, 
+                  is_disabled: false,
+                  soft_disabled: false
+                };
     this.ALL_SHIFT.push(data);
     
     return await data

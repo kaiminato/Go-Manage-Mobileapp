@@ -47,7 +47,6 @@ export class HomePageComponent implements OnInit {
     private dataService: DataService,
   ) {
 
-    //console.log('LIST----', this.LIST)
   }
 
   ngOnInit() {
@@ -56,7 +55,6 @@ export class HomePageComponent implements OnInit {
 
   async ionViewWillEnter () {
 
-    //console.log('texting.........')
 
     await this.apiData._updateUserId();
 
@@ -73,7 +71,7 @@ export class HomePageComponent implements OnInit {
       this.router.navigate([ url ]);
       this.dataService.removePreviousUrl();
     }
-    //console.log('yes')
+    
   }
 
   async navigate (link: any) {
@@ -81,7 +79,6 @@ export class HomePageComponent implements OnInit {
     if (link == '/make-a-booking') {
       
     }
-    //console.log('link', link)
     await this.router.navigate([link])
 
   }

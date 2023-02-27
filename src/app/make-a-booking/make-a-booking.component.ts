@@ -54,7 +54,7 @@ export class MakeABookingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+        
       }
     );
 
@@ -81,11 +81,10 @@ export class MakeABookingComponent implements OnInit {
         await this.getServiceList();
         if (response.length > 0){
 
-          this.STAFF_LIST = response
-          //console.log('this.STAFF_LIST----' , this.STAFF_LIST)
+          this.STAFF_LIST = response;
           await this.dataService.setStaffList(response)
         }
-        //console.log(response);
+       
       },
       async (error: any) => {
 
@@ -105,8 +104,6 @@ export class MakeABookingComponent implements OnInit {
         await this.apiData.dismiss();
 
         if (response.length > 0){
-
-          //console.log('response', response)
 
           for (let service of response)  service.is_checked = false; // Add by default not selected;
           
@@ -183,7 +180,6 @@ export class MakeABookingComponent implements OnInit {
           
         }
 
-        //console.log('qqqqqqqqqqq',this.CATEGORY_LIST)
         await this.selectedServicesDetail()
 
         
@@ -193,8 +189,6 @@ export class MakeABookingComponent implements OnInit {
         this.TOTAL_PRICE = 0
       }
     }
-    // console.log('setPreFilledData', get_pre_filled_data)
-    // console.log('sevices++++', this.CATEGORY_LIST)
   }
 
   async SelectStaff (staff_id: any) {
@@ -232,7 +226,7 @@ export class MakeABookingComponent implements OnInit {
   async selectedServicesDetail (){
     
     let selected_service_details = await this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
-    //console.log('doinng-------', this.SELECTED_SERVICES , selected_service_details)
+    
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
@@ -261,7 +255,6 @@ export class MakeABookingComponent implements OnInit {
   
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 

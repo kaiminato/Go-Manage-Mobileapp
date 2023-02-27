@@ -87,7 +87,7 @@ export class SelectTimingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+        
       }
     );
 
@@ -128,7 +128,7 @@ export class SelectTimingComponent implements OnInit {
     
     let current_date = await this.getCurrentDate();
     this.ALL_SHIFT = await this.dataService.getShift(current_date);
-
+    
     
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
@@ -138,6 +138,7 @@ export class SelectTimingComponent implements OnInit {
     await this.checkLogin();
     await this.getDisabledDates();
     await this.getDisabledShift();
+    
 
     if (booking_data.date != '') {
       this.prefilleddata();
@@ -232,7 +233,7 @@ export class SelectTimingComponent implements OnInit {
       }
 
       this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
-      //console.log('daysConfig--' , daysConfig)
+      
     }
     
     let booking_data = await this.dataService.getInitialBookingdata();
@@ -264,7 +265,7 @@ export class SelectTimingComponent implements OnInit {
 
     //  Set Date and Slider range values
 
-    this.date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate()}`;
+    this.date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate() < 10 ? '0'+new Date().getDate() : new Date().getDate()}`;
 
     for (let index in this.DAYS_ARRAY){
 
@@ -386,9 +387,12 @@ export class SelectTimingComponent implements OnInit {
     let selected_date_booking_list = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.date))
     
     selected_date_booking_list.sort(function (a, b) { return a.startTime.localeCompare(b.startTime); });
+    
+    
+    let break_start_time = new Date(`${this.date}T${ is_selected_day_off.length > 0 ? is_selected_day_off[0]['outOfOfficeFrom'] : '00:00:00'}`)
+    let break_end_time = new Date(`${this.date}T${ is_selected_day_off.length > 0 ? is_selected_day_off[0]['outOfOfficeTo'] : '00:00:00'}`)
 
-    let break_start_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeFrom']}`)
-    let break_end_time = new Date(`${this.date}T${is_selected_day_off[0]['outOfOfficeTo']}`)
+    
     break_end_time.setMinutes(break_end_time.getMinutes() - 1);
 
     for (let index in this.ALL_SHIFT){
@@ -432,11 +436,53 @@ export class SelectTimingComponent implements OnInit {
       
     }
 
+    let booking_total_duration = 0;
+    let total_shift_will_count = 1;
 
+    for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+    booking_total_duration = booking_total_duration - 1;
+   
+
+    total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
+
+    if (total_shift_will_count != 1) {
+
+      for (let index in this.ALL_SHIFT) {
+        
+        let checked_pass = true;
+        
+        if (this.ALL_SHIFT[index]['is_disabled'] == false) {
+
+          for (let i = 1; i < total_shift_will_count; i++) {
+            
+            let num = Number(index)+i;
+           
+
+            if (typeof this.ALL_SHIFT[num] !== 'undefined') {
+
+              if (this.ALL_SHIFT[num]['is_disabled'] == true && checked_pass == true) {
+              
+                checked_pass = false;
+              }
+  
+            } else {
+
+              checked_pass = false;
+            }
+          }
+
+          if (!checked_pass) {
+
+            this.ALL_SHIFT[index]['is_disabled'] = true;
+            this.ALL_SHIFT[index]['soft_disabled'] = true;
+          }
+        }
+      }
+    }    
 
     this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
-    this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
-       
+    this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);    
   }
 
 
@@ -486,7 +532,7 @@ export class SelectTimingComponent implements OnInit {
 
       let new_date = new Date(`${this.date} ${shift.value}`)
       
-      if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
+      if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled && shift.soft_disabled == false) {
         
         is_passed = false;
       }
@@ -499,7 +545,7 @@ export class SelectTimingComponent implements OnInit {
     }
 
     
-
+    
 
     if (!this.IS_LOGIN) {
 
@@ -536,9 +582,6 @@ export class SelectTimingComponent implements OnInit {
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
-
-            
-            //console.log('user_info' , user_info);
             
             let data = {
                           "userId": user_info.userGMID,
@@ -553,7 +596,6 @@ export class SelectTimingComponent implements OnInit {
               async (response: any) => {
 
                 await this.apiData.dismiss();
-                //console.log('response-------pppppppp' , response.status)
               },
               async (error:any) => {
                 await this.apiData.dismiss();
@@ -569,6 +611,8 @@ export class SelectTimingComponent implements OnInit {
                     this.removePendingBooking();
                   }, 300000);
 
+                  
+
                   setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
                   
                 } else if (error.status == 201){
@@ -581,8 +625,6 @@ export class SelectTimingComponent implements OnInit {
                   
                   await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
                 }
-
-                //console.log('pending booking server error ', error)
                 
               }
             );
@@ -592,7 +634,7 @@ export class SelectTimingComponent implements OnInit {
           
           async (error:any) => {
             await this.apiData.dismiss();
-            //console.log('profile error ', error)
+          
             await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
           }
         )
@@ -600,7 +642,7 @@ export class SelectTimingComponent implements OnInit {
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        //console.log('auth error ', error)
+
         await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
@@ -617,24 +659,20 @@ export class SelectTimingComponent implements OnInit {
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => { 
 
-            //console.log('user_info' , user_info);
-
               (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
                 (response: any) => {
 
-                  //console.log('hiddin---' , response)
                 },
 
                 (error: any) => {
 
-                  //console.log('error---' , error)
                 }
               );
           },
           
           async (error:any) => {
             await this.apiData.dismiss();
-            // console.log('profile error ', error)
+            
             // await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
           }
         )
@@ -642,7 +680,7 @@ export class SelectTimingComponent implements OnInit {
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        // console.log('auth error ', error)
+        
         // await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
