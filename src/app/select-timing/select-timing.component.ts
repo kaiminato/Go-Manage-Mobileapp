@@ -35,7 +35,7 @@ export class SelectTimingComponent implements OnInit {
   CANCEL_BOOKING_ID: number = 0;
   IS_STAFF: any = true;
   IS_CALNDER_OPEN: boolean = false;
-  date: string = '';
+  DATE: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
   COMPAREBLE_DATES: any = [];
@@ -88,39 +88,16 @@ export class SelectTimingComponent implements OnInit {
      
     }
 
-    async _monthChage ($event: any) {
-
-      console.log('event---' , $event);
-      // setTimeout(() => {
-      //     console.log('vijay testomh')
-      // }, 1000);
-
-      // if (document.getElementsByClassName('switch-btn').length > 0 ) {
-      //   console.log("test  " + document.getElementsByClassName('switch-btn')[0].textContent.trim())
-      //   let [short_month_name , year] = document.getElementsByClassName('switch-btn')[0].textContent.trim().split(' ');
-      //   console.log('short_month_name--' , short_month_name , 'year----' , year)
-      //   console.log('get short--' , this.SHORT_MONTHS_NAME[short_month_name])
-
-      // }
-    }
+    
 
     async _datePickerClosed () {
-      console.log('closed')
+      
       this.IS_CALNDER_OPEN = false;
     }
 
   ngOnInit() {}
 
   async ionViewWillEnter () {
-
-
-    console.log('start---');
-    
-    console.log(await this._returnDateInBetween());
-    console.log(await this._returnDateInBetween(new Date('2024-03-03') , new Date('2024-03-10')));
-
-
-    console.log('end-----');
 
     this.activateRoute.queryParams
       .subscribe(params => {
@@ -131,36 +108,29 @@ export class SelectTimingComponent implements OnInit {
     );
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR
-    
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH]+" "+ this.CURRENT_YEAR
     
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-
-    console.log('tst----' , JSON.stringify(staff_detail[0].staffDetailFormatted))
-
     
     this.DAYS_ARRAY =  await this.dataService.getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
-    console.log('this.DAYS_ARRAY---' , this.DAYS_ARRAY)
+  
 
-    await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
-
-    // let current_date = await this.getCurrentDate();
-    // this.ALL_SHIFT = await this.dataService.getShift(current_date);
+    // await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
+    await this._getDisabledDate();
+    this.DATE = await this.getCurrentDate();
+    await this._getDayList()
+    
+    this.ALL_SHIFT = await this.dataService.getShift(this.DATE);
     
     
-    // this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
-    // this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
-
-
-    if (booking_data.date != '') {
-      //this.prefilleddata();
-    } else {
-
-      //this.IS_CALNDER_OPEN = true;
-      //this.IS_CALNDER_OPEN = false;
-      //setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
-    }
+    this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
+    
+    console.log('this.MORNING_SHIFT----' , this.MORNING_SHIFT)
+    //this.IS_CALNDER_OPEN = true;
+    //this.IS_CALNDER_OPEN = false;
+    //setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
+   
   }
 
   async ionViewWillLeave () {
@@ -169,6 +139,61 @@ export class SelectTimingComponent implements OnInit {
     this.modalController.dismiss();
   }
 
+  async _getDayList () {
+
+    let today_date = new Date(this.DATE);
+    let year: any = today_date.getFullYear();
+    let month:any = today_date.getMonth() + 1; 
+    let day_list = await this._getDays(month , year);
+
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()]+" "+ year
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+    let staff_availability_dates =  [];
+    
+    if (staff_detail[0].staffDetailFormatted.length > 0) {
+
+      staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && new Date(data.workDate) >= new Date(this.DATE))
+    }
+
+    for (let value of day_list){
+
+      let is_date_working = await staff_availability_dates.filter( data => data.workDate == value.full_date);
+
+      if (is_date_working.length == 0) {
+
+        value.is_disabled = true
+      }
+
+      value.is_active = value.full_date == this.DATE ? true : false;
+    }
+
+    this.DAYS_ARRAY = day_list;
+
+    let active_index_array = await day_list.filter(data => data.is_active);
+    let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
+    console.log('active_index' , active_index)
+    this.slides.slideTo(active_index-1,1000);
+    console.log('day_list----' , day_list)
+
+    await this._getShiftList()
+  }
+
+  async _getShiftList () {
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+    let staff_availability_dates =  [];
+    
+    console.log('this.DATE-------' ,this.DATE);
+    if (staff_detail[0].staffDetailFormatted.length > 0) {
+
+      staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE)
+    }
+
+    console.log('staff_availability_dates------' , staff_availability_dates);
+  }
 
   async _getDays(month: any , year: any) {
 
@@ -200,8 +225,53 @@ export class SelectTimingComponent implements OnInit {
 
     }
 
-    console.log('days_list---' , days_list)
+    //console.log('current component---' , days_list)
     return days_list;
+  }
+
+
+  async _selectDateRangeSlider(day: any, is_disabled: any, month: any, year: any) {
+
+    console.log(day , is_disabled  , month  , year)
+  }
+
+  async _onDateSelect(selected_date: any) {
+
+    console.log('selected_date-----' ,selected_date)
+    this.DATE = selected_date;
+    await this._getDayList();
+  }
+
+  async _getDisabledDate () {
+
+    //console.log(await this._returnDateInBetween());
+    //console.log(await this._returnDateInBetween(new Date('2023-03-03') , new Date('2023-03-10')));
+    let all_dates = await this._returnDateInBetween();
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
+    let staff_availability_dates =  [];
+    let current_date =  await this.getCurrentDate();
+    
+    if (staff_detail[0].staffDetailFormatted.length > 0) {
+
+      staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
+    }
+
+    let daysConfig = [];
+
+    for (let value of all_dates){
+
+      let is_date_working = await staff_availability_dates.filter( data => data.workDate == value);
+
+      if (is_date_working.length == 0) {
+
+        daysConfig.push({date: new Date(value) , disable: true})
+      }
+      
+    }
+    this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
+
   }
 
   async getDisabledDates (){
@@ -291,7 +361,7 @@ export class SelectTimingComponent implements OnInit {
 
     //  Set Date and Slider range values
 
-    this.date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate() < 10 ? '0'+new Date().getDate() : new Date().getDate()}`;
+    this.DATE = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate() < 10 ? '0'+new Date().getDate() : new Date().getDate()}`;
 
     for (let index in this.DAYS_ARRAY){
 
@@ -316,17 +386,12 @@ export class SelectTimingComponent implements OnInit {
    
   }
 
-  
-
   async openPicker() {
 
     
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
     
   }
-
-
-
   
   async _returnDateInBetween (start_date = new Date() , end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 1))) {
 

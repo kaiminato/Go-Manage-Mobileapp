@@ -28,7 +28,7 @@
           <div  class="date-range" 
                 [class.active]=" value.is_active" 
                 [class.disabled]=" value.is_disabled" 
-                (click)="selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year)"
+                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year)"
                 >
             
             <ion-text class="ion-text-uppercase"><b>{{value.day_number}} </b></ion-text>
@@ -67,9 +67,8 @@
     
     <ng-template>
       <ion-calendar [(ngModel)]="date"
-          (change)="onDateSelect($event.format('YYYY-MM-DD'))"
+          (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
           [options]="options"
-          [monthChange]="_monthChage($event)"
           [type]="DATE_TYPE"
           [format]="'YYYY-MM-DD'"
           id="my-custom"
