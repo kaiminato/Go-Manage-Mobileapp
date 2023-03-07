@@ -117,16 +117,13 @@ export class SelectTimingComponent implements OnInit {
   
 
     // await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
-    await this._getDisabledDate();
-    this.DATE = await this.getCurrentDate();
-    await this._getDayList()
+    
     
     this.ALL_SHIFT = await this.dataService.getShift(this.DATE);
     
-    
-    this.MORNING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.MORNING_SHIFT);
-    
-    console.log('this.MORNING_SHIFT----' , this.MORNING_SHIFT)
+    await this._getDisabledDate();
+    this.DATE = await this.getCurrentDate();
+    await this._getDayList()
     //this.IS_CALNDER_OPEN = true;
     //this.IS_CALNDER_OPEN = false;
     //setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
@@ -137,6 +134,13 @@ export class SelectTimingComponent implements OnInit {
     
     this.IS_CALNDER_OPEN = false;
     this.modalController.dismiss();
+  }
+
+
+  async selectTiming (id: number , is_disabled : any){
+
+    console.log('id----' , id)
+    if (is_disabled) return ;
   }
 
   async _getDayList () {
@@ -175,7 +179,6 @@ export class SelectTimingComponent implements OnInit {
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
     console.log('active_index' , active_index)
     this.slides.slideTo(active_index-1,1000);
-    console.log('day_list----' , day_list)
 
     await this._getShiftList()
   }
@@ -185,14 +188,61 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_availability_dates =  [];
-    
-    console.log('this.DATE-------' ,this.DATE);
+      
     if (staff_detail[0].staffDetailFormatted.length > 0) {
 
       staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE)
     }
 
     console.log('staff_availability_dates------' , staff_availability_dates);
+
+    let shift_start_time: any = '';
+    let shift_end_time: any = ''
+
+    if (staff_availability_dates.length > 0) {
+
+      if (staff_availability_dates.length > 1) {
+
+        shift_start_time = staff_availability_dates[0]?.startShiftTime;
+        shift_end_time = staff_availability_dates[1]?.endShiftTime;
+      } else {
+        shift_start_time = staff_availability_dates[0]?.startShiftTime;
+        shift_end_time = staff_availability_dates[0]?.endShiftTime;
+      }
+
+      shift_end_time  = new Date(`${this.DATE}T${shift_end_time}`);
+      shift_end_time.setMinutes(shift_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
+
+      shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes())+":"+(shift_end_time.getSeconds() == 0 ? '00': shift_end_time.getSeconds())
+
+      this.ALL_SHIFT = await this.returnTimesInBetween(shift_start_time , shift_end_time);
+
+      for (let value of staff_availability_dates) {
+
+        if (value.outOfOfficeFrom != null && value.outOfOfficeTo != null) {
+          
+          let start_time = new Date(`${this.DATE}T${value.outOfOfficeFrom}`)
+          let end_time = new Date(`${this.DATE}T${value.outOfOfficeTo}`)
+          end_time.setMinutes(end_time.getMinutes() - 1)
+
+          // for (let ){
+
+          // }
+          console.log('value----' , start_time , end_time)
+        }
+      }
+
+    } else {
+
+      return
+    }
+
+    
+
+
+    
+    console.log('All Shift----' , this.ALL_SHIFT);
+    
   }
 
   async _getDays(month: any , year: any) {
@@ -202,9 +252,6 @@ export class SelectTimingComponent implements OnInit {
     let date = new Date();
     let firstDay = (new Date(parseInt(year), parseInt(month), 1)).getDate();
     let lastDay = (new Date(parseInt(year), parseInt(month) , 0)).getDate();
-
-    console.log('month' , month , 'year' , year);
-    console.log('firstDay' , firstDay , 'lastDay' , lastDay);
 
     let days_list = [];
 
@@ -441,6 +488,47 @@ export class SelectTimingComponent implements OnInit {
     if (minutes < 10) minutes = '0' + minutes;
 
     return  await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes +':00.000Z';
+  }
+
+  async returnTimesInBetween(start, end) {
+    var timesInBetween = [];
+   
+    var startH = parseInt(start.split(":")[0]);
+    var startM = parseInt(start.split(":")[1]);
+    var endH = parseInt(end.split(":")[0]);
+    var endM = parseInt(end.split(":")[1]);
+  
+    if (startM == 30)
+      startH++;
+  
+    for (var i = startH; i < endH; i++) {
+      timesInBetween.push(i < 10 ? "0" + i + ":00" : i + ":00");
+      timesInBetween.push(i < 10 ? "0" + i + ":30" : i + ":30");
+    }
+  
+    timesInBetween.push(endH + ":00");
+    if (endM == 30)
+      timesInBetween.push(endH + ":30")
+    let result = [];
+
+    for (let timeString of timesInBetween) {
+
+      let value = timeString;
+      let H = +timeString.substr(0, 2);
+      let h = (H % 12) || 12;
+      let ampm = H < 12 ? " AM" : " PM";
+      timeString = h + timeString.substr(2, 3) + ampm;
+      result.push({
+                    id: result.length + 1 ,
+                    time: timeString ,   
+                    value: value, 
+                    is_active: false, 
+                    is_disabled: false,
+                    soft_disabled: false
+                  });
+    }
+
+    return result;
   }
 
 
