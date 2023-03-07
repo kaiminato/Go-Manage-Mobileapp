@@ -52,8 +52,8 @@
       <ion-col 
         size="4" 
         class="ion-text-center ion-margin-top" 
-        *ngFor="let shift of MORNING_SHIFT"
-        (click)="selectTiming(shift.id , this.dataService.MORNING_SHIFT, shift.is_disabled)"
+        *ngFor="let shift of ALL_SHIFT"
+        (click)="selectTiming(shift.id , shift.is_disabled)"
         >
         <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
           <ion-icon name="time-outline"></ion-icon>

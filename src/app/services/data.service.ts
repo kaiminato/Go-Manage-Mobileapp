@@ -250,6 +250,7 @@ export class DataService {
     second_end_time = second_end_time.getHours() + ':' + (second_end_time.getMinutes() == 0 ? '00' : second_end_time.getMinutes())+":"+(second_end_time.getSeconds() == 0 ? '00': second_end_time.getSeconds())
     
    
+   
     if (first_end_time != null && second_start_time != null ) {
 
       await this.returnTimesInBetween(first_start_time , first_end_time);
