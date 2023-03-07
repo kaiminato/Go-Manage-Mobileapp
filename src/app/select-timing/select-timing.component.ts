@@ -134,9 +134,11 @@ export class SelectTimingComponent implements OnInit {
     this.EVENING_SHIFT = this.ALL_SHIFT.filter(data => data.shift_type == this.dataService.EVENING_SHIFT);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
-    
+   
     await this.checkLogin();
+    
     await this.getDisabledDates();
+    
     await this.getDisabledShift();
 
     if (booking_data.date != '') {
@@ -264,7 +266,7 @@ export class SelectTimingComponent implements OnInit {
 
     //  Set Date and Slider range values
 
-    this.date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate()}`;
+    this.date = `${new Date().getFullYear()}-${new Date().getMonth() +1 < 10 ? '0'+(new Date().getMonth() +1) : new Date().getMonth() +1}-${new Date().getDate() < 10 ? '0'+new Date().getDate() : new Date().getDate()}`;
 
     for (let index in this.DAYS_ARRAY){
 
@@ -340,6 +342,7 @@ export class SelectTimingComponent implements OnInit {
 
   async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
 
+    
     if (is_disabled) return;
     
 
@@ -375,6 +378,7 @@ export class SelectTimingComponent implements OnInit {
 
   async getDisabledShift () {
     
+  
     this.ALL_SHIFT = await this.dataService.getShift(this.date);
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
