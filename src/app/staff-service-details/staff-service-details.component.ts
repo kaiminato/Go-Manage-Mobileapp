@@ -39,7 +39,14 @@ export class StaffServiceDetailsComponent implements OnInit {
 
   async ionViewWillEnter() {
 
+    console.log('this.SELECTED_SERVICES  ----->>>>>>>>>.' , this.SELECTED_SERVICES)
+    this.SELECTED_SERVICES = [];
+    // this.TOTAL_SERVICE_SELECTED = 0;
+    // this.TOTAL_PRICE = 0;
     await this.getServiceList();
+
+
+    
     
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
     this.activateRoute.queryParams
@@ -73,7 +80,8 @@ export class StaffServiceDetailsComponent implements OnInit {
   async getServiceList() {
 
     this.SERVICE_LIST = await this.dataService.getServiceList(); 
-    
+   
+
     if (this.SERVICE_LIST.length > 0) {
       
       let categorie_ids = [...new Set(this.SERVICE_LIST.map(data => data.categoryId))];
@@ -183,6 +191,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     
     let selected_service_details = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
     
+    console.log('selected_service_details---' , selected_service_details);
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {

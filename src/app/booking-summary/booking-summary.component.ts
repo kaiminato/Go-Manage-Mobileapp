@@ -46,17 +46,12 @@ export class BookingSummaryComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
-
-        console.log('response' , response);
-
         (await this.apiData.getMyProfile(response.email)).subscribe(
-          
           async (user_info: any) => {
 
             if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
             ) {
 
-              
               this.presentAlert(response.email);
             } else {
               this._onEnterData();
@@ -69,6 +64,7 @@ export class BookingSummaryComponent implements OnInit {
       (error: any) => {
       }
     );
+
   }
 
   async _onEnterData() {
