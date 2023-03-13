@@ -8,6 +8,7 @@ export const environment = {
   //apiUrl: "https://release-sleet.gomanage.dev/",
   //apiUrl: "https://uat-sleet.gomanage.dev/",
   apiUrl: "https://dev-sleet.gomanage.dev/",
+  //apiUrl: "https://uat-sleet.gomanage.dev/",// UAT environments
   //apiUrl: "https://10001-sleet.gomanage.io/", // production url
   //apiUrl: "https://release-sleet.gomanage.dev/",
 };
