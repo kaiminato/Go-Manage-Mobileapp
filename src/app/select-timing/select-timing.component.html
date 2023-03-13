@@ -28,7 +28,7 @@
           <div  class="date-range" 
                 [class.active]=" value.is_active" 
                 [class.disabled]=" value.is_disabled" 
-                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year)"
+                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"
                 >
             
             <ion-text class="ion-text-uppercase"><b>{{value.day_number}} </b></ion-text>
@@ -53,7 +53,7 @@
         size="4" 
         class="ion-text-center ion-margin-top" 
         *ngFor="let shift of ALL_SHIFT"
-        (click)="selectTiming(shift.id , shift.is_disabled)"
+        (click)="_selectTiming(shift.id , shift.is_disabled)"
         >
         <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
           <ion-icon name="time-outline"></ion-icon>

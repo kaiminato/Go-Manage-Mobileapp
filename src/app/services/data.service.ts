@@ -415,14 +415,14 @@ export class DataService {
 
   async getStaffBookingDetail (staff_id: any) {
 
-    let staff_list: any = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
-    staff_list = staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
+    let staff_booking_list: any = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+    staff_booking_list = staff_booking_list == undefined || staff_booking_list == null ? [] :  JSON.parse(staff_booking_list);
 
     const today = new Date()
     const yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - 1)
 
-   return await staff_list.filter( data => data.employeeId == staff_id && (new Date(yesterday) < new Date(data.endTime)));
+   return await staff_booking_list.filter( data => data.employeeId == staff_id && (new Date(yesterday) < new Date(data.endTime)));
   }
 
   async getStaffBookingDetailWithDate (staff_id: any, date: any) {
