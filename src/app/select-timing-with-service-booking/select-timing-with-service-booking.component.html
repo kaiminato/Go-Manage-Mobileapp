@@ -28,7 +28,7 @@
           <div  class="date-range" 
                 [class.active]=" value.is_active" 
                 [class.disabled]=" value.is_disabled" 
-                (click)="selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year)"
+                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"
                 >
             
             <ion-text class="ion-text-uppercase"><b>{{value.day_number}} </b></ion-text>
@@ -51,7 +51,7 @@
       <ion-col 
         size="4" 
         class="ion-text-center ion-margin-top" 
-        *ngFor="let shift of MORNING_SHIFT"
+        *ngFor="let shift of ALL_SHIFT"
         (click)="selectTiming(shift.id , this.dataService.MORNING_SHIFT, shift.is_disabled)"
         >
         <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
@@ -67,7 +67,7 @@
     
     <ng-template>
       <ion-calendar [(ngModel)]="date"
-          (change)="onDateSelect($event.format('YYYY-MM-DD'))"
+          (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
           [options]="options"
           
           [type]="DATE_TYPE"
