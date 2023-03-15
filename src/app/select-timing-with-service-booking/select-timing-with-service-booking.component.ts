@@ -185,7 +185,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       
     }
 
-    console.log('daysConfig---' , daysConfig)
+    //console.log('daysConfig---' , daysConfig)
 
     this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
 
@@ -205,22 +205,29 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let staff_availability_dates =  [];
     
     console.log('day_list----' , day_list);
-    
+    //console.log('getCurrentDate---' , await this.getCurrentDate())
+    //return;
 
     for (let value of day_list){
 
       let is_date_working = false; // initially date is not worknig true
-      
-      for (let staff_info of this.ALL_STAFF) {
+      var yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1); 
 
-        if (staff_info.staffDetailFormatted.length > 0) {
+      if (new Date((yesterday)) <= new Date(value.full_date)) { // past date will be off
 
-      //     // Get  staff rota
-          let staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == value.full_date)
-         
-          if (staff_rota.length > 0) is_date_working = true; // 
+        for (let staff_info of this.ALL_STAFF) {
+
+          if (staff_info.staffDetailFormatted.length > 0) {
+  
+        //     // Get  staff rota
+            let staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == value.full_date)
+           
+            if (staff_rota.length > 0) is_date_working = true; // 
+          }
         }
       }
+      
 
       if (!is_date_working) value.is_disabled = true; // if rota not exist according for date
       value.is_active = value.full_date == this.DATE ? true : false;
@@ -280,17 +287,19 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
       this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time , shift_end_time); // Get shift timing list
 
-      console.log('all_shift_list--- before' , this.ALL_SHIFT);
+      //console.log('all_shift_list--- before' , this.ALL_SHIFT);
 
-      // for (let shift of this.ALL_SHIFT) {
-      //   let is_disabled = await this._isShiftAvailable(new Date(`${this.DATE}T${shift.value}:00`));
-      //   shift.is_disabled = is_disabled;
-      // }
+      for (let shift of this.ALL_SHIFT) {
+        let is_disabled = await this._isShiftAvailable(new Date(`${this.DATE}T${shift.value}:00`));
+        shift.is_disabled = is_disabled == 'false' ? false : true;
 
-      // console.log('all_shift_list--- before' , this.ALL_SHIFT);
+        //console.log(`${this.DATE}T${shift.value}:00----` , is_disabled);
+      }
+
+      //console.log('all_shift_list--- before' , this.ALL_SHIFT);
     }
 
-    console.log( `${this.DATE}T12:30:00` , 'disbale', await this._isShiftAvailable(new Date(`${this.DATE}T08:00:00`)));
+    //console.log( `${this.DATE}T12:30:00` , 'disbale', await this._isShiftAvailable(new Date(`${this.DATE}T17:00:00`)));
     // console.log('')
     // console.log('first')
     // console.log( `${this.DATE}T13:00:00` ,await this._isShiftAvailable(new Date(`${this.DATE}T13:00:00`)));
@@ -312,44 +321,48 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       for (let value of rota) {
         let start_shift_timing = new Date(`${this.DATE}T${value.startShiftTime}`);
         let end_shift_timing = new Date(`${this.DATE}T${value.endShiftTime}`);
+        end_shift_timing.setMinutes(end_shift_timing.getMinutes() - 1);
+
+        //console.log('value.endShiftTime---' , value.endShiftTime);
+
         // console.log('value.startShiftTime--' ,value.startShiftTime , value.endShiftTime)
         // console.log('shift time--' , shift_date_time.getTime() , shift_date_time)
         // console.log('')
         // console.log('')
 
         if (start_shift_timing.getTime() <= shift_date_time.getTime() && end_shift_timing.getTime() >= shift_date_time.getTime()) {
-          
-          if (value.outOfOfficeFrom != null && value.outOfOfficeTo != null && value.outOfOfficeFrom != '00:00:00' && value.outOfOfficeTo != '00:00:00') {
-            console.log('value----' ,value);
-          
+         console.log()
+
+          if ((value.outOfOfficeFrom != null && value.outOfOfficeTo != null) || (value.outOfOfficeFrom != '00:00:00' && value.outOfOfficeTo != '00:00:00')) {
+            
             let break_start_time = new Date(`${this.DATE}T${value.outOfOfficeFrom}`);
             let break_end_time = new Date(`${this.DATE}T${value.outOfOfficeTo}`);
             break_end_time.setMinutes(break_end_time.getMinutes() - 1);
   
-            console.log('from--' ,value.outOfOfficeFrom , 'to--' ,value.outOfOfficeTo , '---' ,break_end_time)
+            //console.log('from--' ,value.outOfOfficeFrom , 'to--' ,value.outOfOfficeTo , '---' ,break_end_time)
            
             // Shift will be disabled if shift time will exist in between break start & break end time
             if (is_available == 'true' && break_start_time.getTime() <= shift_date_time.getTime() && break_end_time.getTime() >= shift_date_time.getTime()) {
   
-              console.log('first condition----' , true);
+              //console.log('first condition----' , true);
               //is_available = true;
               //shift_value.is_disabled = true; // Disabled the shift
             } else {
-              console.log('second condition----' , false);
+             //console.log('second condition----' , false);
               is_available = 'false';
             }
            
           }
         } else {
-          console.log('dead------------')
-          is_available = 'false';
+          //console.log('dead------------')
+          //is_available = 'false';
         }
         
       }
     }
 
-    console.log('final-----------------------' , is_available)
-    console.log('' )
+    //console.log('final-----------------------' , is_available)
+    //console.log('' )
     console.log('' )
     
     return is_available
@@ -369,7 +382,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     for (let value of this.DAYS_ARRAY) value.is_active = false;
     this.DAYS_ARRAY[index]['is_active'] = true;
     this.slides.slideTo(index-1,1000);
-    console.log('shift' , this.DAYS_ARRAY[index]) 
+    //console.log('shift' , this.DAYS_ARRAY[index]) 
     await this._getShiftList();
   }
 
@@ -653,6 +666,51 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
     this.MORNING_SHIFT = all_shift;
     return
+  }
+
+  async _selectTiming (id: number , is_disabled : any) {
+
+    if (is_disabled) return ;
+
+    console.log(id  ,is_disabled )
+
+    if (this.DATE == '') {
+      await this.apiService.presentAlert('Please select a available date');
+      return
+    }
+
+    let selecetd_shift = await this.ALL_SHIFT.filter(data => data.id == id);
+    let get_booking_data = await this.dataService.getInitialBookingdata();
+    get_booking_data.date = this.DATE;
+    get_booking_data.timing_id = selecetd_shift[0];
+
+    let total_duration = 0;
+
+    for (let service of get_booking_data.servises) total_duration += service.serviceDuration; // Totao service time
+
+    let starting_date_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
+    let ending_date_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
+    ending_date_time = new Date(ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1));
+
+    let office_last_shift = new Date (`${this.DATE} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}` );
+    let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
+
+    if (ending_date_time > office_closed_time) {
+
+      await this.apiService.presentAlert('Sorry outside of business owner working days')
+      return
+    }
+
+    for (let shift of this.ALL_SHIFT) shift.is_active = shift.id == id ? true : false;
+
+    //for (let e_shift of this.EVENING_SHIFT) e_shift.is_active = e_shift.id == id ? true : false;
+
+    await this.dataService.setBookingData(get_booking_data);
+    console.log('selecetd_shift----' ,selecetd_shift[0].value);
+    
+    setTimeout(() => { this.router.navigate(['/select-staff-with-service-booking'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
+    
+    
   }
 
   async selectTiming (id: number , timing_type: any, is_disabled : any){
