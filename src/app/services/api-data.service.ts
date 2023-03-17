@@ -86,6 +86,14 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'bookings/removeUsersPendingBooking?userId=' + user_id);
   }
 
+  async _createPayment(data: any) {
+
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
+      .set('Cache-Control', 'no-cache');
+
+    return await this.http.post(this.apiUrl + 'stripe/create-charge', data , { headers: header })
+  }
+
 
   async _updateUserId () {
 

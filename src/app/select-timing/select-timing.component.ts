@@ -435,6 +435,7 @@ export class SelectTimingComponent implements OnInit {
 
       // Shift disabled based on break time---- end
 
+      console.log('current_date_booking--' ,current_date_booking)
       // Shift disabled based on Booking time -- start
 
       if (current_date_booking.length > 0) { // If bookings exist on selected date
