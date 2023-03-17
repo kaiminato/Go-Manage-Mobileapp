@@ -48,12 +48,58 @@
       
       
 
-      <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="saveBooking()"> Confirm</ion-button>
+      <!-- <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="saveBooking()"> Confirm</ion-button> -->
 
+      <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="PAYMENT_MODEL_OPEN = true;"> Confirm</ion-button>
+  
     </ion-item>
 
     
   </ion-list>
+
+  <!-- payment model -->
+
+  <!-- Trigger/Open The Modal -->
+<!-- <ion-button id="myBtn" (click)="PAYMENT_MODEL_OPEN = true;">Stripe Payent</ion-button> -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal" style="display: {{ PAYMENT_MODEL_OPEN ? 'block' : 'none'}};">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" (click)="PAYMENT_MODEL_OPEN = false;">&times;</span>
+      <h2>Stripe Payment</h2>
+    </div>
+    <div class="modal-body">
+      <ion-card class="welcome-card">
+        <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
+        <ion-card-header>
+          <ion-row>
+            <ion-col>Total Payment</ion-col>
+            <ion-col> {{ TOTAL_AMOUNT | currency: 'EUR'}} </ion-col>
+          </ion-row>
+        </ion-card-header>
+        <ion-card-content>
+          <form action="/" method="post" id="payment-form">
+            <div class="form-row">
+              <div id="card-element">
+                  </div> 
+              <!-- Used to display Element errors -->
+              <div id="card-errors" role="alert"></div>
+            </div>
+            <ion-button type="submit" color="success" expand="full">Make Payment</ion-button>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="modal-footer">
+      <h3>Modal Footer</h3>
+    </div>
+  </div>
+
+</div>
+
 </ion-content>
 
 <app-footer></app-footer>

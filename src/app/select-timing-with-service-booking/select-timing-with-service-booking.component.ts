@@ -31,6 +31,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
   MONTH_NAME_LIST: any = [];
   CANCEL_BOOKING_ID: number = 0;
   ALL_STAFF: any = [];
+  BOOKING_LIST: any = [];
 
   slideOpts = {
     slidesPerView: 6,
@@ -76,6 +77,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
         
       }
     );
+    this.BOOKING_LIST = await this.dataService.getStaffBookingList();
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH-1]+" "+ this.CURRENT_YEAR;
@@ -198,7 +200,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let month:any = today_date.getMonth() + 1; 
     let day_list = await this._getDays(month , year);
 
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()]+" "+ year
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()]+" "+ year;
 
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
@@ -287,86 +289,222 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
       this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time , shift_end_time); // Get shift timing list
 
-      //console.log('all_shift_list--- before' , this.ALL_SHIFT);
+      console.log('all_shift_list--- before' , this.ALL_SHIFT);
 
       for (let shift of this.ALL_SHIFT) {
-        let is_disabled = await this._isShiftAvailable(new Date(`${this.DATE}T${shift.value}:00`));
+        let is_disabled = await this._isShiftAvailable(new Date(`${this.DATE}T${shift.value}:00`), shift.value);
+        //console.log( `${this.DATE}T${shift.value}:00` , 'disbale', await this._isShiftAvailable(new Date(`${this.DATE}T${shift.value}:00`) , shift.value));
         shift.is_disabled = is_disabled == 'false' ? false : true;
 
         //console.log(`${this.DATE}T${shift.value}:00----` , is_disabled);
       }
 
-      //console.log('all_shift_list--- before' , this.ALL_SHIFT);
+      console.log('all_shift_list--- before' , this.ALL_SHIFT);
     }
 
-    //console.log( `${this.DATE}T12:30:00` , 'disbale', await this._isShiftAvailable(new Date(`${this.DATE}T17:00:00`)));
+    console.log( `${this.DATE}T16:30:00` , 'disbale', await this._isShiftAvailable(new Date(`${this.DATE}T16:30:00`) , '15:00'));
     // console.log('')
     // console.log('first')
-    // console.log( `${this.DATE}T13:00:00` ,await this._isShiftAvailable(new Date(`${this.DATE}T13:00:00`)));
+    //console.log( `${this.DATE}T16:00:00` ,await this._isShiftAvailable(new Date(`${this.DATE}T16:00:00`), '16:00'));
     // console.log('')
     // console.log('second')
     //console.log( `${this.DATE}T13:30:00` ,await this._isShiftAvailable(new Date(`${this.DATE}T13:30:00`)));
   }
 
-  async _isShiftAvailable(shift_date_time: any) {
+  async _isShiftAvailable(shift_date_time: any , selecetd_shift_value: any) {
 
     let is_available = 'true';
     //console.log('shift_date_time---' , shift_date_time);
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let total_duration = 0;
 
+    for (let service of booking_data.servises) total_duration += service.serviceDuration; // totao duration of service
+
+    //console.log('total_duration-----' ,total_duration);
+
+
+    let starting_date_time = new Date(`${this.DATE}T${selecetd_shift_value}`);
+    let ending_date_time = new Date(`${this.DATE}T${selecetd_shift_value}`);
+    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1);
+    ending_date_time = new Date(ending_date_time);
+
+    
     for (let staff of this.ALL_STAFF) {
 
       let rota = await staff.staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE);
       
-      
-      for (let value of rota) {
-        let start_shift_timing = new Date(`${this.DATE}T${value.startShiftTime}`);
-        let end_shift_timing = new Date(`${this.DATE}T${value.endShiftTime}`);
-        end_shift_timing.setMinutes(end_shift_timing.getMinutes() - 1);
+      if (rota.length > 0) {
 
-        //console.log('value.endShiftTime---' , value.endShiftTime);
-
-        // console.log('value.startShiftTime--' ,value.startShiftTime , value.endShiftTime)
-        // console.log('shift time--' , shift_date_time.getTime() , shift_date_time)
-        // console.log('')
-        // console.log('')
-
-        if (start_shift_timing.getTime() <= shift_date_time.getTime() && end_shift_timing.getTime() >= shift_date_time.getTime()) {
-         console.log()
-
-          if ((value.outOfOfficeFrom != null && value.outOfOfficeTo != null) || (value.outOfOfficeFrom != '00:00:00' && value.outOfOfficeTo != '00:00:00')) {
-            
-            let break_start_time = new Date(`${this.DATE}T${value.outOfOfficeFrom}`);
-            let break_end_time = new Date(`${this.DATE}T${value.outOfOfficeTo}`);
-            break_end_time.setMinutes(break_end_time.getMinutes() - 1);
+        for (let value of rota) {
+          let start_shift_timing = new Date(`${this.DATE}T${value.startShiftTime}`);
+          let end_shift_timing = new Date(`${this.DATE}T${value.endShiftTime}`);
+          end_shift_timing.setMinutes(end_shift_timing.getMinutes() - 1);
   
-            //console.log('from--' ,value.outOfOfficeFrom , 'to--' ,value.outOfOfficeTo , '---' ,break_end_time)
-           
-            // Shift will be disabled if shift time will exist in between break start & break end time
-            if (is_available == 'true' && break_start_time.getTime() <= shift_date_time.getTime() && break_end_time.getTime() >= shift_date_time.getTime()) {
   
-              //console.log('first condition----' , true);
-              //is_available = true;
-              //shift_value.is_disabled = true; // Disabled the shift
-            } else {
-             //console.log('second condition----' , false);
-              is_available = 'false';
+          if (start_shift_timing.getTime() <= shift_date_time.getTime() && end_shift_timing.getTime() >= shift_date_time.getTime()) {
+           console.log()
+  
+            if ((value.outOfOfficeFrom != null && value.outOfOfficeTo != null) || (value.outOfOfficeFrom != '00:00:00' && value.outOfOfficeTo != '00:00:00')) {
+              
+              let break_start_time = new Date(`${this.DATE}T${value.outOfOfficeFrom}`);
+              let break_end_time = new Date(`${this.DATE}T${value.outOfOfficeTo}`);
+              break_end_time.setMinutes(break_end_time.getMinutes() - 1);
+    
+             
+              // Shift will be disabled if shift time will exist in between break start & break end time
+              if (is_available == 'true' && break_start_time.getTime() <= shift_date_time.getTime() && break_end_time.getTime() >= shift_date_time.getTime()) {
+    
+                //console.log('first condition----' , true);
+                //is_available = true;
+                //shift_value.is_disabled = true; // Disabled the shift
+              } else {
+               //console.log('second condition----' , false);
+                is_available = 'false';
+              }
+             
             }
-           
+          } else {
+            //console.log('dead------------')
+            //is_available = 'false';
           }
-        } else {
-          //console.log('dead------------')
-          //is_available = 'false';
+        }
+  
+        if (is_available == 'false') {
+          
+          let shift_list = await this._getStaffShiftList(staff.employee_id , this.DATE);
+  
+          let is_passed = true;
+          for (let shift of shift_list) {
+
+            let new_date = new Date(`${this.DATE} ${shift.value}`);
+            // console.log('starting_date_time--' , starting_date_time)
+            // console.log('ending_date_time--' , ending_date_time)
+            // console.log('new_date--' , new_date)
+            //console.log('')
+            if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
+              
+              is_passed = false;
+            }
+          }
+
+          if (!is_passed) {
+
+            is_available = 'true';
+          }
+        //console.log('is_availablet---', is_available , staff.employee_id)
         }
         
       }
+      
     }
 
     //console.log('final-----------------------' , is_available)
     //console.log('' )
-    console.log('' )
     
     return is_available
     
+  }
+
+
+  async _getStaffShiftList(staff_id: any , selected_date: any) {
+
+    let staff_detail = await this.dataService.getStaffDetail(staff_id);
+    let staff_availability_dates =  [];
+      
+    if (staff_detail[0].staffDetailFormatted.length > 0) {
+
+      staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == selected_date)
+    }
+
+    let current_date_booking = await this.BOOKING_LIST.filter( data => data.startTime.includes(selected_date) && staff_id == data.employeeId);
+    let shift_start_time: any = '';
+    let shift_end_time: any = ''
+
+    //console.log('current_date_booking---' , staff_id , selected_date , current_date_booking)
+    if (staff_availability_dates.length > 0) {
+
+      // get shift start time & end time
+      if (staff_availability_dates.length > 1) {
+
+        shift_start_time = staff_availability_dates[0]?.startShiftTime;
+        shift_end_time = staff_availability_dates[1]?.endShiftTime;
+      } else {
+        shift_start_time = staff_availability_dates[0]?.startShiftTime;
+        shift_end_time = staff_availability_dates[0]?.endShiftTime;
+      }
+
+      shift_end_time  = new Date(`${selected_date}T${shift_end_time}`);
+      shift_end_time.setMinutes(shift_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
+
+      shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes())+":"+(shift_end_time.getSeconds() == 0 ? '00': shift_end_time.getSeconds())
+
+
+      // Get shift timing list
+      let all_shift = await this._returnTimesInBetween(shift_start_time , shift_end_time);
+      
+      
+      // Shift disabled based on break time---- start
+     
+      for (let shift_value of all_shift) {
+
+        if (!shift_value.is_disabled) { // If shift is not disabled
+
+          let shift__date_time = new Date(`${selected_date}T${shift_value.value}:00`);
+      
+          for (let value of staff_availability_dates) {
+            if (value.outOfOfficeFrom != null && value.outOfOfficeTo != null) {
+              
+              let break_start_time = new Date(`${selected_date}T${value.outOfOfficeFrom}`);
+              let break_end_time = new Date(`${selected_date}T${value.outOfOfficeTo}`)
+              break_end_time.setMinutes(break_end_time.getMinutes() - 1);
+    
+              // Shift will be disabled if shift time will exist in between break start & break end time
+              if (break_start_time.getTime() <= shift__date_time.getTime() && break_end_time.getTime() >= shift__date_time.getTime()) {
+  
+                //console.log('shift_value.value----' , shift_value.value);
+                shift_value.is_disabled = true; // Disabled the shift
+              }
+             
+            }
+          }
+        }
+        
+      }
+
+      // Shift disabled based on break time---- end)
+
+      // Shift disabled based on Booking time -- start
+
+      //console.log('current_date_booking---' , current_date_booking);
+      if (current_date_booking.length > 0) { // If bookings exist on selected date
+        
+        for (let shift_value of all_shift) {
+
+          if (!shift_value.is_disabled) { // If shift is not disabled
+            
+            let shift__date_time = new Date(`${selected_date}T${shift_value.value}:00`);
+            for (let booking_value of current_date_booking) {
+
+              let booking_start_time = new Date(booking_value.startTime);
+              let booking_end_time = new Date(booking_value.endTime);
+              booking_end_time.setMinutes(booking_end_time.getMinutes() - 1);
+    
+              // Shift will be disabled if shift time will exist in between booking start & booking end time
+              if (booking_start_time.getTime() <= shift__date_time.getTime() && booking_end_time.getTime() >= shift__date_time.getTime()) {
+
+                shift_value.is_disabled = true; // Disabled the shift
+              }
+            }
+            
+          }
+        }
+      }
+
+      // Shift disabled based on Booking time -- end
+
+      //console.log('all_shift--' ,all_shift);
+      return all_shift;
+    }
   }
 
 
@@ -554,7 +692,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     await this._getDayList();
   }
   
-  async onDateSelect (selected_date: any){
+  async onDateSelect (selected_date: any){// not in use
     
     
     this.date = selected_date;
@@ -573,7 +711,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     await this.checkAllShiftStatus(this.date);
   }
 
-  async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){
+  async selectDateRangeSlider (day: any, is_disabled: any, month: any, year: any){ // ---not in use
 
     if (is_disabled) return;
     this.date = `${year}-${month}-${day < 10 ? '0'+day : day}`;
@@ -589,7 +727,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     await this.checkAllShiftStatus(this.date);
   }
 
-  async checkAllShiftStatus (date: any) {
+  async checkAllShiftStatus (date: any) { // not in use------------
 
     let all_shift = await this.dataService.getNewStaticShift(new Date(date).getDay());
     
@@ -713,7 +851,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     
   }
 
-  async selectTiming (id: number , timing_type: any, is_disabled : any){
+  async selectTiming (id: number , timing_type: any, is_disabled : any){ // Not in use-----------
 
     if (is_disabled) return ;
 

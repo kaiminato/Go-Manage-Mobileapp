@@ -90,7 +90,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
         let total_duration = 0;
 
         for (let service of booking_data.servises) total_duration += service.serviceDuration;
-
+        
         let starting_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
         let ending_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
 
@@ -288,7 +288,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
       // Shift disabled based on Booking time -- start
 
-      console.log('current_date_booking---' , current_date_booking);
+      console.log('current_date_booking---' , JSON.stringify(current_date_booking));
       if (current_date_booking.length > 0) { // If bookings exist on selected date
         
         for (let shift_value of all_shift) {
@@ -378,7 +378,9 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     });
   }
 
-  async SelectStaff (staff_id: any){
+  
+
+  async _selectStaff (staff_id: any){ // not in use-----
 
     if (!this.IS_LOGIN) {
 
@@ -396,17 +398,20 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     get_booking_data.staff_id = staff_id;
     await this.dataService.setBookingData(get_booking_data)
 
-    let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == get_booking_data.timing_id);
+    console.log('get_booking_data---' , get_booking_data);
 
-    let date = await this.getCurrentDate()
+    let selecetd_shift = get_booking_data.timing_id;
+    let selecetd_date = get_booking_data.date;
+
+    //let date = await this.getCurrentDate()
     let total_duration = 0;
 
     for (let service of get_booking_data.servises) total_duration += service.serviceDuration;
 
-    let starting_date_time = new Date(`${date}T${selecetd_shift[0].value}`);
-    let ending_date_time = new Date(`${date}T${selecetd_shift[0].value}`);
+    let starting_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
+    let ending_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
 
-    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration)
+    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration);
     ending_date_time = new Date(ending_date_time);
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);

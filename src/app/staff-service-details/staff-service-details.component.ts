@@ -64,7 +64,7 @@ export class StaffServiceDetailsComponent implements OnInit {
 
     
 
-    await this.getStaffBookingList();
+    //await this.getStaffBookingList();
 
     let booking_data = await this.dataService.getInitialBookingdata();
    
@@ -171,21 +171,21 @@ export class StaffServiceDetailsComponent implements OnInit {
 
   }
 
-  async getStaffBookingList (){
+  // async getStaffBookingList (){
 
-    (await this.apiData.getStaffBookingList()).subscribe(
-      (response: any) => {
+  //   (await this.apiData.getStaffBookingList()).subscribe(
+  //     (response: any) => {
         
-        if (response.length >  0) {
+  //       if (response.length >  0) {
 
-          this.dataService.setStaffBookingList(response)
-        }
-      },
-      (error: any) => {
-        alert(JSON.stringify(error))
-      }
-    );
-  }
+  //         this.dataService.setStaffBookingList(response)
+  //       }
+  //     },
+  //     (error: any) => {
+  //       alert(JSON.stringify(error))
+  //     }
+  //   );
+  // }
 
   async selectedServicesDetail (){
     
