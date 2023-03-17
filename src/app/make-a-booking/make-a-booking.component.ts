@@ -67,6 +67,7 @@ export class MakeABookingComponent implements OnInit {
     this.IS_STAFF = true;
 
     await this.getStaffList();
+    await this._getStaffBookingList();
   }
 
   async  getStaffList (){
@@ -189,6 +190,22 @@ export class MakeABookingComponent implements OnInit {
         this.TOTAL_PRICE = 0
       }
     }
+  }
+
+
+  async _getStaffBookingList (){
+
+    (await this.apiData.getStaffBookingList()).subscribe(
+      (response: any) => {
+        
+        
+        this.dataService.setStaffBookingList(response)
+       
+      },
+      (error: any) => {
+        alert(JSON.stringify(error))
+      }
+    );
   }
 
   async SelectStaff (staff_id: any) {

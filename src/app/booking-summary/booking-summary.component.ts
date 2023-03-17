@@ -8,6 +8,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { mergeMap } from 'rxjs/operators';
 import { Browser } from '@capacitor/browser';
 import { AlertController } from '@ionic/angular';
+declare var Stripe;
 
 @Component({
   selector: 'app-booking-summary',
@@ -15,6 +16,10 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./booking-summary.component.scss'],
 })
 export class BookingSummaryComponent implements OnInit {
+
+  stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
+  card: any;
+  
   HEADING: string = '4';
   DATE: string;
   TOTAL_DURATION: any = 0;
@@ -26,6 +31,9 @@ export class BookingSummaryComponent implements OnInit {
   BOOKING_WITH_STAFF: any = true;
   CANCEL_BOOKING_ID: number = 0;
   IS_LOGIN: boolean = false;
+  PAYMENT_MODEL_OPEN: boolean = false;
+  EMAIL: string;
+  RECIPT_URL: string = '';
 
   constructor(
     private router: Router,
@@ -42,10 +50,13 @@ export class BookingSummaryComponent implements OnInit {
 
   async ionViewWillEnter() {
     
+    await this._setupStripe();// Initialize stripe token
+
     await this.apiData._updateUserId();
     await this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
+        this.EMAIL = response.email;
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
 
@@ -125,6 +136,94 @@ export class BookingSummaryComponent implements OnInit {
     
     await this.checkLogin();
   }
+
+  async _setupStripe() {
+
+    let elements = this.stripe.elements();
+    var style = {
+      base: {
+        color: '#32325d',
+        lineHeight: '24px',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#aab7c4',
+          class:'vijay'
+        }
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a'
+      }
+    };
+  
+    this.card = elements.create('card', { style: style });
+    //console.log(this.card);
+    this.card.mount('#card-element');
+  
+    this.card.addEventListener('change', event => {
+      var displayError = document.getElementById('card-errors');
+      if (event.error) {
+        displayError.textContent = event.error.message;
+      } else {
+        displayError.textContent = '';
+      }
+    });
+  
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      //console.log(event)
+  
+      this.stripe.createToken(this.card).then(result => {
+        if (result.error) {
+          var errorElement = document.getElementById('card-errors');
+          errorElement.textContent = result.error.message;
+        } else {
+          console.log('result' , result);
+          
+          this._createPayment(result.token.id)
+          
+        }
+      });
+    });
+    }
+
+
+    async _createPayment(token: any) {
+
+      let amount = this.TOTAL_AMOUNT * 100;
+      let formData = new FormData();
+      formData.append('email' , this.EMAIL);
+      formData.append('token' , token);
+      formData.append('amount' , amount.toString());
+      console.log('token----' , token);
+      
+  
+      //await this.apiData.presentLoading();
+  
+      await (await this.apiData._createPayment(formData)).subscribe(
+        async (response: any) => {
+  
+          console.log('stripe respnose' , response);
+  
+          if (response.id) {  
+            this.RECIPT_URL = response.receiptUrl;
+            this.saveBooking();
+          } else {
+            
+            alert(response.details);
+          }
+        },
+        async (error: any) => {
+  
+          alert('server error');
+        }
+      );
+    }
+  
+
 
   async checkLogin() {
     await this.auth.getUser().subscribe((user_data: any) => {
@@ -232,7 +331,8 @@ export class BookingSummaryComponent implements OnInit {
 
       return;
     }
-
+    
+    
     await this.dataService.removePreviousUrl();
 
     let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00.000Z`;
@@ -289,6 +389,10 @@ export class BookingSummaryComponent implements OnInit {
               async (response: any) => {
                 
                 await this.apiData.dismiss();
+                
+                setTimeout(() => {
+                  if (this.RECIPT_URL != '') window.open(this.RECIPT_URL, '_blank');
+                }, 700);
 
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
@@ -297,6 +401,12 @@ export class BookingSummaryComponent implements OnInit {
               async (error: any) => {
                 
                 await this.apiData.dismiss();
+
+                setTimeout(() => {
+                  if (this.RECIPT_URL != '') window.open(this.RECIPT_URL, '_blank');
+                }, 700);
+                
+
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
                 }, 300);
