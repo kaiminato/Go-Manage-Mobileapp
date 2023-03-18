@@ -1,4 +1,4 @@
-import config from '../app/auth_config_prod.json';
+import config from '../app/auth_config_sales.json';
 
 const { domain, clientId, audience, apiUri, errorPath } = config as {
   domain: string;
@@ -9,12 +9,12 @@ const { domain, clientId, audience, apiUri, errorPath } = config as {
 };
 
 export const environment = {
-  production: true,
+  production: false,
 
   auth: {
     domain,
     clientId,
-    ...(audience && audience !== 'https://go-manage-production.eu.auth0.com/' ? { audience } : null),
+    ...(audience && audience !== 'https://go-manage-testing.eu.auth0.com/' ? { audience } : null),
     redirectUri: window.location.origin,
     errorPath,
     apiUri,

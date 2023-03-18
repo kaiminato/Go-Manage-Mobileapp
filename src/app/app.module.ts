@@ -37,6 +37,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 import { StripeTestComponent } from './stripe-test/stripe-test.component';
+import { environment } from '../environments/environment';
 
 const redirectUri = window.location.origin + `/about-us`;
 
@@ -80,9 +81,8 @@ const redirectUri = window.location.origin + `/about-us`;
     HttpClientModule,
     AuthModule.forRoot(
       {
-        "domain": "go-manage-production.eu.auth0.com",
-        "clientId": "AIESJbUsDo652vga4tdCRcg8hPOGy9zu",
-        "audience": "https://go-manage-production.eu.auth0.com/api/v2/",
+        domain: environment.auth.domain,
+        clientId: environment.auth.clientId,
         redirectUri,
         cacheLocation: 'localstorage',
         httpInterceptor: {
