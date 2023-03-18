@@ -85,7 +85,10 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     this.ALL_STAFF = await this.dataService.getStaffList();
     this.DATE = await this.getCurrentDate();
+
+    
     await this._getDisabledDate();
+    
     await this._getDayList();
    
    
@@ -159,12 +162,6 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     //let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota =  [];
     let current_date =  await this.getCurrentDate();
-    
-    // if (staff_detail[0].staffDetailFormatted.length > 0) {
-
-    //   // Get  staff rota
-    //   staff_rota = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
-    // }
 
     let daysConfig = [];
 
@@ -174,13 +171,16 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
       for (let staff_info of this.ALL_STAFF) {
 
-        if (staff_info.staffDetailFormatted.length > 0) {
+        if (staff_info.staffDetailFormatted != null ) {
+          if (staff_info.staffDetailFormatted.length > 0) {
 
-          // Get  staff rota
-          staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == value)
-         
-          if (staff_rota.length > 0) is_date_working = true; // 
+            // Get  staff rota
+            staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == value)
+           
+            if (staff_rota.length > 0) is_date_working = true; // 
+          }
         }
+        
       }
 
       if (!is_date_working)  daysConfig.push({date: new Date(value) , disable: true});
@@ -220,12 +220,14 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
         for (let staff_info of this.ALL_STAFF) {
 
-          if (staff_info.staffDetailFormatted.length > 0) {
-  
-        //     // Get  staff rota
-            let staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == value.full_date)
-           
-            if (staff_rota.length > 0) is_date_working = true; // 
+          if (staff_info.staffDetailFormatted != null ) {
+            if (staff_info.staffDetailFormatted.length > 0) {
+    
+          //     // Get  staff rota
+              let staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == value.full_date)
+            
+              if (staff_rota.length > 0) is_date_working = true; // 
+            }
           }
         }
       }
@@ -254,19 +256,21 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let time_list = [];
     for (let staff_info of this.ALL_STAFF) {
 
-      if (staff_info.staffDetailFormatted.length > 0) {
+      if (staff_info.staffDetailFormatted != null ) {
+        if (staff_info.staffDetailFormatted.length > 0) {
 
-    //     // Get  staff rota
-        let staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE)
-        console.log('staff_rota----' , staff_rota);
+          //     // Get  staff rota
+          let staff_rota = await staff_info.staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE)
+          console.log('staff_rota----' , staff_rota);
 
-        if (staff_rota.length > 0) {
+          if (staff_rota.length > 0) {
 
-          for (let rota_value  of staff_rota) {
-            time_list.push( rota_value.startShiftTime); 
-            time_list.push( rota_value.endShiftTime); 
-          }
-        } 
+            for (let rota_value  of staff_rota) {
+              time_list.push( rota_value.startShiftTime); 
+              time_list.push( rota_value.endShiftTime); 
+            }
+          } 
+        }
       }
     }
 
@@ -331,8 +335,13 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     
     for (let staff of this.ALL_STAFF) {
 
-      let rota = await staff.staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE);
-      
+      let rota = [];
+
+      if (staff.staffDetailFormatted != null) {
+        
+        rota = await staff.staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE);
+      }
+
       if (rota.length > 0) {
 
         for (let value of rota) {
@@ -411,9 +420,11 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
     let staff_detail = await this.dataService.getStaffDetail(staff_id);
     let staff_availability_dates =  [];
       
-    if (staff_detail[0].staffDetailFormatted.length > 0) {
+    if (staff_detail[0].staffDetailFormatted != null) {
+      if (staff_detail[0].staffDetailFormatted.length > 0) {
 
-      staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == selected_date)
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == selected_date)
+      }
     }
 
     let current_date_booking = await this.BOOKING_LIST.filter( data => data.startTime.includes(selected_date) && staff_id == data.employeeId);
@@ -614,7 +625,12 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
       
         for(let staff of staff_list){
 
-          let get_working_day = staff.staffDetailFormatted.filter( data => data.dayId == created_date.getDay())
+          let get_working_day = [];
+          
+          if (staff.staffDetailFormatted != null) {
+            
+            get_working_day = staff.staffDetailFormatted.filter( data => data.dayId == created_date.getDay())
+          }
 
           if (get_working_day.length > 0) { is_date_disabled = false; }
 
@@ -641,7 +657,12 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
       for (let index in all_staff) {
 
-        let is_day_working = all_staff[index].staffDetailFormatted.filter( data => data.dayId == day_num);
+        let is_day_working = [];
+        
+        if (all_staff[index].staffDetailFormatted != null) {
+          is_day_working = all_staff[index].staffDetailFormatted.filter( data => data.dayId == day_num);
+        }
+        
 
         if (is_day_working.length > 0) { is_day_off = true; }
       }
