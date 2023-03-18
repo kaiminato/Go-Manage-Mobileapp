@@ -57,9 +57,10 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     this.BOOKING_LIST = await this.dataService.getStaffBookingList();
     //this.ALL_SHIFT = await this.dataService.getStaticShift();
     let booking_data = await this.dataService.getInitialBookingdata();
+    
     let date = booking_data.date;
     
-    this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date(date).getDay());
+    //this.ALL_SHIFT = await this.dataService.getNewStaticShift(new Date(date).getDay());
     
     await this._filterStaffList();
   }
@@ -74,48 +75,53 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     console.log('this.STAFF_LIST----' , this.STAFF_LIST);
     for (let staff of this.STAFF_LIST) {
 
-      if (staff.staffDetailFormatted.length > 0) {
-        
-       // console.log('rota--' , staff.staffDetailFormatted)
-        let staff_rota = await staff.staffDetailFormatted.filter( data => data.description == '' && data.workDate == booking_data.date);
-        
-        if (staff_rota.length == 0) continue; 
-        console.log('staff_rota---' , staff_rota)
-      
-        let staff_date_booked_data = this.BOOKING_LIST.filter ( data => data.employeeId == staff.employee_id && data.startTime.includes(booking_data.date))
-        
-        // console.log('staff_date_booked_data----' , staff_date_booked_data);
-        
-        let shift_list = await this._getShiftList(staff.employee_id , selecetd_date);
-        let total_duration = 0;
-
-        for (let service of booking_data.servises) total_duration += service.serviceDuration;
-        
-        let starting_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
-        let ending_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
-
-        ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1)
-        ending_date_time = new Date(ending_date_time);
-
-        let is_passed = true;
-        for (let shift of shift_list) {
-
-          let new_date = new Date(`${selecetd_date} ${shift.value}`);
+      if (staff.staffDetailFormatted != null) {
+        if (staff.staffDetailFormatted.length > 0) {
           
-          if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
+          // console.log('rota--' , staff.staffDetailFormatted)
+          let staff_rota = [];
+          staff_rota = await staff.staffDetailFormatted.filter( data => data.description == '' && data.workDate == booking_data.date);
+          
+          
+          
+          if (staff_rota.length == 0) continue; 
+          console.log('staff_rota---' , staff_rota)
+        
+          let staff_date_booked_data = this.BOOKING_LIST.filter ( data => data.employeeId == staff.employee_id && data.startTime.includes(booking_data.date))
+          
+          // console.log('staff_date_booked_data----' , staff_date_booked_data);
+          
+          let shift_list = await this._getShiftList(staff.employee_id , selecetd_date);
+          let total_duration = 0;
+
+          for (let service of booking_data.servises) total_duration += service.serviceDuration;
+          
+          let starting_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
+          let ending_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
+
+          ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1)
+          ending_date_time = new Date(ending_date_time);
+
+          let is_passed = true;
+          for (let shift of shift_list) {
+
+            let new_date = new Date(`${selecetd_date} ${shift.value}`);
             
-            is_passed = false;
+            if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
+              
+              is_passed = false;
+            }
           }
+
+          if (is_passed) {
+
+            this.AVAILABLE_STAFF.push(staff);
+          }
+
+          console.log('total_duration---' , total_duration);
+          console.log('starting_date_time---' , starting_date_time);
+          console.log('ending_date_time---' , ending_date_time);
         }
-
-        if (is_passed) {
-
-          this.AVAILABLE_STAFF.push(staff);
-        }
-
-        console.log('total_duration---' , total_duration);
-        console.log('starting_date_time---' , starting_date_time);
-        console.log('ending_date_time---' , ending_date_time);
       }
       
     }
@@ -222,10 +228,12 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     let staff_detail = await this.dataService.getStaffDetail(staff_id);
     let staff_availability_dates =  [];
-      
-    if (staff_detail[0].staffDetailFormatted.length > 0) {
+    
+    if (staff_detail[0].staffDetailFormatted != null) {
+      if (staff_detail[0].staffDetailFormatted.length > 0) {
 
-      staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == selected_date)
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == selected_date)
+      }
     }
 
     let current_date_booking = await this.BOOKING_LIST.filter( data => data.startTime.includes(selected_date) && staff_id == data.employeeId);
