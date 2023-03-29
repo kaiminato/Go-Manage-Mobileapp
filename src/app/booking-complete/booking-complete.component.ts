@@ -10,6 +10,7 @@ import { ImageService } from '../services/image.service';
 export class BookingCompleteComponent implements OnInit {
 
   NAME: string = '';
+  RECIEPT_URL: string = ""
   constructor(
     public  imageService: ImageService,
     private dataService: DataService,
@@ -20,8 +21,9 @@ export class BookingCompleteComponent implements OnInit {
   async ionViewWillEnter (){
 
     let data = await this.dataService.getInitialBookingdata();
+    this.RECIEPT_URL = data.reciept_url;
     let staff_details = await this.dataService.getStaffDetail(data.staff_id);
-
+    console.log('data---' , data)
     //this.NAME = `${staff_details[0].firstName} ${staff_details[0].lastName}`
     this.NAME = 'Jade Amber'
   }

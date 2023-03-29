@@ -13,8 +13,12 @@
     </ion-row>
 
     <ion-row class="return_home_section">
-      <ion-col size="12" class="ion-text-center">
+      <ion-col size="6" class="ion-text-center">
         <ion-button [routerLink]="['/']">Return home</ion-button>
+      </ion-col>
+      <ion-col size="6" class="ion-text-center">
+        <!-- <a class="anchor-button" >View Reciept</a> -->
+        <a [href]="RECIEPT_URL" target="_blank"><ion-button style=" --background: #1b1b4d;">View Reciept</ion-button></a>
       </ion-col>
     </ion-row>
   </ion-grid>
