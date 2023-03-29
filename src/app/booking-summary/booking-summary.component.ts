@@ -210,6 +210,10 @@ export class BookingSummaryComponent implements OnInit {
   
           if (response.id) {  
             this.RECIPT_URL = response.receiptUrl;
+
+            this.BOOKINGS_DETAILS.reciept_url = this.RECIPT_URL;
+            await this.dataService.setBookingData(this.BOOKINGS_DETAILS)
+            
             this.saveBooking();
           } else {
             
@@ -391,20 +395,12 @@ export class BookingSummaryComponent implements OnInit {
                 await this.apiData.dismiss();
                 
                 setTimeout(() => {
-                  if (this.RECIPT_URL != '') window.open(this.RECIPT_URL, '_blank');
-                }, 700);
-
-                setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
                 }, 300);
               },
               async (error: any) => {
                 
                 await this.apiData.dismiss();
-
-                setTimeout(() => {
-                  if (this.RECIPT_URL != '') window.open(this.RECIPT_URL, '_blank');
-                }, 700);
                 
 
                 setTimeout(() => {
