@@ -365,7 +365,7 @@ export class SelectTimingComponent implements OnInit {
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
     
     this.slides.slideTo(active_index-1,1000);
-
+    
     await this._getShiftList();
   }
 
@@ -468,13 +468,64 @@ export class SelectTimingComponent implements OnInit {
       }
       
       // Shift disabled based on Booking time -- end
+      let booking_data = await this.dataService.getInitialBookingdata();
+      let booking_total_duration = 0;
+      let total_shift_will_count = 1;
 
+      for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+      booking_total_duration = booking_total_duration - 1;
+      console.log('booking_total_duration---' , booking_total_duration);
+
+      total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
+
+      console.log('total_shift_will_count--' , total_shift_will_count);
+      console.log('booking_data-----' , booking_data);
+
+
+      // Set Soft disabled 
+      if (total_shift_will_count != 1) {
+
+        for (let index in this.ALL_SHIFT) {
+          
+          let checked_pass = true;
+          
+          if (this.ALL_SHIFT[index]['is_disabled'] == false) {
+  
+            for (let i = 1; i < total_shift_will_count; i++) {
+              
+              let num = Number(index)+i;
+             
+  
+              if (typeof this.ALL_SHIFT[num] !== 'undefined') {
+  
+                if (this.ALL_SHIFT[num]['is_disabled'] == true && checked_pass == true) {
+                
+                  checked_pass = false;
+                }
+    
+              } else {
+  
+                checked_pass = false;
+              }
+            }
+  
+            if (!checked_pass) {
+  
+              this.ALL_SHIFT[index]['is_disabled'] = true;
+              this.ALL_SHIFT[index]['soft_disabled'] = true;
+            }
+          }
+        }
+      } 
     } else {
 
       return
     }
 
     console.log('All Shift----' , this.ALL_SHIFT);
+
+    return
     
   }
 
