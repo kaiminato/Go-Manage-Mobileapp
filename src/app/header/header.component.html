@@ -10,7 +10,7 @@
 
       <ion-col size="10">
         <div class="header-text">
-          <ion-text>
+          <ion-text style="color: {{this.dataService.TEXT_COLOR}};">
             {{ this.HEADING_TEXT }} 
           </ion-text>
           <ion-button 
@@ -19,6 +19,7 @@
             fill="clear" 
             [disabled]="!PROFILE_HEADER_DATA.edit_profile"
             (click)="saveProfile()"
+            style="color: {{this.dataService.TEXT_COLOR}};"
             >Save</ion-button>
         </div>
       </ion-col>

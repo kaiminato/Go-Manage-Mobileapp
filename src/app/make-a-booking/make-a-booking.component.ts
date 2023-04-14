@@ -33,7 +33,7 @@ export class MakeABookingComponent implements OnInit {
     public imageService: ImageService,
     private router: Router,
     private apiData: ApiDataService,
-    private dataService: DataService,
+    public dataService: DataService,
     private activateRoute: ActivatedRoute
    ) { }
 

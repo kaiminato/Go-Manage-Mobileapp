@@ -25,7 +25,7 @@ export class BookingSummaryComponent implements OnInit {
   TOTAL_DURATION: any = 0;
   STARTING_TIME: string;
   ENDING_TIME: string;
-  STUDIO_NAME: string = 'Jade amber beauty studio Corofin Tuam Galway';
+  STUDIO_NAME: string = '';
   TOTAL_AMOUNT: any = 0;
   BOOKINGS_DETAILS: any;
   BOOKING_WITH_STAFF: any = true;
@@ -116,7 +116,10 @@ export class BookingSummaryComponent implements OnInit {
       this.TOTAL_DURATION += service.serviceDuration;
       this.TOTAL_AMOUNT += service.servicePrice;
     }
-    //this.STUDIO_NAME = this.BOOKINGS_DETAILS.staff_details[0].firstName+" "+this.BOOKINGS_DETAILS.staff_details[0].lastName+ " "+this.STUDIO_NAME;
+
+    let owner_details = await this.dataService._getOwnerData();
+
+    this.STUDIO_NAME = owner_details != '' ? owner_details['site_name']+" "+ owner_details['businessAddress'] : '';
 
     let [year, month, day]  = this.BOOKINGS_DETAILS.date.split('-');
     let new_date            = new Date(this.BOOKINGS_DETAILS.date);

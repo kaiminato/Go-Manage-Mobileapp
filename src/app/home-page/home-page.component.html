@@ -1,6 +1,6 @@
-<ion-content>
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}">
  
-  <ion-img [src]="this.imageService.LOGO" class="app-logo ion-margin-top"></ion-img>
+  <ion-img [src]="this.dataService.APP_HOME_PAGE_ICON" class="app-logo ion-margin-top"></ion-img>
  
   <ion-grid *ngFor="let row_value of this.LIST; let i = index">
     <ion-row [class.some_space]=" i == 0 ">
@@ -19,7 +19,7 @@
             </span>
 
             <div>
-              <ion-text >{{ value.text }}</ion-text>
+              <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">{{ value.text }}</ion-text>
             </div>
           </ion-card-content>
 
