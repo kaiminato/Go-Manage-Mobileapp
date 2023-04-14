@@ -13,7 +13,7 @@ export class BookingCompleteComponent implements OnInit {
   RECIEPT_URL: string = ""
   constructor(
     public  imageService: ImageService,
-    private dataService: DataService,
+    public dataService: DataService,
     ) { }
 
   ngOnInit() {}
@@ -23,9 +23,11 @@ export class BookingCompleteComponent implements OnInit {
     let data = await this.dataService.getInitialBookingdata();
     this.RECIEPT_URL = data.reciept_url;
     let staff_details = await this.dataService.getStaffDetail(data.staff_id);
-    console.log('data---' , data)
+    console.log('data---' , data);
     //this.NAME = `${staff_details[0].firstName} ${staff_details[0].lastName}`
-    this.NAME = 'Jade Amber'
+    let owner_details = await this.dataService._getOwnerData();
+    console.log('owner_details-----' , owner_details);
+    this.NAME = owner_details != '' ? owner_details['site_name'] : '';
   }
 
   async ionViewWillLeave() {

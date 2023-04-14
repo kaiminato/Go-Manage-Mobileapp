@@ -29,7 +29,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     public imageService: ImageService,
     private apiData: ApiDataService,
-    private dataService: DataService,
+    public dataService: DataService,
   ) { }
 
   async ngOnInit() {

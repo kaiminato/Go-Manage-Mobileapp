@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ImageService } from './image.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,7 @@ export class DataService {
   public STAFF_LIST_KEY: string  = 'staff_list';
   public SERVICE_LIST_KEY: string  = 'service_list';
   public STAFF_BOOKING_LIST_KEY: string  = 'staff_booking_list';
+  public OWNER_DATA_KEY: string  = 'owner_app_info';
   public ALL_SHIFT: any = [];
   public BOOKING_WITH_STAFF: Number = 1;
   public BOOKING_WITH_SERVICE: Number = 2;
@@ -39,8 +41,12 @@ export class DataService {
   public VOUCHER_SEND_TYPE_SOME_ELSE: any = 2;
   public VOUCHER_DATA_KEY: any = 'voucher_data';
   public LOGGED_IN_PREVIOUS_URL_KEY = 'previous_url';
+  public BACKGROUND_COLOR: string = '#ffffff';
+  public BUTTON_COLOR: string = '#047473';
+  public TEXT_COLOR: string = '#ffffff';
+  public APP_HOME_PAGE_ICON: string = this.imageService.LOGO;
 
-  constructor() { }
+  constructor(public imageService: ImageService,) { }
 
   async getMonths () {
 
@@ -370,6 +376,41 @@ export class DataService {
       );
 
       return await staff_available_date_id.length == 0 ? true : false;
+  }
+
+  async _setOwnerData(data: any) {
+
+    return localStorage.setItem(this.OWNER_DATA_KEY ,  JSON.stringify(data));
+  }
+
+  async _getOwnerData () {
+
+    let owner_data = await localStorage.getItem(this.OWNER_DATA_KEY);
+    return await owner_data == undefined || owner_data == null ? [] :  JSON.parse(owner_data);
+  }
+
+  async _getOwnerColor() {
+
+    let owner_data = await localStorage.getItem(this.OWNER_DATA_KEY);
+
+    
+
+    if (owner_data == undefined || owner_data == null) {
+
+      return false
+      
+    } else {
+
+      owner_data = JSON.parse(owner_data)
+
+      this.BACKGROUND_COLOR = owner_data['colour_primary'] != '' ? owner_data['colour_primary'] : this.BACKGROUND_COLOR;
+      this.BUTTON_COLOR = owner_data['colour_secondary'] != '' ? owner_data['colour_secondary'] : this.BUTTON_COLOR;
+      this.TEXT_COLOR = owner_data['colour_text'] != '' ? owner_data['colour_text'] : this.TEXT_COLOR;
+      this.APP_HOME_PAGE_ICON = owner_data['logo'] != '' ? owner_data['logo'] : this.APP_HOME_PAGE_ICON;
+      
+    }
+    
+    return true
   }
 
   async setStaffList (data: any) {

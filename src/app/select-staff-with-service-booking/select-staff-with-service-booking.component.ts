@@ -27,7 +27,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private dataService: DataService,
+    public dataService: DataService,
     public imageService: ImageService,
     private router: Router,
     public alertController: AlertController,

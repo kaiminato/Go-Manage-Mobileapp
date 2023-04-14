@@ -1,13 +1,13 @@
-<ion-content>
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
 
-  <ion-list lines="none" class="ion-margin-top" >
+  <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
     
-    <ion-item button  class="details ion-margin-top"   detail="false">
+    <ion-item button  class="details ion-margin-top"   detail="false" >
           
-      <ion-text class="ion-margin-bottom "> {{ DATE }} at {{ STARTING_TIME }} 
+      <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ DATE }} at {{ STARTING_TIME }} 
         <br/>
-        <ion-text>{{ TOTAL_DURATION }} minutes duration, ends at {{ ENDING_TIME }}</ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ TOTAL_DURATION }} minutes duration, ends at {{ ENDING_TIME }}</ion-text>
       </ion-text>
         
     </ion-item>
@@ -16,11 +16,11 @@
     <ion-item button  class="details ion-margin-top"   detail="false">
           
       
-      <ion-text class="ion-margin-bottom"> {{ STUDIO_NAME }}</ion-text>
-      <ion-img slot="end" [src]="this.imageService.LOGO" class="ion-margin-bottom"></ion-img>
+      <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ STUDIO_NAME }}</ion-text>
+      <ion-img slot="end" [src]="this.dataService.APP_HOME_PAGE_ICON" class="ion-margin-bottom"></ion-img>
     </ion-item>
 
-    <ion-item button  class="details ion-margin-top"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
+    <ion-item button  class="details ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
           
       
       <ion-text class="ion-margin-bottom"> {{ service.serviceName }}
@@ -33,7 +33,7 @@
     </ion-item>
 
 
-    <ion-item button  class="details_no_border ion-no-border ion-margin-top"   detail="false">
+    <ion-item button  class="details_no_border ion-no-border ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false">
           
       
       <ion-text class="ion-margin-bottom ion-margin-top"> Total
@@ -50,7 +50,14 @@
 
       <!-- <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="saveBooking()"> Confirm</ion-button> -->
 
-      <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="PAYMENT_MODEL_OPEN = true;"> Confirm</ion-button>
+      <ion-button 
+        slot="end" 
+        class="ion-margin-bottom ion-margin-top" 
+        (click)="PAYMENT_MODEL_OPEN = true;"
+        style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+        > 
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Confirm</ion-text>
+      </ion-button>
   
     </ion-item>
 
@@ -66,16 +73,16 @@
 <div id="myModal" class="modal" style="display: {{ PAYMENT_MODEL_OPEN ? 'block' : 'none'}};">
 
   <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
+  <div class="modal-content"  style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+    <div class="modal-header" style="background:{{this.dataService.BACKGROUND_COLOR}} !important; color:{{this.dataService.TEXT_COLOR}} !important;">
       <span class="close" (click)="PAYMENT_MODEL_OPEN = false;">&times;</span>
-      <h2>Stripe Payment</h2>
+      <h2>Online Payment</h2>
     </div>
     <div class="modal-body">
       <ion-card class="welcome-card">
         <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
         <ion-card-header>
-          <ion-row>
+          <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
             <ion-col>Total Payment</ion-col>
             <ion-col> {{ TOTAL_AMOUNT | currency: 'EUR'}} </ion-col>
           </ion-row>
@@ -88,7 +95,15 @@
               <!-- Used to display Element errors -->
               <div id="card-errors" role="alert"></div>
             </div>
-            <ion-button type="submit" color="success" expand="full">Make Payment</ion-button>
+            <ion-button 
+              type="submit" 
+              style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;" 
+               
+              expand="full">
+              
+              <ion-text style="color:{{this.dataService.TEXT_COLOR}} !important;">Make Payment</ion-text>
+            
+            </ion-button>
           </form>
         </ion-card-content>
       </ion-card>

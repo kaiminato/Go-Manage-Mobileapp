@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
   <app-header (navigation)="navigation()" (updateUser)="updateUser()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" [PROFILE_HEADER_DATA]="PROFILE_HEADER"></app-header>
   
   <!------------------------ Show Profile --------------------------->
@@ -7,8 +7,8 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12" class="ion-text-center">
-            <div class="user-name" *ngIf="SHORT_NAME">
-              <ion-text class="usr_name">
+            <div class="user-name" *ngIf ="SHORT_NAME">
+              <ion-text class="usr_name" style="color: {{this.dataService.TEXT_COLOR}};">
                 {{SHORT_NAME}}
                 <span class="edit_icon"> 
                   <ion-icon name="pencil" class="pencili-icon" (click)="showForm()"></ion-icon> 
@@ -26,17 +26,17 @@
 
       
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
 
       <ion-grid>
         <ion-row>
           <ion-col size="12">
-            <ion-list>
+            <ion-list >
               <ion-item detail="false">
                 <ion-label>
-                  <ion-text>First Name</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">First Name</ion-text>
                 </ion-label>
-                <ion-text >{{ FIRST_NAME }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ FIRST_NAME }}</ion-text>
                 <div>
                   <ion-input [(ngModel)]="FIRST_NAME" *ngIf="EDIT_PROFILE"></ion-input>
                 </div>
@@ -48,30 +48,30 @@
 
               <ion-item detail="false">
                 <ion-label>
-                  <ion-text>Last Name</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Last Name</ion-text>
                 </ion-label>
-                <ion-text>{{ LAST_NAME }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ LAST_NAME }}</ion-text>
               </ion-item>
 
               <ion-item detail="false">
                 <ion-label>
-                  <ion-text>Gender</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Gender</ion-text>
                 </ion-label>
-                <ion-text>{{ GENDER }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ GENDER }}</ion-text>
               </ion-item>
 
               <ion-item detail="false">
                 <ion-label>
-                  <ion-text>Phone</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Phone</ion-text>
                 </ion-label>
-                <ion-text>{{ PHONE }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ PHONE }}</ion-text>
               </ion-item>
 
               <ion-item detail="false">
                 <ion-label>
-                  <ion-text>Birthday</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Birthday</ion-text>
                 </ion-label>
-                <ion-text>{{ BIRTHDAY }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ BIRTHDAY }}</ion-text>
               </ion-item>
 
               
@@ -85,7 +85,7 @@
 
 
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
 
       <ion-grid>
         <ion-row>
@@ -93,9 +93,9 @@
             <ion-list>
               <ion-item detail="false" lines="none">
                 <ion-label>
-                  <ion-text>Email</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Email</ion-text>
                 </ion-label>
-                <ion-text>{{ EMAIL }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ EMAIL }}</ion-text>
               </ion-item>
             </ion-list>
 
@@ -104,7 +104,7 @@
       </ion-grid>
 
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
 
       <ion-grid>
         <ion-row>
@@ -112,9 +112,9 @@
             <ion-list>
               <ion-item detail="false" lines="none">
                 <ion-label>
-                  <ion-text>Home Location</ion-text>
+                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Home Location</ion-text>
                 </ion-label>
-                <ion-text>{{ HOME_LOCATION }}</ion-text>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ HOME_LOCATION }}</ion-text>
               </ion-item>
             </ion-list>
 
@@ -131,7 +131,7 @@
         <ion-row>
           <ion-col size="12" class="ion-text-center">
             <div class="user-name">
-              <ion-text>{{SHORT_NAME}}</ion-text>
+              <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{SHORT_NAME}}</ion-text>
             </div>
           </ion-col>
         </ion-row>
@@ -141,7 +141,7 @@
 
       
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
 
       <ion-grid>
         <ion-row>
@@ -149,20 +149,20 @@
             <ion-list>
 
               <ion-item detail="false">
-                <ion-label position="fixed"><ion-text>First Name</ion-text></ion-label>
+                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">First Name</ion-text></ion-label>
                 <ion-input [(ngModel)]="FIRST_NAME"></ion-input>
               </ion-item>
 
               <ion-item detail="false">
-                <ion-label position="fixed"> <ion-text>Last Name</ion-text> </ion-label>
+                <ion-label position="fixed"> <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Last Name</ion-text> </ion-label>
                 <ion-input [(ngModel)]="LAST_NAME"></ion-input>
               </ion-item>
 
 
               <ion-item detail="false">
-                <ion-label position="fixed"><ion-text>Gender</ion-text></ion-label>
+                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Gender</ion-text></ion-label>
                 <!-- <ion-input [(ngModel)]="GENDER"></ion-input> -->
-                <ion-select [(ngModel)]="GENDER">
+                <ion-select [(ngModel)]="GENDER" style="color: {{this.dataService.TEXT_COLOR}};">
                   <ion-select-option value="MALE">MALE</ion-select-option>
                   <ion-select-option value="FEMALE">FEMALE</ion-select-option>
                  
@@ -170,12 +170,12 @@
               </ion-item>
 
               <ion-item detail="false">
-                <ion-label position="fixed"> <ion-text>Phone</ion-text> </ion-label>
+                <ion-label position="fixed"> <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Phone</ion-text> </ion-label>
                 <ion-input [(ngModel)]="PHONE" type="number" (keypress)="numberOnlyValidation($event)"></ion-input>
               </ion-item>
 
               <ion-item detail="false">
-                <ion-label position="fixed"><ion-text>Birthday</ion-text></ion-label>
+                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Birthday</ion-text></ion-label>
                 <ion-input type="date" [(ngModel)]="BIRTHDAY"></ion-input>
               </ion-item>
 
@@ -215,7 +215,7 @@
       </ion-grid> -->
 
       <!------------ Divider --------------->
-      <div class="divider"></div>
+      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
 
       <ion-grid>
         <ion-row>
@@ -223,7 +223,7 @@
             <ion-list>
               
               <ion-item detail="false" lines="none">
-                <ion-label position="fixed"><ion-text>Home Location</ion-text></ion-label>
+                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Home Location</ion-text></ion-label>
                 <ion-input [(ngModel)]="HOME_LOCATION"></ion-input>
               </ion-item>
 

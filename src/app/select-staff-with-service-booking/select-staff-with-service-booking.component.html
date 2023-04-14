@@ -1,8 +1,8 @@
-<ion-content>
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="false" [IS_BACK]="true"></app-book-now-header>
 
   <div class="list">
-    <ion-list lines="none">
+    <ion-list lines="none" style="background: {{this.dataService.BACKGROUND_COLOR}};">
       <ion-item button 
         *ngFor="let value of this.AVAILABLE_STAFF" 
         class="staff_list" 
@@ -14,7 +14,7 @@
           <ion-thumbnail slot="start">
             <img [src]=" value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
           </ion-thumbnail>
-          <ion-label> <h3>{{ value.firstName }} {{ value.lastName }}</h3>  </ion-label>
+          <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important;"> <h3>{{ value.firstName }} {{ value.lastName }}</h3>  </ion-label>
         
       </ion-item>
     </ion-list>
