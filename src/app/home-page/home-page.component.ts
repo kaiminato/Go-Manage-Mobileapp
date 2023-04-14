@@ -28,7 +28,7 @@ export class HomePageComponent implements OnInit {
         id: 3 , is_icon: true, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' , image: this.imageService.COMING_SOON
       },
       {
-        id: 4 , is_icon: true, name:'groups', text: 'About us' ,router_link: '/', image: this.imageService.COMING_SOON
+        id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us', image: this.imageService.COMING_SOON
       },
     ],
     [
@@ -44,7 +44,7 @@ export class HomePageComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
-    private dataService: DataService,
+    public dataService: DataService,
   ) {
 
   }
@@ -56,9 +56,41 @@ export class HomePageComponent implements OnInit {
   async ionViewWillEnter () {
 
 
+    await this.dataService._getOwnerColor();
     await this.apiData._updateUserId();
 
     await this.checkPreviousUrl();
+    await this._getBusinessOwnerDetails();
+  }
+
+  async _getBusinessOwnerDetails () {
+
+    await (await this.apiData._getBusinessOwnerDetails()).subscribe(
+      async (response: any) => {
+
+        if (response.length > 0) {
+
+          // console.log('background---' , this.dataService.BACKGROUND_COLOR);
+          // console.log('button---' , this.dataService.BUTTON_COLOR);
+          // console.log('text---' , this.dataService.TEXT_COLOR);
+
+          await this.dataService._setOwnerData(response[0]);
+
+          await this.dataService._getOwnerColor();
+
+          // console.log('after-------')
+          // console.log('background---' , this.dataService.BACKGROUND_COLOR);
+          // console.log('button---' , this.dataService.BUTTON_COLOR);
+          // console.log('text---' , this.dataService.TEXT_COLOR);
+
+          
+        }
+      },
+      (error: any) => {
+
+        console.log('error-----' , error)
+      }
+    );
   }
 
   async checkPreviousUrl () {

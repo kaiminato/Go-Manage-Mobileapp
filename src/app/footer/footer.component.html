@@ -7,28 +7,28 @@
 
       <ion-tab-button [routerLink]="['/']">
         <ion-icon name="home"></ion-icon>
-        <ion-text>Home</ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">Home</ion-text>
       </ion-tab-button>
 
       <ion-tab-button [routerLink]="['/my-booking-list']">
         <ion-icon name="calendar"></ion-icon>
-        <ion-text>Bookings</ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">Bookings</ion-text>
       </ion-tab-button>
       
 
       <ion-tab-button [routerLink]="['/profile']">
         <ion-icon name="person" ></ion-icon>
-        <ion-text>Profile</ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">Profile</ion-text>
       </ion-tab-button>
 
       <ion-tab-button (click)="logout()" *ngIf="IS_LOGIN">
         <ion-icon name="log-out" ></ion-icon>
-        <ion-text>Logout</ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">Logout</ion-text>
       </ion-tab-button>
 
       <ion-tab-button (click)="login()" *ngIf="!IS_LOGIN">
         <ion-icon name="log-in" ></ion-icon>
-        <ion-text>Login</ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">Login</ion-text>
       </ion-tab-button>
 
       <!-- <ion-tab-button [routerLink]="['/stripe']">

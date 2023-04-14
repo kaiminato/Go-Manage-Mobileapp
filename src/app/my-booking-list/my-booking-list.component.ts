@@ -28,7 +28,7 @@ export class MyBookingListComponent implements OnInit {
   constructor(
     private router: Router,
     private apiData: ApiDataService,
-    private dataService: DataService,
+    public dataService: DataService,
     public auth: AuthService,
     private alertController: AlertController,
   ) { }

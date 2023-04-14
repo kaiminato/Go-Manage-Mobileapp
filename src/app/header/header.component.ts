@@ -1,4 +1,5 @@
 import { Component, OnInit , Input ,  Output, EventEmitter } from '@angular/core';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,7 @@ export class HeaderComponent implements OnInit {
   @Input() HEADING_TEXT = '';
   @Input() IS_BACK = '';
   @Input() PROFILE_HEADER_DATA = '';
-  constructor() {
+  constructor(public dataService: DataService,) {
     
    }
 

@@ -57,7 +57,7 @@ export class SelectTimingWithServiceBookingComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private dataService: DataService,
+    public dataService: DataService,
     private router: Router,
     private pickerCtrl: PickerController,
     private modalController: ModalController,

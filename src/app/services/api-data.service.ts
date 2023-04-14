@@ -30,6 +30,11 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'services/retrieveServices');
   }
 
+  async _getBusinessOwnerDetails() {
+
+    return await this.http.get(this.apiUrl + 'settings/getSettings');
+  }
+
   async getStaffBookingList() {
 
     return await this.http.get(this.apiUrl + 'bookings/retrieveBookings');
