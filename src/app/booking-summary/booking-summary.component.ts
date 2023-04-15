@@ -389,6 +389,8 @@ export class BookingSummaryComponent implements OnInit {
                 firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
                 lastName: this.BOOKINGS_DETAILS.staff_details[0].lastName,
                 email: user_info.email,
+                //paymentReceipt: this.RECIPT_URL,
+                //isApp: false // 1 means booking booked from app side
               });
             }
 
@@ -405,7 +407,6 @@ export class BookingSummaryComponent implements OnInit {
                 
                 await this.apiData.dismiss();
                 
-
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
                 }, 300);
