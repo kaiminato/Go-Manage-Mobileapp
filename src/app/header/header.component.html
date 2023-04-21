@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="--background: {{this.dataService.BUTTON_COLOR}}; !important">
     <ion-row>
       
       <ion-col size="2">
@@ -10,7 +10,7 @@
 
       <ion-col size="10">
         <div class="header-text">
-          <ion-text style="color: {{this.dataService.TEXT_COLOR}};">
+          <ion-text>
             {{ this.HEADING_TEXT }} 
           </ion-text>
           <ion-button 

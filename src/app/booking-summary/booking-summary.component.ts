@@ -17,7 +17,8 @@ declare var Stripe;
 })
 export class BookingSummaryComponent implements OnInit {
 
-  stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
+  // stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
+  stripe ;
   card: any;
   
   HEADING: string = '4';
@@ -49,6 +50,16 @@ export class BookingSummaryComponent implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter() {
+
+    
+    let owner_data = await this.dataService._getOwnerData();
+
+    if (owner_data) {
+
+      this.stripe = Stripe(owner_data.stripe_publishable_key)
+    }
+
+    console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
     
     await this._setupStripe();// Initialize stripe token
 
@@ -389,8 +400,8 @@ export class BookingSummaryComponent implements OnInit {
                 firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
                 lastName: this.BOOKINGS_DETAILS.staff_details[0].lastName,
                 email: user_info.email,
-                //paymentReceipt: this.RECIPT_URL,
-                //isApp: false // 1 means booking booked from app side
+                paymentReceipt: this.RECIPT_URL,
+                isApp: true // 1 means booking booked from app side
               });
             }
 
@@ -406,6 +417,7 @@ export class BookingSummaryComponent implements OnInit {
               async (error: any) => {
                 
                 await this.apiData.dismiss();
+                console.log('error--' , error)
                 
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);

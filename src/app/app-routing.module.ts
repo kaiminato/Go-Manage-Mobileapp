@@ -22,6 +22,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 import { StripeTestComponent } from './stripe-test/stripe-test.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 
 const routes: Routes = [
@@ -74,6 +75,11 @@ const routes: Routes = [
   {
     path: 'about-us',
     component: AboutUsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'contact-us',
+    component: ContactUsComponent,
     canActivate: [AuthGuard]
   },
   {
