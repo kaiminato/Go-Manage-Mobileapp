@@ -84,6 +84,7 @@ export class MyBookingListComponent implements OnInit {
                         date_time: date_time,
                         start_time: response[index].startTime,
                         endTime: response[index].endTime,
+                        paymentReceipt: response[index].paymentReceipt,
                         compare_date_time: (response[index].endTime.split('T')[0])
                         
                       };
