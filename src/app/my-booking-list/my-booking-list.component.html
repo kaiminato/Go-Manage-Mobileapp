@@ -70,6 +70,7 @@
                 >
                 <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Cancel booking</ion-text>
               </ion-button>
+              <a href="{{booking.paymentReceipt}}" target=”_blank” class="reciept_payment">
 
                 <ion-button
                 expand="full" 
@@ -79,6 +80,9 @@
                 style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;" 
                 >
                 <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Receipt of payment</ion-text></ion-button>
+                
+
+              </a>
                 
             </div>
           </div>
