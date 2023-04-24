@@ -12,5 +12,9 @@ export class ImageService {
   public SHOE: string = '../assets/images/shoe.jpeg';
   public BEG: string = '../assets/images/beg.jpeg';
   public COMING_SOON: string = '../assets/images/coming_soon.png';
+  public TIME_ICON: string = '../assets/images/time.png';
+  public MESSAGE_ICON: string = '../assets/images/msg.jpeg';
+  public CONTACT_ICON: string = '../assets/images/contact.jpeg';
+
   constructor() { }
 }

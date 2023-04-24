@@ -1,40 +1,80 @@
-<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};" [fullscreen]="true">
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
 
-  <ion-card>
-    <ion-card-content class="ion-no-padding ion-no-margin">
-      <ion-row >
-        <ion-col size="4" class="ion-align-self-center">
-          <ion-icon name="time"></ion-icon>
-        </ion-col>
-        <ion-col size="8" class="ion-text-center hours">
-          <div class="hours-heading"> Opening Hours </div>
-          <div> Tuesday 10am - 8am </div>
-          <div> Tuesday 10am - 8am </div>
-          <div> Tuesday 10am - 8am </div>
-          <div> Tuesday 10am - 8am </div>
-          <div> Tuesday 10am - 8am </div>
-          <div> Tuesday 10am - 8am </div>
-          <div> Tuesday 10am - 8am </div>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+  <ion-grid class="main-grid">
+    <ion-row >
+      <ion-col size="12">
+        <ion-card class="card1">
+          <ion-grid>
+            <ion-row >
+              <ion-col size="3" class="ion-align-self-center ion-text-center">
+                <img [src]="this.imageService.TIME_ICON" class="img-time" />
+              </ion-col>
+              <ion-col size="9" class="ion-text-center">
+                <ion-card-content>
+                  <b>Opening Hours</b>
+                  <div>
+                    <h6 *ngFor="let hours of HOURS_DETAILS"> 
+                      
+                      <ion-text *ngIf="hours.open_status">{{ hours.day }} {{ hours.start_time }} - {{ hours?.end_time}} </ion-text>
+                      <ion-text *ngIf="!hours.open_status">{{ hours.day }} - Closed </ion-text>
+                    
+                    </h6>
+                    <!-- <h6>Wednesday 9.30am - 6pm</h6>
+                    <h6>Thurdsay 10am - 8pm</h6>
+                    <h6>Friday 9am - 6pm</h6>
+                    <h6>Saturday 8/9am - 4pm</h6>
+                    <h6>Sunday & Monday - Closed</h6> -->
+                  </div>
+                </ion-card-content>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+      </ion-col>
 
-  <ion-card class="email-card">
-    <ion-card-content class="ion-no-padding ion-no-margin">
-      <ion-row >
-        <ion-col size="4" class="ion-align-self-center">
-          <ion-icon name="mail"></ion-icon>
-        </ion-col>
-        <ion-col size="8" class="ion-align-self-center">
-           Email Us 
-           Vijay@gmail.com 
-          
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+      <ion-col size="12">
+        <a href="mailto:{{OWNER_INFO?.default_email}}" style="text-decoration: none !important;">
+        <ion-card>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="3" class="ion-align-self-center ion-text-center">
+                <img [src]="this.imageService.MESSAGE_ICON" class="img2"/>
+              </ion-col>
+              <ion-col size="9" class="ion-text-center">
+                <ion-card-content>
+                  <b>Email Us</b>
+                  <h6 class="span-content">{{ OWNER_INFO?.default_email }}</h6>
+                </ion-card-content>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+
+      </a>
+
+      </ion-col>
+      <ion-col size="12" >
+        <a href="tel:{{OWNER_INFO?.tel}}" style="text-decoration: none !important;">
+          <ion-card>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="3" class="ion-align-self-center ion-text-center">
+                  <img [src]="this.imageService.CONTACT_ICON" class="img3"/>
+                </ion-col>
+                <ion-col size="9" class="ion-text-center">
+                  <ion-card-content>
+                    <b>Call Us</b>
+                    <h6 class="span-content"> {{  OWNER_INFO?.tel }}</h6>
+                  </ion-card-content>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
+        </a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
 <app-footer></app-footer>

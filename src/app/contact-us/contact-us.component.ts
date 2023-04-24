@@ -4,6 +4,7 @@ import { ImageService } from '../services/image.service';
 import { AuthService } from '@auth0/auth0-angular';
 
 import { DataService } from '../services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-us',
@@ -13,13 +14,51 @@ import { DataService } from '../services/data.service';
 export class ContactUsComponent implements OnInit {
 
   HEADING: string = "Contact us";
-  
+  OWNER_INFO: any = [];
+  HOURS_DETAILS: any = []
   constructor(
+    private router: Router,
     public imageService: ImageService,
     public auth: AuthService,
     private apiDataService: ApiDataService,
     public dataService: DataService,) { }
 
   ngOnInit() {}
+
+  async ionViewWillEnter () {
+
+    this.OWNER_INFO = await this.dataService._getOwnerData()
+    console.log('this.OWNER_INFO-----' , this.OWNER_INFO)
+    await this._getHoursDetails();
+  }
+  
+  async _getHoursDetails () {
+
+    await (await this.apiDataService._getBusinessHoursDetails()).subscribe(
+      (response: any ) => {
+        
+        if (response.length > 0) {
+
+          
+          this.HOURS_DETAILS = response;
+          console.log('this.OWNER_INFO---' , this.HOURS_DETAILS)
+          for (let  hours of this.HOURS_DETAILS){
+
+            console.log('hours.day----' ,hours.day)
+          }
+        }
+      },
+      (error: any) => {
+        
+
+      }
+    );
+  }
+
+
+  navigation() {
+
+    this.router.navigate(['/about-us']);
+  }
 
 }

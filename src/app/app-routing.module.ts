@@ -75,12 +75,12 @@ const routes: Routes = [
   {
     path: 'about-us',
     component: AboutUsComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'contact-us',
     component: ContactUsComponent,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'add-a-review',
