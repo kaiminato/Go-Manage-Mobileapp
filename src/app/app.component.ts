@@ -15,9 +15,9 @@ export class AppComponent {
 
       this.platform.ready().then(() => {
         if (this.platform.is('android')) {
-          alert('android');
+         // alert('android');
         } else if (this.platform.is('ios')) {
-          alert('ios');
+          ///alert('ios');
         } else {
              //fallback to browser APIs or
              //alert('The platform is not supported');
