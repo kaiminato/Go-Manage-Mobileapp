@@ -28,7 +28,7 @@ export class ContactUsComponent implements OnInit {
   async ionViewWillEnter () {
 
     this.OWNER_INFO = await this.dataService._getOwnerData()
-    console.log('this.OWNER_INFO-----' , this.OWNER_INFO)
+    
     await this._getHoursDetails();
   }
   
@@ -41,11 +41,6 @@ export class ContactUsComponent implements OnInit {
 
           
           this.HOURS_DETAILS = response;
-          console.log('this.OWNER_INFO---' , this.HOURS_DETAILS)
-          for (let  hours of this.HOURS_DETAILS){
-
-            console.log('hours.day----' ,hours.day)
-          }
         }
       },
       (error: any) => {
