@@ -35,6 +35,11 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'settings/getSettings');
   }
 
+  async _getBusinessHoursDetails() {
+
+    return await this.http.get(this.apiUrl + 'settings/getBusinessHours');
+  }
+
   async getStaffBookingList() {
 
     return await this.http.get(this.apiUrl + 'bookings/retrieveBookings');
