@@ -11,7 +11,7 @@ const callbackUri = `http://localhost:8100/home`;
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
- 
+
 export class HomePageComponent implements OnInit {
 
   LIST: any = [
@@ -20,12 +20,12 @@ export class HomePageComponent implements OnInit {
         id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image: ''
       },
       {
-        id: 2 , is_icon: true, name:'store', text: 'Online Store' , router_link: '/' , image : this.imageService.COMING_SOON
+        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/' , image : this.imageService.COMING_SOON
       },
     ],
     [
       {
-        id: 3 , is_icon: true, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' , image: this.imageService.COMING_SOON
+        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' , image: this.imageService.COMING_SOON
       },
       {
         id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us', image: this.imageService.COMING_SOON
@@ -33,10 +33,10 @@ export class HomePageComponent implements OnInit {
     ],
     [
       {
-        id: 5 , is_icon: true, name:'rate_review', text: 'Rate us' ,router_link: '/', image: this.imageService.COMING_SOON
+        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,router_link: '/', image: this.imageService.COMING_SOON
       },
       {
-        id: 6 , is_icon: true, name:'person_add', text: 'Refer a friend' ,router_link: '/', image: this.imageService.COMING_SOON
+        id: 6 , is_icon: false, name:'person_add', text: 'Refer a friend' ,router_link: '/', image: this.imageService.COMING_SOON
       },
     ],
   ];
@@ -50,7 +50,7 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   async ionViewWillEnter () {
@@ -83,7 +83,7 @@ export class HomePageComponent implements OnInit {
           // console.log('button---' , this.dataService.BUTTON_COLOR);
           // console.log('text---' , this.dataService.TEXT_COLOR);
 
-          
+
         }
       },
       (error: any) => {
@@ -98,18 +98,18 @@ export class HomePageComponent implements OnInit {
     let get_previous_url = await this.dataService.getPreviousUrl()
 
     if (get_previous_url != '') {
-      
+
       let url = `/${get_previous_url}`
       this.router.navigate([ url ]);
       this.dataService.removePreviousUrl();
     }
-    
+
   }
 
   async navigate (link: any) {
 
     if (link == '/make-a-booking') {
-      
+
     }
     await this.router.navigate([link])
 
