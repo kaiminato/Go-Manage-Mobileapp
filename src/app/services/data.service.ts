@@ -8,7 +8,7 @@ export class DataService {
 
   public BASE_URL: any = window.location.origin
   public MONTHS_NAME: any = [ 'January','February','March','April','May','June','July','August','September','October','November','December'];
-  
+
   public MONTHS_VALUE: any = [ '01','02','03','04','05','06','07','08','09','10','11','12'];
   public DAYS_VALUES: any = [
                             { name: 'Monday'    , value: 1},
@@ -17,7 +17,7 @@ export class DataService {
                             { name: 'Thursday'  , value: 4},
                             { name: 'Friday'    , value: 5},
                             { name: 'Saturday'  , value: 6},
-                            { name: 'Sunday'    , value: 7}, 
+                            { name: 'Sunday'    , value: 7},
                           ];
 
   public DAYS_OFF_NUMBER: any = [ 1, 2, 3, 4, 5, 6, 7]; // ['monday, tuesday .... respectivly]
@@ -61,7 +61,7 @@ export class DataService {
   async getYears () {
 
     let year_list = [];
-  
+
     for (let i = 1; i <= this.NO_OF_YEARS; i ++){
       year_list.push({text: this.CURRENT_YEAR+i , value: this.CURRENT_YEAR+i});
     }
@@ -71,26 +71,26 @@ export class DataService {
   }
 
   async getDays (month: any , year: any) {
-    
+
     month = month.toString().length > 1 ? month : '0'+month
-    
+
     let date = new Date();
     let firstDay = (new Date(parseInt(year), parseInt(month), 1)).getDate();
     let lastDay = (new Date(parseInt(year), parseInt(month) , 0)).getDate();
 
     let get_booking_values = await this.getInitialBookingdata();
     let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
-    
+
     let days_list = [];
 
     for (let i = 1; i <= lastDay; i++){
 
       let new_date = new Date(`${year}-${month}-${ i < 10 ? '0'+i : i}`);
-      
+
       var dayName = this.SHORT_DAYS_NAME[new_date.getDay()];
 
       let day_name = this.DAYS_NAME[new_date.getDay()];
-    
+
       let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
       let current_date_id = select_day[0].value;
       let staff_available_date_id = [];
@@ -109,10 +109,10 @@ export class DataService {
 
         status = new_date <= new Date(yesterday) || staff_available_date_id.length == 0? true : false;
       } else {
-        
+
         status = new_date <= new Date(yesterday)
       }
-      
+
 
       days_list.push({ day_number: i, is_disabled: status, is_active: false, month: month, year: year , day_name: dayName})
     }
@@ -134,7 +134,7 @@ export class DataService {
         time_array.push(get_working_day[0].startShiftTime)
         time_array.push(get_working_day[0].endShiftTime)
       }
-      
+
     }
 
     time_array.sort(function (a, b) { return a.localeCompare(b); });
@@ -151,13 +151,13 @@ export class DataService {
 
     let current_date = await this.getCurrentDate()
     end_to  = new Date(`${current_date}T${end_to}`);
-    
+
     end_to.setMinutes(end_to.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
 
     end_to = end_to.getHours() + ':' + (end_to.getMinutes() == 0 ? '00' : end_to.getMinutes())+":"+(end_to.getSeconds() == 0 ? '00': end_to.getSeconds())
-    
+
     let data = await this.returnTimesInBetween(start_from , end_to)
-    
+
     return this.ALL_SHIFT;
   }
 
@@ -172,7 +172,7 @@ export class DataService {
     if (month < 10) month = '0' + month;
 
     return  year + '-' + month + '-' + day;
-  
+
   }
 
   async getStaticShift () {
@@ -196,7 +196,7 @@ export class DataService {
 
       return this.ALL_SHIFT = [];
     }
-    
+
     this.ALL_SHIFT = [];
 
     let start_from = time_array[0];
@@ -204,43 +204,43 @@ export class DataService {
 
     let current_date = await this.getCurrentDate()
     end_to  = new Date(`${current_date}T${end_to}`);
-    
+
     end_to.setMinutes(end_to.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
 
     end_to = end_to.getHours() + ':' + (end_to.getMinutes() == 0 ? '00' : end_to.getMinutes())+":"+(end_to.getSeconds() == 0 ? '00': end_to.getSeconds())
-    
+
     let data = await this.returnTimesInBetween(start_from , end_to)
-    
+
     return this.ALL_SHIFT;
   }
 
 
   async getShift (date: string){
 
-    
+
     let d = new Date(date);
     let day_name = this.DAYS_NAME[d.getDay()];
-    
+
     let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
 
     let selected_day_id = select_day.length > 0 ? select_day[0].value : 0;
 
     this.ALL_SHIFT = [];
     let get_booking_values = await this.getInitialBookingdata();
-    
+
 
     let staff_detail = await this.getStaffDetail(get_booking_values.staff_id)
 
     // if dayId is exist in the array
-    let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter( 
+    let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter(
                                       data => data.dayId == selected_day_id
                                     );
 
     if (staff_available_date_id.length == 0) {
-      
+
       // If current day is off day then take first working day from  staffDetailFormatted array
-      
-      staff_available_date_id =   [await staff_detail[0].staffDetailFormatted[0]]; 
+
+      staff_available_date_id =   [await staff_detail[0].staffDetailFormatted[0]];
       //return [];
     }
 
@@ -249,14 +249,14 @@ export class DataService {
     let first_end_time = staff_available_date_id[0]?.outOfOfficeFrom;
     let second_start_time = staff_available_date_id[0]?.timeAwayTo;
     let second_end_time = staff_available_date_id[0]?.endShiftTime;
-    
+
     second_end_time  = new Date(`${date}T${second_end_time}`);
     second_end_time.setMinutes(second_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
 
     second_end_time = second_end_time.getHours() + ':' + (second_end_time.getMinutes() == 0 ? '00' : second_end_time.getMinutes())+":"+(second_end_time.getSeconds() == 0 ? '00': second_end_time.getSeconds())
-    
-   
-   
+
+
+
     if (first_end_time != null && second_start_time != null ) {
 
       await this.returnTimesInBetween(first_start_time , first_end_time);
@@ -272,11 +272,11 @@ export class DataService {
       if (<any>(new Date().getTime()) > (new Date(`${date} ${this.ALL_SHIFT[index].value}`) )){
 
         this.ALL_SHIFT[index].is_disabled = true
-        
+
       }
     }
 
-   
+
     return await this.ALL_SHIFT;
     // return await [
     //   { id:1, time: '08:30 AM', value:'08:30:00', shift_type: this.MORNING_SHIFT, is_active: false , is_disabled: false},
@@ -291,38 +291,38 @@ export class DataService {
     //   { id:10, time: '07:00 PM', value:'19:00:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
     //   { id:11, time: '07:30 PM', value:'19:30:00', shift_type: this.EVENING_SHIFT, is_active: false , is_disabled: false },
     //   { id:12, time: '08:00 PM', value:'20:00:00', shift_type: this.EVENING_SHIFT, is_active: false  , is_disabled: false},
-      
+
     // ];
   }
 
 
   async returnTimesInBetween(start, end) {
     var timesInBetween = [];
-   
+
     var startH = parseInt(start.split(":")[0]);
     var startM = parseInt(start.split(":")[1]);
     var endH = parseInt(end.split(":")[0]);
     var endM = parseInt(end.split(":")[1]);
-  
+
     if (startM == 30)
       startH++;
-  
+
     for (var i = startH; i < endH; i++) {
       timesInBetween.push(i < 10 ? "0" + i + ":00" : i + ":00");
       timesInBetween.push(i < 10 ? "0" + i + ":30" : i + ":30");
     }
-  
+
     timesInBetween.push(endH + ":00");
     if (endM == 30)
       timesInBetween.push(endH + ":30")
 
-  
+
     return await timesInBetween.map(data => this.getGenTime(data));
   }
-  
-  
+
+
   async getGenTime (timeString: any)  {
-      
+
     let value = timeString;
     let H = +timeString.substr(0, 2);
     let h = (H % 12) || 12;
@@ -330,31 +330,31 @@ export class DataService {
     timeString = h + timeString.substr(2, 3) + ampm;
     let data = {
                   id: this.ALL_SHIFT.length + 1 ,
-                  time: timeString , 
-                  shift_type: this.MORNING_SHIFT ,  
-                  value: value, 
-                  is_active: false, 
+                  time: timeString ,
+                  shift_type: this.MORNING_SHIFT ,
+                  value: value,
+                  is_active: false,
                   is_disabled: false,
                   soft_disabled: false
                 };
     this.ALL_SHIFT.push(data);
-    
+
     return await data
-     
+
   }
 
   async isDateOff (date_value: any) {
-    
+
     let booking_data = await this.getInitialBookingdata();
       let staff_detail = await this.getStaffDetail(booking_data.staff_id);
 
       let d = new Date(date_value);
       let day_name = this.DAYS_NAME[d.getDay()];
-    
+
       let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
       let current_date_id = select_day[0].value;
-      
-      let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter( 
+
+      let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter(
         data => data.dayId == current_date_id
       );
 
@@ -362,16 +362,16 @@ export class DataService {
   }
 
   async isStaffDateOff (date_value: any , staff_id: any) {
-    
+
       let staff_detail = await this.getStaffDetail(staff_id);
 
       let d = new Date(date_value);
       let day_name = this.DAYS_NAME[d.getDay()];
-    
+
       let select_day = this.DAYS_VALUES.filter( data => data.name == day_name);
       let current_date_id = select_day[0].value;
-      
-      let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter( 
+
+      let staff_available_date_id =   await staff_detail[0].staffDetailFormatted.filter(
         data => data.dayId == current_date_id
       );
 
@@ -393,12 +393,12 @@ export class DataService {
 
     let owner_data = await localStorage.getItem(this.OWNER_DATA_KEY);
 
-    
+
 
     if (owner_data == undefined || owner_data == null) {
 
       return false
-      
+
     } else {
 
       owner_data = JSON.parse(owner_data)
@@ -406,10 +406,10 @@ export class DataService {
       this.BACKGROUND_COLOR = owner_data['colour_primary'] != '' ? owner_data['colour_primary'] : this.BACKGROUND_COLOR;
       this.BUTTON_COLOR = owner_data['colour_secondary'] != '' ? owner_data['colour_secondary'] : this.BUTTON_COLOR;
       this.TEXT_COLOR = owner_data['colour_text'] != '' ? owner_data['colour_text'] : this.TEXT_COLOR;
-      this.APP_HOME_PAGE_ICON = owner_data['logo'] != '' ? owner_data['logo'] : this.APP_HOME_PAGE_ICON;
-      
+      // this.APP_HOME_PAGE_ICON = owner_data['logo'] != '' ? owner_data['logo'] : this.APP_HOME_PAGE_ICON;
+
     }
-    
+
     return true
   }
 
@@ -471,12 +471,12 @@ export class DataService {
     let staff_list: any = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
     staff_list = staff_list == undefined || staff_list == null ? [] :  JSON.parse(staff_list);
 
-    
+
 
    return await staff_list.filter( data => data.employeeId == staff_id && data.startTime.includes(date));
   }
 
-  
+
 
   async setInitialBooking(data: any) {
 
@@ -484,7 +484,7 @@ export class DataService {
   }
 
   async getInitialBookingdata(){
-    
+
     let data = await localStorage.getItem(this.BOOKING_KEY);
     return await data == undefined ? '' : JSON.parse(data);
   }
@@ -507,7 +507,7 @@ export class DataService {
   }
 
   async setBookingData (data: any){
-    
+
     return await localStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
   }
 
@@ -524,7 +524,7 @@ export class DataService {
 
     let voucher_data: any = await localStorage.getItem(this.VOUCHER_DATA_KEY);
     return await  voucher_data == undefined || voucher_data == null ? {} :  JSON.parse(voucher_data);
-    
+
   }
 
   async removeVoucherData () {
@@ -547,5 +547,5 @@ export class DataService {
 
     return await localStorage.removeItem(this.LOGGED_IN_PREVIOUS_URL_KEY)
   }
- 
+
 }

@@ -1,34 +1,37 @@
-<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}">
- 
-  <ion-img [src]="this.dataService.APP_HOME_PAGE_ICON" class="app-logo ion-margin-top"></ion-img>
- 
-  <ion-grid *ngFor="let row_value of this.LIST; let i = index">
-    <ion-row [class.some_space]=" i == 0 ">
-      <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value">
-       
-        <ion-card class="ion-text-center ion-no-margin " (click)="navigate(value.router_link)" style="background-color: {{this.dataService.BUTTON_COLOR}};">
-          
-          <ion-card-content >
+<ion-content>
+  <div class="green-background">
+    <ion-grid style="height: 60px;"></ion-grid>
+    <ion-card class="ion-margin-top app-logo">
+      <ion-img [src]="this.dataService.APP_HOME_PAGE_ICON"></ion-img>
+    </ion-card>
+  </div>
+  <div class="card-list">
+    <ion-grid *ngFor="let row_value of this.LIST; let i = index">
+      <ion-row [class.some_space]=" i == 0 ">
+        <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value">
 
-            <ion-img [src]="value.image" *ngIf="value.is_icon">
+          <ion-card class="ion-text-center ion-no-margin " (click)="navigate(value.router_link)">
 
-            </ion-img>
+            <ion-card-content >
 
-            <span class="material-symbols-outlined" *ngIf="!value.is_icon">
-              {{value.name}}
-            </span>
+              <ion-img [src]="value.image" *ngIf="value.is_icon">
 
-            <div>
-              <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">{{ value.text }}</ion-text>
-            </div>
-          </ion-card-content>
+              </ion-img>
 
-        </ion-card>
-      </ion-col>
+              <span class="material-symbols-outlined" *ngIf="!value.is_icon">
+                {{value.name}}
+              </span>
 
-    </ion-row>
-  </ion-grid>
+              <div>
+                <ion-text >{{ value.text }}</ion-text>
+              </div>
+            </ion-card-content>
 
-  
+          </ion-card>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
 <app-footer></app-footer>
