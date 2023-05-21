@@ -72,41 +72,36 @@ ion-content {
     }
 
     .request-tabs {
-
+        padding-top: 10px;
         padding-left: 0px;
-        padding-right: 0px;
+        padding-right: 10px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
         ion-row {
-            text-align: center;
-            color: #047473;
-
-            div {
-                margin-bottom: 10px;
-            }
-
-            .active {
-                font-weight: bold;
-                background-color: #047473;
-                color: white !important;
-                border-radius: 15px;
-                border: 1px solid;
-            }
-
-            .inactive {
-                //border-bottom: 3px solid #bdbcbc;
-                border-radius: 15px;
-                border: 1px solid;
-            }
-
-            ion-text {
-                margin-left: 5px;
-            }
+          display: flex;
+          justify-content: center;
+          color: #047473;
+          margin-bottom: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          width: 100%;
         }
 
+    }
+    .active {
+      font-weight: bold;
+      background-color: #047473;
+      color: white !important;
+      border-radius: 5px;
+      border: 1px solid;
+    }
+
+    .inactive {
+        //border-bottom: 3px solid #bdbcbc;
+        border-radius: 5px;
+        border: 1px solid;
     }
 
     ion-input,ion-textarea {
