@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-buy-voucher',
@@ -10,7 +11,7 @@ import { DataService } from '../services/data.service';
 })
 export class BuyVoucherComponent implements OnInit {
 
-  HEADING: string = "Buy a Voucher";
+  HEADING: string = "";
   CUSTOM_PRICE: any = '';
   SEND_TO_ME: boolean = true;
   TOTAL_PRICE : any = 0;
@@ -36,7 +37,8 @@ export class BuyVoucherComponent implements OnInit {
   constructor(
     private router: Router,
     private apiData: ApiDataService,
-    private dataService: DataService
+    private dataService: DataService,
+    public imageService: ImageService
   ) { }
 
   ngOnInit() {}
@@ -57,7 +59,7 @@ export class BuyVoucherComponent implements OnInit {
     this.S_GIFTEE_EMAIL_MESSAGE = '';
 
     let prefilled_data = await this.dataService.getVoucherData();
-    
+
     if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
 
@@ -66,7 +68,7 @@ export class BuyVoucherComponent implements OnInit {
 
     await this.selectPrice(prefilled_data.selected_price_id);
     let selected_data = await this.PRICE_LIST.filter( data => data.id == prefilled_data.selected_price_id)
-    
+
     if (selected_data[0].is_button == false) this.CUSTOM_PRICE = prefilled_data.price
 
     this.SEND_TO_ME = prefilled_data.send_type == this.dataService.VOUCHER_SEND_TYPE_ME ? true : false;
@@ -94,9 +96,9 @@ export class BuyVoucherComponent implements OnInit {
     this.SELECTED_PRICE = this.PRICE_LIST.filter( data => data.id == price_id);
 
     if (this.SELECTED_PRICE[0].is_button == true) this.CUSTOM_PRICE = '';
-    
+
   }
-  
+
 
   async confirm () {
 
@@ -106,10 +108,10 @@ export class BuyVoucherComponent implements OnInit {
 
     this.SELECTED_PRICE = this.PRICE_LIST.filter( data => data.is_active == true);
 
-    if (this.SELECTED_PRICE.length == 0) return await this.apiData.presentAlert("Please select price first") 
+    if (this.SELECTED_PRICE.length == 0) return await this.apiData.presentAlert("Please select price first")
 
     if (this.SELECTED_PRICE[0].is_button == false){
-      
+
       data.price = this.CUSTOM_PRICE;
     } else {
 
@@ -120,8 +122,8 @@ export class BuyVoucherComponent implements OnInit {
 
 
     if (this.SEND_TO_ME) {
-      
-      
+
+
 
       if (this.F_FIRST_NAME.trim() == '') return await this.apiData.presentAlert("First name can't be empty")
       if (this.F_LAST_NAME.trim() == '') return await this.apiData.presentAlert("Last name can't be empty")
