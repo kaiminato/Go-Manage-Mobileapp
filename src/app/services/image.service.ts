@@ -15,6 +15,7 @@ export class ImageService {
   public TIME_ICON: string = '../assets/images/time.png';
   public MESSAGE_ICON: string = '../assets/images/msg.jpeg';
   public CONTACT_ICON: string = '../assets/images/contact.jpeg';
+  public GIFT_IMG: string = '../assets/images/gift.png';
 
   constructor() { }
 }

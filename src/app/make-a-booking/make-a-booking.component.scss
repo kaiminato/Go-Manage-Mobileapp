@@ -5,82 +5,122 @@ ion-popover {
     --color: white;
     --width: 300px;
   }
-  
+
   ion-popover ion-content {
     //--background: rgba(40, 173, 218, 0.6);
     --color: #047473;
   }
-  
+
   ion-popover::part(backdrop) {
     //background-color: rgb(6, 14, 106);
   }
 
-  
+  .green-background {
+    height: 36%;
+    width: 100%;
+    // background-color: #027f7b;
+    background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
+    margin-top: -11px;
+    padding-top: 30px;
+  }
+
+
 ion-content {
 
     .request-tabs {
 
         padding-left: 0px;
         padding-right: 0px;
-        
+
         ion-row {
-            box-shadow: 0px 3px 3px #bdbcbc;
             text-align: center;
-            color: #047473;
-            margin-top: 15px;
+            color: white;
+            margin-left: 30px;
+            margin-right: 30px;
 
             div {
-                margin-bottom: 10px;
+              margin-bottom: 10px;
+              margin-top: 10px;
             }
             .active {
-                border-bottom: 4px solid #047473;
                 font-weight: bold;
-                
+                background-color: white;
+                color: #047473 !important;
+                border-radius: 15px;
             }
-    
+
             .inactive {
                 //border-bottom: 3px solid #bdbcbc;
+                border-radius: 15px;
             }
-    
+
             ion-text {
                 margin-left: 5px;
             }
         }
-        
+
+    }
+    .page-title {
+      color: rgb(4, 116, 115) !important;
+      border: 2px solid;
+      border-radius: 10px;
+      box-shadow: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 30px;
+      margin-right: 30px;
+      margin-top: 10px;
+      h1{
+        margin-top: 16px;
+        margin-bottom: 16px;
+        font-weight: bold;
+      }
     }
 
     .list {
         max-height: 65%;
-        overflow: scroll; 
-        overflow-x: hidden;  
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    .card-list {
+      background-color: white;
+      border-radius: 25px;
+      margin-top: -95px;
+      margin-left: 30px;
+      margin-right: 30px;
+      padding: 10px;
+      box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
     }
 
     .staff_list {
-        margin: 25px;
-        border-radius: 5px;
-        --background: #047473;
-        color: #fff;
+        margin: 10px;
+        --background: #fff;
+        color: #047473;
+        border-bottom: 1px solid #047473;
 
         ion-thumbnail {
-            border-radius: 50% !important;
+            border-radius: 15px !important;
+            padding: 3px;
+            border: 1px solid;
             overflow: hidden;
         }
 
         h3{
             font-weight: bold;
-            font-size: 15px;
+            font-size: 20px;
         }
     }
-    
+
     .staff-details {
-        
+
         color: #047473;
         font-weight: bold;
         font-size: 13px;
 
         ion-avatar {
-            width:70% !important;  
-            height : 75% !important;  
+            width:70% !important;
+            height : 75% !important;
             max-width: 100px !important;  //any size
             max-height: 100px !important;
             margin: 10px;
@@ -143,14 +183,14 @@ ion-content {
         }
         ion-label {
             margin-left: 5px;
-            
+
         }
 
         ion-checkbox {
 
             --background-checked: #047473;
         }
-        
+
     }
 
     .book_now {

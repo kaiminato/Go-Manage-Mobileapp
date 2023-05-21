@@ -4,28 +4,33 @@
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
 
-  <ion-grid class="request-tabs">
-    <ion-row>
-      <ion-col size="6"  [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
-        
-        <div style="color : {{this.dataService.TEXT_COLOR}} !important; ">
-          <ion-text  class="app-text-color ion-margin-start">Staff</ion-text>
-        </div>
-      </ion-col>
-      
-      <ion-col size="6" style="color : {{this.dataService.TEXT_COLOR}} !important; "  [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
-       <div>
-        <ion-text  class="app-text-color ion-margin-start">Services</ion-text>
-       </div>
-        
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="green-background">
+    <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+      <h1>Make a Booking</h1>
+    </ion-card>
+    <ion-grid class="request-tabs">
+      <ion-row>
+        <ion-col size="6"  [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
 
-  <div class="list" >
-    <ion-list lines="none" *ngIf="IS_STAFF" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
+          <div >
+            <ion-text  class="app-text-color ion-margin-start">Staff</ion-text>
+          </div>
+        </ion-col>
+
+        <ion-col size="6"  [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
+         <div>
+          <ion-text  class="app-text-color ion-margin-start">Services</ion-text>
+         </div>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="list card-list" *ngIf="IS_STAFF">
+    <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
       <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false"
-        (click)="SelectStaff(value.employee_id)" style="--background: {{this.dataService.BUTTON_COLOR}} !important">
+        (click)="SelectStaff(value.employee_id)" >
 
         <ion-thumbnail slot="start">
           <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
@@ -40,20 +45,20 @@
 
 
   <!-- <ion-list lines="none" *ngIf="!IS_STAFF">
-    <ion-item button 
-      *ngFor="let value of this.SERVICE_LIST" 
-      class="staff_list" 
+    <ion-item button
+      *ngFor="let value of this.SERVICE_LIST"
+      class="staff_list"
       detail="false" >
 
         <ion-thumbnail slot="start">
           <img [src]="value.image">
         </ion-thumbnail>
         <ion-label> <h3>{{ value.name }}</h3>  </ion-label>
-      
+
     </ion-item>
   </ion-list> -->
-  <div class="list">
-    <ion-list lines="none" class="ion-margin-start ion-margin-end" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;" [class.ion-hide]="IS_STAFF"
+  <div class="list card-list" [class.ion-hide]="IS_STAFF">
+    <ion-list lines="none" class="ion-margin-start ion-margin-end" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;"
       *ngFor="let service of CATEGORY_LIST; let service_index = index" >
 
       <ion-item button class="service_detail" detail="false"
@@ -78,7 +83,7 @@
 
               <ion-popover trigger="top-center-{{service_detail.id}}" side="right" size="auto" alignment="center">
                 <ng-template >
-                  <ion-content class="ion-padding" > 
+                  <ion-content class="ion-padding" >
                     <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">{{ service_detail.serviceDescription }} </ion-text>
                   </ion-content>
                 </ng-template>
@@ -106,14 +111,14 @@
         <div>{{ TOTAL_PRICE | currency: 'EUR'}}</div>
       </ion-col>
       <ion-col size="6">
-        <ion-button 
-          expand="block" 
-          (click)="setServicesInBooking()" 
+        <ion-button
+          expand="block"
+          (click)="setServicesInBooking()"
           [disabled]="TOTAL_SERVICE_SELECTED == '0'"
           style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
           >
-          
-          <ion-text  style="color : {{this.dataService.TEXT_COLOR}} !important;">Book now</ion-text>      
+
+          <ion-text  style="color : {{this.dataService.TEXT_COLOR}} !important;">Book now</ion-text>
           <span class="material-symbols-outlined booking-arrow">
             arrow_forward
           </span>
