@@ -8,9 +8,9 @@
   <div class="card-list">
     <ion-grid *ngFor="let row_value of this.LIST; let i = index">
       <ion-row [class.some_space]=" i == 0 ">
-        <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value">
+        <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value; let j = index">
 
-          <ion-card class="ion-text-center ion-no-margin " (click)="navigate(value.router_link)">
+          <ion-card class="ion-text-center ion-no-margin" [class.right_card]="j==1" (click)="navigate(value.router_link)">
 
             <ion-card-content >
 
