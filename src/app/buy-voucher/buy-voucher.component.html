@@ -47,14 +47,10 @@
         </ion-col>
         <ion-col size="6" class="request-tabs ion-no-margin ion-no-padding">
           <ion-row [class]="SEND_TO_ME  ? 'active' : 'inactive'" (click)="SEND_TO_ME = true;">
-            <div>
-              <ion-text  class="app-text-color ion-margin-start">Send to me</ion-text>
-            </div>
+            <ion-text  class="app-text-color">Send to me</ion-text>
           </ion-row>
           <ion-row [class]=" !SEND_TO_ME  ? 'active' : 'inactive'" (click)="SEND_TO_ME = false;">
-            <div>
-              <ion-text  class="app-text-color ion-margin-start">Send to someone</ion-text>
-            </div>
+            <ion-text  class="app-text-color">Send to someone</ion-text>
           </ion-row>
         </ion-col>
       </ion-row>
