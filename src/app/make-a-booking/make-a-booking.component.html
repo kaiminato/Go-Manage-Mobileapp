@@ -58,7 +58,7 @@
     </ion-item>
   </ion-list> -->
   <div class="list card-list" [class.ion-hide]="IS_STAFF">
-    <ion-list lines="none" class="ion-margin-start ion-margin-end" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;"
+    <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;"
       *ngFor="let service of CATEGORY_LIST; let service_index = index" >
 
       <ion-item button class="service_detail" detail="false"
@@ -71,10 +71,10 @@
         </ion-icon>
       </ion-item>
 
-      <ion-grid *ngIf="service.is_open">
+      <ion-grid *ngIf="service.is_open" class="service_order_list_grid">
         <ion-row *ngFor="let service_detail of service.services" class="service_order_list">
-          <ion-col size="1"></ion-col>
-          <ion-col size="11">
+          <!-- <ion-col size="1"></ion-col> -->
+          <ion-col size="12">
 
             <ion-item class="service_detail ion-no-padding" detail="false">
               <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
