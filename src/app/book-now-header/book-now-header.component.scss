@@ -1,6 +1,6 @@
 ion-header {
 
-    ion-toolbar { 
+    ion-toolbar {
 
         .header-text {
             margin-top: 10px;
@@ -8,7 +8,8 @@ ion-header {
             font-weight: bold;
         }
 
-        --background: #047473;
+        // --background: #047473;
+        --background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 40%, rgba(2,127,123,1) 43%);
 
         .back {
             padding-top: 4px;
@@ -49,7 +50,7 @@ ion-header {
             color: #000;
             text-align: center;
             font: 20px Arial, sans-serif;
-    
+
           }
 
         .active {
@@ -124,12 +125,12 @@ ion-header {
             margin-bottom: 10px;
             padding-left: 2px;
         }
-        
+
         .ili4th {
             padding-bottom: 12px;
         }
-       
+
     }
-   
+
 }
 

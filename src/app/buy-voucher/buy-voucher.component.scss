@@ -1,5 +1,5 @@
 .green-background {
-  height: 36%;
+  height: 300px;
   width: 100%;
   // background-color: #027f7b;
   background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
@@ -72,7 +72,7 @@ ion-content {
     }
 
     .request-tabs {
-        padding-top: 10px;
+        padding-top: 15px;
         padding-left: 0px;
         padding-right: 10px;
         display: flex;
@@ -155,6 +155,14 @@ ion-content {
         }
 
     }
-
+    ion-col {
+      ion-input {
+        margin-top:5px;
+        border: 1px solid #047473;
+      }
+    }
+    .btn_checkout{
+      border-radius: 15px;
+    }
 
 }
