@@ -5,32 +5,36 @@ ion-popover {
         --color: white;
         --width: 300px;
       }
-      
+
       ion-popover ion-content {
         //--background: rgba(40, 173, 218, 0.6);
         --color: #047473;
       }
-      
+
       ion-popover::part(backdrop) {
         //background-color: rgb(6, 14, 106);
       }
 
 ion-content {
-    
-    
-    
+
+
+
     .staff-details {
-        
+
         color: #047473;
         font-weight: bold;
         font-size: 13px;
 
         ion-avatar {
-            width:70% !important;  
-            height : 75% !important;  
-            max-width: 100px !important;  //any size
-            max-height: 100px !important;
+            // width:70% !important;
+            // height : 75% !important;
+            // max-width: 100px !important;  //any size
+            // max-height: 100px !important;
+            width: 100px;
+            height: 100px;
             margin: 10px;
+            border: 1px solid;
+            padding: 2px;
         }
 
         .comment {
@@ -43,7 +47,7 @@ ion-content {
         overflow: scroll;
 
         .service_detail {
-            margin: 5px;
+            // margin: 5px;
             border-radius: 5px;
             --background: #f6f5fa;
             color: #047473;
@@ -51,17 +55,19 @@ ion-content {
             .service_count {
                 font-size: 15px;
             }
-    
+
             h3{
                 font-weight: bold;
                 font-size: 15px;
             }
-    
+
             .toggle {
                 color: #000;
                 margin-left: 15px;
             }
-    
+            ion-checkbox{
+            }
+
         }
 
         .itemBtns {
@@ -76,7 +82,7 @@ ion-content {
             margin-bottom: 0;
             ion-text {
                 margin-left: auto;
-                margin-right: 32px;
+                margin-right: 5px;
             }
             ion-checkbox {
                 min-width: 26px;
@@ -87,24 +93,24 @@ ion-content {
         }
     }
 
-    
+
 
     .service_order_list {
 
         ion-icon {
             margin-left: 0px;
-            margin-left: 5px;
+            margin-left: 0px;
         }
         ion-label {
-            margin-left: 5px;
-            
+            // margin-left: 5px;
+
         }
 
         ion-checkbox {
-
+            // --margin-right: -10px;
             --background-checked: #047473;
         }
-        
+
     }
 
     .book_now {
@@ -124,5 +130,5 @@ ion-content {
             }
         }
     }
-    
+
 }
