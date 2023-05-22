@@ -17,6 +17,7 @@ export class ImageService {
   public CONTACT_ICON: string = '../assets/images/contact.jpeg';
   public GIFT_IMG: string = '../assets/images/gift.png';
   public GIFT_CARD_IMG: string = '../assets/images/gift-card.png';
+  public  JADE_SIGN_IMG: string = '../assets/images/JadeAmberSign.png';
 
   constructor() { }
 }

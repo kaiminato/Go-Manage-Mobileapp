@@ -1,17 +1,30 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-  
-  <ion-card>
+  <div class="green-background">
+    <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+      <h1>Feedbacks / Review</h1>
+    </ion-card>
+  </div>
+  <ion-card class="card-list">
     <ion-card-header class="ion-text-center">
-      <ion-card-title>Review Mesmereyes</ion-card-title>
+      <ion-card-title>
+        <img [src]="this.imageService.JADE_SIGN_IMG" style="width: 100%;">
+      </ion-card-title>
       <ion-card-subtitle>Please write your feedback</ion-card-subtitle>
-      
+
     </ion-card-header>
-  
+
     <ion-card-content>
       <ion-textarea rows="6"></ion-textarea>
+      <div class="star-icons">
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+      </div>
     </ion-card-content>
   </ion-card>
-
+  <ion-button expand="block" class="btn_checkout"> SUBMIT REVIEW</ion-button>
 </ion-content>
 <app-footer></app-footer>
