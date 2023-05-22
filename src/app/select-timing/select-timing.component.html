@@ -1,71 +1,77 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="true" [IS_BACK]="true"></app-book-now-header>
 
-  <ion-grid class="ion-margin calender_section">
-    <ion-row>
-      <ion-col size="12">
-        <ion-icon name="calendar-outline" class="ion-float-right" (click)="openPicker()"></ion-icon>
-       
-        <ion-text class="ion-float-right" style="color : {{this.dataService.TEXT_COLOR}} !important;">Month view</ion-text>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="green-background">
+    <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+      <h1>Select a time</h1>
+    </ion-card>
+  </div>
+  <div class="card-list">
+    <!-- <ion-grid class="ion-margin calender_section">
+      <ion-row>
+        <ion-col size="12">
+          <ion-icon name="calendar-outline" class="ion-float-right" (click)="openPicker()"></ion-icon>
 
-  <ion-grid class="month_name">
-    <ion-row >
-      <ion-col size="12" class="ion-text-center ">
-        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ CURRENT_MONTH_VALUE }}</ion-text>
-      </ion-col>
-    </ion-row>
+          <ion-text class="ion-float-right" style="color : {{this.dataService.TEXT_COLOR}} !important;">Month view</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
 
-    <ion-row class="date-range-picker" *ngIf="DAYS_ARRAY">
-      <ion-col size="12">
-        <!-- <ion-slides pager="true" [options]="slideOptsOne" #slideWithNav
-          (ionSlideDidChange)="SlideDidChange(sliderOne,slideWithNav)"> -->
-      <ion-slides pager="false" [options]="slideOpts" #mySlider >
-        <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
-       
-          <div  class="date-range" 
-                [class.active]=" value.is_active" 
-                [class.disabled]=" value.is_disabled" 
-                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"
-                style="color : {{this.dataService.TEXT_COLOR}} !important;"
-                >
-            
-            <ion-text class="ion-text-uppercase"><b>{{value.day_number}} </b></ion-text>
-            <div class="day-name">
-              {{value.day_name}}
+    <ion-grid class="month_name">
+      <ion-row >
+        <ion-col size="12" class="ion-text-center ">
+          <ion-text class="current_month_name">{{ CURRENT_MONTH_VALUE }}</ion-text>
+          <ion-icon name="calendar-outline" class="ion-float-right" (click)="openPicker()"></ion-icon>
+
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="date-range-picker" *ngIf="DAYS_ARRAY">
+        <ion-col size="12">
+          <!-- <ion-slides pager="true" [options]="slideOptsOne" #slideWithNav
+            (ionSlideDidChange)="SlideDidChange(sliderOne,slideWithNav)"> -->
+        <ion-slides pager="false" [options]="slideOpts" #mySlider >
+          <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
+
+            <div class="date-range">
+              <div class="day-name">
+                {{value.day_name}}
+              </div>
+              <ion-text class="ion-text-uppercase" [class.active]=" value.is_active"
+              [class.disabled]=" value.is_disabled"
+              (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"><b>{{value.day_number}} </b></ion-text>
+
             </div>
+
+
+          </ion-slide>
+
+        </ion-slides>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid class="all_shift">
+      <ion-row>
+        <ion-col size="12" class="heading"><ion-text class="ion-text-bold">   </ion-text></ion-col>
+        <ion-col
+          size="4"
+          class="ion-text-center ion-margin-top"
+          *ngFor="let shift of ALL_SHIFT"
+          (click)="_selectTiming(shift.id , shift.is_disabled)"
+          >
+          <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
+            <ion-icon name="time-outline"></ion-icon>
+            <ion-text class="time"> {{ shift.time }}</ion-text>
           </div>
-          
-       
-        </ion-slide>
-        
-      </ion-slides>
-      </ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
-    </ion-row>
-  </ion-grid>
-
-  <ion-grid class="all_shift">
-    <ion-row>
-      <ion-col size="12" class="heading"><ion-text class="ion-text-bold">   </ion-text></ion-col>
-      <ion-col 
-        size="4" 
-        class="ion-text-center ion-margin-top" 
-        *ngFor="let shift of ALL_SHIFT"
-        (click)="_selectTiming(shift.id , shift.is_disabled)"
-        >
-        <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled" style="color : {{this.dataService.TEXT_COLOR}} !important;">
-          <ion-icon name="time-outline"></ion-icon>
-          <ion-text class="time"> {{ shift.time }}</ion-text>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
   <ion-modal [isOpen]="IS_CALNDER_OPEN" [breakpoints]="[0.1, 0.5, 1]" [initialBreakpoint]="0.8" (willDismiss)="_datePickerClosed()">
-    
+
     <ng-template>
       <ion-calendar [(ngModel)]="date"
           (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
@@ -75,7 +81,7 @@
           id="my-custom"
           >
       </ion-calendar>
-     
+
     </ng-template>
   </ion-modal>
 
