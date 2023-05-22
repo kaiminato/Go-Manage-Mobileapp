@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
+import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class AddReviewComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
+    public dataService: DataService,
   ) { }
 
   ngOnInit() {}

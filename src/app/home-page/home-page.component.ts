@@ -20,7 +20,7 @@ export class HomePageComponent implements OnInit {
         id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image: ''
       },
       {
-        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/' , image : this.imageService.COMING_SOON
+        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/store-all-product' , image : this.imageService.COMING_SOON
       },
     ],
     [
@@ -33,7 +33,7 @@ export class HomePageComponent implements OnInit {
     ],
     [
       {
-        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,router_link: '/', image: this.imageService.COMING_SOON
+        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,router_link: '/add-a-review', image: this.imageService.COMING_SOON
       },
       {
         id: 6 , is_icon: false, name:'person_add', text: 'Refer a friend' ,router_link: '/', image: this.imageService.COMING_SOON
