@@ -61,6 +61,13 @@
 
     <ion-grid class="send_to_me ion-no-margin" *ngIf="SEND_TO_ME">
       <ion-row class="ion-margin">
+        <ion-col size="12">
+          <label>Your Email</label>
+          <ion-input type="text" [(ngModel)]="F_EMAIL"></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-margin">
         <ion-col size="6">
           <label>First Name</label>
           <ion-input type="text" [(ngModel)]="F_FIRST_NAME"></ion-input>
@@ -71,16 +78,16 @@
           <ion-input type="text" [(ngModel)]="F_LAST_NAME"></ion-input>
         </ion-col>
       </ion-row>
-
-      <ion-row class="ion-margin">
-        <ion-col size="12">
-          <label>Email</label>
-          <ion-input type="text" [(ngModel)]="F_EMAIL"></ion-input>
-        </ion-col>
-      </ion-row>
     </ion-grid>
 
     <ion-grid class="send_to_me" *ngIf="!SEND_TO_ME">
+      <ion-row class="ion-margin">
+        <ion-col size="12">
+          <label>Your Email</label>
+          <ion-input type="text" [(ngModel)]="S_EMAIL"></ion-input>
+        </ion-col>
+      </ion-row>
+
       <ion-row class="ion-margin">
         <ion-col size="6">
           <label>Your First Name</label>
@@ -90,13 +97,6 @@
         <ion-col size="6">
           <label>Your Last Name</label>
           <ion-input type="text" [(ngModel)]="S_LAST_NAME"></ion-input>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="ion-margin">
-        <ion-col size="12">
-          <label>Your Email</label>
-          <ion-input type="text" [(ngModel)]="S_EMAIL"></ion-input>
         </ion-col>
       </ion-row>
 
@@ -116,17 +116,24 @@
     </ion-grid>
 
     <ion-grid class="ion-no-margin ion-no-padding">
+      <ion-row class="ion-margin-start ion-margin-end">
+        <img [src]="this.imageService.GIFT_CARD_IMG" style="width: 100%;">
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid class="ion-no-margin ion-no-padding">
       <ion-row class="ion-margin-top ion-margin-start ion-margin-end">
         <ion-col size="6" class="ion-margin-top">
           <label >Total: {{ (this.SELECTED_PRICE[0]?.is_button == true ? this.SELECTED_PRICE[0].price  : CUSTOM_PRICE) | currency: 'EUR'}}</label>
         </ion-col>
 
         <ion-col size="6">
-          <ion-button expand="block" class="" (click)="confirm()"> <ion-text>Confirm</ion-text></ion-button>
+          <ion-button expand="block" class="btn_checkout" (click)="confirm()"> <ion-text>Checkout</ion-text></ion-button>
         </ion-col>
       </ion-row>
 
     </ion-grid>
+
   </div>
 </ion-content>
 <app-footer></app-footer>

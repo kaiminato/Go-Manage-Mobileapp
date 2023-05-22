@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-toolbar style="--background: {{this.dataService.BUTTON_COLOR}}; !important">
+  <ion-toolbar>
     <ion-row >
-      
+
       <ion-col size="2">
         <span class="material-symbols-outlined back" (click)="back()" *ngIf="IS_BACK">
           arrow_back
@@ -10,12 +10,12 @@
 
       <ion-col size="10" *ngIf="BOOKING_WITH_STAFF">
         <div class="header-text">
-        
+
           <ul class="headli" >
             <li>
               <div class="ili3">
                 <div class="ili">
-                  <span class="headlitop" [class.active] ="HEADING_TEXT == 1" style="background: {{HEADING_TEXT == 1 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">1</span> 
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 1" style="background: {{HEADING_TEXT == 1 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">1</span>
                 </div>
                 <div class="ili2">
                   <!-- <span class="material-symbols-outlined rightli" >
@@ -29,7 +29,7 @@
             <li>
               <div class="ili3">
                 <div class="ili">
-                  <span class="headlitop" [class.active] ="HEADING_TEXT == 2" style="background: {{HEADING_TEXT == 2 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">2</span> 
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 2" style="background: {{HEADING_TEXT == 2 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">2</span>
                 </div>
                 <div class="ili2">
                   <!-- <span class="material-symbols-outlined rightli">
@@ -43,7 +43,7 @@
             <li>
               <div class="ili3">
                 <div class="ili ">
-                  <span class="headlitop" [class.active] ="HEADING_TEXT == 3" style="background: {{HEADING_TEXT == 3 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">3</span> 
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 3" style="background: {{HEADING_TEXT == 3 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">3</span>
                 </div>
                 <div class="ili2">
                   <!-- <span class="material-symbols-outlined rightli">
@@ -55,7 +55,7 @@
             </li>
             <li>
               <div class="ili4th">
-              <span class="headlitop" [class.active] ="HEADING_TEXT == 4" style="background: {{HEADING_TEXT == 4 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">4</span> 
+              <span class="headlitop" [class.active] ="HEADING_TEXT == 4" style="background: {{HEADING_TEXT == 4 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">4</span>
              </div>
              <div class="ili4send">
               <ion-text class="confirm" > Confirm </ion-text>
@@ -68,12 +68,12 @@
 
       <ion-col size="10" *ngIf="!BOOKING_WITH_STAFF">
         <div class="header-text">
-        
+
           <ul class="headli">
             <li>
               <div class="ili3">
                 <div class="ili">
-                  <span class="headlitop" [class.active] ="HEADING_TEXT == 1" style="background: {{HEADING_TEXT == 1 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">1</span> 
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 1" style="background: {{HEADING_TEXT == 1 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">1</span>
                 </div>
                 <div class="ili2">
                   <!-- <span class="material-symbols-outlined rightli" >
@@ -87,7 +87,7 @@
             <li>
               <div class="ili3">
                 <div class="ili">
-                  <span class="headlitop" [class.active] ="HEADING_TEXT == 2" style="background: {{HEADING_TEXT == 2 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">2</span> 
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 2" style="background: {{HEADING_TEXT == 2 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">2</span>
                 </div>
                 <div class="ili2">
                   <!-- <span class="material-symbols-outlined rightli">
@@ -101,7 +101,7 @@
             <li>
               <div class="ili3">
                 <div class="ili ">
-                  <span class="headlitop" [class.active] ="HEADING_TEXT == 3" style="background: {{HEADING_TEXT == 3 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">3</span> 
+                  <span class="headlitop" [class.active] ="HEADING_TEXT == 3" style="background: {{HEADING_TEXT == 3 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">3</span>
                 </div>
                 <div class="ili2">
                   <!-- <span class="material-symbols-outlined rightli">
@@ -113,7 +113,7 @@
             </li>
             <li>
               <div class="ili4th">
-              <span class="headlitop" [class.active] ="HEADING_TEXT == 4" style="background: {{HEADING_TEXT == 4 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">4</span> 
+              <span class="headlitop" [class.active] ="HEADING_TEXT == 4" style="background: {{HEADING_TEXT == 4 ? '#FFFFFF' : this.dataService.BUTTON_COLOR}} !important;">4</span>
              </div>
              <div class="ili4send">
               <ion-text  class="headcontent confirm" > Confirm </ion-text>
@@ -123,8 +123,8 @@
           </ul>
         </div>
       </ion-col>
-    
+
     </ion-row>
-    
+
   </ion-toolbar>
 </ion-header>
