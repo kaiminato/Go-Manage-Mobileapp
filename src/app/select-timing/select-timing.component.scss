@@ -1,16 +1,17 @@
 ion-content {
   .green-background {
-    height: 280px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
     width: 100%;
-    // background-color: #027f7b;
     background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
-    margin-top: -11px;
-    padding-top: 30px;
+    z-index: -1;
   }
   .card-list {
     background-color: white;
     border-radius: 25px;
-    margin-top: -145px;
+    margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
