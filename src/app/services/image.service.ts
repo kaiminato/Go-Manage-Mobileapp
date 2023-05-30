@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class ImageService {
 
   public LOGO: string = '../assets/images/logo.png';
+  public BOOK_NOW: string = '../assets/images/book_now.png';
   public DEFAULT_PERSON: string = '../assets/images/default-person.png';
   public PRODUCT_ONE: string = '../assets/images/product.jpg';
   public PRODUCT_TWO: string = '../assets/images/product_1.jpg';
@@ -17,7 +18,12 @@ export class ImageService {
   public CONTACT_ICON: string = '../assets/images/contact.jpeg';
   public GIFT_IMG: string = '../assets/images/gift.png';
   public GIFT_CARD_IMG: string = '../assets/images/gift-card.png';
-  public  JADE_SIGN_IMG: string = '../assets/images/JadeAmberSign.png';
+  public JADE_SIGN_IMG: string = '../assets/images/JadeAmberSign.png';
+  public ONLINE_STORE_IMG: string = '../assets/images/online-store.png';
+  public RATE_US_IMG: string = '../assets/images/rate-us.png';
+  public BUY_A_VOUCHER_IMG: string = '../assets/images/buy-a-voucher.png';
+  public ABOUT_US_IMG: string = '../assets/images/about-us.png';
+  public REFER_A_FRIEND_IMG: string = '../assets/images/refer-a-friend.png';
 
   constructor() { }
 }

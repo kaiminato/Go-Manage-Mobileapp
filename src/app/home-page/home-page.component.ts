@@ -17,26 +17,26 @@ export class HomePageComponent implements OnInit {
   LIST: any = [
     [
       {
-        id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image: ''
+        id: 1 , is_icon: true, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image : this.imageService.BOOK_NOW
       },
       {
-        id: 2 , is_icon: false, name:'store', text: 'Online Store' , router_link: '/store-all-product' , image : this.imageService.COMING_SOON
-      },
-    ],
-    [
-      {
-        id: 3 , is_icon: false, name:'card_giftcard', text: 'Buy a voucher',router_link: '/buy-a-voucher' , image: this.imageService.COMING_SOON
-      },
-      {
-        id: 4 , is_icon: false, name:'groups', text: 'About us' ,router_link: '/about-us', image: this.imageService.COMING_SOON
+        id: 2 , is_icon: true, name:'store', text: 'Online Store' , router_link: '/store-all-product' , image : this.imageService.ONLINE_STORE_IMG
       },
     ],
     [
       {
-        id: 5 , is_icon: false, name:'rate_review', text: 'Rate us' ,router_link: '/add-a-review', image: this.imageService.COMING_SOON
+        id: 3 , is_icon: true, name:'card_giftcard', text: 'Buy a voucher',router_link: '/buy-a-voucher' , image: this.imageService.BUY_A_VOUCHER_IMG
       },
       {
-        id: 6 , is_icon: false, name:'person_add', text: 'Refer a friend' ,router_link: '/', image: this.imageService.COMING_SOON
+        id: 4 , is_icon: true, name:'groups', text: 'About us' ,router_link: '/about-us', image: this.imageService.ABOUT_US_IMG
+      },
+    ],
+    [
+      {
+        id: 5 , is_icon: true, name:'rate_review', text: 'Rate us' ,router_link: '/add-a-review', image: this.imageService.RATE_US_IMG
+      },
+      {
+        id: 6 , is_icon: true, name:'person_add', text: 'Refer a friend' ,router_link: '/', image: this.imageService.REFER_A_FRIEND_IMG
       },
     ],
   ];
