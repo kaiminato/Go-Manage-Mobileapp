@@ -1,31 +1,29 @@
 
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
-
+  <div class="green-background">
+  </div>
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+    <h1>Make a Booking</h1>
+  </ion-card>
+  <ion-grid class="request-tabs">
+    <ion-row>
+      <ion-col size="6"  [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
 
-  <div class="green-background">
-    <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
-      <h1>Make a Booking</h1>
-    </ion-card>
-    <ion-grid class="request-tabs">
-      <ion-row>
-        <ion-col size="6"  [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
+        <div >
+          <ion-text  class="app-text-color ion-margin-start">Staff</ion-text>
+        </div>
+      </ion-col>
 
-          <div >
-            <ion-text  class="app-text-color ion-margin-start">Staff</ion-text>
-          </div>
-        </ion-col>
+      <ion-col size="6"  [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
+        <div>
+        <ion-text  class="app-text-color ion-margin-start">Services</ion-text>
+        </div>
 
-        <ion-col size="6"  [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
-         <div>
-          <ion-text  class="app-text-color ion-margin-start">Services</ion-text>
-         </div>
-
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <div class="list card-list" *ngIf="IS_STAFF">
     <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
@@ -118,7 +116,7 @@
           style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
           >
 
-          <ion-text  style="color : {{this.dataService.TEXT_COLOR}} !important;">Book now</ion-text>
+          <ion-text>Book now</ion-text>
           <span class="material-symbols-outlined booking-arrow">
             arrow_forward
           </span>
