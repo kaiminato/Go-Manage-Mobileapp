@@ -5,11 +5,11 @@
     <ion-img [src]="this.dataService.APP_HOME_PAGE_ICON"></ion-img>
   </ion-card>
   <div class="card-list">
-    <ion-grid *ngFor="let row_value of this.LIST; let i = index">
-      <ion-row [class.some_space]=" i == 0 ">
+    <ion-grid *ngFor="let row_value of this.LIST; let i = index" style="padding: 0px;">
+      <ion-row [class.first_row]="i == 0" [class.last_row]="i == 2">
         <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value; let j = index">
 
-          <ion-card class="ion-text-center ion-no-margin" [class.right_card]="j==1" (click)="navigate(value.router_link)">
+          <ion-card class="ion-text-center ion-no-margin" [class.left_card]="j==0" [class.right_card]="j==1" (click)="navigate(value.router_link)">
 
             <ion-card-content >
 
@@ -34,16 +34,3 @@
   </div>
 </ion-content>
 <app-footer></app-footer>
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>Example Page</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="background">
-  <div class="gradient"></div>
-  <div class="content">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor mi quis ultrices malesuada. Sed vel maximus sapien. Mauris eget leo pulvinar, posuere est ut, finibus diam. Nam euismod mi risus, et lobortis arcu consequat ut. Duis condimentum purus a magna porttitor, ac blandit elit lacinia. Nullam feugiat augue nunc, nec iaculis nulla dictum vitae.</p>
-    <p>Nam convallis sapien vel dolor vulputate scelerisque. Etiam at sagittis erat. Proin egestas libero a nisi faucibus suscipit. Sed porta turpis in tristique laoreet. Donec vestibulum neque eu enim ultrices mattis. Ut tincidunt tellus nec lacus dapibus rhoncus. Vivamus ut ante id lacus ultrices efficitur. Pellentesque euismod, sem ut aliquam ullamcorper, nisl velit placerat orci, vel imperdiet felis lectus vel risus. </p>
-  </div>
-</ion-content> -->

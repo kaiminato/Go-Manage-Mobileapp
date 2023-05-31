@@ -1,13 +1,30 @@
 ion-content {
 
     --background: #f1f1f1;
-
+    .green-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 40%;
+      width: 100%;
+      background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
+      z-index: -1;
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
+    .card-list {
+      background-color: white;
+      border-radius: 25px;
+      margin: 20px;
+      padding: 5px;
+      box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    }
     .search-cart-row {
 
         ion-input {
-            border: 1px solid #fbfbfb;
+            border: 1px solid #e6e7e9;
             border-radius: 12px;
-            background: #fbfbfb;
+            background: #e6e7e9;
             text-indent: 10px;
         }
 
@@ -48,11 +65,11 @@ ion-content {
                     background: #eae9ee;
                     z-index: -1;
                 }
-    
+
                 ion-icon {
                     font-size: 22px;
                 }
-    
+
                 ion-badge {
                     position: absolute;
                     top: -8px;
@@ -60,13 +77,13 @@ ion-content {
                     /* width: 95%; */
                     z-index: 2;
                 }
-    
+
             }
         }
     }
 
     .tags-category {
-        
+
         margin-top: 10px;
 
         ion-slide {
@@ -75,27 +92,35 @@ ion-content {
 
         .active {
             background: #ffc409 !important;
-           
+
         }
 
         ion-badge {
-            padding: 14px;
+            padding: 11px;
             border-radius: 27px;
-            background: #fbfbfb;
+            background: #e6e7e9;
             color: #000;
         }
     }
 
     .all-products {
+        ion-card {
+          background: #e6e7e9;
+          height: 183px;
+          margin: 10px;
+        }
+        ion-img {
+          height: 90px;
+        }
 
         .description-rating {
-            
+            margin-top: 5px;
             display: flex;
             flex-direction: column;
             font-size: 12px;
-            
+
             .description {
-                
+
                 color: #000;
             }
             .rating {
@@ -104,7 +129,7 @@ ion-content {
         }
 
         .price-cart {
-            
+
             width: 100;
             display: flex;
             .price {
@@ -114,17 +139,20 @@ ion-content {
                     font-weight: bold;
                 }
             }
-            
+
 
             .add-cart {
                 width: 100%;
-                ion-button {
-                    --background: #047473;
+                ion-icon {
+                    background-color: #047473;
                     --background-activated: #047473;
-                    font-size: 10px;
+                    font-size: 21px;
+                    color: white;
+                    padding: 3px;
+                    border-radius: 6px;
                 }
             }
-           
+
         }
     }
 }
