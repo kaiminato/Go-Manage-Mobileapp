@@ -111,9 +111,9 @@ export class ApiDataService {
       async (response: any) => {
 
         if (response !== undefined) {
-          
+
           await this.http.get(this.apiUrl + 'user/validateUserExists?email='+response.email).subscribe(
-            (response: any) => {}, 
+            (response: any) => {},
             (error: any) => {}
           );
 
@@ -138,7 +138,7 @@ export class ApiDataService {
       res.present();
 
       res.onDidDismiss().then((dis) => {
-        
+
       })
     });
 
@@ -165,4 +165,9 @@ export class ApiDataService {
     });
 
   }
+
+  async _getProducts() {
+    return await this.http.get(this.apiUrl+'product/retrieveProducts');
+  }
+
 }
