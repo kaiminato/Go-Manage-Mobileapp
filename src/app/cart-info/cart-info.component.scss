@@ -16,13 +16,20 @@ ion-content {
       background-color: white;
       border-radius: 25px;
       margin: 20px;
-      padding: 5px;
+      // padding: 5px;
       box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
     }
     .bold-text {
 
         color: #000 !important;
         font-weight: bold !important;
+    }
+    .name {
+      margin-top: 10px;
+    }
+    .price {
+      font-weight: bold !important;
+      color: #c53131;
     }
     ion-card{
       margin-top: 10px;
@@ -113,18 +120,26 @@ ion-content {
     }
 
     .divider {
-
+        margin-top: 10px;
         width: 100%;
         border: 1px solid #000;
 
     }
+    .product_btn_dissabled button{
+      background-color: #eee2cb !important;
+  }
 
     .place-order {
 
         ion-button {
             --background: #047473;
             --background-activated: #047473;
-
+            --border-radius: 20px;
         }
+    }
+    .total-payment-confirm {
+      border-radius: 20px;
+      box-shadow: 0px -12px 8px -6px rgba(0, 0, 0, 0.2);
+      padding-top: 15px;
     }
 }

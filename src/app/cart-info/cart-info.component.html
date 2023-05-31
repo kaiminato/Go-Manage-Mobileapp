@@ -5,7 +5,10 @@
   </div>
   <!-- Product list show -->
   <div class="card-list">
-    <ion-grid *ngFor="let product of PRODUCT_LIST" class="product-list">
+    <ion-grid *ngIf="isEmptyCart" style="padding: 10px; text-align: center;">
+      <ion-text style="font-size: 20px; color: #c53131;"> No products in Shopping Cart </ion-text>
+    </ion-grid>
+    <ion-grid *ngFor="let product of PRODUCT_LIST ; let i = index" class="product-list">
           <ion-row>
             <ion-col size="4" class="product-image">
               <ion-img [src]="product.image"></ion-img>
@@ -13,14 +16,16 @@
             <ion-col size="4" class="product-description">
               <ion-text class="name bold-text"> {{ product.name }} </ion-text>
               <ion-text class="availability"> in Stock </ion-text>
-              <ion-text class="price bold-text ion-margin-top"> {{ product.price | currency: 'EUR' }} </ion-text>
+              <ion-text class="price ion-margin-top"> {{ product.price | currency: 'EUR' }} </ion-text>
             </ion-col>
             <ion-col size="4" class="product-count">
               <!-- <div class="close"> <ion-icon name="close-outline" class="ion-float-end"></ion-icon> </div> -->
               <div class="count">
-                <ion-button size="small" color="light" class="ion-float-end"> + </ion-button>
-                <ion-text class="ion-float-end count-number"> {{ product.count }} </ion-text>
-                <ion-button size="small" color="light" class="ion-float-end"> - </ion-button>
+                <ion-button size="small" (click)="_cartProductItemChange(i , 'increment')" color="light" class="ion-float-end"
+                [disabled]="product.no_of_item >= product.quantity ? true : false" [class.product_btn_dissabled]="product.no_of_item >= product.quantity ? true : false"> + </ion-button>
+                <ion-text class="ion-float-end count-number"> {{ product.no_of_item }} </ion-text>
+                <ion-button size="small" (click)="_cartProductItemChange(i , 'decrement')" color="light" class="ion-float-end"
+                [disabled]="product.no_of_item <= 0 ? true : false" [class.product_btn_dissabled]="product.no_of_item <= 0 ? true : false"> - </ion-button>
               </div>
             </ion-col>
           </ion-row>
@@ -29,7 +34,7 @@
 
     <!-- Summary detail -->
 
-    <ion-grid class="selected-product-info">
+    <!-- <ion-grid class="selected-product-info">
       <ion-card>
 
         <ion-card-content>
@@ -55,18 +60,18 @@
 
         </ion-card-content>
       </ion-card>
-    </ion-grid>
+    </ion-grid> -->
 
-    <div class="divider"></div>
+    <!-- <div class="divider"></div> -->
 
     <!-- Show total -->
 
-    <ion-grid class="ion-margin-top">
+    <ion-grid class="total-payment-confirm">
       <ion-row>
         <ion-col size="6" class="ion-text-center">
           <ion-text class="bold-text"> TOTAL </ion-text>
         </ion-col>
-        <ion-col size="6" class="ion-text-center bold-text"> {{ 200.50 | currency : 'EUR' }} </ion-col>
+        <ion-col size="6" class="ion-text-center price"> {{ SUB_TOTAL | currency : 'EUR' }} </ion-col>
       </ion-row>
     </ion-grid>
 
