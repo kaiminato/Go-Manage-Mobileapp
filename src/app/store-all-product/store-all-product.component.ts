@@ -35,7 +35,7 @@ export class StoreAllProductComponent implements OnInit {
   //                     ];
   PRODUCT_LIST: any = [];
   PRODUCT_RESPONSE: any = [];
-
+  productIdArr: any = [];
 
 
   slideOpts: any = {
@@ -80,7 +80,6 @@ export class StoreAllProductComponent implements OnInit {
     this.PRODUCT_LIST =  this.SELECTED_CATEGORY_ID !=0 ?  await this.PRODUCT_RESPONSE.filter( data => data.brandId == this.SELECTED_CATEGORY_ID) : this.PRODUCT_RESPONSE;
   }
 
-
   navigation() {
 
     this.router.navigate(['/']);
@@ -108,6 +107,12 @@ export class StoreAllProductComponent implements OnInit {
         ||
         ((data.description.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
         );
+  }
+
+  async addCart (producId: any) {
+    console.log("product id",producId);
+    this.productIdArr.push(producId);
+    console.log("productid arr",this.productIdArr);
   }
 
 }

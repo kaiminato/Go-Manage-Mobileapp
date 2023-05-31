@@ -18,8 +18,7 @@
             <ion-icon name="cart-outline"></ion-icon>
             <ion-badge color="primary">8</ion-badge>
           </ion-tab-button>       -->
-
-          <div class="cart-div" [routerLink]="['/cart-detail']">
+          <div class="cart-div" [routerLink]="['/cart-detail', {productIdArr: productIdArr}]">
             <ion-icon name="cart-outline" ></ion-icon>
             <ion-badge color="dark">8</ion-badge>
           </div>
@@ -80,7 +79,8 @@
 
               <div class="price-cart">
                 <div class="price"><ion-text><b> {{ product.price | currency: 'EUR'}} </b></ion-text></div>
-                <div class="add-cart"><ion-icon name="cart-outline" class="ion-float-end"></ion-icon></div>
+                <div class="add-cart" (click)="addCart(product.id)"><ion-icon name="add-outline" class="ion-float-end"></ion-icon></div>
+                <!-- <div class="add-cart"><ion-icon name="cart-outline" class="ion-float-end"></ion-icon></div> -->
                 <!-- <div class="add-cart"><ion-button class="ion-float-end" >ADD TO CART</ion-button></div> -->
               </div>
 
