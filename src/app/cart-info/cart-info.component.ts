@@ -37,9 +37,6 @@ export class CartInfoComponent implements OnInit {
   async ionViewWillEnter (){
     this.productIdArr = this.activatedRoute.snapshot.paramMap.get('productIdArr').split(',');
     await this._getProducts();
-    for(let productId of this.productIdArr){
-      console.log('...',productId);
-    }
   }
 
   async _getProducts() {
@@ -53,12 +50,15 @@ export class CartInfoComponent implements OnInit {
           let get_product =  await this.PRODUCT_RESPONSE.filter( data => data.id == Number(productId));
           if (get_product.length > 0) {
             get_product = get_product[0];
-            get_product['no_of_item'] = 0;
+            get_product['no_of_item'] = 1;
             this.PRODUCT_LIST.push(get_product);
           }
         }
         if(!this.PRODUCT_LIST){
           this.isEmptyCart = true;
+        }
+        else{
+          this._calculatePrice();
         }
       },
       async (error: any) => {
@@ -76,12 +76,14 @@ export class CartInfoComponent implements OnInit {
   }
 
   async _calculatePrice () {
-
+    console.log("yeah")
     this.SUB_TOTAL = 0;
-    for (let value of this.PRODUCT_LIST) this.SUB_TOTAL += (value.price * value.no_of_item);
+    for (let value of this.PRODUCT_LIST){
+      console.log("this is value",value);
+      this.SUB_TOTAL += (value.price * value.no_of_item);
+    }
 
     this.SUB_TOTAL = this.SUB_TOTAL.toFixed(2);
-    console.log('cartt to add----' , this.PRODUCT_LIST);
   }
 
 
