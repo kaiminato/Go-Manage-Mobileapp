@@ -37,7 +37,6 @@ export class CartInfoComponent implements OnInit {
   async ionViewWillEnter (){
     this.productIdArr = this.activatedRoute.snapshot.paramMap.get('productIdArr').split(',');
     await this._getProducts();
-    console.log("this is",this.productIdArr);
     for(let productId of this.productIdArr){
       console.log('...',productId);
     }
