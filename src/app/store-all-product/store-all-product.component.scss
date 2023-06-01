@@ -76,6 +76,9 @@ ion-content {
                     right: -9px;
                     /* width: 95%; */
                     z-index: 2;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 47%;
                 }
 
             }
@@ -145,14 +148,22 @@ ion-content {
             .add-cart {
                 width: 100%;
                 ion-icon {
-                    background-color: #047473;
+                    background-color: white;
                     --background-activated: #047473;
                     font-size: 21px;
-                    color: white;
+                    color: #047473;
                     padding: 3px;
                     border-radius: 50%;
                 }
+                border-color: #047473;
+
             }
+            .add-cart.active {
+              ion-icon {
+                  background-color: #047473 !important;
+                  color: white !important;
+              }
+          }
 
         }
     }

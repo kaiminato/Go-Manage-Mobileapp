@@ -36,6 +36,7 @@ export class StoreAllProductComponent implements OnInit {
   PRODUCT_LIST: any = [];
   PRODUCT_RESPONSE: any = [];
   productIdArr: any = [];
+  cart_num: number = 0;
 
 
   slideOpts: any = {
@@ -90,6 +91,9 @@ export class StoreAllProductComponent implements OnInit {
     await (await this.apiData._getProducts()).subscribe(
       async (response: any ) => {
         await this.apiData.dismiss();
+        for(let response_item of response){
+          response_item['isActive'] = false;
+        }
         this.PRODUCT_LIST = response;
         this.PRODUCT_RESPONSE = response;
         console.log("this is product list",response);
@@ -101,7 +105,6 @@ export class StoreAllProductComponent implements OnInit {
     );
   }
   async onSearch(SEARCH_TEXT: string) {
-      console.log("this is onsearch function",SEARCH_TEXT);
       this.PRODUCT_LIST = await this.PRODUCT_RESPONSE.filter( data =>
         ((data.name.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
         ||
@@ -109,10 +112,19 @@ export class StoreAllProductComponent implements OnInit {
         );
   }
 
-  async addCart (producId: any) {
-    console.log("product id",producId);
-    this.productIdArr.push(producId);
-    console.log("productid arr",this.productIdArr);
+  async addCart (productId: any) {
+    let is_exist_in_cart = await this.productIdArr.filter(data => data == productId);
+    if (is_exist_in_cart.length  == 0){
+      this.productIdArr.push(productId);
+      this.cart_num++;
+      console.log("cart_num",this.cart_num);
+    }
+
+    for(let product of this.PRODUCT_LIST){
+      if(product.id == productId){
+        product.isActive = true;
+      }
+    }
   }
 
 }

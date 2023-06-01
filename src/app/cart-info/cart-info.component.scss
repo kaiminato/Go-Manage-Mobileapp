@@ -36,7 +36,6 @@ ion-content {
       margin-bottom: 10px;
     }
     .product-list {
-
         .product-image {
 
             ion-img {
@@ -74,6 +73,10 @@ ion-content {
                 width: 100%;
                 margin-top: 50px;
 
+                ion-button {
+                  width: 25px;
+                  height: 25px;
+                }
                 .count-number {
 
                     margin-left: 5px;
