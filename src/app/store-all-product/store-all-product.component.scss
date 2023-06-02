@@ -79,6 +79,8 @@ ion-content {
                     width: 20px;
                     height: 20px;
                     border-radius: 47%;
+                    display: flex;
+                    justify-content: center;
                 }
 
             }
@@ -115,7 +117,7 @@ ion-content {
     .all-products {
         ion-card {
           background: #e6e7e9;
-          // height: 183px;
+          height: 200px;
           margin: 10px;
         }
         ion-img {
@@ -129,10 +131,13 @@ ion-content {
             font-size: 12px;
 
             .description {
-                white-space: nowrap;
+                // white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 color: #000;
+                display: -webkit-box;
+                -webkit-line-clamp: 2; /* Number of lines to show */
+                -webkit-box-orient: vertical;
             }
             .rating {
                 color: #ffc409;
@@ -154,6 +159,8 @@ ion-content {
 
             .add-cart {
                 width: 100%;
+                margin-top: 4px;
+                border-color: #047473;
                 ion-icon {
                     background-color: white;
                     --background-activated: #047473;
@@ -162,7 +169,6 @@ ion-content {
                     padding: 3px;
                     border-radius: 50%;
                 }
-                border-color: #047473;
 
             }
             .add-cart.active {
