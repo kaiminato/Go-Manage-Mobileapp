@@ -101,20 +101,20 @@ export class ApiDataService {
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
       .set('Cache-Control', 'no-cache');
 
-    return await this.http.post(this.apiUrl + 'stripe/create-charge', data , { headers: header })
+    return await this.http.post(this.apiUrl + 'stripe/create-charge', data, { headers: header })
   }
 
 
-  async _updateUserId () {
+  async _updateUserId() {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
 
         if (response !== undefined) {
 
-          await this.http.get(this.apiUrl + 'user/validateUserExists?email='+response.email).subscribe(
-            (response: any) => {},
-            (error: any) => {}
+          await this.http.get(this.apiUrl + 'user/validateUserExists?email=' + response.email).subscribe(
+            (response: any) => { },
+            (error: any) => { }
           );
 
         }
@@ -147,7 +147,7 @@ export class ApiDataService {
   async dismiss() {
 
     this.isLoading = false;
-    return await this.loadingController.dismiss().then(() => {});
+    return await this.loadingController.dismiss().then(() => { });
   }
 
 
@@ -167,7 +167,11 @@ export class ApiDataService {
   }
 
   async _getProducts() {
-    return await this.http.get(this.apiUrl+'product/retrieveProducts');
+    return await this.http.get(this.apiUrl + 'product/retrieveProducts');
+  }
+
+  async _getCategories() {
+    return await this.http.get(this.apiUrl + 'product/retrieveProductCategory');
   }
 
 }
