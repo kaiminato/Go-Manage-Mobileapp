@@ -90,7 +90,7 @@ ion-content {
         margin-top: 10px;
 
         ion-slide {
-            margin-left: 5%;
+            // margin-left: 5%;
         }
 
         .active {
@@ -100,7 +100,12 @@ ion-content {
         }
 
         ion-badge {
-            padding: 11px;
+            max-width: 100%;
+            font-size: 12px;
+            padding: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             border-radius: 27px;
             background: #e6e7e9;
             color: #000;
@@ -110,7 +115,7 @@ ion-content {
     .all-products {
         ion-card {
           background: #e6e7e9;
-          height: 183px;
+          // height: 183px;
           margin: 10px;
         }
         ion-img {
@@ -124,7 +129,9 @@ ion-content {
             font-size: 12px;
 
             .description {
-
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 color: #000;
             }
             .rating {

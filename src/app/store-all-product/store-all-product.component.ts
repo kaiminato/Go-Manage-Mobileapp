@@ -19,20 +19,7 @@ export class StoreAllProductComponent implements OnInit {
   HEADING: string = "Online Store";
   SELECTED_CATEGORY: string = '';
   SELECTED_CATEGORY_ID: number = 0;
-  CATEGORY_TAGS: any =  [
-                          { id: 0 , name: "All" , status: true },
-                          { id: 1 , name: "Shoes" , status: false },
-                          { id: 2 , name: "T-shirt" , status: false },
-                        ];
-
-  // PRODUCT_LIST: any = [
-  //                       { id: 1 , image: this.imageService.PRODUCT_ONE , description: 'lorem ipsum' , rating: 3.5 , price: 40},
-  //                       { id: 2 , image: this.imageService.PRODUCT_TWO , description: 'lorem ipsum' , rating: 4.5 , price: 20},
-  //                       { id: 3 , image: this.imageService.PRODUCT_ONE , description: 'lorem ipsum' , rating: 5 , price: 70},
-  //                       { id: 4 , image: this.imageService.PRODUCT_TWO , description: 'lorem ipsum' , rating: 3.5 , price: 30},
-  //                       { id: 5 , image: this.imageService.PRODUCT_ONE , description: 'lorem ipsum' , rating: 2 , price: 20},
-  //                       { id: 6 , image: this.imageService.PRODUCT_TWO , description: 'lorem ipsum' , rating: 3.5 , price: 40},
-  //                     ];
+  CATEGORY_TAGS: any = [];
   PRODUCT_LIST: any = [];
   PRODUCT_RESPONSE: any = [];
   productIdArr: any = [];
@@ -41,7 +28,7 @@ export class StoreAllProductComponent implements OnInit {
 
   slideOpts: any = {
     slidesPerView: 5,
-    initialSlide: 0,
+    initialSlide: 1,
     speed: 400,
     loop: false,
     // autoplay: {
@@ -63,6 +50,8 @@ export class StoreAllProductComponent implements OnInit {
 
     await this.getSelectedcategory();
     await this._getProducts();
+    await this._getCategories();
+    this.cart_num = 0;
   }
 
   async selectCategory (index : any) {
@@ -96,7 +85,6 @@ export class StoreAllProductComponent implements OnInit {
         }
         this.PRODUCT_LIST = response;
         this.PRODUCT_RESPONSE = response;
-        console.log("this is product list",response);
       },
       async (error: any) => {
         await this.apiData.dismiss();
@@ -104,6 +92,24 @@ export class StoreAllProductComponent implements OnInit {
       }
     );
   }
+
+  async _getCategories() {
+    await (await this.apiData._getCategories()).subscribe(
+      async (response: any ) => {
+        for(let response_item of response){
+          response_item['status'] = false;
+        }
+        const addedCategoryTags = { id: 0 , name: "All" , status: true };
+        this.CATEGORY_TAGS = response;
+        console.log("response", response);
+        this.CATEGORY_TAGS.unshift(addedCategoryTags);
+      },
+      async (error: any) => {
+        console.log("this is error",error);
+      }
+    );
+  }
+
   async onSearch(SEARCH_TEXT: string) {
       this.PRODUCT_LIST = await this.PRODUCT_RESPONSE.filter( data =>
         ((data.name.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
@@ -117,7 +123,6 @@ export class StoreAllProductComponent implements OnInit {
     if (is_exist_in_cart.length  == 0){
       this.productIdArr.push(productId);
       this.cart_num++;
-      console.log("cart_num",this.cart_num);
     }
 
     for(let product of this.PRODUCT_LIST){
