@@ -1,5 +1,22 @@
 ion-content {
-
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .card-list {
+    background-color: white;
+    border-radius: 25px;
+    margin: 20px;
+    padding: 5px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+  }
     .details {
         color: #047473;
         font-size: 17px;
@@ -23,7 +40,7 @@ ion-content {
         }
     }
 
-    
+
 .modal {
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -39,7 +56,7 @@ ion-content {
     animation-name: fadeIn;
     animation-duration: 0.4s
   }
-  
+
   .modal-content {
     position: fixed;
     bottom: 0;
@@ -51,65 +68,65 @@ ion-content {
     animation-name: slideIn;
     animation-duration: 0.4s
   }
-  
+
   .close {
     color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
   }
-  
+
   .close:hover,
   .close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
   }
-  
+
   .modal-header {
     padding: 2px 16px;
     background-color: #047473;
     color: white;
   }
-  
+
   .modal-body {padding: 2px 16px;}
-  
+
   .modal-footer {
     padding: 2px 16px;
     background-color: #047473;
     color: white;
   }
-  
+
   /* Add Animation */
   @-webkit-keyframes slideIn {
-    from {bottom: -300px; opacity: 0} 
+    from {bottom: -300px; opacity: 0}
     to {bottom: 0; opacity: 1}
   }
-  
+
   @keyframes slideIn {
     from {bottom: -300px; opacity: 0}
     to {bottom: 0; opacity: 1}
   }
-  
+
   @-webkit-keyframes fadeIn {
-    from {opacity: 0} 
+    from {opacity: 0}
     to {opacity: 1}
   }
-  
+
   @keyframes fadeIn {
-    from {opacity: 0} 
+    from {opacity: 0}
     to {opacity: 1}
   }
 }
 
 @media screen and (max-width: 480px) {
     .modal-content {
-        
+
         width: 100% !important;
         left: unset !important;
 
     }
-  
+
 
 }
 
