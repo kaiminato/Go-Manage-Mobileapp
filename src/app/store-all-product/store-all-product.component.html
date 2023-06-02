@@ -68,7 +68,8 @@
               <ion-img [src]="product.image" [routerLink]="['/product-detail/', product.id]"></ion-img>
 
               <div class="description-rating">
-                <ion-text class="description" ion-text-wrap><b> {{ product.description }} </b></ion-text>
+                <ion-text class="description" ion-text-wrap><b> {{ product.name }} </b></ion-text>
+                <ion-text class="description" ion-text-wrap> {{ product.description }} </ion-text>
                 <!-- <ion-text class="rating"><ion-icon name="star"></ion-icon> {{ product.rating }} </ion-text> -->
               </div>
 
