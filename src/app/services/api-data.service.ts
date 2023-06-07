@@ -173,5 +173,9 @@ export class ApiDataService {
   async _getCategories() {
     return await this.http.get(this.apiUrl + 'product/retrieveProductCategory');
   }
+  async addReview(data: any) {
+
+    return await this.http.post(this.apiUrl + 'feedBack/addNewFeedback', data);
+  }
 
 }

@@ -10,6 +10,25 @@ ion-content {
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
   }
+  .page-title {
+    color: rgb(4, 116, 115) !important;
+    border: 2px solid;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    h2{
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+  }
+
   .card-list {
     background-color: white;
     border-radius: 25px;
@@ -17,29 +36,38 @@ ion-content {
     padding: 5px;
     box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
   }
+    ion-img {
+      width: 75px;
+      margin-left: auto;
+      margin-right: auto;
+  }
     .details {
         color: #047473;
         font-size: 17px;
         font-weight: bolder;
-        border-bottom: 1px solid #047473;
-
-        ion-img {
-            width: 20%;
-        }
     }
+    .details-text {
+      color: #047473;
+      font-size: 17px;
+      font-weight: bolder;
+      margin-left: 20px;
+  }
 
     .details_no_border {
-        color: #047473;
         font-size: 17px;
         font-weight: bolder;
-
-        ion-button {
-            --background:#047473;
-            width: 35%;
-            height: 75%;
-        }
+        display: flex;
+        justify-content: center;
     }
-
+    ion-button.details_no_border {
+      font-size: 17px;
+      font-weight: bolder;
+      display: flex;
+      justify-content: center;
+      --background: #047473;
+      --background-activated: #047473;
+      --border-radius: 20px;
+    }
 
 .modal {
     position: fixed; /* Stay in place */
@@ -60,18 +88,23 @@ ion-content {
   .modal-content {
     position: fixed;
     bottom: 0;
-    background-color: #fefefe;
+    background-color: white;
     width: 45%;
     left: 28%;
     -webkit-animation-name: slideIn;
     -webkit-animation-duration: 0.4s;
     animation-name: slideIn;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
   }
 
   .close {
+    position: absolute;
+    top: 0px;
+    right: 17px;
     color: white;
-    float: right;
+    // float: right;
     font-size: 28px;
     font-weight: bold;
   }
@@ -87,14 +120,42 @@ ion-content {
     padding: 2px 16px;
     background-color: #047473;
     color: white;
+    border: 1px solid #047473;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
   }
 
-  .modal-body {padding: 2px 16px;}
-
+  .modal-body {
+    // padding: 2px 16px;
+    background-color: #047473;
+    border: 1px solid #047473;
+  }
+  .Confirm {
+    --border-radius: 20px;
+    ion-text{
+      font-weight: bold;
+    }
+  }
+  .online-payment-txt{
+    border-radius: 5px;
+    border: 2px solid white;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 28px;
+  }
+  .welcome-card{
+    margin: 0px;
+    border-radius: 20px;
+  }
   .modal-footer {
     padding: 2px 16px;
     background-color: #047473;
     color: white;
+    border: 1px solid #047473;
   }
 
   /* Add Animation */

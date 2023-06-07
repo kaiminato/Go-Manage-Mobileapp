@@ -50,7 +50,12 @@ export class CartInfoComponent implements OnInit {
           let get_product =  await this.PRODUCT_RESPONSE.filter( data => data.id == Number(productId));
           if (get_product.length > 0) {
             get_product = get_product[0];
-            get_product['no_of_item'] = 1;
+            if(1 > get_product.quantity){
+              get_product['no_of_item'] = 0;
+            }
+            else{
+              get_product['no_of_item'] = 1;
+            }
             this.PRODUCT_LIST.push(get_product);
           }
         }
@@ -89,7 +94,7 @@ export class CartInfoComponent implements OnInit {
 
 
   navigation() {
-
+    // this.router.navigate(['/store-all-product']);
     this.location.back();
   }
 
