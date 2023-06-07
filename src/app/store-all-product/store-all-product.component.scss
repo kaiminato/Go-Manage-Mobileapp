@@ -92,7 +92,9 @@ ion-content {
         margin-top: 10px;
 
         ion-slide {
-            // margin-left: 5%;
+            width: auto !important;
+            max-width: calc(100% - 10px); /* subtracting margin/padding */
+            flex-shrink: 0;
         }
 
         .active {
@@ -111,13 +113,15 @@ ion-content {
             border-radius: 27px;
             background: #e6e7e9;
             color: #000;
+            margin-left: 5px;
+            margin-right: 5px;
         }
     }
 
     .all-products {
         ion-card {
           background: #e6e7e9;
-          height: 200px;
+          height: 90%;
           margin: 10px;
         }
         ion-img {

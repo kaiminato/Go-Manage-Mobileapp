@@ -1,7 +1,8 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-
-
+  <div class="green-background">
+  </div>
+  <div class="card-list">
     <ion-row class="select-text ion-no-margin ion-no-padding">
       <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
         <ion-text>Please select one</ion-text>
@@ -12,7 +13,7 @@
 
     <ion-row class="select-dilivery-type ion-no-margin ion-no-padding">
       <ion-col size="6" class="free ion-no-margin ion-no-padding" >
-        
+
         <ion-card [class.active]="!DELIVERY" (click)="DELIVERY = false">
           <ion-card-content>
             <ion-icon name="checkmark" *ngIf="!DELIVERY"></ion-icon>
@@ -27,14 +28,63 @@
             <ion-icon name="checkmark" *ngIf="DELIVERY"></ion-icon>
             <div><ion-text> Delivery </ion-text></div>
 
-            {{ 4.99 | currency: 'EUR' }}
+            {{ 1.00 | currency: 'EUR' }}
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
-
+    <ion-button
+        class="ion-margin-bottom ion-margin-top details_no_border"
+        (click)="PAYMENT_MODEL_OPEN = true;"
+        >
+        <ion-text>Confirm</ion-text>
+    </ion-button>
+  </div>
     <!-- Information -->
 
 
+    <div id="myModal" class="modal" style="display: {{ PAYMENT_MODEL_OPEN ? 'block' : 'none'}};">
+
+      <!-- Modal content -->
+      <div class="modal-content"  style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+        <div class="modal-header">
+          <span class="close" (click)="PAYMENT_MODEL_OPEN = false;">&times;</span>
+          <h2 class="online-payment-txt">Online Payment</h2>
+        </div>
+        <div class="modal-body">
+          <ion-card class="welcome-card">
+            <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
+            <ion-card-header>
+              <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
+                <ion-col class="total-payment-amount">Total Payment</ion-col>
+                <ion-col class="total-payment-amount"> {{ SUB_TOTAL | currency: 'EUR'}} </ion-col>
+              </ion-row>
+            </ion-card-header>
+            <ion-card-content>
+              <form action="/" method="post" id="payment-form">
+                <div class="form-row">
+                  <div id="card-element">
+                  </div>
+                  <!-- Used to display Element errors -->
+                  <div id="card-errors" role="alert"></div>
+                </div>
+                <div class="confirm-div">
+                  <ion-button
+                  type="submit"
+                  class="Confirm"
+                  >
+                    <ion-text>Confirm Payment</ion-text>
+                  </ion-button>
+                </div>
+              </form>
+            </ion-card-content>
+          </ion-card>
+        </div>
+        <div class="modal-footer">
+          <h3>Modal Footer</h3>
+        </div>
+      </div>
+
+    </div>
 </ion-content>
 <app-footer></app-footer>
