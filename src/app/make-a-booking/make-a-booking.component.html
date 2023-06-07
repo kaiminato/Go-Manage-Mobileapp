@@ -5,7 +5,7 @@
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
   <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
-    <h1>Make a Booking</h1>
+    <h2>Make a Booking</h2>
   </ion-card>
   <ion-grid class="request-tabs">
     <ion-row>
@@ -112,9 +112,9 @@
         <ion-button
           expand="block"
           (click)="setServicesInBooking()"
-          [disabled]="TOTAL_SERVICE_SELECTED == '0'"
           style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
           >
+        <!-- [disabled]="TOTAL_SERVICE_SELECTED == '0'" -->
 
           <ion-text>Book now</ion-text>
           <span class="material-symbols-outlined booking-arrow">
