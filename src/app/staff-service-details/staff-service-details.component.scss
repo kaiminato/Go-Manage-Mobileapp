@@ -34,118 +34,133 @@ ion-content {
     margin: 20px;
     padding: 5px;
     box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    height: 80%;
   }
 
-    .staff-details {
+  .staff-details {
 
-        color: #047473;
-        font-weight: bold;
-        font-size: 13px;
+      color: #047473;
+      font-weight: bold;
+      font-size: 13px;
 
-        ion-avatar {
-            // width:70% !important;
-            // height : 75% !important;
-            // max-width: 100px !important;  //any size
-            // max-height: 100px !important;
-            width: 80px;
-            height: 80px;
-            margin: 10px;
-            border: 1px solid;
-            padding: 2px;
-        }
+      ion-avatar {
+          // width:70% !important;
+          // height : 75% !important;
+          // max-width: 100px !important;  //any size
+          // max-height: 100px !important;
+          width: 80px;
+          height: 80px;
+          margin: 10px;
+          border: 1px solid;
+          padding: 2px;
+      }
 
-        .comment {
-            margin-right: 30px;
-        }
-    }
+      .comment {
+          margin-right: 30px;
+      }
+  }
 
-    .service-list {
-        max-height: 54%;
-        overflow: scroll;
+  .service-list {
+      max-height: 54%;
+      overflow: scroll;
 
-        .service_detail {
-            // margin: 5px;
-            border-radius: 5px;
-            --background: #f6f5fa;
-            color: #047473;
-            border: 2px solid;
-            .service_count {
-                font-size: 15px;
-            }
+      .service_detail {
+          // margin: 5px;
+          border-radius: 5px;
+          --background: #f6f5fa;
+          color: #047473;
+          border: 2px solid;
+          .service_count {
+              font-size: 15px;
+          }
 
-            h3{
-                font-weight: bold;
-                font-size: 15px;
-            }
+          h3{
+              font-weight: bold;
+              font-size: 15px;
+          }
 
-            .toggle {
-                color: #000;
-                margin-left: 15px;
-            }
-            ion-checkbox{
-            }
+          .toggle {
+              color: #000;
+              margin-left: 15px;
+          }
+          ion-checkbox{
+          }
 
-        }
+      }
 
-        .itemBtns {
-            position: relative;
-            z-index: 4;
-        }
+      .itemBtns {
+          position: relative;
+          z-index: 4;
+      }
 
-        ion-label {
-            display: flex;
-            align-items: center;
-            margin-top: 0;
-            margin-bottom: 0;
-            ion-text {
-                margin-left: auto;
-                margin-right: 5px;
-            }
-            ion-checkbox {
-                min-width: 26px;
-                svg {
-                    border-radius: 2px;
-                }
-            }
-        }
-    }
+      ion-list{
+        margin-bottom: 5px;
+      }
+
+      ion-label {
+          display: flex;
+          align-items: center;
+          margin-top: 0;
+          margin-bottom: 0;
+          ion-text {
+              margin-left: auto;
+              margin-right: 5px;
+          }
+          ion-checkbox {
+              min-width: 26px;
+              svg {
+                  border-radius: 2px;
+              }
+          }
+      }
+  }
 
 
 
-    .service_order_list {
+  .service_order_list {
 
-        ion-icon {
-            margin-left: 0px;
-            margin-left: 0px;
-        }
-        ion-label {
-            // margin-left: 5px;
+      ion-icon {
+          margin-left: 0px;
+          margin-left: 0px;
+      }
+      ion-label {
+          // margin-left: 5px;
 
-        }
+      }
 
-        ion-checkbox {
-            // --margin-right: -10px;
-            --background-checked: #047473;
-        }
+      ion-checkbox {
+          // --margin-right: -10px;
+          --background-checked: #047473;
+      }
 
-    }
+  }
 
-    .book_now {
+  .book_now {
 
-        .service_selected_price {
-            font-weight: bold;
-            font-size: 15px;
-            margin-top: 10px;
-        }
-        ion-button {
-            --background:  #047473;
-            --background-activated: #047473;
+      .service_selected_price {
+          font-weight: bold;
+          font-size: 15px;
+          margin-top: 10px;
+      }
+      ion-button {
+          --background:  #047473;
+          --background-activated: #047473;
 
-            .booking-arrow {
-                margin-left: 20px;
-                font-size: 25px;
-            }
-        }
-    }
+          .booking-arrow {
+              margin-left: 20px;
+              font-size: 25px;
+          }
+      }
+  }
+  // .book_now_grid {
+  //   position: fixed;
+  //   left: 0px;
+  //   bottom: 44px;
+  //   background: white;
+  //   border-top-left-radius: 20px;
+  //   border-top-right-radius: 20px;
+  //   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+  //   width: 100%;
+  // }
 
 }
