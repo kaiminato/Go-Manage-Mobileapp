@@ -47,7 +47,8 @@ export class StoreAllProductComponent implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter (){
-
+    this.PRODUCT_LIST = [];
+    this.productIdArr = [];
     await this.getSelectedcategory();
     await this._getProducts();
     await this._getCategories();

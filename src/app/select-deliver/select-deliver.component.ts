@@ -70,7 +70,7 @@ export class SelectDeliverComponent implements OnInit {
       }
     };
 
-    this.card = elements.create('card', { style: style });
+    this.card = elements.create('card', { style: style, hidePostalCode: true });
     //console.log(this.card);
     this.card.mount('#card-element');
 

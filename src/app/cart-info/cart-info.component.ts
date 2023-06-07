@@ -13,11 +13,6 @@ import { Location } from '@angular/common';
 export class CartInfoComponent implements OnInit {
 
   HEADING: string = "Shopping Cart";
-
-  // PRODUCT_LIST: any = [
-  //                       {id: 1 , name: 'Nike Shoe' , price: 24 , count: 1 , image: this.imageService.SHOE},
-  //                       {id: 2 , name: 'Ladies beg' , price: 24 , count: 1 , image: this.imageService.BEG},
-  //                     ];
   productIdArr: any = [];
   PRODUCT_LIST: any = [];
   PRODUCT_RESPONSE: any = [];
@@ -35,6 +30,7 @@ export class CartInfoComponent implements OnInit {
 
   ngOnInit() {}
   async ionViewWillEnter (){
+    this.PRODUCT_LIST = [];
     this.productIdArr = this.activatedRoute.snapshot.paramMap.get('productIdArr').split(',');
     await this._getProducts();
   }
@@ -47,6 +43,7 @@ export class CartInfoComponent implements OnInit {
         this.PRODUCT_RESPONSE = response;
 
         for(let productId of this.productIdArr){
+          console.log("this is productid", productId);
           let get_product =  await this.PRODUCT_RESPONSE.filter( data => data.id == Number(productId));
           if (get_product.length > 0) {
             get_product = get_product[0];
