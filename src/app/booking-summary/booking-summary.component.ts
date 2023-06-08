@@ -20,7 +20,7 @@ export class BookingSummaryComponent implements OnInit {
   // stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
   stripe ;
   card: any;
-  
+
   HEADING: string = '4';
   DATE: string;
   TOTAL_DURATION: any = 0;
@@ -51,7 +51,7 @@ export class BookingSummaryComponent implements OnInit {
 
   async ionViewWillEnter() {
 
-    
+
     let owner_data = await this.dataService._getOwnerData();
 
     if (owner_data) {
@@ -60,7 +60,7 @@ export class BookingSummaryComponent implements OnInit {
     }
 
     console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
-    
+
     await this._setupStripe();// Initialize stripe token
 
     await this.apiData._updateUserId();
@@ -92,9 +92,9 @@ export class BookingSummaryComponent implements OnInit {
   async _onEnterData() {
     this.activateRoute.queryParams.subscribe((params) => {
       this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-     
+
     });
-    
+
 
     this.BOOKINGS_DETAILS = await this.dataService.getInitialBookingdata();
     this.BOOKING_WITH_STAFF =
@@ -139,7 +139,7 @@ export class BookingSummaryComponent implements OnInit {
     this.DATE = `${day} ${get_month_name} ${year}`;
 
     var now = new Date(`${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00`);
-    
+
 
     now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
 
@@ -147,7 +147,7 @@ export class BookingSummaryComponent implements OnInit {
 
     let { without_space_time } = await this.formatAMPM(now);
     this.ENDING_TIME = without_space_time;
-    
+
     await this.checkLogin();
   }
 
@@ -171,11 +171,11 @@ export class BookingSummaryComponent implements OnInit {
         iconColor: '#fa755a'
       }
     };
-  
+
     this.card = elements.create('card', { style: style });
     //console.log(this.card);
     this.card.mount('#card-element');
-  
+
     this.card.addEventListener('change', event => {
       var displayError = document.getElementById('card-errors');
       if (event.error) {
@@ -184,21 +184,21 @@ export class BookingSummaryComponent implements OnInit {
         displayError.textContent = '';
       }
     });
-  
+
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', event => {
       event.preventDefault();
       //console.log(event)
-  
+
       this.stripe.createToken(this.card).then(result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
           console.log('result' , result);
-          
+
           this._createPayment(result.token.id)
-          
+
         }
       });
     });
@@ -207,45 +207,47 @@ export class BookingSummaryComponent implements OnInit {
 
     async _createPayment(token: any) {
 
-      let amount = this.TOTAL_AMOUNT * 100;
+      let amount = this.TOTAL_AMOUNT;
       let formData = new FormData();
       formData.append('email' , this.EMAIL);
       formData.append('token' , token);
       formData.append('amount' , amount.toString());
+      formData.append('transactionType' , String(1));
+      formData.append('description' , "Booking Deposit Payment");
       console.log('token----' , token);
-      
-  
+
+
       //await this.apiData.presentLoading();
-  
+
       await (await this.apiData._createPayment(formData)).subscribe(
         async (response: any) => {
-  
+
           console.log('stripe respnose' , response);
-  
-          if (response.id) {  
+
+          if (response.id) {
             this.RECIPT_URL = response.receiptUrl;
 
             this.BOOKINGS_DETAILS.reciept_url = this.RECIPT_URL;
             await this.dataService.setBookingData(this.BOOKINGS_DETAILS)
-            
+
             this.saveBooking();
           } else {
-            
+
             alert(response.details);
           }
         },
         async (error: any) => {
-  
+
           alert('server error');
         }
       );
     }
-  
+
 
 
   async checkLogin() {
     await this.auth.getUser().subscribe((user_data: any) => {
-      
+
       if (user_data !== undefined) {
         this.IS_LOGIN = true;
       }
@@ -284,9 +286,9 @@ export class BookingSummaryComponent implements OnInit {
             ) {
 
               this._updateClient(save_data, email);
-              
+
             } else {
-              
+
               return false;
             }
           },
@@ -310,14 +312,14 @@ export class BookingSummaryComponent implements OnInit {
     (await this.apiData.updateProfile(data, email)).subscribe(
       async (response: any) => {
         await this.apiData.dismiss();
-        
+
         this._onEnterData();
         return true;
       },
       async (error: any) => {
         await this.apiData.dismiss();
         await this.apiData.presentAlert('Server error, Please try again later');
-       
+
       }
     );
   }
@@ -339,7 +341,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async saveBooking() {
-    
+
     if (!this.IS_LOGIN) {
       await this.dataService.setPreviousUrl('booking-summary');
       this.auth
@@ -349,8 +351,8 @@ export class BookingSummaryComponent implements OnInit {
 
       return;
     }
-    
-    
+
+
     await this.dataService.removePreviousUrl();
 
     let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00.000Z`;
@@ -407,18 +409,18 @@ export class BookingSummaryComponent implements OnInit {
 
             (await this.apiData.saveBooking(data)).subscribe(
               async (response: any) => {
-                
+
                 await this.apiData.dismiss();
-                
+
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
                 }, 300);
               },
               async (error: any) => {
-                
+
                 await this.apiData.dismiss();
                 console.log('error--' , error)
-                
+
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
                 }, 300);
@@ -435,7 +437,7 @@ export class BookingSummaryComponent implements OnInit {
 
           async (error: any) => {
             await this.apiData.dismiss();
-           
+
             await this.apiData.presentAlert(
               'profile error' + JSON.stringify(error)
             );
@@ -444,7 +446,7 @@ export class BookingSummaryComponent implements OnInit {
       },
       async (error: any) => {
         await this.apiData.dismiss();
-        
+
         await this.apiData.presentAlert(
           'auth api error' + JSON.stringify(error)
         );
@@ -455,17 +457,17 @@ export class BookingSummaryComponent implements OnInit {
   async deleteBooking() {
     (await this.apiData.deleteBooking(this.CANCEL_BOOKING_ID)).subscribe(
       async (response: any) => {
-        
+
       },
       async (error: any) => {
-        
+
       }
     );
   }
 
   async addHours(time: string, add_duration: number) {
     let [hours, minut] = time.split(':');
-   
+
 
     let total_minuts = parseInt(hours) * 60 + parseInt(minut) + add_duration;
     let h: any = ~~(total_minuts / 60);
