@@ -98,10 +98,12 @@ export class ApiDataService {
 
   async _createPayment(data: any) {
 
-    let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
-      .set('Cache-Control', 'no-cache');
+    // let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
+    //   .set('Cache-Control', 'no-cache');
 
-    return await this.http.post(this.apiUrl + 'stripe/create-charge', data, { headers: header })
+    // return await this.http.post(this.apiUrl + 'stripe/create-charge', data, { headers: header })
+    const headers = { 'Cache-Control': 'no-cache'  };
+    return this.http.post(this.apiUrl + 'stripe/create-charge', data , { 'headers': headers });
   }
 
 
