@@ -94,7 +94,7 @@ export class SelectDeliverComponent implements OnInit {
           errorElement.textContent = result.error.message;
         } else {
           console.log('result' , result);
-          // this._createPayment(result.token.id);
+          this._createPayment(result.token.id);
         }
       });
     });
@@ -110,6 +110,7 @@ export class SelectDeliverComponent implements OnInit {
       formData.append('email' , this.EMAIL);
       formData.append('token' , token);
       formData.append('amount' , amount.toString());
+      formData.append('transactionType' , String(3));
       formData.append('description' , "Online Store Payment");
       await this.apiData.presentLoading();
       console.log('token----' , token);
