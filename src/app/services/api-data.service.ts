@@ -62,13 +62,21 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'user/retrieveUserDetails?email=' + email);
   }
 
-  async updateProfile(data: any, email: string) {
+  async updateProfile(data: any) {
 
-    let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
-      .set('Cache-Control', 'no-cache')
-      .set('Content-Type', 'application/json-patch+json')
+    // let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
+    //   .set('Cache-Control', 'no-cache')
+    //   .set('Content-Type', 'application/json-patch+json')
 
-    return await this.http.post(this.apiUrl + 'user/updateUserDetails?email=' + email, data, { headers: header, })
+    // return await this.http.post(this.apiUrl + 'user/updateUserDetails?email=' + email, data, { headers: header, })
+    const headers = {
+      'content-type': 'application/json',
+      'Cache-Control': 'no-cache'
+      };
+    const body = JSON.stringify(data);
+
+    console.log('body--' , data);
+    return this.http.post(this.apiUrl + '/user/updateUserDetails', body, { 'headers': headers })
   }
 
   async deleteBooking(id: any) {
@@ -157,6 +165,20 @@ export class ApiDataService {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Alert',
+      message: message,
+      buttons: ['OK']
+    }).then((res) => {
+
+      res.present();
+      res.onDidDismiss().then((dis) => {
+      })
+    });
+
+  }
+  async presentAlertWithHeader(header: any, message: any) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: header,
       message: message,
       buttons: ['OK']
     }).then((res) => {

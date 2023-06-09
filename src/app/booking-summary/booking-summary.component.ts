@@ -34,6 +34,7 @@ export class BookingSummaryComponent implements OnInit {
   IS_LOGIN: boolean = false;
   PAYMENT_MODEL_OPEN: boolean = false;
   EMAIL: string;
+  userGMID: any;
   RECIPT_URL: string = '';
 
   constructor(
@@ -55,25 +56,20 @@ export class BookingSummaryComponent implements OnInit {
     let owner_data = await this.dataService._getOwnerData();
 
     if (owner_data) {
-
-      this.stripe = Stripe(owner_data.stripe_publishable_key)
+      this.stripe = Stripe(owner_data.stripe_publishable_key);
     }
-
     console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
-
-    await this._setupStripe();// Initialize stripe token
-
-    await this.apiData._updateUserId();
+    // await this.apiData._updateUserId();
     await this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
         this.EMAIL = response.email;
+        this.userGMID = response.userGMID;
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
-
+            console.log("this is user_info", user_info);
             if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
             ) {
-
               this.presentAlert(response.email);
             } else {
               this._onEnterData();
@@ -86,7 +82,7 @@ export class BookingSummaryComponent implements OnInit {
       (error: any) => {
       }
     );
-
+    await this._setupStripe();// Initialize stripe token
   }
 
   async _onEnterData() {
@@ -172,7 +168,7 @@ export class BookingSummaryComponent implements OnInit {
       }
     };
 
-    this.card = elements.create('card', { style: style });
+    this.card = elements.create('card', { style: style, hidePostalCode: true });
     //console.log(this.card);
     this.card.mount('#card-element');
 
@@ -196,17 +192,14 @@ export class BookingSummaryComponent implements OnInit {
           errorElement.textContent = result.error.message;
         } else {
           console.log('result' , result);
-
-          this._createPayment(result.token.id)
-
+          console.log('token' , result.token.id);
+          this._createPayment(result.token.id);
         }
       });
     });
     }
 
-
     async _createPayment(token: any) {
-
       let amount = this.TOTAL_AMOUNT;
       let formData = new FormData();
       formData.append('email' , this.EMAIL);
@@ -215,30 +208,31 @@ export class BookingSummaryComponent implements OnInit {
       formData.append('transactionType' , String(1));
       formData.append('description' , "Booking Deposit Payment");
       console.log('token----' , token);
-
-
-      //await this.apiData.presentLoading();
+      await this.apiData.presentLoading();
 
       await (await this.apiData._createPayment(formData)).subscribe(
         async (response: any) => {
 
           console.log('stripe respnose' , response);
-
+          await this.apiData.dismiss();
           if (response.id) {
             this.RECIPT_URL = response.receiptUrl;
 
             this.BOOKINGS_DETAILS.reciept_url = this.RECIPT_URL;
             await this.dataService.setBookingData(this.BOOKINGS_DETAILS)
-
             this.saveBooking();
-          } else {
 
-            alert(response.details);
+            await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+          } else {
+            // alert(response.details);
+            await this.apiData.presentAlertWithHeader("Payment Failed","Something Went Wrong. Please try later.");
           }
         },
         async (error: any) => {
-
-          alert('server error');
+          console.log("error",error);
+          await this.apiData.dismiss();
+          await this.apiData.presentAlertWithHeader("Payment Failed","Something Went Wrong. Please try later.");
+          // alert('server error');
         }
       );
     }
@@ -285,7 +279,7 @@ export class BookingSummaryComponent implements OnInit {
               save_data.last_name.trim() != '' || save_data.phone.trim() != ''
             ) {
 
-              this._updateClient(save_data, email);
+              this._updateClient(save_data);
 
             } else {
 
@@ -299,17 +293,18 @@ export class BookingSummaryComponent implements OnInit {
     await alert.present();
   }
 
-  async _updateClient(save_data: any, email: string) {
+  async _updateClient(save_data: any) {
     let data = {
-      // email: this.EMAIL,
+      email: this.EMAIL,
       givenName: save_data.first_name,
       familyName: save_data.last_name,
       phoneMobile: save_data.phone,
+      userGMID: this.userGMID
     };
 
     await this.apiData.presentLoading();
 
-    (await this.apiData.updateProfile(data, email)).subscribe(
+    (await this.apiData.updateProfile(data)).subscribe(
       async (response: any) => {
         await this.apiData.dismiss();
 
