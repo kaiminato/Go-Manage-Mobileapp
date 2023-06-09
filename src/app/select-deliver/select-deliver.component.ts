@@ -122,7 +122,7 @@ export class SelectDeliverComponent implements OnInit {
           if (response.id) {
             // this.RECIPT_URL = response.receiptUrl;
             await this.apiData.dismiss();
-            await this.apiData.presentAlert("Submission Success");
+            await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
           } else {
             // alert(response.details);
 
@@ -131,7 +131,7 @@ export class SelectDeliverComponent implements OnInit {
         async (error: any) => {
           // alert('server error');
           await this.apiData.dismiss();
-          await this.apiData.presentAlert("Submission Failed");
+          await this.apiData.presentAlertWithHeader("Payment Failed","Something Went Wrong. Please try later.");
         }
       );
     }
