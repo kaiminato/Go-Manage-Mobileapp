@@ -61,13 +61,13 @@ export class AddReviewComponent implements OnInit {
     (await this.apiData.addReview(data)).subscribe(
       async (response: any) => {
         await this.apiData.dismiss();
-        await this.apiData.presentAlert("Added New Feedback");
+        await this.apiData.presentAlertWithHeader("Review Confirmed", "Thanks for your feedback!");
         this.REVIEW_TEXT = "";
       },
       async (error: any) => {
 
         await this.apiData.dismiss();
-        await this.apiData.presentAlert("Something Went Wrong. Please try later.");
+        await this.apiData.presentAlertWithHeader("Failed","Something Went Wrong. Please try later.");
       }
     );
   }
