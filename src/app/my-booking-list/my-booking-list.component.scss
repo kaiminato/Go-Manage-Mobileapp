@@ -1,50 +1,151 @@
 
 
 ion-content {
-
-    .main-div {
-        max-height: 75%;
-        min-height: 75%;
-        overflow: scroll;
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .page-title {
+    color: rgb(4, 116, 115) !important;
+    border: 2px solid;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    h2{
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-weight: bold;
     }
-    
-    
-    .new_booking {
-        //font-weight: bold;
-        color : #047473;
+  }
+  .card-list {
+    background-color: white;
+    border-radius: 25px;
+    margin: 20px;
+    padding: 10px 10px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    ion-list {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
+    .new_booking_div {
+      display: flex;
+      justify-content: space-between;
+      background-color: #047473;
+      border-radius: 10px;
+      height: 60px;
+      padding: 10px;
+    }
+    .new_booking_txt {
+      font-weight: bold;
+      font-size: large;
+      color: white;
+      display: flex;
+      margin-top: 6px;
+      margin-left: 5px;
+    }
+
+    .new_booking_btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #047473;
+      border-radius: 50%;
+      background-color: white;
+      width: 25px;
+      height: 25px;
+      font-size: 24px;
     }
 
     .booking-header-grid-section {
-        margin-top: -20px;
+        margin-top: -30px;
+        margin-left: 7px;
+        margin-right: 7px;
 
         .booking-header-section {
-
             display: flex;
-            
+            .booking-selection-div {
+              background-color: white;
+              width: 50%;
+              border-radius: 10px;
+              padding: 6px;
+            }
             .booking-selection {
-    
-                width: 50%;
                 font-size: 12px;
                 color:  #047473;
                 border: 2px solid #047473;
-                height: 30px;
-                padding: 5px;
+                border-radius: 5px;
+                height: 35px;
+                font-size: 11px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 cursor: pointer;
             }
-    
+
             .active-booking-selection {
                 background-color: #047473;
                 font-weight: bold;
-                color: #fff;
+                color: #fff !important;
             }
         }
     }
 
+    .main-div {
+      max-height: 75%;
+      min-height: 75%;
+      overflow: scroll;
+    }
     .list_0 {
 
         margin-top: -5px !important;
     }
     .booking_list {
+        .booking-time{
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 3px;
+          .receipt_btn {
+            display: flex;
+            text-decoration: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            height: 20px;
+            padding-left: 5px;
+            padding-right: 5px;
+            color: #047473;
+            border: 1px solid #047473;
+            border-radius: 3px;
+            ion-icon {
+              font-size: 11px;
+            }
+          }
+        }
+        ion-icon{
+          font-size: 20px;
+          color: #047473;
+        }
+        ion-text{
+          color: rgb(4, 116, 115) !important;
+          font-size: 11px;
+          margin-top: 3px;
+        }
 
         .card-content {
             margin-top: 10px;
@@ -53,11 +154,14 @@ ion-content {
             .booking-content {
                 width: 50%;
                 color: #047473;
+                ion-img {
+                  width: 100%;
+                  height: 100%;
+                }
             }
-
             .service_info {
-                
-                line-height: 20px;  
+
+                line-height: 20px;
                 .service_name {
                     font-weight: bold;
                 }
@@ -72,30 +176,45 @@ ion-content {
                     font-weight: bold;
                 }
             }
-
-            .rescheduling_info {
-
-                .rescheduling-button {
-
-                    --background: #047473;
-                    color: #fff;
-                    font-size: 10px;
-                    height: 26px;
-                }
-
-                .cancel-button {
-                    color: #047473;
-                    --background: #ebe8e8;
-                    //font-size: 8px;
-                    height: 26px;
-                }
-
-                .reciept_payment {
-                    text-decoration: none;
-                }
-                
-            }
+        }
+        .rescheduling-header-section{
+          margin-top: 10px;
+          display: flex;
+          gap: 3px;
+          .rescheduling-selection {
+            width: 50%;
+            border: 2px solid #047473;
+            border-radius: 5px;
+            height: 35px;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #047473;
+          }
+          .active-rescheduling-selection {
+              background-color: #047473;
+              color: #fff !important;
+          }
+        }
+        .previous-receipt-section{
+          margin-top: 10px;
+          display: flex;
+          justify-content: center;
+          a{
+            text-decoration: none;
+            width: 70%;
+            background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
+            color: #fff;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            font-size: 14px;
+          }
         }
     }
-    
+
 }

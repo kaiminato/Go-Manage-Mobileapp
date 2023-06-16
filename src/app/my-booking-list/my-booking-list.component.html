@@ -1,97 +1,134 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
   <app-header (navigation)="navigation()"  [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" ></app-header>
-  
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <ion-button 
-          fill="clear" 
-          class="ion-float-right ion-margin-end"
-          [routerLink]="['/make-a-booking']"
-          ><ion-text class="new_booking" style="color : {{this.dataService.TEXT_COLOR}} !important; ">+ New Booking</ion-text></ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="green-background">
+  </div>
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+    <h2>Your Booking</h2>
+  </ion-card>
 
-  <ion-grid class="booking-header-grid-section ion-margin-start ion-margin-end">
-    <ion-row>
-      <ion-col size="12" class="booking-header-section" >
-        <div 
-          class="booking-selection future ion-text-center "
-          [class.active-booking-selection]="IS_FUTURE_BOOKING_active"
-          (click)="IS_FUTURE_BOOKING_active = true"
-          style="color : {{this.dataService.TEXT_COLOR}} !important; "
-          >Future Bookings
-        </div>
-        
-        <div  
-          class="booking-selection future ion-text-center"
-          [class.active-booking-selection]="!IS_FUTURE_BOOKING_active"
-          (click)="IS_FUTURE_BOOKING_active = false"
-          style="color : {{this.dataService.TEXT_COLOR}} !important; "
-          >Previous Bookings</div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="card-list">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" class="new_booking_div">
+          <ion-text class="new_booking_txt">New Booking</ion-text>
+          <ion-button
+            fill="clear"
+            class="ion-float-right new_booking_btn"
+            [routerLink]="['/make-a-booking']"
+            >+</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-  <div class="main-div">
-    <ion-card class="booking_list list_{{i}}" *ngFor="let booking of IS_FUTURE_BOOKING_active ? FUTURE_BOOKING_LIST : RECENT_BOOKING_LIST; let i = index" >
-      <ion-card-header>
-        <ion-card-subtitle>
-          <ion-icon name="calendar"></ion-icon> <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{booking.date_time}}</ion-text>
-        </ion-card-subtitle>
-        <ion-card-content class="ion-no-padding" >
-          <div class="card-content" >
-            <div class="booking-content service_info" style="color : {{this.dataService.TEXT_COLOR}} !important; ">
-              <div class="service_name"> {{booking.service_name}}</div>
-              <div class="service_duration"> {{booking.service_duration}} </div>
-              <div class="owner_name"> Jade Amber </div>
-              
-            </div>
-    
-            <div class="booking-content rescheduling_info" *ngIf="IS_FUTURE_BOOKING_active">
-              <ion-button 
-                expand="full" 
-                size="small" 
-                class="rescheduling-button"
-                [routerLink]="['/make-a-booking']"
-                [queryParams]="{id: booking.id}"
-                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;" 
-                >
-                <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Rescheduling booking</ion-text>
-              </ion-button>
-
-              <ion-button
-                expand="full" 
-                size="small" 
-                class="cancel-button ion-margin-top"
-                (click)="cancelBooking(booking.id)"
-                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;" 
-                >
-                <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Cancel booking</ion-text>
-              </ion-button>
-              <a href="{{booking.paymentReceipt}}" target=”_blank” class="reciept_payment">
-
-                <ion-button
-                expand="full" 
-                size="small" 
-                class="rescheduling-button ion-margin-top"
-                style=" --background: #1b1b4d;"
-                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;" 
-                >
-                <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Receipt of payment</ion-text></ion-button>
-                
-
-              </a>
-                
+    <ion-grid class="booking-header-grid-section">
+      <ion-row>
+        <ion-col size="12" class="booking-header-section">
+          <div class="booking-selection-div">
+            <div
+              class="booking-selection future ion-text-center "
+              [class.active-booking-selection]="IS_FUTURE_BOOKING_active"
+              (click)="IS_FUTURE_BOOKING_active = true"
+              >Future Bookings
             </div>
           </div>
-          
-        </ion-card-content>
-        
-      </ion-card-header>
-    </ion-card>
+          <div class="booking-selection-div">
+            <div
+              class="booking-selection future ion-text-center"
+              [class.active-booking-selection]="!IS_FUTURE_BOOKING_active"
+              (click)="IS_FUTURE_BOOKING_active = false"
+              >Previous Bookings
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="main-div">
+      <ion-card class="booking_list list_{{i}}" *ngFor="let booking of IS_FUTURE_BOOKING_active ? FUTURE_BOOKING_LIST : RECENT_BOOKING_LIST; let i = index" >
+        <ion-card-header>
+          <ion-card-subtitle class="booking-time">
+            <a *ngIf="IS_FUTURE_BOOKING_active" href="{{booking.paymentReceipt}}" target=”_blank” class="receipt_btn">RECEIPT<ion-icon name="arrow-down-outline"></ion-icon></a>
+            <!-- <div class="receipt_btn">RECEIPT<ion-icon name="arrow-down-outline"></ion-icon></div> -->
+            <ion-icon name="calendar"></ion-icon> <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{booking.date_time}}</ion-text>
+          </ion-card-subtitle>
+          <ion-card-content class="ion-no-padding" >
+            <div class="card-content" >
+              <div class="booking-content service_info" style="color : {{this.dataService.TEXT_COLOR}} !important; ">
+                <div class="service_name"> {{booking.service_name}}</div>
+                <div class="service_duration"> {{booking.service_duration}} </div>
+                <div class="owner_name"> Jade Amber </div>
+              </div>
+              <div class="booking-content">
+                <ion-img [src]="this.imageService.SERIVCE_IMG"></ion-img>
+              </div>
+              <!-- <div class="booking-content rescheduling_info" *ngIf="IS_FUTURE_BOOKING_active">
+                <ion-button
+                  expand="full"
+                  size="small"
+                  class="rescheduling-button"
+                  [routerLink]="['/make-a-booking']"
+                  [queryParams]="{id: booking.id}"
+                  style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+                  >
+                  <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Rescheduling booking</ion-text>
+                </ion-button>
+
+                <ion-button
+                  expand="full"
+                  size="small"
+                  class="cancel-button ion-margin-top"
+                  (click)="cancelBooking(booking.id)"
+                  style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+                  >
+                  <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Cancel booking</ion-text>
+                </ion-button>
+                <a href="{{booking.paymentReceipt}}" target=”_blank” class="reciept_payment">
+
+                  <ion-button
+                  expand="full"
+                  size="small"
+                  class="rescheduling-button ion-margin-top"
+                  style=" --background: #1b1b4d;"
+                  style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+                  >
+                  <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">Receipt of payment</ion-text></ion-button>
+
+
+                </a>
+
+              </div> -->
+            </div>
+          </ion-card-content>
+          <div *ngIf="IS_FUTURE_BOOKING_active" class="rescheduling-header-section">
+            <div
+              class="rescheduling-selection ion-text-center "
+              [class.active-rescheduling-selection]="false"
+              expand="full"
+              size="small"
+              [routerLink]="['/make-a-booking']"
+              [queryParams]="{id: booking.id}"
+              >
+              Rescheduling booking
+            </div>
+            <div
+              class="rescheduling-selection ion-text-center"
+              [class.active-rescheduling-selection]="true"
+              expand="full"
+              size="small"
+              (click)="cancelBooking(booking.id)"
+              >
+              Cancel booking
+            </div>
+          </div>
+          <div *ngIf="!IS_FUTURE_BOOKING_active" class="previous-receipt-section">
+            <a href="{{booking.paymentReceipt}}" target=”_blank” class="reciept_payment">
+              Receipt
+            </a>
+          </div>
+        </ion-card-header>
+      </ion-card>
+    </div>
   </div>
-  
+
 </ion-content>
 <app-footer></app-footer>

@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit {
   HOME_LOCATION: string = '';
   PHONE: string = '';
   RESPONSE: any;
+  USERGMID: any;
 
   constructor(
     private router: Router,
@@ -74,9 +75,9 @@ export class ProfileComponent implements OnInit {
           async (user_info: any) => {
 
             await this.apiData.dismiss();
-
+            console.log("user_info",user_info);
             this.RESPONSE = user_info;
-            let user_details = user_info
+            let user_details = user_info;
 
 
             if (user_details.givenName == 'null' && user_details.familyName == 'null'){
@@ -112,31 +113,23 @@ export class ProfileComponent implements OnInit {
                 this.SHORT_NAME = (<any> Array.from(user_details.name)[0]).toUpperCase();
                 this.FIRST_NAME = user_details.name;
               }
-
             }
-
+            this.USERGMID = user_details.userGMID;
             this.PHONE = user_details.phoneMobile;
-
-            if (user_details?.user_metadata) {
-
-              let [date , month , year] = user_details.user_metadata.dob.split('/')
-
-
-              this.EMAIL = user_details.email;
-              this.GENDER = user_details.user_metadata.gender.toUpperCase()
-              this.BIRTHDAY = `${year}-${month}-${date}`;
-              this.ABOUT_ME = user_details.user_metadata.aboutMe;
-              this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
-              this.HEIGHT = user_details.user_metadata.height;
-              this.WEIGHT = user_details.user_metadata.weight;
-              let address_value = JSON.parse(user_details.user_metadata?.addresses[0])
-              this.HOME_LOCATION = address_value?.work_address;
-
-            }
-
-
-
-
+            this.BIRTHDAY = user_details.dateOfBirth;
+            this.GENDER = user_details.gender.toUpperCase();
+            // if (user_details?.user_metadata) {
+            //   let [date , month , year] = user_details.user_metadata.dob.split('/')
+            //   this.EMAIL = user_details.email;
+            //   this.GENDER = user_details.user_metadata.gender.toUpperCase()
+            //   this.BIRTHDAY = `${year}-${month}-${date}`;
+            //   this.ABOUT_ME = user_details.user_metadata.aboutMe;
+            //   this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
+            //   this.HEIGHT = user_details.user_metadata.height;
+            //   this.WEIGHT = user_details.user_metadata.weight;
+            //   let address_value = JSON.parse(user_details.user_metadata?.addresses[0])
+            //   this.HOME_LOCATION = address_value?.work_address;
+            // }
           },
           async (error: any) => {
 
@@ -162,8 +155,6 @@ export class ProfileComponent implements OnInit {
 
   async updateUser() {
 
-
-
     if (this.FIRST_NAME == ''){
 
       await this.apiData.presentAlert("First name can't be empty")
@@ -188,57 +179,58 @@ export class ProfileComponent implements OnInit {
       return
     }
 
-
     if (this.BIRTHDAY == ''){
 
       await this.apiData.presentAlert("Birthday can't be empty")
       return
     }
 
+    // if (this.HOME_LOCATION == ''){
 
+    //   await this.apiData.presentAlert("Home location can't be empty")
+    //   return
+    // }
 
-    if (this.HOME_LOCATION == ''){
+    // let [year , month , date] = this.BIRTHDAY.split('-');
+    // let D_O_B = `${date}-${month}-${year}`;
 
-      await this.apiData.presentAlert("Home location can't be empty")
-      return
-    }
-
-    let [year , month , date] = this.BIRTHDAY.split('-');
-    let D_O_B = `${date}/${month}/${year}`;
-
-    let dat = {
-      gender: this.GENDER,
-      birth: D_O_B,
-      HOME_LOCATION: this.HOME_LOCATION
-    }
+    // let dat = {
+    //   gender: this.GENDER,
+    //   birth: D_O_B,
+    //   HOME_LOCATION: this.HOME_LOCATION
+    // }
 
     let data = {
       email: this.EMAIL,
       givenName: this.FIRST_NAME,
       familyName: this.LAST_NAME,
-      //name: `${this.FIRST_NAME} ${this.LAST_NAME}`,
       phoneMobile: this.PHONE.toString(),
-      address: this.HOME_LOCATION,
+      // address: this.HOME_LOCATION,
       gender: this.GENDER,
-      dateOfBirth: D_O_B,
+      dateOfBirth: this.BIRTHDAY,
+      userGMID: this.USERGMID,
     }
 
   await this.apiData.presentLoading();
 
     (await this.apiData.updateProfile(data)).subscribe(
       async (response: any) => {
-
         await this.apiData.dismiss();
         await this.apiData.presentAlert('Profile updated successfully');
         this.EDIT_PROFILE = false;
-        this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE
-
+        this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
       },
       async (error: any) => {
-
-        await this.apiData.dismiss();
-        await this.apiData.presentAlert('Server error, Please try again later');
-
+        if(error.status === 200){
+          await this.apiData.dismiss();
+          await this.apiData.presentAlert('Profile updated successfully');
+          this.EDIT_PROFILE = false;
+          this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
+        }
+        else{
+          await this.apiData.dismiss();
+          await this.apiData.presentAlert('Server error, Please try again later');
+        }
       }
     );
 

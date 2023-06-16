@@ -6,7 +6,7 @@ import { DataService } from '../services/data.service';
 import { mergeMap } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
-
+import { ImageService } from '../services/image.service';
 
 let returnTo = ``;
 
@@ -25,10 +25,11 @@ export class FooterComponent implements OnInit {
     public dataService: DataService,
     private alertController: AlertController,
     private apiData: ApiDataService,
-    ) { 
+    private imageService: ImageService,
+    ) {
 
     this.checkLogin();
-    
+
   }
 
   ngOnInit() {}
@@ -41,13 +42,13 @@ export class FooterComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Do you want Logout ?',
       cssClass:'my-custom-class',
-      backdropDismiss:false, // alert will not close automaticall if we click outside of alert 
+      backdropDismiss:false, // alert will not close automaticall if we click outside of alert
       buttons: [
         {
           text: 'No',
           role: 'cancel',
           handler: () => {
-           
+
           },
         },
         {
@@ -55,7 +56,7 @@ export class FooterComponent implements OnInit {
           role: 'confirm',
           handler: async () => {
 
-  
+
             // Use the SDK to build the logout URL
             this.auth
             .buildLogoutUrl({ returnTo })
@@ -74,8 +75,8 @@ export class FooterComponent implements OnInit {
     });
 
     await alert.present();
-    
-    
+
+
   }
 
   async login () {
@@ -92,9 +93,9 @@ export class FooterComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (user_data: any) =>{
-        
+
         this.IS_LOGIN = user_data !== undefined ? true : false;
-        
+
       }
     );
   }
