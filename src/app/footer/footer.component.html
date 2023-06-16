@@ -6,23 +6,23 @@
 
 
       <ion-tab-button [routerLink]="['/']">
-        <ion-icon name="home"></ion-icon>
+        <ion-img [src]="this.imageService.HOME"></ion-img>
         <ion-text >Home</ion-text>
       </ion-tab-button>
 
       <ion-tab-button [routerLink]="['/my-booking-list']">
-        <ion-icon name="calendar"></ion-icon>
+        <ion-img [src]="this.imageService.BOOKING"></ion-img>
         <ion-text >Bookings</ion-text>
       </ion-tab-button>
 
 
       <ion-tab-button [routerLink]="['/profile']">
-        <ion-icon name="person" ></ion-icon>
+        <ion-img [src]="this.imageService.PROFILE"></ion-img>
         <ion-text >Profile</ion-text>
       </ion-tab-button>
 
       <ion-tab-button (click)="logout()" *ngIf="IS_LOGIN">
-        <ion-icon name="log-out" ></ion-icon>
+        <ion-img [src]="this.imageService.LOGOUT"></ion-img>
         <ion-text >Logout</ion-text>
       </ion-tab-button>
 

@@ -1,52 +1,98 @@
 ion-content {
-
-  ion-card{
-    border: 1px solid;
-    border-radius: 16px;
-    margin: 2px;
-    margin-inline:5px;
-    color: black;
-    padding: 17px 8px;
-  
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    background: linear-gradient(101deg, rgba(3,136,132,1) 5%, rgba(13,144,139,1) 33%, rgba(2,127,123,1) 35%);
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
   }
-  
+  .page-title {
+    color: rgb(4, 116, 115) !important;
+    border: 2px solid;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    h2{
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+  }
+  .card-list {
+    background-color: white;
+    border-radius: 25px;
+    margin: 20px;
+    padding: 5px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    color: #047473;
+  }
+  .jade_sign_img{
+    height: 63px;
+  }
   ion-card-content{
     padding: 0;
   }
-  
+
   ion-grid{
     padding: 0;
   }
-  
-  .main-grid{
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-  
+
   h6{
     font-size: 12px;
+    margin-top: 6px;
+    margin-bottom: 6px;
   }
-  
+
+  .item-header-txt{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .bio{
+    font-size: 18px;
+    font-weight: bold;
+  }
   .main-row{
     margin: 10px;
   }
-  
-  .span-content{
-    padding-top: 15px;
+  hr{
+    width: 100%;
+    border: 0.5px solid #ebebeb;
+    height: auto;
   }
-  
-  
-  .card1{
-    padding: 5px 8px !important;
+  .owner_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ion-text{
+      font-size: 13px;
+      font-weight: bold;
+    }
   }
-  
-  .img2{
-    padding-top: 10px;
+  .img-time{
+    max-width: 51px;
   }
-  
-  
+  ion-icon{
+    color: gray;
+    font-size: 45px;
+  }
   img{
-    max-width: 65px;
+    max-width: 43px;
   }
-  
+
+  a{
+    color: #047473;
+  }
+
 }

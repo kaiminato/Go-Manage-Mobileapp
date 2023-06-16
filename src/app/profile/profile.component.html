@@ -1,238 +1,85 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
   <app-header (navigation)="navigation()" (updateUser)="updateUser()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true" [PROFILE_HEADER_DATA]="PROFILE_HEADER"></app-header>
-  
-  <!------------------------ Show Profile --------------------------->
-
-    <div class="scroll-bar" *ngIf="!EDIT_PROFILE">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" class="ion-text-center">
-            <div class="user-name" *ngIf ="SHORT_NAME">
-              <ion-text class="usr_name" style="color: {{this.dataService.TEXT_COLOR}};">
-                {{SHORT_NAME}}
-                <span class="edit_icon"> 
-                  <ion-icon name="pencil" class="pencili-icon" (click)="showForm()"></ion-icon> 
-                </span> 
-              </ion-text>
- 
-            </div>
-          
-            <!-- <ion-button (click)="showForm()"><ion-icon name="pencil"></ion-icon></ion-button> -->
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      
-
-      
-      <!------------ Divider --------------->
-      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list >
-              <ion-item detail="false">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">First Name</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ FIRST_NAME }}</ion-text>
-                <div>
-                  <ion-input [(ngModel)]="FIRST_NAME" *ngIf="EDIT_PROFILE"></ion-input>
+  <div class="green-background">
+  </div>
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+    <h2>My Profile</h2>
+  </ion-card>
+  <div class="card-list">
+    <div class="card-content">
+      <div class="sec-green-background">
+      </div>
+      <div class="scroll-bar">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" class="ion-text-center">
+              <div class="user-name-div">
+                <div class="user-name">
+                  <ion-text class="usr_name" *ngIf ="SHORT_NAME">
+                    {{SHORT_NAME}}
+                    <!-- <span class="edit_icon">
+                      <ion-icon name="pencil" class="pencili-icon" (click)="showForm()"></ion-icon>
+                    </span> -->
+                  </ion-text>
                 </div>
-                
-                
-              </ion-item>
-
-              
-
-              <ion-item detail="false">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Last Name</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ LAST_NAME }}</ion-text>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Gender</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ GENDER }}</ion-text>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Phone</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ PHONE }}</ion-text>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Birthday</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ BIRTHDAY }}</ion-text>
-              </ion-item>
-
-              
-
-            </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-
-
-      <!------------ Divider --------------->
-      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-              <ion-item detail="false" lines="none">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Email</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ EMAIL }}</ion-text>
-              </ion-item>
-            </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <!------------ Divider --------------->
-      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-              <ion-item detail="false" lines="none">
-                <ion-label>
-                  <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Home Location</ion-text>
-                </ion-label>
-                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{ HOME_LOCATION }}</ion-text>
-              </ion-item>
-            </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+                <ion-text class="user-name-txt">{{FIRST_NAME}} {{LAST_NAME}}</ion-text>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-grid class="profile-form">
+          <ion-row>
+            <ion-col size="12">
+              <ion-label><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Email</ion-text></ion-label>
+              <ion-input type="email" [(ngModel)]="EMAIL"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <ion-label>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">First Name</ion-text>
+              </ion-label>
+              <ion-input [(ngModel)]="FIRST_NAME"></ion-input>
+            </ion-col>
+            <ion-col size="6">
+              <ion-label>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Last Name</ion-text>
+              </ion-label>
+              <ion-input [(ngModel)]="LAST_NAME"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-label>
+                <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Phone</ion-text>
+              </ion-label>
+              <ion-input [(ngModel)]="PHONE" type="number" (keypress)="numberOnlyValidation($event)"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-label><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Gender</ion-text></ion-label>
+              <ion-select [(ngModel)]="GENDER" style="color: {{this.dataService.TEXT_COLOR}};">
+                <ion-select-option value="MALE">MALE</ion-select-option>
+                <ion-select-option value="FEMALE">FEMALE</ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-label><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Birthday</ion-text></ion-label>
+              <ion-input type="date" [(ngModel)]="BIRTHDAY"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <div class="save-btn-div">
+          <ion-button class="save-btn" (click)="updateUser()">
+            <ion-text>Save</ion-text>
+          </ion-button>
+        </div>
+      </div>
     </div>
-
-    <!------------------------ Edit Profile --------------------------->
-
-
-    <div class="scroll-bar" *ngIf="EDIT_PROFILE">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" class="ion-text-center">
-            <div class="user-name">
-              <ion-text style="color: {{this.dataService.TEXT_COLOR}};">{{SHORT_NAME}}</ion-text>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      
-
-      
-      <!------------ Divider --------------->
-      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-
-              <ion-item detail="false">
-                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">First Name</ion-text></ion-label>
-                <ion-input [(ngModel)]="FIRST_NAME"></ion-input>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label position="fixed"> <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Last Name</ion-text> </ion-label>
-                <ion-input [(ngModel)]="LAST_NAME"></ion-input>
-              </ion-item>
-
-
-              <ion-item detail="false">
-                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Gender</ion-text></ion-label>
-                <!-- <ion-input [(ngModel)]="GENDER"></ion-input> -->
-                <ion-select [(ngModel)]="GENDER" style="color: {{this.dataService.TEXT_COLOR}};">
-                  <ion-select-option value="MALE">MALE</ion-select-option>
-                  <ion-select-option value="FEMALE">FEMALE</ion-select-option>
-                 
-                </ion-select>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label position="fixed"> <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Phone</ion-text> </ion-label>
-                <ion-input [(ngModel)]="PHONE" type="number" (keypress)="numberOnlyValidation($event)"></ion-input>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Birthday</ion-text></ion-label>
-                <ion-input type="date" [(ngModel)]="BIRTHDAY"></ion-input>
-              </ion-item>
-
-            </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <!------------ Divider --------------->
-      <!-- <div class="divider"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-            
-              <ion-item detail="false">
-                <ion-label position="fixed"><ion-text>Unit of Measure</ion-text></ion-label>
-                <ion-input [(ngModel)]="UNIT_OF_MEASURE"></ion-input>
-              </ion-item>
-
-              <ion-item detail="false">
-                <ion-label position="fixed"><ion-text>Height</ion-text></ion-label>
-                <ion-input [(ngModel)]="HEIGHT"></ion-input>
-              </ion-item>
-
-            <ion-item detail="false" lines="none">
-              <ion-label position="fixed"><ion-text>Weight</ion-text></ion-label>
-              <ion-input [(ngModel)]="WEIGHT"></ion-input>
-            </ion-item>
-
-          </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid> -->
-
-      <!------------ Divider --------------->
-      <div class="divider" style="background: {{this.dataService.BACKGROUND_COLOR}};"></div>
-
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <ion-list>
-              
-              <ion-item detail="false" lines="none">
-                <ion-label position="fixed"><ion-text style="color: {{this.dataService.TEXT_COLOR}};">Home Location</ion-text></ion-label>
-                <ion-input [(ngModel)]="HOME_LOCATION"></ion-input>
-              </ion-item>
-
-            </ion-list>
-
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
+  </div>
 </ion-content>
 
 <app-footer></app-footer>

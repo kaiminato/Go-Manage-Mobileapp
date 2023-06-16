@@ -4,7 +4,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ImageService {
-
+  public HOME: string = '../assets/images/home.png';
+  public BOOKING: string = '../assets/images/booking.png';
+  public PROFILE: string = '../assets/images/profile.png';
+  public LOGOUT: string = '../assets/images/logout.png';
   public LOGO: string = '../assets/images/logo.png';
   public BOOK_NOW: string = '../assets/images/book_now.png';
   public DEFAULT_PERSON: string = '../assets/images/default-person.png';
@@ -24,6 +27,7 @@ export class ImageService {
   public BUY_A_VOUCHER_IMG: string = '../assets/images/buy-a-voucher.png';
   public ABOUT_US_IMG: string = '../assets/images/about-us.png';
   public REFER_A_FRIEND_IMG: string = '../assets/images/refer-a-friend.png';
+  public SERIVCE_IMG: string = '../assets/images/service.JPG';
 
   constructor() { }
 }

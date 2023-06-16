@@ -76,7 +76,7 @@ export class ApiDataService {
     const body = JSON.stringify(data);
 
     console.log('body--' , data);
-    return this.http.post(this.apiUrl + '/user/updateUserDetails', body, { 'headers': headers })
+    return this.http.post(this.apiUrl + 'user/updateUserDetails', body, { 'headers': headers })
   }
 
   async deleteBooking(id: any) {

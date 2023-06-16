@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { ApiDataService } from '../services/api-data.service';
 import { AlertController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-my-booking-list',
@@ -31,6 +32,7 @@ export class MyBookingListComponent implements OnInit {
     public dataService: DataService,
     public auth: AuthService,
     private alertController: AlertController,
+    private imageService: ImageService,
   ) { }
 
   ngOnInit() {}
@@ -41,7 +43,6 @@ export class MyBookingListComponent implements OnInit {
   }
 
   async ionViewWillLeave () {
-
     this.RECENT_BOOKING_LIST = [];
     this.FUTURE_BOOKING_LIST = [];
     this.ALL_BOOKING_LIST = [];
@@ -53,30 +54,30 @@ export class MyBookingListComponent implements OnInit {
     await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
-      async (response: any) => { 
+      async (response: any) => {
 
         (await this.apiData.getMyProfile(response.email)).subscribe(
-          async (user_info: any) => { 
+          async (user_info: any) => {
 
             (await this.apiData.retrievSingleUserBooking(user_info.userGMID)).subscribe(
               async (response: any) => {
-        
+
                 if (response.length >0) {
-        
-                    
+
+
                     this.RECENT_BOOKING_LIST = [];
                     this.FUTURE_BOOKING_LIST = [];
                     this.ALL_BOOKING_LIST = [];
 
                     for (let index = 0; index < response.length; index++){
-        
+
                       let start_date_time = new Date(response[index].startTime)
                       let end_date_time = new Date(response[index].endTime)
                       var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
                       var resultInMinutes = Math.round(difference / 60000);
-        
+
                       let date_time = await this.getDateFormat(response[index].startTime)
-        
+
                       let data = {
                         service_name : response[index].service,
                         service_duration:resultInMinutes+" minutes",
@@ -86,9 +87,9 @@ export class MyBookingListComponent implements OnInit {
                         endTime: response[index].endTime,
                         paymentReceipt: response[index].paymentReceipt,
                         compare_date_time: (response[index].endTime.split('T')[0])
-                        
+
                       };
-        
+
                       this.ALL_BOOKING_LIST.push(data)
                     }
 
@@ -99,40 +100,41 @@ export class MyBookingListComponent implements OnInit {
                 let tomorrow: any = new Date(today)
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 tomorrow = tomorrow.getFullYear()+'-'+((tomorrow.getMonth()+1) < 10 ? `0${(tomorrow.getMonth()+1)}` : (tomorrow.getMonth()+1))+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
-                
+
 
                 this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => <any>new Date(tomorrow).getTime() > <any>new Date(data.compare_date_time).getTime())
                 this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (<any>new Date(tomorrow).getTime() <= <any>new Date(data.compare_date_time).getTime()) )
-
+                console.log("RECENT_BOOKING_LIST",this.RECENT_BOOKING_LIST);
+                console.log("FUTURE_BOOKING_LIST",this.FUTURE_BOOKING_LIST);
                 // Sort array
-                    
+
                 this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
-                
+
                 await this.apiData.dismiss();
               },
               async (error: any) => {
-        
+
                 await this.apiData.dismiss();
-                
+
               }
             );
 
           },
           async (error:any) => {
             await this.apiData.dismiss();
-            
+
             await this.apiData.presentAlert('profile error'+ JSON.stringify(error))
           }
         )
       },
       async (error:any) => {
         await this.apiData.dismiss();
-        
+
         await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
       }
     );
-    
-    
+
+
   }
 
   async getDateFormat (date_value: any) {
@@ -155,7 +157,7 @@ export class MyBookingListComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Do you want cancel this booking ?',
       cssClass:'my-custom-class',
-      backdropDismiss:false, // alert will not close automaticall if we click outside of alert 
+      backdropDismiss:false, // alert will not close automaticall if we click outside of alert
       buttons: [
         {
           text: 'No',
@@ -179,14 +181,14 @@ export class MyBookingListComponent implements OnInit {
                   cssClass:'my-custom-class',
                   buttons: ['Ok']
                 }).then((res) => {
-            
+
                   res.present();
-    
+
                   res.onDidDismiss().then((dis) => {
-      
+
                    this.router.navigate(['/'])
                   })
-                  
+
                 });
               },
               async (error: any) => {
@@ -195,11 +197,11 @@ export class MyBookingListComponent implements OnInit {
               }
             );
 
-            
-            
-            
 
-            
+
+
+
+
           },
         },
       ],
