@@ -1,18 +1,18 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-  
+
   <ion-grid class="fisrt_div ion-margin">
     <ion-row>
       <ion-col size="6">
         <ion-button expand="block" style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;">
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">
+          <ion-text>
             Opening Hours
           </ion-text>
         </ion-button>
       </ion-col>
       <ion-col size="6">
         <ion-button [routerLink]="['/contact-us']" expand="block" style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;">
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">
+          <ion-text>
             Contact us
           </ion-text>
         </ion-button>
@@ -21,19 +21,19 @@
   </ion-grid>
 
   <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
-    <ion-item button 
-      *ngFor="let value of this.STAFF_LIST" 
-      class="staff_list" 
-      detail="false" 
+    <ion-item button
+      *ngFor="let value of this.STAFF_LIST"
+      class="staff_list"
+      detail="false"
       [routerLink]="['/staff-service-details', value.id]"
-      
+
       >
-      
+
         <ion-thumbnail slot="start">
           <img [src]="this.imageService.DEFAULT_PERSON">
         </ion-thumbnail>
         <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important;"> <h3>{{ value.firstName }} {{ value.lastName }}</h3>  </ion-label>
-      
+
     </ion-item>
   </ion-list>
 </ion-content>

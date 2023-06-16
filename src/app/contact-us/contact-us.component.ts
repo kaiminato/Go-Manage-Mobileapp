@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class ContactUsComponent implements OnInit {
 
-  HEADING: string = "Contact us";
+  HEADING: string = "";
   OWNER_INFO: any = [];
   HOURS_DETAILS: any = []
   constructor(
@@ -27,24 +27,24 @@ export class ContactUsComponent implements OnInit {
 
   async ionViewWillEnter () {
 
-    this.OWNER_INFO = await this.dataService._getOwnerData()
-    
+    this.OWNER_INFO = await this.dataService._getOwnerData();
+
     await this._getHoursDetails();
   }
-  
+
   async _getHoursDetails () {
 
     await (await this.apiDataService._getBusinessHoursDetails()).subscribe(
       (response: any ) => {
-        
+
         if (response.length > 0) {
 
-          
+
           this.HOURS_DETAILS = response;
         }
       },
       (error: any) => {
-        
+
 
       }
     );
@@ -53,7 +53,7 @@ export class ContactUsComponent implements OnInit {
 
   navigation() {
 
-    this.router.navigate(['/about-us']);
+    this.router.navigate(['/']);
   }
 
 }
