@@ -105,7 +105,7 @@ export class ApiDataService {
   }
 
   async _createPayment(data: any) {
-
+    console.log("...");
     // let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
     //   .set('Cache-Control', 'no-cache');
 
