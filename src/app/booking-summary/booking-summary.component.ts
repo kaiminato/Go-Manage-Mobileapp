@@ -202,6 +202,7 @@ export class BookingSummaryComponent implements OnInit {
     async _createPayment(token: any) {
       let amount = this.TOTAL_AMOUNT;
       let formData = new FormData();
+      console.log("this is email",this.EMAIL);
       formData.append('email' , this.EMAIL);
       formData.append('token' , token);
       formData.append('amount' , amount.toString());
