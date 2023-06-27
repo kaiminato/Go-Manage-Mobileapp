@@ -28,25 +28,19 @@
 
       <ion-row class="date-range-picker" *ngIf="DAYS_ARRAY">
         <ion-col size="12">
-          <!-- <ion-slides pager="true" [options]="slideOptsOne" #slideWithNav
-            (ionSlideDidChange)="SlideDidChange(sliderOne,slideWithNav)"> -->
-        <ion-slides pager="false" [options]="slideOpts" #mySlider (ionSlideDidChange)="slideChanged()">
-          <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
+          <ion-slides pager="false" [options]="slideOpts" #mySlider (ionSlideDidChange)="slideChanged()">
+            <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
 
-            <div class="date-range">
-              <div class="day-name">
-                {{value.day_name}}
+              <div class="date-range">
+                <div class="day-name">
+                  {{value.day_name}}
+                </div>
+                <ion-text class="ion-text-uppercase" [class.active]=" value.is_active"
+                [class.disabled]=" value.is_disabled"
+                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"><b>{{value.day_number}} </b></ion-text>
               </div>
-              <ion-text class="ion-text-uppercase" [class.active]=" value.is_active"
-              [class.disabled]=" value.is_disabled"
-              (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"><b>{{value.day_number}} </b></ion-text>
-
-            </div>
-
-
-          </ion-slide>
-
-        </ion-slides>
+            </ion-slide>
+          </ion-slides>
         </ion-col>
 
       </ion-row>
