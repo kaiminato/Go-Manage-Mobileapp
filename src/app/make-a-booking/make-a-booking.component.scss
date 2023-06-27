@@ -63,7 +63,25 @@ ion-content {
         }
 
     }
-    .page-title {
+    .page-title-ios {
+      color: rgb(4, 116, 115) !important;
+      border: 2px solid;
+      border-radius: 10px;
+      box-shadow: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 45px;
+      margin-right: 45px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      h2{
+        margin-top: 13px;
+        margin-bottom: 13px;
+        font-weight: bold;
+      }
+    }
+    .page-title-android {
       color: rgb(4, 116, 115) !important;
       border: 2px solid;
       border-radius: 10px;
