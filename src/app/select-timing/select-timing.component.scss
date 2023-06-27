@@ -16,6 +16,7 @@ ion-content {
     margin: 20px;
     box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
     padding-bottom: 10px;
+    background: white;
   }
   .page-title {
     color: rgb(4, 116, 115) !important;
@@ -53,8 +54,8 @@ ion-content {
         border-top-right-radius: 20px;
         font-weight: bold;
         color: white;
-        // background-color: #047473;
-        background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
+        background-color: rgb(35 138 134);
+        // background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
         ion-icon {
           font-size: 30px;
         }
@@ -152,8 +153,8 @@ ion-content {
         .active {
             border: 1px solid #047473;
             border-radius: 5px;
-            // background-color: #047473;
-            background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
+            background-color: rgb(35 138 134);
+            // background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
             color: #fff;
             padding: 4px;
         }

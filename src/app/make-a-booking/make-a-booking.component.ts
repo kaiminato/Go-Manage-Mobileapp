@@ -1,3 +1,4 @@
+import { Platform } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../services/image.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,13 +29,14 @@ export class MakeABookingComponent implements OnInit {
 
   CATEGORY_LIST: any = [];
   SELECTED_SERVICES: any = [];
-
+  isIOS: boolean;
   constructor(
     public imageService: ImageService,
     private router: Router,
     private apiData: ApiDataService,
     public dataService: DataService,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private platform: Platform
    ) { }
 
   test (){
@@ -42,11 +44,17 @@ export class MakeABookingComponent implements OnInit {
   }
   ngOnInit() {
 
-    
+
   }
 
-  async ionViewWillEnter (){
-
+  async ionViewWillEnter(){
+    if (this.platform.is('ios')) {
+      this.isIOS = true;
+      // do something for iOS
+    } else if (this.platform.is('android')) {
+      this.isIOS = false;
+      // do something for Android
+    }
     this.STAFF_LIST = [];
     this.SERVICE_LIST = [];
 
@@ -54,7 +62,7 @@ export class MakeABookingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        
+
       }
     );
 
@@ -85,7 +93,7 @@ export class MakeABookingComponent implements OnInit {
           this.STAFF_LIST = response;
           await this.dataService.setStaffList(response)
         }
-       
+
       },
       async (error: any) => {
 
@@ -107,9 +115,9 @@ export class MakeABookingComponent implements OnInit {
         if (response.length > 0){
 
           for (let service of response)  service.is_checked = false; // Add by default not selected;
-          
+
           this.SERVICE_LIST = response;
-        
+
           let categorie_ids = [...new Set(response.map(data => data.categoryId))];
           this.CATEGORY_LIST = [];
 
@@ -143,18 +151,18 @@ export class MakeABookingComponent implements OnInit {
       }
     );
 
-    
+
   }
 
   async setPreFilledData () {
 
-    
+
     let get_pre_filled_data = await this.dataService.getInitialBookingdata();
 
     if (get_pre_filled_data != '') {
 
       this.IS_STAFF = get_pre_filled_data.booking_type == this.dataService.BOOKING_WITH_STAFF ? true : false;
-      
+
       if (get_pre_filled_data.booking_type == this.dataService.BOOKING_WITH_SERVICE) {
         for (let service of get_pre_filled_data.servises) {
 
@@ -163,27 +171,27 @@ export class MakeABookingComponent implements OnInit {
           for (let category of this.CATEGORY_LIST) {
 
             if (category.category_id == service.categoryId) {
-              
+
               category.is_open = true;
-              
+
               for(let categorie_service of category.services)  {
-               
+
                 if (categorie_service.id == service.id) {
-                 
+
                   categorie_service.is_checked =  true ;
                 }
-                
-              } 
-              
+
+              }
+
             }
           }
 
-          
+
         }
 
         await this.selectedServicesDetail()
 
-        
+
       } else {
         this.SELECTED_SERVICES = []
         this.TOTAL_SERVICE_SELECTED = 0;
@@ -197,10 +205,10 @@ export class MakeABookingComponent implements OnInit {
 
     (await this.apiData.getStaffBookingList()).subscribe(
       (response: any) => {
-        
-        
+
+
         this.dataService.setStaffBookingList(response)
-       
+
       },
       (error: any) => {
         alert(JSON.stringify(error))
@@ -222,7 +230,7 @@ export class MakeABookingComponent implements OnInit {
   changeCategoryStatus (service_id: any , status){
 
     this.CATEGORY_LIST[service_id].is_open = !status ;
-    
+
   }
 
   changeServiceStatus (service_id: any ){
@@ -241,9 +249,9 @@ export class MakeABookingComponent implements OnInit {
   }
 
   async selectedServicesDetail (){
-    
+
     let selected_service_details = await this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
-    
+
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
@@ -254,11 +262,11 @@ export class MakeABookingComponent implements OnInit {
       }
     }
 
-    this.dataService.setSelectedServicesInBooking(selected_service_details);  
+    this.dataService.setSelectedServicesInBooking(selected_service_details);
   }
 
   async setServicesInBooking () {
-    
+
     let selected_service = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
@@ -269,7 +277,7 @@ export class MakeABookingComponent implements OnInit {
     await this.dataService.setInitialBooking(initial_data);
     this.router.navigate(['/select-time-with-service-booking'] ,{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
   }
-  
+
   navigation() {
 
     this.router.navigate(['/']);

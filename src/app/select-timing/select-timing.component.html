@@ -30,7 +30,7 @@
         <ion-col size="12">
           <!-- <ion-slides pager="true" [options]="slideOptsOne" #slideWithNav
             (ionSlideDidChange)="SlideDidChange(sliderOne,slideWithNav)"> -->
-        <ion-slides pager="false" [options]="slideOpts" #mySlider >
+        <ion-slides pager="false" [options]="slideOpts" #mySlider (ionSlideDidChange)="slideChanged()">
           <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
 
             <div class="date-range">

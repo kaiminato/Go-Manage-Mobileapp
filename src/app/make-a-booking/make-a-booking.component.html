@@ -4,7 +4,7 @@
   </div>
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
-  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " [class]="isIOS  ? 'page-title-ios' : 'page-title-android'">
     <h2>Make a Booking</h2>
   </ion-card>
   <ion-grid class="request-tabs">
@@ -105,7 +105,7 @@
   <ion-grid *ngIf="!IS_STAFF">
     <ion-row class="book_now">
       <ion-col size="6" class="ion-text-center service_selected_price" style="color : {{this.dataService.TEXT_COLOR}} !important; ">
-        <div>{{ TOTAL_SERVICE_SELECTED }} service selected</div>
+        <div>{{ TOTAL_SERVICE_SELECTED }} selected</div>
         <div>{{ TOTAL_PRICE | currency: 'EUR'}}</div>
       </ion-col>
       <ion-col size="6">

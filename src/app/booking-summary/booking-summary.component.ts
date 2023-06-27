@@ -202,13 +202,14 @@ export class BookingSummaryComponent implements OnInit {
     async _createPayment(token: any) {
       let amount = this.TOTAL_AMOUNT;
       let formData = new FormData();
-      console.log("this is email",this.EMAIL);
       formData.append('email' , this.EMAIL);
       formData.append('token' , token);
       formData.append('amount' , amount.toString());
       formData.append('transactionType' , String(1));
-      formData.append('description' , "Booking Deposit Payment");
+      formData.append('description' , 'Booking Deposit Payment');
+      console.log('this is email', this.EMAIL);
       console.log('token----' , token);
+      console.log('amount', amount.toString());
       await this.apiData.presentLoading();
 
       await (await this.apiData._createPayment(formData)).subscribe(
@@ -272,6 +273,14 @@ export class BookingSummaryComponent implements OnInit {
       ],
       buttons: [
         {
+          text: 'Cancel',
+          cssClass: 'danger',
+          role: 'cancel',
+          handler: () => {
+            alert.dismiss();
+          }
+        },
+        {
           text: 'Save',
           cssClass: 'secondary',
           handler: (save_data) => {
@@ -302,6 +311,7 @@ export class BookingSummaryComponent implements OnInit {
       phoneMobile: save_data.phone,
       userGMID: this.userGMID
     };
+    console.log("data",data);
 
     await this.apiData.presentLoading();
 
