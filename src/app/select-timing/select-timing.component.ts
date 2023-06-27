@@ -560,58 +560,36 @@ export class SelectTimingComponent implements OnInit {
 
 
   async _selectDateRangeSlider(day: any, is_disabled: any, month: any, year: any , index: any) {
-
-
     console.log(day , is_disabled  , month  , year , index);
     if (is_disabled) return;
     this.DATE = `${year}-${month}-${day}`;
 
     for (let value of this.DAYS_ARRAY) value.is_active = false;
     this.DAYS_ARRAY[index]['is_active'] = true;
-    this.currentSlideIndex = index;
     this.slides.slideTo(index-1,1000);
     console.log('shift' , this.DAYS_ARRAY[index])
     await this._getShiftList();
   }
-  async slideChanged() {
-    let indexNum: number;
+  async getDaysBySlideChange(nextMonth, nextYear) {
+    this.DAYS_ARRAY = await this._getDays(nextMonth, nextYear);
+    console.log("this.days_array",this.DAYS_ARRAY);
+    for (let value of this.DAYS_ARRAY) {
+      value.is_active = false;
+      value.is_disabled = true;
+    }
+    await this._getShiftList();
+  }
+  slideChanged() {
     this.slides.getActiveIndex().then(index => {
       console.log("this is index",index);
-      indexNum = index;
-      console.log("this is indexNum",indexNum);
-      // const date = new Date();
-      // const month = date.getMonth();
-      // const year = date.getFullYear();
-      // const newMonth = (month + index) % 12;
-      // const newYear = year + Math.floor((month + index) / 12);
-
-      // const monthDays = new Date(newYear, newMonth + 1, 0).getDate();
-
-      // this.DAYS_ARRAY = [];
-      // for (let i = 1; i <= monthDays; i++) {
-      //   const day = new Date(newYear, newMonth, i);
-      //   const dayName = day.toLocaleString('default', { weekday: 'short' }).toUpperCase();
-      //   const dayNumber = day.getDate();
-
-      //   this.DAYS_ARRAY.push({
-      //     day_name: dayName,
-      //     day_number: dayNumber,
-      //     month: newMonth,
-      //     year: newYear,
-      //     is_active: dayNumber === 1 && i === 1, // Set first day as active
-      //     is_disabled: false
-      //   });
-      // }
-
-      // // Update current slide index
-      // this.currentSlideIndex = index;
+      if(index >= this.DAYS_ARRAY.length - 6){
+        this.CURRENT_MONTH += 1;
+        console.log("current_month",this.CURRENT_MONTH);
+        this.getDaysBySlideChange(this.CURRENT_MONTH, this.CURRENT_YEAR);
+        this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1]+" "+ this.CURRENT_YEAR;
+        this.slides.slideTo(index - this.DAYS_ARRAY.length + 6, 1000);
+      }
     });
-    if(indexNum >= 24){
-      // this._getDayList();
-      console.log("sdfs")
-      this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH+1 , this.CURRENT_YEAR);
-      console.log("DAYS_ARRAY",this.DAYS_ARRAY);
-    }
   }
 
 
