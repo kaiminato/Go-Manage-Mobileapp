@@ -40,9 +40,9 @@ import { StripeTestComponent } from './stripe-test/stripe-test.component';
 import { environment } from '../environments/environment';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 
-const redirectUri = window.location.origin + `/about-us`;
+const redirectUri = window.location.origin + `/contact-us`;
 
-//alert(redirectUri); 
+//alert(redirectUri);
 
 @NgModule({
   declarations: [
