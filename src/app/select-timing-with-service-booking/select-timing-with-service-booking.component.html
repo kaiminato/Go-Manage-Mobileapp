@@ -3,6 +3,9 @@
   </div>
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="false" [IS_BACK]="true"></app-book-now-header>
 
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+    <h2>Select a time</h2>
+  </ion-card>
   <div class="card-list">
     <!-- <ion-grid class="ion-margin calender_section">
       <ion-row>
@@ -17,7 +20,7 @@
     <ion-grid class="month_name">
       <ion-row >
         <ion-col size="12" class="ion-text-center ">
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ CURRENT_MONTH_VALUE }}</ion-text>
+          <ion-text style="font-size: 25px; margin-left: 30px;">{{ CURRENT_MONTH_VALUE }}</ion-text>
           <ion-icon name="calendar-outline" class="ion-float-right" (click)="openPicker()"></ion-icon>
         </ion-col>
       </ion-row>

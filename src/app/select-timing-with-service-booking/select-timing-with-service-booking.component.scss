@@ -14,7 +14,7 @@ ion-content {
     // background-color: white;
     border-color: transparent;
     border-radius: 25px;
-    margin-top: 100px;
+    margin-top: 48px;
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
@@ -58,8 +58,8 @@ ion-content {
         margin-top: -30px;
         font-weight: bold;
         color: white;
-        // background-color: #047473;
-        background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
+        background-color: #047473;
+        // background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
         ion-icon {
           font-size: 30px;
         }
@@ -139,7 +139,7 @@ ion-content {
     }
 
     .all_shift {
-
+        background: white;
         .heading {
             color: #383a3e;
             font-weight: bold;
