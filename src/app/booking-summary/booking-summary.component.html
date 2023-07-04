@@ -83,7 +83,7 @@
         <ion-card-header>
           <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
             <ion-col>Total Payment</ion-col>
-            <ion-col> {{ TOTAL_AMOUNT | currency: 'EUR'}} </ion-col>
+            <ion-col> {{ TOTAL_AMOUNT*100 | currency: 'EUR'}} </ion-col>
           </ion-row>
         </ion-card-header>
         <ion-card-content>
