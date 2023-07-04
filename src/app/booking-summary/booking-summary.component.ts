@@ -62,12 +62,14 @@ export class BookingSummaryComponent implements OnInit {
     // await this.apiData._updateUserId();
     await this.auth.getUser().subscribe(
       async (response: any) => {
+        console.log("response",response);
         // Get auth data
         this.EMAIL = response.email;
-        this.userGMID = response.userGMID;
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
             console.log("this is user_info", user_info);
+            this.userGMID = user_info.userGMID;
+            console.log("this is userGMID", this.userGMID);
             if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
             ) {
               this.presentAlert(response.email);
@@ -200,7 +202,7 @@ export class BookingSummaryComponent implements OnInit {
     }
 
     async _createPayment(token: any) {
-      let amount = this.TOTAL_AMOUNT;
+      let amount = this.TOTAL_AMOUNT * 100;
       let formData = new FormData();
       formData.append('email' , this.EMAIL);
       formData.append('token' , token);
@@ -318,13 +320,19 @@ export class BookingSummaryComponent implements OnInit {
     (await this.apiData.updateProfile(data)).subscribe(
       async (response: any) => {
         await this.apiData.dismiss();
-
         this._onEnterData();
         return true;
       },
       async (error: any) => {
-        await this.apiData.dismiss();
-        await this.apiData.presentAlert('Server error, Please try again later');
+        if(error.status === 200){
+          await this.apiData.dismiss();
+          this._onEnterData();
+          return true;
+        }
+        else{
+          await this.apiData.dismiss();
+          await this.apiData.presentAlert('Server error, Please try again later');
+        }
 
       }
     );
