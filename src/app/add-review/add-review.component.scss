@@ -6,13 +6,11 @@ ion-content {
     left: 0;
     height: 40%;
     width: 100%;
-    background: rgba(2,127,123,1);
     z-index: -1;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
   }
   .page-title {
-    color: rgb(4, 116, 115) !important;
     border: 2px solid;
     border-radius: 10px;
     box-shadow: none;
@@ -39,14 +37,12 @@ ion-content {
   }
   ion-card {
       ion-card-subtitle {
-      color: #047473;
       margin-top: 10px;
       font-size: 20px;
       }
       ion-card-content {
         margin: 10px;
         border-radius: 25px;
-        border: 2px solid #047473;
       }
       ion-textarea {
         color: #000;
@@ -75,7 +71,5 @@ ion-content {
     margin-right: auto;
     width: 80%;
     --border-radius: 20px !important;
-    --background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
-      --background-activated: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
   }
 }

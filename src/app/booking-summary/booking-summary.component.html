@@ -1,6 +1,6 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
     <h2>Booking Summary</h2>
@@ -9,7 +9,7 @@
     <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
       <ion-img slot="end" [src]="this.dataService.APP_HOME_PAGE_ICON" class="ion-margin-bottom"></ion-img>
 
-      <ion-item button  class="details"   detail="false">
+      <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
 
         <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> Date and Time
           <br/>
@@ -17,7 +17,7 @@
         </ion-text>
 
       </ion-item>
-      <ion-item button  class="details"   detail="false">
+      <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
 
         <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> Duration
           <br/>
@@ -26,7 +26,7 @@
 
       </ion-item>
 
-      <ion-item button  class="details ion-margin-top"   detail="false">
+      <ion-item button  class="details ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ STUDIO_NAME }} Studio</ion-text>
       </ion-item>
 
@@ -53,10 +53,10 @@
 
       </ion-item>
 
-          <!-- <ion-button slot="end" class="ion-margin-bottom ion-margin-top" (click)="saveBooking()"> Confirm</ion-button> -->
       <ion-button
         class="ion-margin-bottom ion-margin-top details_no_border"
         (click)="PAYMENT_MODEL_OPEN = true;"
+        style="--background : {{this.dataService.BUTTON_COLOR}} !important; --background-activated: {{this.dataService.BUTTON_COLOR}}"
         >
         <ion-text>Confirm</ion-text>
       </ion-button>
@@ -73,11 +73,11 @@
 
   <!-- Modal content -->
   <div class="modal-content"  style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
-    <div class="modal-header">
+    <div class="modal-header" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
       <span class="close" (click)="PAYMENT_MODEL_OPEN = false;">&times;</span>
       <h2 class="online-payment-txt">Online Payment</h2>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
       <ion-card class="welcome-card">
         <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
         <ion-card-header>
@@ -105,7 +105,7 @@
         </ion-card-content>
       </ion-card>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
       <h3>Modal Footer</h3>
     </div>
   </div>

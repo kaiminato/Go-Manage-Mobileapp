@@ -13,7 +13,7 @@ import { IonTextarea } from '@ionic/angular';
 })
 export class AddReviewComponent implements OnInit {
   @ViewChild('myTextarea') myTextarea: IonTextarea;
-  HEADING: string = "Leave a review";
+  HEADING: string = "";
   REVIEW_TEXT: string;
   user_id: number;
   BOOKINGS_DETAILS: any;

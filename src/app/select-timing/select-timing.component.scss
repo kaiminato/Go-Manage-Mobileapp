@@ -19,7 +19,6 @@ ion-content {
     background: white;
   }
   .page-title {
-    color: rgb(4, 116, 115) !important;
     border: 2px solid;
     border-radius: 10px;
     box-shadow: none;
@@ -35,27 +34,11 @@ ion-content {
       font-weight: bold;
     }
   }
-    .calender_section {
-      background-color: #047473;
-        ion-icon {
-
-            font-size: 40px;
-        }
-
-        ion-text {
-            margin-top: 45px;
-            margin-right: -50px;
-            font-size: 13px;
-        }
-    }
-
     .month_name {
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
         font-weight: bold;
         color: white;
-        background-color: rgb(35 138 134);
-        // background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
         ion-icon {
           font-size: 30px;
         }
@@ -73,16 +56,12 @@ ion-content {
         .active {
             background-color: #fff;
             color: #047473 !important;
-            // border: 1px solid #047473 !important;
         }
 
         .disabled {
-            // background-color: #cccccc !important;
-            // border: 1px solid #047473 !important;
             text-decoration: line-through;
         }
         .date-range {
-            // border: 2px solid #047473;
             padding: 5px;
             font-size: 20px;
             color: white;
@@ -99,39 +78,6 @@ ion-content {
             }
 
         }
-
-
-    }
-
-    .request-tabs {
-
-        padding-left: 0px;
-        padding-right: 0px;
-
-        ion-row {
-            //box-shadow: 0px 3px 3px #bdbcbc;
-            text-align: center;
-            color: #047473;
-            margin-top: 15px;
-
-            div {
-                margin-bottom: 10px;
-            }
-            .active {
-                border-bottom: 4px solid #000;
-                font-weight: bold;
-
-            }
-
-            .inactive {
-                //border-bottom: 3px solid #bdbcbc;
-            }
-
-            ion-text {
-                margin-left: 5px;
-            }
-        }
-
     }
 
     .all_shift {
@@ -154,13 +100,11 @@ ion-content {
             border: 1px solid #047473;
             border-radius: 5px;
             background-color: rgb(35 138 134);
-            // background: linear-gradient(180deg, rgba(4,116,115,1) 20%, rgba(13,144,139,1) 46%, rgba(12,185,179,1) 67%, rgba(10,246,237,1) 100%);
             color: #fff;
             padding: 4px;
         }
 
         .disbaled_shift {
-            // background-color: #6e7474 !important;
             border: 1px solid white;
             border-radius: 5px;
             color: black;

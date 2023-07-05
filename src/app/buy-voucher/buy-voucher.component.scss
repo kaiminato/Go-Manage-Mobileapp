@@ -4,7 +4,6 @@
   left: 0;
   height: 40%;
   width: 100%;
-  background: rgba(2,127,123,1);
   z-index: -1;
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
@@ -18,7 +17,6 @@
 }
 ion-content {
     .page_title {
-      color: #047473;
       font-weight: bold;
       font-size: 33px;
       margin-top: 15px;
@@ -26,27 +24,19 @@ ion-content {
     .choose_amount_heading {
         margin-top: 15px;
         margin-left: 20px;
-        color: #047473;
         font-size: 20px;
         font-weight: bold;
     }
 
     .select-amount-row {
 
-
-
-        .inactive {
-            --background: #f7f8fb;
-            border: 2px solid #c9c9cb;
+      .inactive {
             border-radius: 7px;
             margin: 5px;
             height: 42px;
-            --background-activated: #f7f8fb;
-
 
             ion-text {
                 font-weight: bold;
-                color: #047473;
             }
         }
 
@@ -55,18 +45,12 @@ ion-content {
         }
 
         .active{
-
-            --background: #047473 !important;
-            --background-activated: #047473;
-            border: 2px solid #047473 !important;
             border-radius: 7px;
             margin: 5px;
             height: 42px;
 
-
             ion-text {
                 font-weight: bold;
-                color: #f7f8fb !important;
             }
         }
 
@@ -83,7 +67,6 @@ ion-content {
         ion-row {
           display: flex;
           justify-content: center;
-          color: #047473;
           margin-bottom: 20px;
           padding-top: 10px;
           padding-bottom: 10px;
@@ -93,14 +76,12 @@ ion-content {
     }
     .active {
       font-weight: bold;
-      background-color: #047473;
-      color: white !important;
+
       border-radius: 5px;
       border: 1px solid;
     }
 
     .inactive {
-        //border-bottom: 3px solid #bdbcbc;
         border-radius: 5px;
         border: 1px solid;
     }
@@ -113,7 +94,6 @@ ion-content {
 
     label {
         font-weight: bolder;
-        color: #047473;
     }
 
     .add_cart_button {
@@ -121,17 +101,12 @@ ion-content {
     }
 
     ion-button {
-        --background: #047473;
-        --background-activated: #047473;
-
         ion-text {
             font-weight: bold;
         }
-
     }
 
     .divider {
-
         width: 100%;
         border: 2px solid rgb(173 171 171);
         margin-top: 30px;
@@ -147,19 +122,9 @@ ion-content {
         'opsz' 48
     }
 
-    ion-button {
-        --background: #047473;
-        --background-activated: #047473;
-
-        ion-text {
-            font-weight: bold;
-        }
-
-    }
     ion-col {
       ion-input {
         margin-top:5px;
-        border: 1px solid #047473;
       }
     }
     .btn_checkout{

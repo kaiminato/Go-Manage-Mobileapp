@@ -1,6 +1,6 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="false"></app-header>
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <div class="card-list">
     <ion-img [src]="this.dataService.APP_HOME_PAGE_ICON" class="app-logo ion-margin-top"></ion-img>
@@ -16,12 +16,8 @@
 
       <ion-row class="return_home_section">
         <ion-col size="12" class="ion-text-center">
-          <ion-button [routerLink]="['/']"><ion-text>Return home</ion-text></ion-button>
+          <ion-button [routerLink]="['/']" style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"><ion-text>Return home</ion-text></ion-button>
         </ion-col>
-        <!-- <ion-col size="6" class="ion-text-center">
-          <a class="anchor-button" >View Reciept</a>
-          <a [href]="RECIEPT_URL" target="_blank"><ion-button style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"><ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">View Reciept</ion-text></ion-button></a>
-        </ion-col> -->
       </ion-row>
     </ion-grid>
   </div>
