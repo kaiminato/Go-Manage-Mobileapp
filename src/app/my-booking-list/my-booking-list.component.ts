@@ -13,7 +13,7 @@ import { ImageService } from '../services/image.service';
 })
 export class MyBookingListComponent implements OnInit {
 
-  HEADING: string = "Your Bookings";
+  HEADING: string = "";
   IS_FUTURE_BOOKING_active: boolean = true;
   ALL_BOOKING_LIST: any = [];
   FUTURE_BOOKING_LIST: any = [

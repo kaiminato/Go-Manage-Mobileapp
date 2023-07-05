@@ -5,7 +5,6 @@ ion-content {
     left: 0;
     height: 40%;
     width: 100%;
-    background: rgba(2,127,123,1);
     z-index: -1;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
@@ -22,27 +21,19 @@ ion-content {
     font-weight: bolder;
     display: flex;
     justify-content: center;
-    --background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
-    --background-activated: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
     --border-radius: 7px;
     width: 90%;
     margin-left: auto;
     margin-right: auto;
   }
     .select-text {
-
-        color: #047473;
         margin-top: 16px;
         font-weight: bold;
     }
 
     .select-dilivery-type {
-
         ion-card {
-
-            border: 2px solid #047473;
             height: 160px;
-            color: #047473;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
@@ -63,10 +54,6 @@ ion-content {
                     padding: 25px 0;
                 }
             }
-        }
-
-        .active {
-            border: 5px solid #047473 !important;
         }
     }
     .modal {
@@ -119,7 +106,6 @@ ion-content {
 
     .modal-header {
       padding: 2px 16px;
-      background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
       color: white;
       border: transparent !important;
       border-top-left-radius: 20px;
@@ -127,8 +113,6 @@ ion-content {
     }
 
     .modal-body {
-      // padding: 2px 16px;
-      background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
       border: transparent !important;
     }
 
@@ -153,7 +137,6 @@ ion-content {
     }
     .modal-footer {
       padding: 2px 16px;
-      background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
       color: white;
       border: transparent !important;
     }
@@ -163,8 +146,6 @@ ion-content {
       justify-content: center;
     }
     .Confirm {
-      --background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
-      --background-activated: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
       --border-radius: 20px;
       width: 80%;
       ion-text{

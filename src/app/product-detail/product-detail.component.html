@@ -2,7 +2,7 @@
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
 
   <!-- Product image and cart -->
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <div class="card-list">
     <ion-grid class="product-image-section">
@@ -26,7 +26,10 @@
     <ion-grid class="price-cart">
       <ion-row>
         <ion-col size="12" class="add-to-cart">
-          <ion-button expand="block" >add to cart</ion-button>
+          <ion-button
+          expand="block"
+          style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+          >add to cart</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

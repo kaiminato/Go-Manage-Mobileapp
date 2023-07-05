@@ -5,7 +5,6 @@ ion-content {
     left: 0;
     height: 40%;
     width: 100%;
-    background: rgba(2,127,123,1);
     z-index: -1;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
@@ -16,7 +15,6 @@ ion-content {
     left: 0;
     height: 98px;
     width: 100%;
-    background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
     z-index: 0;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
@@ -24,7 +22,6 @@ ion-content {
     border-top-right-radius: 25px;
   }
   .page-title {
-    color: rgb(4, 116, 115) !important;
     border: 2px solid;
     border-radius: 10px;
     box-shadow: none;
@@ -42,7 +39,6 @@ ion-content {
     }
   }
   .card-list {
-    background-color: #047473;
     border-radius: 25px;
     margin: 20px;
     padding: 10px;
@@ -56,6 +52,7 @@ ion-content {
     position: relative;
     background-color: white;
     border-radius: 25px;
+    border: 1px solid white;
     ion-list {
       padding-top: 0px;
       padding-bottom: 0px;
@@ -80,22 +77,18 @@ ion-content {
             ion-text {
               color: #fff;
               border-radius: 50%;
-              background-color: #047473;
               font-weight: bold;
               font-size: 25px;
               padding: 8px;
             }
         }
         .user-name-txt {
-          color: #047473;
           font-weight: bold;
           margin-left: 10px;
           font-size: 23px;
       }
       .profile-form{
         ion-input {
-          border: 1px solid #047473;
-          color: #047473;
           border-radius: 5px;
           margin-top: 3px;
 
@@ -104,8 +97,6 @@ ion-content {
           }
         }
         ion-select {
-          border: 1px solid #047473;
-          color: #047473;
           border-radius: 5px;
           margin-top: 3px;
         }
@@ -117,12 +108,11 @@ ion-content {
         justify-content: center;
       }
       .save-btn {
-        --background: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
-        --background-activated: linear-gradient(90deg, rgba(6,84,83,1) 1%, rgba(17,133,132,1) 41%, rgba(15,148,146,1) 74%, rgba(82,212,210,1) 98%);
         --border-radius: 20px;
         width: 60%;
         ion-text{
           font-weight: bold;
+          font-size: 20px;
         }
       }
     }

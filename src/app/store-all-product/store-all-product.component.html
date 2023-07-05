@@ -1,6 +1,6 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <div class="card-list">
     <!-- search bar and cart icon -->
@@ -31,9 +31,9 @@
             <ion-slide
               *ngFor="let category of CATEGORY_TAGS;let i = index"
               >
-
                 <ion-badge
                   [class.active]="category.status"
+                  [ngStyle]="{'background-color': category.status ? this.dataService.TEXT_COLOR : '#e6e7e9'}"
                   slot="end"
                   (click)="selectCategory(i)"
                   >
@@ -75,7 +75,14 @@
 
               <div class="price-cart">
                 <div class="price"><ion-text><b> {{ product.price | currency: 'EUR'}} </b></ion-text></div>
-                <div class="add-cart" [class.active]="product.isActive" (click)="addCart(product.id)"><ion-icon name="add-outline" class="ion-float-end"></ion-icon></div>
+                <div class="add-cart" [class.active]="product.isActive" (click)="addCart(product.id)">
+                  <ion-icon name="add-outline"
+                   [ngStyle]="{
+                    'background-color': product.isActive ? this.dataService.BUTTON_COLOR : 'white',
+                   'color': product.isActive ? 'white' : this.dataService.BUTTON_COLOR}"
+                   class="ion-float-end">
+                  </ion-icon>
+                </div>
               </div>
 
             </ion-card-content>

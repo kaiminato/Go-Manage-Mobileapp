@@ -7,7 +7,6 @@ ion-content {
       left: 0;
       height: 40%;
       width: 100%;
-      background: rgba(2,127,123,1);
       z-index: -1;
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
@@ -96,12 +95,8 @@ ion-content {
         }
 
         .add-to-cart {
-
             ion-button {
-                --background: #047473;
-                --background-activated: #047473;
                 --border-radius: 20px;
-
             }
         }
     }

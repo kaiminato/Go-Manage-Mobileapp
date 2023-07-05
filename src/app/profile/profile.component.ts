@@ -11,7 +11,7 @@ import { DataService } from '../services/data.service';
 })
 export class ProfileComponent implements OnInit {
 
-  HEADING: string = "My Profile";
+  HEADING: string = "";
   IS_PROFILE_SCREEN: boolean = true;
   EDIT_PROFILE: boolean = false;
   PROFILE_HEADER: any = { is_profile: this.IS_PROFILE_SCREEN, edit_profile: this.EDIT_PROFILE }
@@ -117,7 +117,10 @@ export class ProfileComponent implements OnInit {
             this.USERGMID = user_details.userGMID;
             this.PHONE = user_details.phoneMobile;
             this.BIRTHDAY = user_details.dateOfBirth;
-            this.GENDER = user_details.gender.toUpperCase();
+            console.log("user_details.gender",user_details.gender);
+            if(user_details.gender){
+              this.GENDER = user_details.gender.toUpperCase();
+            }
             // if (user_details?.user_metadata) {
             //   let [date , month , year] = user_details.user_metadata.dob.split('/')
             //   this.EMAIL = user_details.email;
@@ -154,32 +157,31 @@ export class ProfileComponent implements OnInit {
   }
 
   async updateUser() {
-
-    if (this.FIRST_NAME == ''){
+    if (!this.FIRST_NAME){
 
       await this.apiData.presentAlert("First name can't be empty")
       return
     }
 
-    if (this.LAST_NAME == ''){
+    if (!this.LAST_NAME){
 
       await this.apiData.presentAlert("Last name can't be empty")
       return
     }
 
-    if (this.GENDER == ''){
+    if (!this.GENDER){
 
       await this.apiData.presentAlert("Gender can't be empty")
       return
     }
 
-    if (this.PHONE == ''){
+    if (!this.PHONE){
 
       await this.apiData.presentAlert("Phone can't be empty")
       return
     }
 
-    if (this.BIRTHDAY == ''){
+    if (!this.BIRTHDAY){
 
       await this.apiData.presentAlert("Birthday can't be empty")
       return
@@ -199,7 +201,6 @@ export class ProfileComponent implements OnInit {
     //   birth: D_O_B,
     //   HOME_LOCATION: this.HOME_LOCATION
     // }
-
     let data = {
       email: this.EMAIL,
       givenName: this.FIRST_NAME,
@@ -211,30 +212,30 @@ export class ProfileComponent implements OnInit {
       userGMID: this.USERGMID,
     }
 
-  await this.apiData.presentLoading();
+    await this.apiData.presentLoading();
 
-    (await this.apiData.updateProfile(data)).subscribe(
-      async (response: any) => {
-        await this.apiData.dismiss();
-        await this.apiData.presentAlert('Profile updated successfully');
-        this.EDIT_PROFILE = false;
-        this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
-      },
-      async (error: any) => {
-        if(error.status === 200){
+      (await this.apiData.updateProfile(data)).subscribe(
+        async (response: any) => {
           await this.apiData.dismiss();
           await this.apiData.presentAlert('Profile updated successfully');
           this.EDIT_PROFILE = false;
           this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
+        },
+        async (error: any) => {
+          if(error.status === 200){
+            await this.apiData.dismiss();
+            await this.apiData.presentAlert('Profile updated successfully');
+            this.EDIT_PROFILE = false;
+            this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
+          }
+          else{
+            await this.apiData.dismiss();
+            await this.apiData.presentAlert('Server error, Please try again later');
+          }
         }
-        else{
-          await this.apiData.dismiss();
-          await this.apiData.presentAlert('Server error, Please try again later');
-        }
-      }
-    );
+      );
+    }
 
-  }
 
   navigation() {
 

@@ -1,9 +1,9 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <div class="card-list">
-    <ion-row class="select-text ion-no-margin ion-no-padding">
+    <ion-row class="select-text ion-no-margin ion-no-padding" style="color : {{this.dataService.TEXT_COLOR}}!important; ">
       <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
         <ion-text>Please select one</ion-text>
       </ion-col>
@@ -13,8 +13,11 @@
 
     <ion-row class="select-dilivery-type ion-no-margin ion-no-padding">
       <ion-col size="6" class="free ion-no-margin ion-no-padding" >
-
-        <ion-card [class.active]="!DELIVERY" (click)="DELIVERY = false">
+        <ion-card
+          [class.active]="!DELIVERY"
+          (click)="DELIVERY = false"
+          [ngStyle]="{'border': !DELIVERY ? '5px solid' + this.dataService.TEXT_COLOR : '2px solid' + this.dataService.TEXT_COLOR}"
+          style="color : {{this.dataService.TEXT_COLOR}}!important">
           <ion-card-content>
             <ion-icon name="checkmark" *ngIf="!DELIVERY"></ion-icon>
             <div><ion-text> Pickup </ion-text></div>
@@ -23,7 +26,12 @@
         </ion-card>
       </ion-col>
       <ion-col size="6" class="paid ion-no-margin ion-no-padding">
-        <ion-card [class.active]="DELIVERY" (click)="DELIVERY = true">
+        <ion-card
+          [class.active]="DELIVERY"
+          (click)="DELIVERY = true"
+          [ngStyle]="{'border': DELIVERY ? '5px solid' + this.dataService.TEXT_COLOR : '2px solid' + this.dataService.TEXT_COLOR}"
+          style="color : {{this.dataService.TEXT_COLOR}}!important"
+          >
           <ion-card-content>
             <ion-icon name="checkmark" *ngIf="DELIVERY"></ion-icon>
             <div><ion-text> Delivery </ion-text></div>
@@ -35,6 +43,7 @@
     </ion-row>
     <ion-button
         class="ion-margin-bottom ion-margin-top details_no_border"
+        style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
         (click)="PAYMENT_MODEL_OPEN = true;"
         >
         <ion-text>Confirm</ion-text>
@@ -47,11 +56,11 @@
 
       <!-- Modal content -->
       <div class="modal-content"  style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
-        <div class="modal-header">
+        <div class="modal-header" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
           <span class="close" (click)="PAYMENT_MODEL_OPEN = false;">&times;</span>
           <h2 class="online-payment-txt">Online Payment</h2>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
           <ion-card class="welcome-card">
             <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
             <ion-card-header>
@@ -72,6 +81,7 @@
                   <ion-button
                   type="submit"
                   class="Confirm"
+                  style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
                   >
                     <ion-text>Confirm Payment</ion-text>
                   </ion-button>
@@ -80,7 +90,7 @@
             </ion-card-content>
           </ion-card>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
           <h3>Modal Footer</h3>
         </div>
       </div>

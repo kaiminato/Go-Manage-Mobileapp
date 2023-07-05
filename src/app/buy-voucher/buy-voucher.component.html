@@ -1,7 +1,7 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-  <div class="green-background"></div>
-  <div class="card-list">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; "></div>
+  <div class="card-list" style="color : {{this.dataService.TEXT_COLOR}}!important; ">
     <ion-grid class="ion-no-margin ion-no-padding">
       <ion-row class="ion-no-margin ion-no-padding" style="margin-top: 10px;">
         <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
@@ -24,9 +24,12 @@
             *ngIf="price_detail.is_button"
             [class.active]="price_detail.is_active"
             [class.inactive]="!price_detail.is_active"
+            [ngStyle]="{'--background': price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            '--background-activated': price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            'border': !price_detail.is_active ? '2px solid' + this.dataService.TEXT_COLOR : '2px solid #f7f8fb'}"
             (click)="selectPrice(price_detail.id)"
             >
-            <ion-text> {{ price_detail.price | currency: 'EUR'}}</ion-text>
+            <ion-text [ngStyle]="{'color': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb'}"> {{ price_detail.price | currency: 'EUR'}}</ion-text>
           </ion-button>
 
 
@@ -34,6 +37,10 @@
             placeholder="Custom"
             [class.active]="price_detail.is_active"
             [class.inactive]="!price_detail.is_active"
+            [ngStyle]="{'--background': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            'color': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            '--background-activated': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            'border': !price_detail.is_active ? '2px solid' + this.dataService.TEXT_COLOR : '2px solid #f7f8fb'}"
             *ngIf="!price_detail.is_button"
             (click)="selectPrice(price_detail.id)"
             [(ngModel)]="CUSTOM_PRICE"
@@ -46,10 +53,16 @@
           <img [src]="this.imageService.GIFT_IMG">
         </ion-col>
         <ion-col size="6" class="request-tabs ion-no-margin ion-no-padding">
-          <ion-row [class]="SEND_TO_ME  ? 'active' : 'inactive'" (click)="SEND_TO_ME = true;">
+          <ion-row [class]="SEND_TO_ME  ? 'active' : 'inactive'"
+           (click)="SEND_TO_ME = true;"
+           [ngStyle]="{'color': !SEND_TO_ME ? this.dataService.TEXT_COLOR : 'white',
+           'background-color': SEND_TO_ME ? this.dataService.BUTTON_COLOR : 'white'}">
             <ion-text  class="app-text-color">Send to me</ion-text>
           </ion-row>
-          <ion-row [class]=" !SEND_TO_ME  ? 'active' : 'inactive'" (click)="SEND_TO_ME = false;">
+          <ion-row [class]=" !SEND_TO_ME  ? 'active' : 'inactive'"
+           (click)="SEND_TO_ME = false;"
+           [ngStyle]="{'color': SEND_TO_ME ? this.dataService.TEXT_COLOR : 'white',
+           'background-color': !SEND_TO_ME ? this.dataService.BUTTON_COLOR : 'white'}">
             <ion-text  class="app-text-color">Send to someone</ion-text>
           </ion-row>
         </ion-col>
@@ -63,19 +76,19 @@
       <ion-row class="ion-margin">
         <ion-col size="12">
           <label>Your Email</label>
-          <ion-input type="text" [(ngModel)]="F_EMAIL"></ion-input>
+          <ion-input type="text" [(ngModel)]="F_EMAIL" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-margin">
         <ion-col size="6">
           <label>First Name</label>
-          <ion-input type="text" [(ngModel)]="F_FIRST_NAME"></ion-input>
+          <ion-input type="text" [(ngModel)]="F_FIRST_NAME" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
 
         <ion-col size="6">
           <label>Last Name</label>
-          <ion-input type="text" [(ngModel)]="F_LAST_NAME"></ion-input>
+          <ion-input type="text" [(ngModel)]="F_LAST_NAME" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -84,33 +97,33 @@
       <ion-row class="ion-margin">
         <ion-col size="12">
           <label>Your Email</label>
-          <ion-input type="text" [(ngModel)]="S_EMAIL"></ion-input>
+          <ion-input type="text" [(ngModel)]="S_EMAIL" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-margin">
         <ion-col size="6">
           <label>Your First Name</label>
-          <ion-input type="text" [(ngModel)]="S_FIRST_NAME"></ion-input>
+          <ion-input type="text" [(ngModel)]="S_FIRST_NAME" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
 
         <ion-col size="6">
           <label>Your Last Name</label>
-          <ion-input type="text" [(ngModel)]="S_LAST_NAME"></ion-input>
+          <ion-input type="text" [(ngModel)]="S_LAST_NAME" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-margin">
         <ion-col size="12">
           <label>Giftee Email</label>
-          <ion-input type="text" [(ngModel)]="S_GIFTEE_EMAIL"></ion-input>
+          <ion-input type="text" [(ngModel)]="S_GIFTEE_EMAIL" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-margin">
         <ion-col size="12">
           <label>Message to giftee</label>
-          <ion-input type="text" [(ngModel)]="S_GIFTEE_EMAIL_MESSAGE"></ion-input>
+          <ion-input type="text" [(ngModel)]="S_GIFTEE_EMAIL_MESSAGE" style="border : 1px solid {{this.dataService.BUTTON_COLOR}}!important"></ion-input>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -128,7 +141,11 @@
         </ion-col>
 
         <ion-col size="6">
-          <ion-button expand="block" class="btn_checkout" (click)="confirm()"> <ion-text>Checkout</ion-text></ion-button>
+          <ion-button
+            expand="block"
+            class="btn_checkout"
+            (click)="confirm()"
+            style="--background : {{this.dataService.BUTTON_COLOR}}!important; --background-activated : {{this.dataService.BUTTON_COLOR}}!important;"> <ion-text>Checkout</ion-text></ion-button>
         </ion-col>
       </ion-row>
 
