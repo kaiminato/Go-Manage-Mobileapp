@@ -1,7 +1,7 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
 
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <!-- Product list show -->
   <div class="card-list">
@@ -81,7 +81,12 @@
     <ion-grid class="ion-margin-top place-order">
       <ion-row>
         <ion-col size="12" class="">
-          <ion-button expand="block" [routerLink]="['/select-deliver', {SUB_TOTAL: SUB_TOTAL}]">PLACE ORDER</ion-button>
+          <ion-button
+           expand="block"
+           [routerLink]="['/select-deliver', {SUB_TOTAL: SUB_TOTAL}]"
+           style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+           >PLACE ORDER
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

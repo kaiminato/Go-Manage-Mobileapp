@@ -1,6 +1,6 @@
 
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
-  <div class="green-background">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
@@ -9,14 +9,14 @@
   </ion-card>
   <ion-grid class="request-tabs">
     <ion-row>
-      <ion-col size="6"  [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
+      <ion-col size="6" style="color : {{this.dataService.TEXT_COLOR}}; " [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
 
         <div >
           <ion-text  class="app-text-color ion-margin-start">Staff</ion-text>
         </div>
       </ion-col>
 
-      <ion-col size="6"  [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
+      <ion-col size="6" style="color : {{this.dataService.TEXT_COLOR}}; " [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
         <div>
         <ion-text  class="app-text-color ion-margin-start">Services</ion-text>
         </div>
@@ -27,7 +27,7 @@
 
   <div class="list card-list" *ngIf="IS_STAFF">
     <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
-      <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false"
+      <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false" style="border-bottom: 1px solid {{this.dataService.TEXT_COLOR}} !important; color: {{this.dataService.TEXT_COLOR}} !important"
         (click)="SelectStaff(value.employee_id)" >
 
         <ion-thumbnail slot="start">
@@ -41,25 +41,11 @@
     </ion-list>
   </div>
 
-
-  <!-- <ion-list lines="none" *ngIf="!IS_STAFF">
-    <ion-item button
-      *ngFor="let value of this.SERVICE_LIST"
-      class="staff_list"
-      detail="false" >
-
-        <ion-thumbnail slot="start">
-          <img [src]="value.image">
-        </ion-thumbnail>
-        <ion-label> <h3>{{ value.name }}</h3>  </ion-label>
-
-    </ion-item>
-  </ion-list> -->
   <div class="list card-list" [class.ion-hide]="IS_STAFF">
     <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;"
       *ngFor="let service of CATEGORY_LIST; let service_index = index" >
 
-      <ion-item button class="service_detail" detail="false"
+      <ion-item button class="service_detail" detail="false" style="color : {{this.dataService.TEXT_COLOR}} !important; "
         (click)="changeCategoryStatus(service_index, service.is_open)" >
         <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
           <h3>{{ service.category_name }}</h3>
@@ -74,7 +60,7 @@
           <!-- <ion-col size="1"></ion-col> -->
           <ion-col size="12">
 
-            <ion-item class="service_detail ion-no-padding" detail="false">
+            <ion-item class="service_detail ion-no-padding" detail="false" style="color : {{this.dataService.TEXT_COLOR}} !important; ">
               <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
                 <ion-icon name="information-circle-outline" style="color: black;"></ion-icon>
               </ion-button>

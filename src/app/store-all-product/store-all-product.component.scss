@@ -7,7 +7,6 @@ ion-content {
       left: 0;
       height: 40%;
       width: 100%;
-      background: rgba(2,127,123,1);
       z-index: -1;
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
@@ -49,7 +48,6 @@ ion-content {
                 background: #fff;
                 height: 35px;
                 width: 35px;
-                // box-shadow: 0 0 10px rgb(0 0 0 / 20%);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -98,9 +96,7 @@ ion-content {
         }
 
         .active {
-            background: #047473 !important;
             color: white !important;
-
         }
 
         ion-badge {
@@ -164,23 +160,12 @@ ion-content {
             .add-cart {
                 width: 100%;
                 margin-top: 4px;
-                border-color: #047473;
                 ion-icon {
-                    background-color: white;
-                    --background-activated: #047473;
                     font-size: 21px;
-                    color: #047473;
                     padding: 3px;
                     border-radius: 50%;
                 }
-
             }
-            .add-cart.active {
-              ion-icon {
-                  background-color: #047473 !important;
-                  color: white !important;
-              }
-          }
 
         }
     }

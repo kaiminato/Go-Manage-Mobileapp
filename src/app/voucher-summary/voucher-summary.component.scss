@@ -4,7 +4,7 @@ ion-content {
 
         color: #047473;
         font-weight: bold;
-    }  
+    }
 
     .gift-voucher-amount {
 
@@ -18,9 +18,9 @@ ion-content {
 
                 color: #047473;
                 font-weight: bold;
-            } 
+            }
         }
-        
+
 
     }
 
@@ -41,16 +41,16 @@ ion-content {
         ion-text {
             font-weight: bold;
         }
-       
+
     }
 
     .credit_card_icons {
         font-size: 30px;
     }
 
-    
 
-    
+
+
 }
 
 
@@ -66,12 +66,12 @@ ion-modal {
         line-height: 20px;
     }
   }
-  
+
   ion-modal::part(backdrop) {
     background: rgba(209, 213, 219);
     opacity: 1;
   }
-  
+
   ion-modal ion-toolbar {
     --background: rgb(14 116 144);
     --color: white;
