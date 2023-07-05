@@ -427,7 +427,6 @@ export class SelectTimingComponent implements OnInit {
 
               // Shift will be disabled if shift time will exist in between break start & break end time
               if (break_start_time.getTime() <= shift__date_time.getTime() && break_end_time.getTime() >= shift__date_time.getTime()) {
-
                 //console.log('shift_value.value----' , shift_value.value);
                 shift_value.is_disabled = true; // Disabled the shift
               }
@@ -482,6 +481,14 @@ export class SelectTimingComponent implements OnInit {
       console.log('total_shift_will_count--' , total_shift_will_count);
       console.log('booking_data-----' , booking_data);
 
+      // Shift disabled based on current time
+      for (let shift_value of this.ALL_SHIFT) {
+        let shift__date_time = new Date(`${this.DATE}T${shift_value.value}:00`);
+        const current_date_time = new Date();
+        if(current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()){
+          shift_value.is_disabled = true; // Disabled the shift
+        }
+      }
 
       // Set Soft disabled
       if (total_shift_will_count != 1) {
