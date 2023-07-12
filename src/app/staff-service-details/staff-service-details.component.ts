@@ -19,7 +19,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   isOpen: boolean = false
   CANCEL_BOOKING_ID: number = 0;
   STAFF_DETAIL: any = []
-
+  PERFORMED_SERVICES: any = [];
   CATEGORY_LIST: any = [];
   SERVICE_LIST: any = [];
   SELECTED_SERVICES: any = [];
@@ -43,13 +43,14 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.SELECTED_SERVICES = [];
     // this.TOTAL_SERVICE_SELECTED = 0;
     // this.TOTAL_PRICE = 0;
-    await this.getServiceList();
-
-
-
-
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
     console.log("this.ID",this.ID);
+    this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
+    console.log("this.staff_detail", this.STAFF_DETAIL);
+    this.PERFORMED_SERVICES = this.STAFF_DETAIL[0].performedServices;
+
+    await this.getServiceList();
+
     this.activateRoute.queryParams
       .subscribe(params => {
 
@@ -58,7 +59,6 @@ export class StaffServiceDetailsComponent implements OnInit {
       }
     );
 
-    this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.STAFF_DETAIL[0].image = this.STAFF_DETAIL[0]?.employeeImg ? this.STAFF_DETAIL[0]?.employeeImg : this.imageService.DEFAULT_PERSON;
     //this.STAFF_DETAIL[0].comment = 'Quick bio on the worker of what they like & hobbies and what they are qualified in will be added here';
     this.HEADING = "2";
@@ -87,10 +87,19 @@ export class StaffServiceDetailsComponent implements OnInit {
 
       let categorie_ids = [...new Set(this.SERVICE_LIST.map(data => data.categoryId))];
       this.CATEGORY_LIST = [];
-
+      console.log("PERFORMED_SERVICES",this.PERFORMED_SERVICES);
       for(let category_id of categorie_ids){
         let service_list = this.SERVICE_LIST.filter(service => service.categoryId == category_id);
+        console.log("service_list",service_list);
 
+        for(let service of service_list) {
+          if(this.PERFORMED_SERVICES.includes(service.id)){
+            service['performed'] = true;
+          }
+          else{
+            service['performed'] = false;
+          }
+        }
         if (service_list.length > 0){
 
           this.CATEGORY_LIST.push(
@@ -107,6 +116,7 @@ export class StaffServiceDetailsComponent implements OnInit {
         }
 
       }
+      console.log("CATEGORY_LIST",this.CATEGORY_LIST);
 
       let booking_data = await this.dataService.getInitialBookingdata();
 

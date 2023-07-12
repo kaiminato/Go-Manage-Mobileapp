@@ -52,7 +52,7 @@
                 <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
                   <h3>{{ service_detail.serviceName }}</h3>
                   <ion-text class="service_count"> {{ service_detail.servicePrice | currency: 'EUR'}} </ion-text>
-                  <ion-checkbox style="--background-checked: {{this.dataService.BUTTON_COLOR}} !important" slot="end"  (ionChange)="changeServiceStatus( service_detail.id )" [checked]="service_detail.is_checked"></ion-checkbox>
+                  <ion-checkbox style="--background-checked: {{this.dataService.BUTTON_COLOR}} !important" slot="end" [disabled]="!service_detail.performed" (ionChange)="changeServiceStatus( service_detail.id )" [checked]="service_detail.is_checked"></ion-checkbox>
                 </ion-label>
 
               </ion-item>
