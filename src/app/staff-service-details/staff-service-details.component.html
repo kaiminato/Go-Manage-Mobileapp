@@ -31,8 +31,7 @@
         <ion-grid *ngIf="service.is_open">
           <ion-row *ngFor="let service_detail of service.services; let index_number = index" class="service_order_list">
             <!-- <ion-col size="1" ></ion-col> -->
-            <ion-col size="12" >
-
+            <ion-col size="12" *ngIf="service_detail.performed">
               <ion-item class="service_detail ion-no-padding"   detail="false" >
 
 
