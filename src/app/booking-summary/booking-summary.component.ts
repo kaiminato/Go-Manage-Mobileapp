@@ -33,6 +33,7 @@ export class BookingSummaryComponent implements OnInit {
   CANCEL_BOOKING_ID: number = 0;
   IS_LOGIN: boolean = false;
   PAYMENT_MODEL_OPEN: boolean = false;
+  STRIPE_FLAG: boolean;
   EMAIL: string;
   userGMID: any;
   RECIPT_URL: string = '';
@@ -54,9 +55,9 @@ export class BookingSummaryComponent implements OnInit {
 
 
     let owner_data = await this.dataService._getOwnerData();
-
     if (owner_data) {
       this.stripe = Stripe(owner_data.stripe_publishable_key);
+      this.STRIPE_FLAG = owner_data.stripe;
     }
     console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
     // await this.apiData._updateUserId();
@@ -86,7 +87,14 @@ export class BookingSummaryComponent implements OnInit {
     );
     await this._setupStripe();// Initialize stripe token
   }
-
+  confirm() {
+    if(this.STRIPE_FLAG){
+      this.PAYMENT_MODEL_OPEN = true;
+    }
+    else {
+      this.saveBooking();
+    }
+  }
   async _onEnterData() {
     this.activateRoute.queryParams.subscribe((params) => {
       this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
