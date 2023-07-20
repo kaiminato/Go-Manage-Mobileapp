@@ -20,6 +20,8 @@ export class SelectDeliverComponent implements OnInit {
   stripe ;
   card: any;
   EMAIL: any;
+  PAYMENT_MODEL_OPEN: boolean = false;
+  STRIPE_FLAG: boolean;
   constructor(
     private router: Router,
     private apiData: ApiDataService,
@@ -37,6 +39,7 @@ export class SelectDeliverComponent implements OnInit {
 
     if (owner_data) {
       this.stripe = Stripe(owner_data.stripe_publishable_key);
+      this.STRIPE_FLAG = owner_data.stripe;
     }
     console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
     await this.auth.getUser().subscribe(
@@ -48,6 +51,14 @@ export class SelectDeliverComponent implements OnInit {
       }
     );
     await this._setupStripe();
+  }
+  async confirm() {
+    if(this.STRIPE_FLAG){
+      this.PAYMENT_MODEL_OPEN = true;
+    }
+    else {
+      await this.apiData.presentAlertWithHeader("Unavailable", "Online purchase unavailable");
+    }
   }
   async _setupStripe() {
 
