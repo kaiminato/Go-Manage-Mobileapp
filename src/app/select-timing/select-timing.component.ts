@@ -164,7 +164,8 @@ export class SelectTimingComponent implements OnInit {
 
   async _selectTiming (id: number , is_disabled : any){
 
-    console.log('id----' , id , is_disabled)
+    console.log('id----' , id , is_disabled);
+    console.log('this.DATE' , this.DATE);
     if (is_disabled) return ;
 
     let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
@@ -198,7 +199,7 @@ export class SelectTimingComponent implements OnInit {
       let new_date = new Date(`${this.DATE} ${shift.value}`);
 
       if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
-
+        console.log("new_date",new_date);
         is_passed = false;
       }
     }
@@ -287,7 +288,9 @@ export class SelectTimingComponent implements OnInit {
 
                 } else if (error.status == 201){
 
-                  await this.apiService.presentAlert('Shift not available')
+                  // await this.apiService.presentAlert('Shift not available')
+                  await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
+
                   return
 
                 } else {
