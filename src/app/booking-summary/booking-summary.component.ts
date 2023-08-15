@@ -65,7 +65,12 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         console.log("response",response);
         // Get auth data
-        this.EMAIL = response.email;
+        if(response.email == 'null' || response.email == '' || response.email == undefined){
+          this.EMAIL = await this.dataService._getUserEmail();
+        }
+        else {
+          this.EMAIL = response.email;
+        }
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
             console.log("this is user_info", user_info);

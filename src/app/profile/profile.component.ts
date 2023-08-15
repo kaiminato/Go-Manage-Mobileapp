@@ -157,6 +157,11 @@ export class ProfileComponent implements OnInit {
   }
 
   async updateUser() {
+    if (!this.EMAIL){
+
+      await this.apiData.presentAlert("Email can't be empty")
+      return
+    }
     if (!this.FIRST_NAME){
 
       await this.apiData.presentAlert("First name can't be empty")
@@ -201,6 +206,7 @@ export class ProfileComponent implements OnInit {
     //   birth: D_O_B,
     //   HOME_LOCATION: this.HOME_LOCATION
     // }
+    await this.dataService._setUserEmail(this.EMAIL);
     let data = {
       email: this.EMAIL,
       givenName: this.FIRST_NAME,

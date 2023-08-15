@@ -33,6 +33,7 @@ export class DataService {
   public SERVICE_LIST_KEY: string  = 'service_list';
   public STAFF_BOOKING_LIST_KEY: string  = 'staff_booking_list';
   public OWNER_DATA_KEY: string  = 'owner_app_info';
+  public USER_EMAIL_KEY: string  = 'user_email';
   public ALL_SHIFT: any = [];
   public BOOKING_WITH_STAFF: Number = 1;
   public BOOKING_WITH_SERVICE: Number = 2;
@@ -376,6 +377,16 @@ export class DataService {
       );
 
       return await staff_available_date_id.length == 0 ? true : false;
+  }
+  async _setUserEmail(data: any) {
+
+    return localStorage.setItem(this.USER_EMAIL_KEY , data);
+  }
+
+  async _getUserEmail() {
+
+    let email = await localStorage.getItem(this.USER_EMAIL_KEY);
+    return await email == undefined || email == null ? "" : email ;
   }
 
   async _setOwnerData(data: any) {
