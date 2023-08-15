@@ -62,7 +62,7 @@ export class ProfileComponent implements OnInit {
 
   async _getUserInfo (){
 
-    await this.apiData.presentLoading();
+    // await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
@@ -74,7 +74,7 @@ export class ProfileComponent implements OnInit {
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
 
-            await this.apiData.dismiss();
+            // await this.apiData.dismiss();
             console.log("user_info",user_info);
             this.RESPONSE = user_info;
             let user_details = user_info;
