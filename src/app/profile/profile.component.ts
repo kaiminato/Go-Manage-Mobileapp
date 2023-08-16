@@ -207,6 +207,7 @@ export class ProfileComponent implements OnInit {
     //   HOME_LOCATION: this.HOME_LOCATION
     // }
     await this.dataService._setUserEmail(this.EMAIL);
+    console.log("this.EMAIL",this.EMAIL);
     let data = {
       email: this.EMAIL,
       givenName: this.FIRST_NAME,
