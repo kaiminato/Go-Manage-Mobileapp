@@ -67,18 +67,19 @@ export class BookingSummaryComponent implements OnInit {
         // Get auth data
         if(response.email == 'null' || response.email == '' || response.email == undefined){
           this.EMAIL = await this.dataService._getUserEmail();
+          console.log("this is eamil from local storage",this.EMAIL);
         }
         else {
           this.EMAIL = response.email;
         }
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
             console.log("this is user_info", user_info);
             this.userGMID = user_info.userGMID;
             console.log("this is userGMID", this.userGMID);
             if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
             ) {
-              this.presentAlert(response.email);
+              this.presentAlert(this.EMAIL);
             } else {
               this._onEnterData();
             }
