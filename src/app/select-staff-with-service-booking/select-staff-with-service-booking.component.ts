@@ -429,8 +429,14 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
-
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        let userEmail;
+        if(response){
+          userEmail = response.email.toLowerCase();
+        }
+        else{
+          userEmail = await this.dataService._getUserEmail();
+        }
+        (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
 
             let data = {
@@ -502,8 +508,14 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
-
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        let userEmail;
+        if(response){
+          userEmail = response.email.toLowerCase();
+        }
+        else{
+          userEmail = await this.dataService._getUserEmail();
+        }
+        (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
 
 

@@ -66,12 +66,19 @@ export class ProfileComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
+        console.log("response",response);
+        let userEmail;
+        if(response){
+          userEmail = response.email;
+          console.log("userEmail",userEmail);
+        }
+        else{
+          userEmail = await this.dataService._getUserEmail();
+        }
 
-        response.email = response.email.toLowerCase();
+        this.EMAIL = userEmail;
 
-        this.EMAIL = response.email;
-
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
 
             // await this.apiData.dismiss();
