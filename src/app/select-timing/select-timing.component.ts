@@ -223,16 +223,16 @@ export class SelectTimingComponent implements OnInit {
       return
     }
 
-    if (!this.IS_LOGIN) {
+    // if (!this.IS_LOGIN) {
 
-      await this.dataService.setPreviousUrl('select-a-time');
-      this.auth
-      .buildAuthorizeUrl()
-      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-      .subscribe();
+    //   await this.dataService.setPreviousUrl('select-a-time');
+    //   this.auth
+    //   .buildAuthorizeUrl()
+    //   .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+    //   .subscribe();
 
-      return
-    }
+    //   return
+    // }
 
     for (let shift of this.ALL_SHIFT) shift.is_active = shift.id == id ? true : false;
     console.log('passed');
@@ -246,10 +246,22 @@ export class SelectTimingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
-
         //response.email = 'gomanagetest@gmail.com';
-
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        let userEmail;
+        if(response){
+          userEmail = response.email;
+        }
+        else{
+          const altEmail = await this.dataService._getUserEmail();
+          if(altEmail){
+            userEmail = altEmail;
+          }
+          else {
+            await this.apiService.presentAlert('If you are signed with Facebook, please go to profile page and enter your email.');
+            setTimeout(() => { this.router.navigate(['/profile'])}, 200);
+          }
+        }
+        (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
 
 
@@ -866,8 +878,14 @@ export class SelectTimingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
-
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        let userEmail;
+        if(response){
+          userEmail = response.email;
+        }
+        else{
+          userEmail = await this.dataService._getUserEmail();
+        }
+        (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
 
             //console.log('user_info' , user_info);
