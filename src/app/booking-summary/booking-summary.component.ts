@@ -53,7 +53,8 @@ export class BookingSummaryComponent implements OnInit {
 
   async ionViewWillEnter() {
 
-
+    const customer_email = await this.dataService._getUserEmail();
+    console.log("customer_email",customer_email);
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
       this.stripe = Stripe(owner_data.stripe_publishable_key);
@@ -65,12 +66,12 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         console.log("response",response);
         // Get auth data
-        if(response.email == 'null' || response.email == '' || response.email == undefined){
-          this.EMAIL = await this.dataService._getUserEmail();
+        if(response){
+          this.EMAIL = response.email;
           console.log("this is eamil from local storage",this.EMAIL);
         }
         else {
-          this.EMAIL = response.email;
+          this.EMAIL = await this.dataService._getUserEmail();
         }
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
@@ -370,15 +371,15 @@ export class BookingSummaryComponent implements OnInit {
 
   async saveBooking() {
 
-    if (!this.IS_LOGIN) {
-      await this.dataService.setPreviousUrl('booking-summary');
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
+    // if (!this.IS_LOGIN) {
+    //   await this.dataService.setPreviousUrl('booking-summary');
+    //   this.auth
+    //     .buildAuthorizeUrl()
+    //     .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+    //     .subscribe();
 
-      return;
-    }
+    //   return;
+    // }
 
 
     await this.dataService.removePreviousUrl();
@@ -394,8 +395,14 @@ export class BookingSummaryComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
-
-        (await this.apiData.getMyProfile(response.email)).subscribe(
+        let userEmail;
+        if(response){
+          userEmail = response.email;
+        }
+        else{
+          userEmail = await this.dataService._getUserEmail();
+        }
+        (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
             // Get current user data
 
