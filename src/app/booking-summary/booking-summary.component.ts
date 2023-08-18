@@ -66,13 +66,13 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         console.log("response",response);
         // Get auth data
-        if(response){
+        if(response.email){
           this.EMAIL = response.email;
-          console.log("this is eamil from local storage",this.EMAIL);
         }
         else {
           this.EMAIL = await this.dataService._getUserEmail();
         }
+
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
             console.log("this is user_info", user_info);
@@ -99,6 +99,7 @@ export class BookingSummaryComponent implements OnInit {
       this.PAYMENT_MODEL_OPEN = true;
     }
     else {
+    console.log("confirm booking")
       this.saveBooking();
     }
   }
@@ -370,7 +371,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async saveBooking() {
-
+    console.log("save booking")
     // if (!this.IS_LOGIN) {
     //   await this.dataService.setPreviousUrl('booking-summary');
     //   this.auth
@@ -382,7 +383,7 @@ export class BookingSummaryComponent implements OnInit {
     // }
 
 
-    await this.dataService.removePreviousUrl();
+    // await this.dataService.removePreviousUrl();
 
     let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00.000Z`;
     let end_time = await this.addHours(this.BOOKINGS_DETAILS.timing_id.value,this.TOTAL_DURATION);
@@ -441,7 +442,7 @@ export class BookingSummaryComponent implements OnInit {
                 isApp: true // 1 means booking booked from app side
               });
             }
-
+            console.log("this is data",data);
             (await this.apiData.saveBooking(data)).subscribe(
               async (response: any) => {
 
@@ -455,6 +456,7 @@ export class BookingSummaryComponent implements OnInit {
 
                 await this.apiData.dismiss();
                 console.log('error--' , error)
+                console.log('this.CANCEL_BOOKING_ID--' , this.CANCEL_BOOKING_ID)
 
                 setTimeout(() => {
                   this.router.navigate(['/booking-complete']);
@@ -464,7 +466,7 @@ export class BookingSummaryComponent implements OnInit {
                   await this.deleteBooking();
                 }
                 setTimeout(() => {
-                  this.router.navigate(['/booking-complete']);
+                  // this.router.navigate(['/booking-complete']);
                 }, 300);
               }
             );
@@ -490,9 +492,10 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async deleteBooking() {
+    console.log("delete booking");
+
     (await this.apiData.deleteBooking(this.CANCEL_BOOKING_ID)).subscribe(
       async (response: any) => {
-
       },
       async (error: any) => {
 
