@@ -397,7 +397,7 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         // Get auth data
         let userEmail;
-        if(response){
+        if(response.email){
           userEmail = response.email;
         }
         else{

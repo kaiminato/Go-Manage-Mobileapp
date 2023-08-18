@@ -248,7 +248,7 @@ export class SelectTimingComponent implements OnInit {
       async (response: any) => {
         //response.email = 'gomanagetest@gmail.com';
         let userEmail;
-        if(response){
+        if(response.email){
           userEmail = response.email;
         }
         else{
@@ -879,7 +879,7 @@ export class SelectTimingComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
         let userEmail;
-        if(response){
+        if(response.email){
           userEmail = response.email;
         }
         else{
