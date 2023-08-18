@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit {
       async (response: any) => {
         console.log("response",response);
         let userEmail;
-        if(response.email){
+        if(response.hasOwnProperty('email')){
           userEmail = response.email;
           console.log("userEmail",userEmail);
         }
