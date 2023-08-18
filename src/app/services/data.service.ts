@@ -378,6 +378,7 @@ export class DataService {
 
       return await staff_available_date_id.length == 0 ? true : false;
   }
+
   async _setUserEmail(data: any) {
 
     return localStorage.setItem(this.USER_EMAIL_KEY , data);
@@ -387,6 +388,10 @@ export class DataService {
 
     let email = await localStorage.getItem(this.USER_EMAIL_KEY);
     return await email == undefined || email == null ? "" : email ;
+  }
+
+  async _removeUserEmail() {
+    return await localStorage.removeItem(this.USER_EMAIL_KEY);
   }
 
   async _setOwnerData(data: any) {
