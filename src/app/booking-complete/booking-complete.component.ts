@@ -19,7 +19,7 @@ export class BookingCompleteComponent implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter (){
-
+    // this.dataService._removeUserEmail();
     let data = await this.dataService.getInitialBookingdata();
     this.RECIEPT_URL = data.reciept_url;
     let staff_details = await this.dataService.getStaffDetail(data.staff_id);
