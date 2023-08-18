@@ -430,7 +430,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
         let userEmail;
-        if(response){
+        if(response.hasOwnProperty('email')){
           userEmail = response.email.toLowerCase();
         }
         else{
@@ -509,7 +509,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
         let userEmail;
-        if(response){
+        if(response.hasOwnProperty('email')){
           userEmail = response.email.toLowerCase();
         }
         else{

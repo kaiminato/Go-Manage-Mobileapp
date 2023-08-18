@@ -397,7 +397,7 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         // Get auth data
         let userEmail;
-        if(response.email){
+        if(response.hasOwnProperty('email')){
           userEmail = response.email;
         }
         else{
@@ -466,7 +466,7 @@ export class BookingSummaryComponent implements OnInit {
                   await this.deleteBooking();
                 }
                 setTimeout(() => {
-                  // this.router.navigate(['/booking-complete']);
+                  this.router.navigate(['/booking-complete']);
                 }, 300);
               }
             );
