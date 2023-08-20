@@ -66,11 +66,13 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         console.log("response",response);
         // Get auth data
-        if(response.email){
+        if(response.hasOwnProperty('email')){
           this.EMAIL = response.email;
+          console.log("this.EMAIL",response.email);
         }
         else {
           this.EMAIL = await this.dataService._getUserEmail();
+          console.log("local storage",this.EMAIL);
         }
 
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
@@ -372,15 +374,15 @@ export class BookingSummaryComponent implements OnInit {
 
   async saveBooking() {
     console.log("save booking")
-    // if (!this.IS_LOGIN) {
-    //   await this.dataService.setPreviousUrl('booking-summary');
-    //   this.auth
-    //     .buildAuthorizeUrl()
-    //     .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-    //     .subscribe();
+    if (!this.IS_LOGIN) {
+      await this.dataService.setPreviousUrl('booking-summary');
+      this.auth
+        .buildAuthorizeUrl()
+        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+        .subscribe();
 
-    //   return;
-    // }
+      return;
+    }
 
 
     // await this.dataService.removePreviousUrl();
@@ -438,6 +440,7 @@ export class BookingSummaryComponent implements OnInit {
                 firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
                 lastName: this.BOOKINGS_DETAILS.staff_details[0].lastName,
                 email: user_info.email,
+                phoneNumber: user_info.phoneMobile,
                 paymentReceipt: this.RECIPT_URL,
                 isApp: true // 1 means booking booked from app side
               });

@@ -223,16 +223,16 @@ export class SelectTimingComponent implements OnInit {
       return
     }
 
-    // if (!this.IS_LOGIN) {
+    if (!this.IS_LOGIN) {
 
-    //   await this.dataService.setPreviousUrl('select-a-time');
-    //   this.auth
-    //   .buildAuthorizeUrl()
-    //   .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-    //   .subscribe();
+      await this.dataService.setPreviousUrl('select-a-time');
+      this.auth
+      .buildAuthorizeUrl()
+      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+      .subscribe();
 
-    //   return
-    // }
+      return
+    }
 
     for (let shift of this.ALL_SHIFT) shift.is_active = shift.id == id ? true : false;
     console.log('passed');
@@ -246,6 +246,7 @@ export class SelectTimingComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
+        console.log("response",response);
         //response.email = 'gomanagetest@gmail.com';
         let userEmail;
         if(response.hasOwnProperty('email')){
@@ -291,10 +292,10 @@ export class SelectTimingComponent implements OnInit {
 
                   // remove temprary booking after 5 minutes = 300000
 
-                  this.PENDING_BOOKING_TIMEOUT =  setTimeout(async () => {
+                  // this.PENDING_BOOKING_TIMEOUT =  setTimeout(async () => {
 
-                    this.removePendingBooking();
-                  }, 300000);
+                  //   this.removePendingBooking();
+                  // }, 300000);
 
                   setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
 
