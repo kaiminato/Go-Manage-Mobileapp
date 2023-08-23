@@ -110,7 +110,9 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     //let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
-    this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
+    // this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
+    this.DAYS_ARRAY =  await this._getDaysByYear(this.CURRENT_YEAR);
+    console.log("this.DAYS_ARRAY",this.DAYS_ARRAY);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
 
@@ -336,12 +338,20 @@ export class SelectTimingComponent implements OnInit {
     );
   }
 
+  getMonthFromDayIndex(dayIndex, year) {
+    var date = new Date(year, 0);
+    date.setDate(dayIndex);
+
+    return date.getMonth() + 1;
+  }
+
   async _getDayList () {
 
     let today_date = new Date(this.DATE);
     let year: any = today_date.getFullYear();
     let month:any = today_date.getMonth() + 1;
-    let day_list = await this._getDays(month , year);
+    // let day_list = await this._getDays(month , year);
+    let day_list = await this._getDaysByYear(year);
 
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()]+" "+ year
 
@@ -379,8 +389,8 @@ export class SelectTimingComponent implements OnInit {
 
     let active_index_array = await day_list.filter(data => data.is_active);
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
-
-    this.slides.slideTo(active_index-1,1000);
+    let active_index_array_index = day_list.indexOf(active_index_array[0]);
+    this.slides.slideTo(active_index_array_index-1,1000);
 
     await this._getShiftList();
   }
@@ -580,6 +590,32 @@ export class SelectTimingComponent implements OnInit {
     }
     return days_list;
   }
+  async _getDaysByYear(year: any) {
+    let days_list = [];
+
+    for (let m = 0; m < 12; m++) {
+        let month = (m + 1).toString().padStart(2, '0');
+        let firstDay = (new Date(parseInt(year), m, 1)).getDate();
+        let lastDay = (new Date(parseInt(year), m + 1, 0)).getDate();
+
+        for (let i = 1; i <= lastDay; i++) {
+            let new_date = new Date(`${year}-${month}-${i.toString().padStart(2, '0')}`);
+            let dayName = this.dataService.SHORT_DAYS_NAME[new_date.getDay()];
+
+            days_list.push({
+                day_number: i.toString().padStart(2, '0'),
+                is_disabled: false,
+                is_active: false,
+                month: month,
+                year: year,
+                day_name: dayName,
+                full_date: `${year}-${month}-${i.toString().padStart(2, '0')}`
+            });
+        }
+    }
+
+    return days_list;
+}
 
 
   async _selectDateRangeSlider(day: any, is_disabled: any, month: any, year: any , index: any) {
@@ -602,39 +638,12 @@ export class SelectTimingComponent implements OnInit {
     }
     await this._getShiftList();
   }
-  async getPrevDaysList(prevMonth, prevYear) {
-    let prev_days_array = await this._getDays(prevMonth, prevYear);
-    return prev_days_array;
-  }
   slideChanged() {
     this.slides.getActiveIndex().then(index => {
-      console.log("this is index",index);
-      console.log("current_month",this.CURRENT_MONTH);
-      const currentSlide = this.DAYS_ARRAY[index];
-      console.log("currentSlide",currentSlide);
-      if(index >= this.DAYS_ARRAY.length - 6){
-        console.log("current_month when ",this.CURRENT_MONTH);
-        if(this.CURRENT_MONTH == 12){
-          console.log("this.current_year",this.CURRENT_YEAR);
-          this.CURRENT_YEAR += 1;
-          this.CURRENT_MONTH = 0;
-        }
-        this.CURRENT_MONTH = this.CURRENT_MONTH + 1;
-        this.getDaysBySlideChange(this.CURRENT_MONTH, this.CURRENT_YEAR);
-        this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1]+" "+ this.CURRENT_YEAR;
-        this.slides.slideTo(index - this.DAYS_ARRAY.length + 6, 1000);
-      }
-      if(index <= 0) {
-        if(this.CURRENT_MONTH == 1){
-          this.CURRENT_YEAR -= 1;
-          this.CURRENT_MONTH = 13;
-        }
-        this.CURRENT_MONTH = this.CURRENT_MONTH - 1;
-        this.getDaysBySlideChange(this.CURRENT_MONTH, this.CURRENT_YEAR);
-        this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1]+" "+ this.CURRENT_YEAR;
-        console.log("this.DAYS_ARRAY.length",this.DAYS_ARRAY.length);
-        this.slides.slideTo(this.DAYS_ARRAY.length - 6, 0);
-      }
+      console.log("index",index);
+      this.CURRENT_MONTH = this.getMonthFromDayIndex(index, this.CURRENT_YEAR)-1;
+      console.log("this.CURRENT_MONTH",this.CURRENT_MONTH);
+      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH]+" "+ this.CURRENT_YEAR;
     });
   }
   async _onDateSelect(selected_date: any) {
