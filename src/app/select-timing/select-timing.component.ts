@@ -590,32 +590,53 @@ export class SelectTimingComponent implements OnInit {
     for (let value of this.DAYS_ARRAY) value.is_active = false;
     this.DAYS_ARRAY[index]['is_active'] = true;
     this.slides.slideTo(index-1,1000);
-    console.log('shift' , this.DAYS_ARRAY[index])
+    // console.log('shift' , this.DAYS_ARRAY[index])
     await this._getShiftList();
   }
   async getDaysBySlideChange(nextMonth, nextYear) {
     this.DAYS_ARRAY = await this._getDays(nextMonth, nextYear);
-    console.log("this.days_array",this.DAYS_ARRAY);
+    // console.log("this.days_array",this.DAYS_ARRAY);
     for (let value of this.DAYS_ARRAY) {
       value.is_active = false;
       value.is_disabled = true;
     }
     await this._getShiftList();
   }
+  async getPrevDaysList(prevMonth, prevYear) {
+    let prev_days_array = await this._getDays(prevMonth, prevYear);
+    return prev_days_array;
+  }
   slideChanged() {
     this.slides.getActiveIndex().then(index => {
       console.log("this is index",index);
+      console.log("current_month",this.CURRENT_MONTH);
+      const currentSlide = this.DAYS_ARRAY[index];
+      console.log("currentSlide",currentSlide);
       if(index >= this.DAYS_ARRAY.length - 6){
-        this.CURRENT_MONTH += 1;
-        console.log("current_month",this.CURRENT_MONTH);
+        console.log("current_month when ",this.CURRENT_MONTH);
+        if(this.CURRENT_MONTH == 12){
+          console.log("this.current_year",this.CURRENT_YEAR);
+          this.CURRENT_YEAR += 1;
+          this.CURRENT_MONTH = 0;
+        }
+        this.CURRENT_MONTH = this.CURRENT_MONTH + 1;
         this.getDaysBySlideChange(this.CURRENT_MONTH, this.CURRENT_YEAR);
         this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1]+" "+ this.CURRENT_YEAR;
         this.slides.slideTo(index - this.DAYS_ARRAY.length + 6, 1000);
       }
+      if(index <= 0) {
+        if(this.CURRENT_MONTH == 1){
+          this.CURRENT_YEAR -= 1;
+          this.CURRENT_MONTH = 13;
+        }
+        this.CURRENT_MONTH = this.CURRENT_MONTH - 1;
+        this.getDaysBySlideChange(this.CURRENT_MONTH, this.CURRENT_YEAR);
+        this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1]+" "+ this.CURRENT_YEAR;
+        console.log("this.DAYS_ARRAY.length",this.DAYS_ARRAY.length);
+        this.slides.slideTo(this.DAYS_ARRAY.length - 6, 0);
+      }
     });
   }
-
-
   async _onDateSelect(selected_date: any) {
 
     //console.log('selected_date-----' ,selected_date)
