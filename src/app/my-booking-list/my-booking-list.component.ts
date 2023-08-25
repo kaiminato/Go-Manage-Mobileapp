@@ -103,12 +103,7 @@ export class MyBookingListComponent implements OnInit {
                 }
 
                 let currentDate = new Date();
-                // let tomorrow: any = new Date(today);
-                // tomorrow.setDate(tomorrow.getDate() + 1);
-                // tomorrow = tomorrow.getFullYear()+'-'+((tomorrow.getMonth()+1) < 10 ? `0${(tomorrow.getMonth()+1)}` : (tomorrow.getMonth()+1))+'-'+(tomorrow.getDate() < 10 ? '0'+tomorrow.getDate() : tomorrow.getDate())
 
-                console.log("currentDate.getTime()",new Date(currentDate));
-                console.log("new Date(data.compare_date_time)",new Date(this.ALL_BOOKING_LIST[0].endTime));
                 this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => <any>new Date(currentDate).getTime() > <any>new Date(data.endTime).getTime())
                 this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (<any>new Date(currentDate).getTime() <= <any>new Date(data.endTime).getTime()) )
                 console.log("RECENT_BOOKING_LIST",this.RECENT_BOOKING_LIST);

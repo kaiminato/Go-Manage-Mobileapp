@@ -407,6 +407,7 @@ export class BookingSummaryComponent implements OnInit {
         }
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
+            console.log("user_info",user_info);
             // Get current user data
 
             let last_service_end_time = '';
@@ -426,13 +427,19 @@ export class BookingSummaryComponent implements OnInit {
                 );
                 end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
               }
+              const original_start_time = new Date(start_time);
+              const new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - 1));
+              const original_end_time = new Date(end_time);
+              const new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - 1));
+              console.log(new_start_time.toISOString());
+              console.log(new_end_time.toISOString());
 
               data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
-                endTime: end_time,
-                startTime: start_time,
+                endTime: new_end_time.toISOString(),
+                startTime: new_start_time.toISOString(),
                 isAllDay: false,
                 customer: null,
                 service: service.serviceName,
