@@ -371,7 +371,15 @@ export class BookingSummaryComponent implements OnInit {
       without_space_time: str_time_without_space,
     };
   }
-
+  stdTimezoneOffset() {
+    const today = new Date();
+    const jan = new Date(today.getFullYear(), 0, 1);
+    const jul = new Date(today.getFullYear(), 6, 1);
+    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+  }
+  isDstObserved(date) {
+    return date.getTimezoneOffset() < this.stdTimezoneOffset();
+  }
   async saveBooking() {
     console.log("save booking")
     if (!this.IS_LOGIN) {
@@ -427,13 +435,21 @@ export class BookingSummaryComponent implements OnInit {
                 );
                 end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
               }
-              const original_start_time = new Date(start_time);
-              const new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - 1));
-              const original_end_time = new Date(end_time);
-              const new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - 1));
-              console.log(new_start_time.toISOString());
-              console.log(new_end_time.toISOString());
 
+              const original_start_time = new Date(start_time);
+              const original_end_time = new Date(end_time);
+              const today = new Date();
+              var daylight_saving_time;
+              if (this.isDstObserved(today)){
+                console.log("Daylight saving time!");
+                daylight_saving_time = 1;
+              }
+              else{
+                console.log("no daylight saving time!");
+                daylight_saving_time = 0;
+              }
+              const new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
+              const new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
               data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
