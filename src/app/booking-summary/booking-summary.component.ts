@@ -371,14 +371,13 @@ export class BookingSummaryComponent implements OnInit {
       without_space_time: str_time_without_space,
     };
   }
-  stdTimezoneOffset() {
-    const today = new Date();
-    const jan = new Date(today.getFullYear(), 0, 1);
-    const jul = new Date(today.getFullYear(), 6, 1);
+  stdTimezoneOffset(date) {
+    const jan = new Date(date.getFullYear(), 0, 1);
+    const jul = new Date(date.getFullYear(), 6, 1);
     return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
   }
   isDstObserved(date) {
-    return date.getTimezoneOffset() < this.stdTimezoneOffset();
+    return date.getTimezoneOffset() < this.stdTimezoneOffset(date);
   }
   async saveBooking() {
     console.log("save booking")
@@ -438,9 +437,8 @@ export class BookingSummaryComponent implements OnInit {
 
               const original_start_time = new Date(start_time);
               const original_end_time = new Date(end_time);
-              const today = new Date();
               var daylight_saving_time;
-              if (this.isDstObserved(today)){
+              if (this.isDstObserved(original_start_time)){
                 console.log("Daylight saving time!");
                 daylight_saving_time = 1;
               }
