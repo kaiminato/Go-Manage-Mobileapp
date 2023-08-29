@@ -261,6 +261,7 @@ export class SelectTimingComponent implements OnInit {
           }
           else {
             setTimeout(() => { this.router.navigate(['/profile'])}, 200);
+            return;
           }
         }
         (await this.apiData.getMyProfile(userEmail)).subscribe(
