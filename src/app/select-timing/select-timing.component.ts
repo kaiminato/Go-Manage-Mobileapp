@@ -260,7 +260,6 @@ export class SelectTimingComponent implements OnInit {
             userEmail = altEmail;
           }
           else {
-            await this.apiService.presentAlert('If you are signed with Facebook, please go to profile page and enter your email.');
             setTimeout(() => { this.router.navigate(['/profile'])}, 200);
           }
         }
