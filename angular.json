@@ -30,7 +30,10 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
             "scripts": [],
             "aot": false,
             "vendorChunk": true,
@@ -130,7 +133,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "app:build:prod",
+              "browserTarget": "app:build:production",
               "port": 4300
             },
             "test": {
