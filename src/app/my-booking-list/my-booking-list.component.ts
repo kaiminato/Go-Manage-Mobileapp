@@ -67,7 +67,6 @@ export class MyBookingListComponent implements OnInit {
 
             (await this.apiData.retrievSingleUserBooking(user_info.userGMID)).subscribe(
               async (response: any) => {
-                console.log("this is response",response);
                 if (response.length >0) {
 
 
@@ -75,39 +74,33 @@ export class MyBookingListComponent implements OnInit {
                     this.FUTURE_BOOKING_LIST = [];
                     this.ALL_BOOKING_LIST = [];
 
-                    for (let index = 0; index < response.length; index++){
-
-                      let start_date_time = new Date(response[index].startTime)
-                      let end_date_time = new Date(response[index].endTime)
-                      var difference = end_date_time.getTime() - start_date_time.getTime(); // This will give difference in milliseconds
-                      var resultInMinutes = Math.round(difference / 60000);
-
-                      let date_time = await this.getDateFormat(response[index].startTime)
-
-                      let data = {
-                        service_name : response[index].service,
-                        service_duration:resultInMinutes+" minutes",
-                        id:response[index].id,
-                        date_time: date_time,
-                        start_time: response[index].startTime,
-                        endTime: response[index].endTime,
-                        paymentReceipt: response[index].paymentReceipt,
-                        compare_date_time: (response[index].endTime.split('T')[0])
-
+                    for (const booking of response) {
+                      const start_date_time = new Date(booking.startTime);
+                      const end_date_time = new Date(booking.endTime);
+                      const difference = end_date_time.getTime() - start_date_time.getTime();
+                      const resultInMinutes = Math.round(difference / 60000);
+      
+                      const date_time = await this.getDateFormat(booking.startTime);
+      
+                      const data = {
+                          service_name: booking.service,
+                          service_duration: resultInMinutes + ' minutes',
+                          id: booking.id,
+                          date_time,
+                          start_time: this.subtractHourFromDate(booking.startTime),
+                          endTime: this.subtractHourFromDate(booking.endTime),
+                          paymentReceipt: booking.paymentReceipt,
+                          compare_date_time: booking.endTime.split('T')[0]
                       };
-
-                      this.ALL_BOOKING_LIST.push(data)
-                    }
-
-
+      
+                      this.ALL_BOOKING_LIST.push(data);
+                  }
                 }
 
                 let currentDate = new Date();
 
                 this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => <any>new Date(currentDate).getTime() > <any>new Date(data.endTime).getTime())
                 this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (<any>new Date(currentDate).getTime() <= <any>new Date(data.endTime).getTime()) )
-                console.log("RECENT_BOOKING_LIST",this.RECENT_BOOKING_LIST);
-                console.log("FUTURE_BOOKING_LIST",this.FUTURE_BOOKING_LIST);
                 // Sort array
 
                 this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
@@ -139,6 +132,15 @@ export class MyBookingListComponent implements OnInit {
 
   }
 
+  subtractHourFromDate(timeString: string): Date {
+    // Parse the time string into a Date object
+    const time = new Date(timeString);
+
+    // Subtract an hour
+    time.setHours(time.getHours() - 1);
+
+    return time;
+  }
   async getDateFormat (date_value: any) {
 
     let month_name = ['Jan' , 'Feb' , 'Mar' , 'Apr' , 'May' , 'Jun' , 'Jul' , 'Aug' , 'Sep' , 'Oct' , 'Nov' , 'Dec'];
