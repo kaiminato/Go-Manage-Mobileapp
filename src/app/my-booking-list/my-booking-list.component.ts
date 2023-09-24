@@ -75,25 +75,30 @@ export class MyBookingListComponent implements OnInit {
                     this.ALL_BOOKING_LIST = [];
 
                     for (const booking of response) {
+                      console.log("this is first booking",booking);
                       const start_date_time = new Date(booking.startTime);
                       const end_date_time = new Date(booking.endTime);
+                      start_date_time.setHours(start_date_time.getHours() - 1);
+                      end_date_time.setHours(end_date_time.getHours() - 1);
                       const difference = end_date_time.getTime() - start_date_time.getTime();
                       const resultInMinutes = Math.round(difference / 60000);
-      
-                      const date_time = await this.getDateFormat(booking.startTime);
-      
+
+                      const date_time = await this.getDateFormat(start_date_time);
+
                       const data = {
                           service_name: booking.service,
                           service_duration: resultInMinutes + ' minutes',
                           id: booking.id,
                           date_time,
-                          start_time: this.subtractHourFromDate(booking.startTime),
-                          endTime: this.subtractHourFromDate(booking.endTime),
+                          start_time: start_date_time,
+                          endTime: end_date_time,
                           paymentReceipt: booking.paymentReceipt,
                           compare_date_time: booking.endTime.split('T')[0]
                       };
-      
+
                       this.ALL_BOOKING_LIST.push(data);
+                      console.log("this is data",data);
+
                   }
                 }
 
