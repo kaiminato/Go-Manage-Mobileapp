@@ -75,38 +75,25 @@ export class MyBookingListComponent implements OnInit {
                     this.ALL_BOOKING_LIST = [];
 
                     for (const booking of response) {
-                      console.log("this is first booking",booking);
                       const start_date_time = new Date(booking.startTime);
                       const end_date_time = new Date(booking.endTime);
-                      const october29th = new Date('2023-10-29T23:59:59Z');
-                      let daylightSavingTime;
-                      if (start_date_time > october29th) {
-                        daylightSavingTime = 0;
-                      }
-                      else {
-                        daylightSavingTime = 1;
-                      }
-                      start_date_time.setHours(start_date_time.getHours() - daylightSavingTime);
-                      end_date_time.setHours(end_date_time.getHours() - daylightSavingTime);
                       const difference = end_date_time.getTime() - start_date_time.getTime();
                       const resultInMinutes = Math.round(difference / 60000);
-
-                      const date_time = await this.getDateFormat(start_date_time);
-
+      
+                      const date_time = await this.getDateFormat(booking.startTime);
+      
                       const data = {
                           service_name: booking.service,
                           service_duration: resultInMinutes + ' minutes',
                           id: booking.id,
                           date_time,
-                          start_time: start_date_time,
-                          endTime: end_date_time,
+                          start_time: this.subtractHourFromDate(booking.startTime),
+                          endTime: this.subtractHourFromDate(booking.endTime),
                           paymentReceipt: booking.paymentReceipt,
                           compare_date_time: booking.endTime.split('T')[0]
                       };
-
+      
                       this.ALL_BOOKING_LIST.push(data);
-                      console.log("this is data",data);
-
                   }
                 }
 
