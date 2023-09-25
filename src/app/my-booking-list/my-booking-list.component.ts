@@ -78,8 +78,16 @@ export class MyBookingListComponent implements OnInit {
                       console.log("this is first booking",booking);
                       const start_date_time = new Date(booking.startTime);
                       const end_date_time = new Date(booking.endTime);
-                      start_date_time.setHours(start_date_time.getHours() - 1);
-                      end_date_time.setHours(end_date_time.getHours() - 1);
+                      const october29th = new Date('2023-10-29T23:59:59Z');
+                      let daylightSavingTime;
+                      if (start_date_time > october29th) {
+                        daylightSavingTime = 0;
+                      }
+                      else {
+                        daylightSavingTime = 1;
+                      }
+                      start_date_time.setHours(start_date_time.getHours() - daylightSavingTime);
+                      end_date_time.setHours(end_date_time.getHours() - daylightSavingTime);
                       const difference = end_date_time.getTime() - start_date_time.getTime();
                       const resultInMinutes = Math.round(difference / 60000);
 
