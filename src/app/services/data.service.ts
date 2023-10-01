@@ -429,6 +429,44 @@ export class DataService {
     return true
   }
 
+  setCookie(name, value, daysToExpire) {
+    const date = new Date();
+    date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+    const expires = 'expires=' + date.toUTCString();
+    document.cookie = name + '=' + value + ';' + expires + ';path=/v';
+}
+
+ getCookie(name) {
+  const cookies = document.cookie.split('; ');
+  for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === name) {
+          return cookie[1];
+      }
+  }
+  return null; // Return null if the cookie is not found
+}
+
+  deleteCookie(name) {
+    // sets cookies expire date to the past so it expires and deletes
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
+
+clearCacheForUrl(url: string) {
+  // Append a unique query parameter to the URL to force cache invalidation
+  const cacheBuster = Date.now(); // You can use any unique value here
+  const cacheBustedUrl = url + '?cache=' + cacheBuster;
+
+  // Create a new Image object with the cache-busted URL
+  const img = new Image();
+  img.src = cacheBustedUrl;
+
+  // This will trigger a request to the URL, effectively invalidating the cache
+  img.onload = () => {
+    console.log('Cache cleared for', url);
+  };
+}
+
   async setStaffList (data: any) {
 
     return await localStorage.setItem(this.STAFF_LIST_KEY, JSON.stringify(data));
@@ -440,8 +478,7 @@ export class DataService {
   }
 
   async setStaffBookingList (data: any) {
-
-    return await localStorage.setItem(this.STAFF_BOOKING_LIST_KEY, JSON.stringify(data));
+    let booking_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
   }
 
   async getStaffList () {
@@ -466,7 +503,9 @@ export class DataService {
 
   async getStaffBookingList () {
 
-    let booking_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+    let booking_list = await this.getCookie(this.STAFF_BOOKING_LIST_KEY);
+    console.log(booking_list);
+
     return await booking_list == undefined || booking_list == null ? [] :  JSON.parse(booking_list);
   }
 
