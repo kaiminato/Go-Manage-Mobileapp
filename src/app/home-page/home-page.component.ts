@@ -50,11 +50,6 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Get the current URL
-    const currentUrl = window.location.href;
-    this.dataService.clearCacheForUrl(currentUrl); // Replace with the URL or resource you want to clear from cache
-    localStorage.clear();
-    sessionStorage.clear();
   }
 
   async ionViewWillEnter () {

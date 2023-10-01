@@ -54,32 +54,25 @@ export class BookingSummaryComponent implements OnInit {
   async ionViewWillEnter() {
 
     const customer_email = await this.dataService._getUserEmail();
-    console.log("customer_email",customer_email);
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
       this.stripe = Stripe(owner_data.stripe_publishable_key);
       this.STRIPE_FLAG = owner_data.stripe;
     }
-    console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
     // await this.apiData._updateUserId();
     await this.auth.getUser().subscribe(
       async (response: any) => {
-        console.log("response",response);
         // Get auth data
         if(response.hasOwnProperty('email')){
           this.EMAIL = response.email;
-          console.log("this.EMAIL",response.email);
         }
         else {
           this.EMAIL = await this.dataService._getUserEmail();
-          console.log("local storage",this.EMAIL);
         }
 
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
-            console.log("this is user_info", user_info);
             this.userGMID = user_info.userGMID;
-            console.log("this is userGMID", this.userGMID);
             if ( user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == ''
             ) {
               this.presentAlert(this.EMAIL);
@@ -101,7 +94,6 @@ export class BookingSummaryComponent implements OnInit {
       this.PAYMENT_MODEL_OPEN = true;
     }
     else {
-    console.log("confirm booking")
       this.saveBooking();
     }
   }
@@ -135,7 +127,6 @@ export class BookingSummaryComponent implements OnInit {
 
     let [start_time, am_pm] = this.BOOKINGS_DETAILS.timing_id.time.split(' ');
 
-      console.log('start_time--' , start_time , 'am_pm--' , am_pm);
 
     this.STARTING_TIME = `${start_time}${am_pm}`;
 
@@ -189,7 +180,6 @@ export class BookingSummaryComponent implements OnInit {
     };
 
     this.card = elements.create('card', { style: style, hidePostalCode: true });
-    //console.log(this.card);
     this.card.mount('#card-element');
 
     this.card.addEventListener('change', event => {
@@ -204,15 +194,12 @@ export class BookingSummaryComponent implements OnInit {
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', event => {
       event.preventDefault();
-      //console.log(event)
 
       this.stripe.createToken(this.card).then(result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          console.log('result' , result);
-          console.log('token' , result.token.id);
           this._createPayment(result.token.id);
         }
       });
@@ -227,15 +214,11 @@ export class BookingSummaryComponent implements OnInit {
       formData.append('amount' , amount.toString());
       formData.append('transactionType' , String(1));
       formData.append('description' , 'Booking Deposit Payment');
-      console.log('this is email', this.EMAIL);
-      console.log('token----' , token);
-      console.log('amount', amount.toString());
       await this.apiData.presentLoading();
 
       await (await this.apiData._createPayment(formData)).subscribe(
         async (response: any) => {
 
-          console.log('stripe respnose' , response);
           await this.apiData.dismiss();
           if (response.id) {
             this.RECIPT_URL = response.receiptUrl;
@@ -251,7 +234,6 @@ export class BookingSummaryComponent implements OnInit {
           }
         },
         async (error: any) => {
-          console.log("error",error);
           await this.apiData.dismiss();
           await this.apiData.presentAlertWithHeader("Payment Failed","Something Went Wrong. Please try later.");
           // alert('server error');

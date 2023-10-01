@@ -477,9 +477,20 @@ clearCacheForUrl(url: string) {
     return await localStorage.setItem(this.SERVICE_LIST_KEY, JSON.stringify(data));
   }
 
-  async setStaffBookingList (data: any) {
-    let booking_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
+  async setStaffBookingList(data: any) {
+    // Assuming each item has a 'timestamp' property in the format '2022-07-08T13:00:00'
+    const filteredData = data.filter((item: any) => {
+      const timestamp = new Date(item.startTime).getTime(); // Parse the timestamp and convert to milliseconds
+      const currentTime = new Date().getTime(); // Get the current time in milliseconds
+      const hoursInMilliseconds = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
+  
+      // Filter out data older than 48 hours
+      return currentTime - timestamp <= hoursInMilliseconds;
+    });
+
+    await localStorage.setItem(this.STAFF_BOOKING_LIST_KEY, JSON.stringify(filteredData));
   }
+  
 
   async getStaffList () {
 
@@ -503,9 +514,7 @@ clearCacheForUrl(url: string) {
 
   async getStaffBookingList () {
 
-    let booking_list = await this.getCookie(this.STAFF_BOOKING_LIST_KEY);
-    console.log(booking_list);
-
+    let booking_list = await localStorage.getItem(this.STAFF_BOOKING_LIST_KEY);
     return await booking_list == undefined || booking_list == null ? [] :  JSON.parse(booking_list);
   }
 

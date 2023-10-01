@@ -35,7 +35,6 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomePageComponent,
-    canActivate: [ClearCacheGuard],
     //canActivate: [AuthGuard]
   },
   {
@@ -146,7 +145,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    canActivate: [ClearCacheGuard],
     //canActivate: [AuthGuard]
   },
   // {
