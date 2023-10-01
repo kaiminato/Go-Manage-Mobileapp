@@ -85,11 +85,6 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
 
           if (staff_rota.length == 0) continue;
-          console.log('staff_rota---' , staff_rota)
-
-          let staff_date_booked_data = this.BOOKING_LIST.filter ( data => data.employeeId == staff.employee_id && data.startTime.includes(booking_data.date))
-
-          // console.log('staff_date_booked_data----' , staff_date_booked_data);
 
           let shift_list = await this._getShiftList(staff.employee_id , selecetd_date);
           let total_duration = 0;
@@ -99,7 +94,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
           let starting_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
           let ending_date_time = new Date(`${selecetd_date}T${selecetd_shift.value}`);
 
-          ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1)
+          ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1);
           ending_date_time = new Date(ending_date_time);
 
           let is_passed = true;
