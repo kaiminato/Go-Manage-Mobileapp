@@ -66,11 +66,9 @@ export class ProfileComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
-        console.log("response",response);
         let userEmail;
         if(response.hasOwnProperty('email')){
           userEmail = response.email;
-          console.log("userEmail",userEmail);
         }
         else{
           userEmail = await this.dataService._getUserEmail();
@@ -82,7 +80,6 @@ export class ProfileComponent implements OnInit {
           async (user_info: any) => {
 
             // await this.apiData.dismiss();
-            console.log("user_info",user_info);
             this.RESPONSE = user_info;
             let user_details = user_info;
 
@@ -124,7 +121,6 @@ export class ProfileComponent implements OnInit {
             this.USERGMID = user_details.userGMID;
             this.PHONE = user_details.phoneMobile;
             this.BIRTHDAY = user_details.dateOfBirth;
-            console.log("user_details.gender",user_details.gender);
             if(user_details.gender){
               this.GENDER = user_details.gender.toUpperCase();
             }
@@ -214,7 +210,6 @@ export class ProfileComponent implements OnInit {
     //   HOME_LOCATION: this.HOME_LOCATION
     // }
     await this.dataService._setUserEmail(this.EMAIL);
-    console.log("this.EMAIL",this.EMAIL);
     let data = {
       email: this.EMAIL,
       givenName: this.FIRST_NAME,
