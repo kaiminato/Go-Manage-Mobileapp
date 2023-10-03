@@ -1,24 +1,75 @@
 ion-content {
-
-    ion-card {
-        margin-top: 20%;
-        background: #047473;
-        color: #fff;
-        height: 50%;
-        
-        ion-card-title {
-            color: #fff;
-        }
-        
-        ion-card-subtitle {
-            color: #fff;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        ion-textarea {
-            background-color: #fff;
-            color: #000;
-        }
+  position: relative;
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .page-title {
+    border: 2px solid;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 10px;
+    h2{
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-weight: bold;
     }
+  }
+  .card-list {
+    background-color: white;
+    border-radius: 25px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+  }
+  ion-card {
+      ion-card-subtitle {
+      margin-top: 10px;
+      font-size: 20px;
+      }
+      ion-card-content {
+        margin: 10px;
+        border-radius: 25px;
+      }
+      ion-textarea {
+        color: #000;
+        font-size: large;
+        border-radius: 15px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+      .star-icons{
+        display: flex;
+        justify-content: center;
+        ion-icon{
+          color: #c2c0bc;
+          font-size: 30px;
+        }
+        ion-icon.active{
+          color: #ecbb19;
+          font-size: 30px;
+        }
+      }
+  }
+  .btn_checkout {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    --border-radius: 20px !important;
+  }
 }

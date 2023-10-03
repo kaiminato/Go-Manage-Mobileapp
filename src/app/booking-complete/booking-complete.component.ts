@@ -10,20 +10,22 @@ import { ImageService } from '../services/image.service';
 export class BookingCompleteComponent implements OnInit {
 
   NAME: string = '';
+  RECIEPT_URL: string = ""
   constructor(
     public  imageService: ImageService,
-    private dataService: DataService,
+    public dataService: DataService,
     ) { }
 
   ngOnInit() {}
 
   async ionViewWillEnter (){
-
+    // this.dataService._removeUserEmail();
     let data = await this.dataService.getInitialBookingdata();
+    this.RECIEPT_URL = data.reciept_url;
     let staff_details = await this.dataService.getStaffDetail(data.staff_id);
-
     //this.NAME = `${staff_details[0].firstName} ${staff_details[0].lastName}`
-    this.NAME = 'Jade Amber'
+    let owner_details = await this.dataService._getOwnerData();
+    this.NAME = owner_details != '' ? owner_details['site_name'] : '';
   }
 
   async ionViewWillLeave() {

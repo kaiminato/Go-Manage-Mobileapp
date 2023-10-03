@@ -1,19 +1,39 @@
 ion-content {
-
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .card-list {
+    background-color: white;
+    border-radius: 25px;
+    margin: 20px;
+    padding: 5px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+  }
+  ion-button.details_no_border {
+    font-size: 17px;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    --border-radius: 7px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
     .select-text {
-
-        color: #047473;
         margin-top: 16px;
         font-weight: bold;
     }
 
     .select-dilivery-type {
-
         ion-card {
-
-            border: 2px solid #047473;
             height: 160px;
-            color: #047473;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
@@ -30,14 +50,141 @@ ion-content {
                 div {
                     height: 80%;
                     //border: 1px solid;
-                    
+
                     padding: 25px 0;
                 }
             }
         }
+    }
+    .modal {
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      -webkit-animation-name: fadeIn; /* Fade in the background */
+      -webkit-animation-duration: 0.4s;
+      animation-name: fadeIn;
+      animation-duration: 0.4s
+    }
 
-        .active {
-            border: 5px solid #047473 !important;
-        }
+    .modal-content {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 45%;
+      left: 28%;
+      -webkit-animation-name: slideIn;
+      -webkit-animation-duration: 0.4s;
+      animation-name: slideIn;
+      animation-duration: 0.4s;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border: transparent !important;
+    }
+
+    .close {
+      position: absolute;
+      top: 0px;
+      right: 12px;
+      color: white;
+      // float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal-header {
+      padding: 2px 16px;
+      color: white;
+      border: transparent !important;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .modal-body {
+      border: transparent !important;
+    }
+
+    .online-payment-txt{
+      border-radius: 5px;
+      border: 2px solid white;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      margin-top: 28px;
+    }
+    .total-payment-amount {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .welcome-card{
+      margin: 0px;
+      border-radius: 20px;
+    }
+    .modal-footer {
+      padding: 2px 16px;
+      color: white;
+      border: transparent !important;
+    }
+    .confirm-div{
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+    }
+    .Confirm {
+      --border-radius: 20px;
+      width: 80%;
+      ion-text{
+        font-weight: bold;
+      }
     }
 }
+
+
+
+/* Add Animation */
+@-webkit-keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@media screen and (max-width: 480px) {
+  .modal-content {
+
+      width: 100% !important;
+      left: unset !important;
+
+  }
+
+
+}
+

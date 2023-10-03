@@ -1,3 +1,4 @@
+import { Platform } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from '../services/image.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,13 +29,14 @@ export class MakeABookingComponent implements OnInit {
 
   CATEGORY_LIST: any = [];
   SELECTED_SERVICES: any = [];
-
+  isIOS: boolean;
   constructor(
     public imageService: ImageService,
     private router: Router,
     private apiData: ApiDataService,
-    private dataService: DataService,
-    private activateRoute: ActivatedRoute
+    public dataService: DataService,
+    private activateRoute: ActivatedRoute,
+    private platform: Platform
    ) { }
 
   test (){
@@ -42,11 +44,17 @@ export class MakeABookingComponent implements OnInit {
   }
   ngOnInit() {
 
-    
+
   }
 
-  async ionViewWillEnter (){
-
+  async ionViewWillEnter(){
+    if (this.platform.is('ios')) {
+      this.isIOS = true;
+      // do something for iOS
+    } else if (this.platform.is('android')) {
+      this.isIOS = false;
+      // do something for Android
+    }
     this.STAFF_LIST = [];
     this.SERVICE_LIST = [];
 
@@ -54,7 +62,7 @@ export class MakeABookingComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-        //console.log('params',params.hasOwnProperty('id') ? params : ''); // { orderby: "price" }
+
       }
     );
 
@@ -67,6 +75,7 @@ export class MakeABookingComponent implements OnInit {
     this.IS_STAFF = true;
 
     await this.getStaffList();
+    await this._getStaffBookingList();
   }
 
   async  getStaffList (){
@@ -81,11 +90,10 @@ export class MakeABookingComponent implements OnInit {
         await this.getServiceList();
         if (response.length > 0){
 
-          this.STAFF_LIST = response
-          //console.log('this.STAFF_LIST----' , this.STAFF_LIST)
+          this.STAFF_LIST = response;
           await this.dataService.setStaffList(response)
         }
-        //console.log(response);
+
       },
       async (error: any) => {
 
@@ -106,12 +114,10 @@ export class MakeABookingComponent implements OnInit {
 
         if (response.length > 0){
 
-          //console.log('response', response)
-
           for (let service of response)  service.is_checked = false; // Add by default not selected;
-          
+
           this.SERVICE_LIST = response;
-        
+
           let categorie_ids = [...new Set(response.map(data => data.categoryId))];
           this.CATEGORY_LIST = [];
 
@@ -145,18 +151,18 @@ export class MakeABookingComponent implements OnInit {
       }
     );
 
-    
+
   }
 
   async setPreFilledData () {
 
-    
+
     let get_pre_filled_data = await this.dataService.getInitialBookingdata();
 
     if (get_pre_filled_data != '') {
 
       this.IS_STAFF = get_pre_filled_data.booking_type == this.dataService.BOOKING_WITH_STAFF ? true : false;
-      
+
       if (get_pre_filled_data.booking_type == this.dataService.BOOKING_WITH_SERVICE) {
         for (let service of get_pre_filled_data.servises) {
 
@@ -165,40 +171,54 @@ export class MakeABookingComponent implements OnInit {
           for (let category of this.CATEGORY_LIST) {
 
             if (category.category_id == service.categoryId) {
-              
+
               category.is_open = true;
-              
+
               for(let categorie_service of category.services)  {
-               
+
                 if (categorie_service.id == service.id) {
-                 
+
                   categorie_service.is_checked =  true ;
                 }
-                
-              } 
-              
+
+              }
+
             }
           }
 
-          
+
         }
 
-        //console.log('qqqqqqqqqqq',this.CATEGORY_LIST)
         await this.selectedServicesDetail()
 
-        
+
       } else {
         this.SELECTED_SERVICES = []
         this.TOTAL_SERVICE_SELECTED = 0;
         this.TOTAL_PRICE = 0
       }
     }
-    // console.log('setPreFilledData', get_pre_filled_data)
-    // console.log('sevices++++', this.CATEGORY_LIST)
+  }
+
+
+  async _getStaffBookingList (){
+
+    (await this.apiData.getStaffBookingList()).subscribe(
+      (response: any) => {
+
+
+        this.dataService.setStaffBookingList(response)
+
+      },
+      (error: any) => {
+        alert(JSON.stringify(error))
+      }
+    );
   }
 
   async SelectStaff (staff_id: any) {
-
+    console.log("selectstaff",staff_id);
+    console.log("STAFF_LIST",this.STAFF_LIST);
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
     initial_data.staff_id = staff_id;
@@ -211,7 +231,7 @@ export class MakeABookingComponent implements OnInit {
   changeCategoryStatus (service_id: any , status){
 
     this.CATEGORY_LIST[service_id].is_open = !status ;
-    
+
   }
 
   changeServiceStatus (service_id: any ){
@@ -230,9 +250,9 @@ export class MakeABookingComponent implements OnInit {
   }
 
   async selectedServicesDetail (){
-    
+
     let selected_service_details = await this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
-    //console.log('doinng-------', this.SELECTED_SERVICES , selected_service_details)
+
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
@@ -243,11 +263,11 @@ export class MakeABookingComponent implements OnInit {
       }
     }
 
-    this.dataService.setSelectedServicesInBooking(selected_service_details);  
+    this.dataService.setSelectedServicesInBooking(selected_service_details);
   }
 
   async setServicesInBooking () {
-    
+
     let selected_service = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
 
     let initial_data = {... await this.dataService.BOOKING_INITIAL_DATA };
@@ -258,10 +278,9 @@ export class MakeABookingComponent implements OnInit {
     await this.dataService.setInitialBooking(initial_data);
     this.router.navigate(['/select-time-with-service-booking'] ,{ queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } })
   }
-  
+
   navigation() {
 
-    //console.log('back  button is triggered')
     this.router.navigate(['/']);
   }
 

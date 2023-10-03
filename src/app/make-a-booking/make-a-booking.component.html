@@ -1,28 +1,41 @@
-<ion-content>
+
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  </div>
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
-
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " [class]="isIOS  ? 'page-title-ios' : 'page-title-android'">
+    <h2>Make a Booking</h2>
+  </ion-card>
   <ion-grid class="request-tabs">
     <ion-row>
-      <ion-col size="6" [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
+      <ion-col size="6" style="color : {{this.dataService.TEXT_COLOR}}; " [class]="IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = true;">
 
-        <div>
-          <ion-text class="app-text-color ion-margin-start">Staff</ion-text>
+        <div >
+          <ion-text  class="app-text-color ion-margin-start">Staff</ion-text>
         </div>
       </ion-col>
 
+      <ion-col>
+      </ion-col>
+      <!-- <ion-col size="6" style="color : {{this.dataService.TEXT_COLOR}}; " [class]=" !IS_STAFF  ? 'active' : 'inactive'" (click)="IS_STAFF = false;">
+        <div>
+        <ion-text  class="app-text-color ion-margin-start">Services</ion-text>
+        </div>
+
+      </ion-col> -->
     </ion-row>
   </ion-grid>
 
-  <div class="list">
-    <ion-list lines="none" *ngIf="IS_STAFF">
-      <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false"
-        (click)="SelectStaff(value.employee_id)">
+  <div class="list card-list" *ngIf="IS_STAFF">
+    <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
+      <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false" style="border-bottom: 1px solid {{this.dataService.TEXT_COLOR}} !important; color: {{this.dataService.TEXT_COLOR}} !important"
+        (click)="SelectStaff(value.employee_id)" >
 
         <ion-thumbnail slot="start">
           <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
         </ion-thumbnail>
-        <ion-label>
+        <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
           <h3>{{ value.firstName }} {{ value.lastName }}</h3>
         </ion-label>
 
@@ -30,54 +43,42 @@
     </ion-list>
   </div>
 
+  <div class="list card-list" [class.ion-hide]="IS_STAFF">
+    <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;"
+      *ngFor="let service of CATEGORY_LIST; let service_index = index" >
 
-  <!-- <ion-list lines="none" *ngIf="!IS_STAFF">
-    <ion-item button 
-      *ngFor="let value of this.SERVICE_LIST" 
-      class="staff_list" 
-      detail="false" >
-
-        <ion-thumbnail slot="start">
-          <img [src]="value.image">
-        </ion-thumbnail>
-        <ion-label> <h3>{{ value.name }}</h3>  </ion-label>
-      
-    </ion-item>
-  </ion-list> -->
-  <div class="list">
-    <ion-list lines="none" class="ion-margin-start ion-margin-end" [class.ion-hide]="IS_STAFF"
-      *ngFor="let service of CATEGORY_LIST; let service_index = index">
-
-      <ion-item button class="service_detail" detail="false"
-        (click)="changeCategoryStatus(service_index, service.is_open)">
-        <ion-label>
+      <ion-item button class="service_detail" detail="false" style="color : {{this.dataService.TEXT_COLOR}} !important; "
+        (click)="changeCategoryStatus(service_index, service.is_open)" >
+        <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
           <h3>{{ service.category_name }}</h3>
         </ion-label>
-        <ion-text class="service_count">{{ service?.count }} Service </ion-text>
+        <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; " class="service_count">{{ service?.count }} Service </ion-text>
         <ion-icon [name]=" service.is_open ? 'chevron-down-outline' : 'chevron-forward-outline' " class="toggle">
         </ion-icon>
       </ion-item>
 
-      <ion-grid *ngIf="service.is_open">
+      <ion-grid *ngIf="service.is_open" class="service_order_list_grid">
         <ion-row *ngFor="let service_detail of service.services" class="service_order_list">
-          <ion-col size="1"></ion-col>
-          <ion-col size="11">
+          <!-- <ion-col size="1"></ion-col> -->
+          <ion-col size="12">
 
-            <ion-item class="service_detail ion-no-padding" detail="false">
+            <ion-item class="service_detail ion-no-padding" detail="false" style="color : {{this.dataService.TEXT_COLOR}} !important; ">
               <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
                 <ion-icon name="information-circle-outline" style="color: black;"></ion-icon>
               </ion-button>
 
               <ion-popover trigger="top-center-{{service_detail.id}}" side="right" size="auto" alignment="center">
-                <ng-template>
-                  <ion-content class="ion-padding"> {{ service_detail.serviceDescription }} </ion-content>
+                <ng-template >
+                  <ion-content class="ion-padding" >
+                    <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; ">{{ service_detail.serviceDescription }} </ion-text>
+                  </ion-content>
                 </ng-template>
               </ion-popover>
-              <ion-label>
+              <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
                 <h3>{{ service_detail.serviceName }}</h3>
                 <ion-text class="service_count"> {{ service_detail.servicePrice | currency: 'EUR'}} </ion-text>
                 <ion-checkbox slot="end" (ionChange)="changeServiceStatus( service_detail.id)"
-                  [checked]="service_detail.is_checked"></ion-checkbox>
+                  [checked]="service_detail.is_checked" style="--background-checked: {{this.dataService.BUTTON_COLOR}} !important"></ion-checkbox>
               </ion-label>
 
             </ion-item>
@@ -91,13 +92,19 @@
 
   <ion-grid *ngIf="!IS_STAFF">
     <ion-row class="book_now">
-      <ion-col size="6" class="ion-text-center service_selected_price">
-        <div>{{ TOTAL_SERVICE_SELECTED }} service selected</div>
+      <ion-col size="6" class="ion-text-center service_selected_price" style="color : {{this.dataService.TEXT_COLOR}} !important; ">
+        <div>{{ TOTAL_SERVICE_SELECTED }} selected</div>
         <div>{{ TOTAL_PRICE | currency: 'EUR'}}</div>
       </ion-col>
       <ion-col size="6">
-        <ion-button expand="block" (click)="setServicesInBooking()" [disabled]="TOTAL_SERVICE_SELECTED == '0'">
-          Book now
+        <ion-button
+          expand="block"
+          (click)="setServicesInBooking()"
+          style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
+          >
+        <!-- [disabled]="TOTAL_SERVICE_SELECTED == '0'" -->
+
+          <ion-text>Book now</ion-text>
           <span class="material-symbols-outlined booking-arrow">
             arrow_forward
           </span>

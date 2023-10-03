@@ -1,16 +1,50 @@
+
 ion-content {
-
+    // background-color: white;
+    // --background: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
+      position: relative;
+      // height: 100vh;
+    .green-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 40%;
+      width: 100%;
+      background: rgba(2,127,123,1);
+      z-index: -1;
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
     .app-logo {
+        height: 140px;
+        border-radius: 20px;
+        background-color: white;
+        margin-left: 30px;
+        margin-right: 30px;
+        ion-img {
+          margin-left: auto;
+          margin-right: auto;
+          width: 113px;
+          height: auto;
+        }
+    }
 
-        height: 25%;
+    .card-list {
+      background-color: white;
+      border-radius: 25px;
+      margin: 20px;
+      padding: 5px;
+      box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
     }
 
     ion-card {
-
-        background-color: #047473;
-        margin-left: 10px;
-        margin-right: 10px;
+        // background-color: rgba(2,127,123,1);
         cursor: pointer;
+        border-radius: 0px;
+        height: 125px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         ion-icon {
             font-size: 50px;
@@ -20,20 +54,36 @@ ion-content {
         ion-text {
             color: #fff;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         ion-img {
             margin-left: auto;
             margin-right: auto;
-            width: 90px;
+            width: 50px;
+            height: 50px;
         }
     }
 
-    .some_space {
-        margin-top: 30px;
+    .right_card{
+        // background-color: #0d908b !important;
     }
-
+    .first_row {
+      .left_card{
+        border-top-left-radius: 20px;
+      }
+      .right_card{
+        border-top-right-radius: 20px;
+      }
+    }
+    .last_row {
+      .left_card{
+        border-bottom-left-radius: 20px;
+      }
+      .right_card{
+        border-bottom-right-radius: 20px;
+      }
+    }
     .material-symbols-outlined {
         font-size: 50px;
         color: #fff;
@@ -43,6 +93,4 @@ ion-content {
         'GRAD' 0,
         'opsz' 48
     }
-
-    
 }

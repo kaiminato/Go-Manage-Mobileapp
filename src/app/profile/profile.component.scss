@@ -1,49 +1,120 @@
 ion-content {
-
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .sec-green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 98px;
+    width: 100%;
+    z-index: 0;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+  }
+  .page-title {
+    border: 2px solid;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    h2{
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+  }
+  .card-list {
+    border-radius: 25px;
+    margin: 20px;
+    padding: 10px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    ion-list {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
+  .card-content {
+    position: relative;
+    background-color: white;
+    border-radius: 25px;
+    border: 1px solid white;
+    ion-list {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
     .scroll-bar {
         overflow: scroll;
         max-height: 92%;
 
+        .user-name-div {
+          display: flex;
+          padding: 10px 5px;
+          background-color: white;
+          border-radius: 26px;
+          margin: 15px;
+          height: 49px;
+        }
         .user-name {
-            padding: 10%;
-    
             ion-icon {
                 cursor: pointer;
             }
             ion-text {
-                //border: 2px solid;
-                padding: 5%;
-                border-radius: 50%;
-                background-color: #f2f2f2;
-                font-weight: bold;
+              color: #fff;
+              border-radius: 50%;
+              font-weight: bold;
+              font-size: 25px;
+              padding: 8px;
             }
         }
-    
-        .divider {
-            width: 100%;
-            height: 12px;
-            background-color: #f2f2f2;
-        }
-    
-        ion-list {
-    
-            //margin-top: -9px;
-            ion-item {
-    
-            
-                ion-label {
-                    color: grey;
-                }
+        .user-name-txt {
+          font-weight: bold;
+          margin-left: 10px;
+          font-size: 23px;
+      }
+      .profile-form{
+        ion-input {
+          border-radius: 5px;
+          margin-top: 3px;
 
-                ion-input {
-                    color: #000;
-                }
-        
-                ion-text {
-                    font-size: 95%;
-                }
-            }
+          input {
+            padding-left: 5px !important;
+          }
         }
+        ion-select {
+          border-radius: 5px;
+          margin-top: 3px;
+        }
+      }
+      .save-btn-div{
+        margin-top: 8px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: center;
+      }
+      .save-btn {
+        --border-radius: 20px;
+        width: 60%;
+        ion-text{
+          font-weight: bold;
+          font-size: 20px;
+        }
+      }
     }
 
     span.edit_icon {
@@ -72,8 +143,8 @@ ion-content {
         top: 10px ;
         right: 18px ;
     }
-    
-}    
+
+}
 
 @media screen and (max-width: 786px) {
     span.edit_icon {
@@ -81,21 +152,21 @@ ion-content {
         right: -3px !important;
     }
 }
-   
+
 @media screen and (max-width: 580px) {
     span.edit_icon {
         top: -9px !important;
         right: -4px !important;
     }
-} 
-   
+}
+
 @media screen and (max-width: 412px) {
       span.edit_icon {
         position: absolute;
         background: #ccc;
         line-height: 21px !important;
         height: 21px !important;
-        width: 21px !important; 
+        width: 21px !important;
         border-radius: 100%;
         color: #fff;
         display: flex;

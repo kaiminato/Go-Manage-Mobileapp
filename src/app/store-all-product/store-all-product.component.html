@@ -1,94 +1,96 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  </div>
+  <div class="card-list">
+    <!-- search bar and cart icon -->
+    <ion-grid class="search-cart-row">
+      <ion-row>
 
-  <!-- search bar and cart icon -->
-  <ion-grid class="search-cart-row">
-    <ion-row>
-      
-      <ion-col size="10" class="search-bar">
-        <ion-input placeholder="Search any product"></ion-input>
-        <!-- <ion-searchbar placeholder="Search here" color="light"></ion-searchbar> -->
-      </ion-col>
-      
-      <ion-col size="2" class="cart">
-        
-        <!-- <ion-tab-button class="ion-float-start">
-          <ion-icon name="cart-outline"></ion-icon>
-          <ion-badge color="primary">8</ion-badge>
-        </ion-tab-button>       -->
+        <ion-col size="10" class="search-bar">
+          <ion-input placeholder="Search any product" (keyup)="onSearch($event.target.value)"></ion-input>
+          <!-- <ion-searchbar placeholder="Search here" color="light"></ion-searchbar> -->
+        </ion-col>
 
-        <div class="cart-div" [routerLink]="['/cart-detail']">
-          <ion-icon name="cart-outline" ></ion-icon>
-          <ion-badge color="dark">8</ion-badge>
-        </div>
-      </ion-col>
+        <ion-col size="2" class="cart">
+          <div class="cart-div" [routerLink]="['/cart-detail', {productIdArr: productIdArr}]">
+            <ion-icon name="cart-outline" ></ion-icon>
+            <ion-badge color="dark">{{cart_num}}</ion-badge>
+          </div>
+        </ion-col>
 
-    </ion-row>
-  </ion-grid>
+      </ion-row>
+    </ion-grid>
 
-  <!-- Tags html -->
+    <!-- Tags html -->
 
-  <ion-grid class="tags-category ion-no-padding">
-    <ion-row>
-      <ion-col size="12">
-        <ion-slides pager="false" [options]="slideOpts" #mySlider >
-          <ion-slide 
-            *ngFor="let category of CATEGORY_TAGS;let i = index"
-            >
-         
-              <ion-badge 
-                [class.active]="category.status" 
-                slot="end"
-                (click)="selectCategory(i)"
-                >
-                  <b>{{category.name}} </b>
-              </ion-badge>
-         
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row>
+    <ion-grid class="tags-category ion-no-padding">
+      <ion-row>
+        <ion-col size="12">
+          <ion-slides pager="false" [options]="slideOpts" #mySlider >
+            <ion-slide
+              *ngFor="let category of CATEGORY_TAGS;let i = index"
+              >
+                <ion-badge
+                  [class.active]="category.status"
+                  [ngStyle]="{'background-color': category.status ? this.dataService.TEXT_COLOR : '#e6e7e9'}"
+                  slot="end"
+                  (click)="selectCategory(i)"
+                  >
+                    <b>{{category.name}} </b>
+                </ion-badge>
 
-    
-  </ion-grid>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
 
-  <!-- Show selected categoy name -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <ion-text>
-          <b>{{ SELECTED_CATEGORY}}</b>
-        </ion-text>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 
-  <!-- Show products -->
-  <ion-grid class="all-products ion-no-padding">
-    <ion-row class="ion-no-padding">
-      <ion-col size="6" class="ion-no-padding" *ngFor="let product of PRODUCT_LIST">
-        <ion-card class="ion-no-padding">
-          <ion-card-content class="">
-            <ion-img [src]="product.image" [routerLink]="['/product-detail/', product.id]"></ion-img>
-            
-            <div class="description-rating">
-              <ion-text class="description"><b> {{ product.description }} </b></ion-text>
-              <ion-text class="rating"><ion-icon name="star"></ion-icon> {{ product.rating }} </ion-text>
-            </div>
+    </ion-grid>
 
-            <div class="price-cart">
-              <div class="price"><ion-text><b> {{ product.price | currency: 'EUR'}} </b></ion-text></div>
-              <div class="add-cart"><ion-button class="ion-float-end" >ADD TO CART</ion-button></div>
-              
-              
-            </div>
+    <!-- Show selected categoy name -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <b>{{ SELECTED_CATEGORY}}</b>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <!-- Show products -->
+    <ion-grid class="all-products ion-no-padding">
+      <ion-row class="ion-no-padding">
+        <ion-col size="6" class="ion-no-padding" *ngFor="let product of PRODUCT_LIST">
+          <ion-card class="ion-no-padding">
+            <ion-card-content class="">
+              <ion-img [src]="product.image" [routerLink]="['/product-detail/', product.id]"></ion-img>
 
+              <div class="description-rating">
+                <ion-text class="description" ion-text-wrap><b> {{ product.name }} </b></ion-text>
+                <ion-text class="description" ion-text-wrap><ion-label>{{ product.description }}</ion-label> </ion-text>
+                <!-- <ion-text class="rating"><ion-icon name="star"></ion-icon> {{ product.rating }} </ion-text> -->
+              </div>
+
+              <div class="price-cart">
+                <div class="price"><ion-text><b> {{ product.price | currency: 'EUR'}} </b></ion-text></div>
+                <div class="add-cart" [class.active]="product.isActive" (click)="addCart(product.id)">
+                  <ion-icon name="add-outline"
+                   [ngStyle]="{
+                    'background-color': product.isActive ? this.dataService.BUTTON_COLOR : 'white',
+                   'color': product.isActive ? 'white' : this.dataService.BUTTON_COLOR}"
+                   class="ion-float-end">
+                  </ion-icon>
+                </div>
+              </div>
+
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
 
 <app-footer></app-footer>

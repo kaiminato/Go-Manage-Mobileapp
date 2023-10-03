@@ -1,6 +1,6 @@
 ion-header {
 
-    ion-toolbar { 
+    ion-toolbar {
 
         .header-text {
             margin-top: 10px;
@@ -14,7 +14,7 @@ ion-header {
             --color: #fff;
             margin-top: -10px;
         }
-        --background: #047473;
+        --background: transparent;
         .material-symbols-outlined {
             font-size: 35px;
             color: #fff;
@@ -25,5 +25,5 @@ ion-header {
             'opsz' 48
         }
     }
-    
+
 }

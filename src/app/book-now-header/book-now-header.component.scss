@@ -1,6 +1,6 @@
 ion-header {
 
-    ion-toolbar { 
+    ion-toolbar {
 
         .header-text {
             margin-top: 10px;
@@ -8,7 +8,7 @@ ion-header {
             font-weight: bold;
         }
 
-        --background: #047473;
+        --background: transparent;
 
         .back {
             padding-top: 4px;
@@ -20,6 +20,8 @@ ion-header {
             height: 1px;
             top: 15px;
             margin-top: 7px;
+            margin-left: -5px;
+            margin-right: -16px;
         }
 
         .date-time {
@@ -49,7 +51,7 @@ ion-header {
             color: #000;
             text-align: center;
             font: 20px Arial, sans-serif;
-    
+
           }
 
         .active {
@@ -74,14 +76,23 @@ ion-header {
         span.headlitop {
             padding: 4px 9px;
             font-size: 14px;
-            background: #047473;
             margin-bottom: 16px !important;
             color: #fff;
-            border-radius: 29px;
+            border-radius: 50%;
             margin-right: 5px;
             margin-left: 3px;
             border: 1px solid white;
         }
+        span.headlitop-checkout {
+          padding: 4px 5px;
+          font-size: 14px;
+          margin-bottom: 16px !important;
+          color: #fff;
+          border-radius: 50%;
+          margin-right: 5px;
+          margin-left: 3px;
+          border: 1px solid white;
+      }
         ul.headli  {
             text-align: center;
             position: relative;
@@ -124,12 +135,15 @@ ion-header {
             margin-bottom: 10px;
             padding-left: 2px;
         }
-        
+
         .ili4th {
-            padding-bottom: 12px;
+            // padding-bottom: 12px;
+            padding: 0px;
+            margin-bottom: 10px;
+            padding-left: 2px;
         }
-       
+
     }
-   
+
 }
 
