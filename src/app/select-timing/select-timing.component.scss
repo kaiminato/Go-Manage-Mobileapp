@@ -1,90 +1,83 @@
 ion-content {
-    
-    .calender_section {
-        ion-icon {
-
-            font-size: 40px;
-        }
-        
-        ion-text {
-            margin-top: 45px;
-            margin-right: -50px;
-            font-size: 13px;
-        }
+    position: relative;
+  .green-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    background: rgba(2,127,123,1);
+    z-index: -1;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+  }
+  .card-list {
+    border-radius: 25px;
+    margin: 20px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    padding-bottom: 10px;
+    background: white;
+  }
+  .page-title {
+    border: 2px solid;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 35px;
+    margin-right: 35px;
+    margin-top: 10px;
+    h2{
+      margin-top: 16px;
+      margin-bottom: 16px;
+      font-weight: bold;
     }
-
+  }
     .month_name {
-
-        margin-top: -30px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
         font-weight: bold;
-        color: #047473;
+        color: white;
+        ion-icon {
+          font-size: 30px;
+        }
+        .current_month_name{
+          margin-left:35px;
+          margin-top: 10px;
+          font-size: 22px;
+        }
     }
 
     .date-range-picker {
-        
+
         //background-color: white;
         margin-top: 10px;
         .active {
-            background-color: #047473;
-            color: #fff !important;
-            border: 1px solid #047473 !important;
+            background-color: #fff;
+            color: #047473 !important;
         }
 
         .disabled {
-            background-color: #cccccc !important;
-            border: 1px solid #047473 !important;
-            ion-text{
-                text-decoration: line-through;
-            }
-            
+            text-decoration: line-through;
         }
         .date-range {
-            border: 2px solid #047473;
-            padding: 15%;
+            padding: 5px;
             font-size: 20px;
-            color: #047473;
+            color: white;
             font-weight: bold;
             width: 90%;
 
             .day-name {
-
+                margin-bottom: 10px;
                 font-size: 15px;
             }
-        
+            ion-text{
+              border-radius: 50%;
+              padding: 3px;
+            }
+
         }
-
-        
-    }
-
-    .request-tabs {
-
-        padding-left: 0px;
-        padding-right: 0px;
-        
-        ion-row {
-            //box-shadow: 0px 3px 3px #bdbcbc;
-            text-align: center;
-            color: #047473;
-            margin-top: 15px;
-
-            div {
-                margin-bottom: 10px;
-            }
-            .active {
-                border-bottom: 4px solid #000;
-                font-weight: bold;
-                
-            }
-    
-            .inactive {
-                //border-bottom: 3px solid #bdbcbc;
-            }
-    
-            ion-text {
-                margin-left: 5px;
-            }
-        }
-        
     }
 
     .all_shift {
@@ -97,7 +90,7 @@ ion-content {
         ion-icon {
             margin-top: 5px;
         }
-        
+
        .time {
             margin-left: 5px;
             font-size: 16px;
@@ -106,22 +99,21 @@ ion-content {
         .active {
             border: 1px solid #047473;
             border-radius: 5px;
-            background-color: #047473;
+            background-color: rgb(35 138 134);
             color: #fff;
             padding: 4px;
         }
 
         .disbaled_shift {
-            background-color: #6e7474 !important;
-            border: 1px solid #047473;
+            border: 1px solid white;
             border-radius: 5px;
-            color: #fff;
+            color: black;
             padding: 4px;
             ion-text{
                 text-decoration: line-through;
             }
         }
-        
+
     }
-    
+
 }

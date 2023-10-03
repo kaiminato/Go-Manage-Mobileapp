@@ -41,7 +41,6 @@ export class StripeTestComponent implements OnInit {
   };
 
   this.card = elements.create('card', { style: style });
-  //console.log(this.card);
   this.card.mount('#card-element');
 
   this.card.addEventListener('change', event => {
@@ -56,16 +55,12 @@ export class StripeTestComponent implements OnInit {
   var form = document.getElementById('payment-form');
   form.addEventListener('submit', event => {
     event.preventDefault();
-    //console.log(event)
-
-    //console.log('this.card---' , this.card)
 
     this.stripe.createSource(this.card).then(result => {
       if (result.error) {
         var errorElement = document.getElementById('card-errors');
         errorElement.textContent = result.error.message;
       } else {
-        //console.log('result' , result);
         alert('result  ----  ' + result.source.id);
         
       }

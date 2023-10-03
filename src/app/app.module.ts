@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
+import { IonicStorageModule } from '@ionic/storage-angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FooterComponent } from './footer/footer.component';
@@ -38,10 +38,11 @@ import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 import { StripeTestComponent } from './stripe-test/stripe-test.component';
 import { environment } from '../environments/environment';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
-const redirectUri = window.location.origin + `/about-us`;
+const redirectUri = window.location.origin + `/contact-us`;
 
-//alert(redirectUri); 
+//alert(redirectUri);
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ const redirectUri = window.location.origin + `/about-us`;
     ProductDetailComponent,
     CartInfoComponent,
     SelectDeliverComponent,
-    StripeTestComponent
+    StripeTestComponent,
+    ContactUsComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +79,7 @@ const redirectUri = window.location.origin + `/about-us`;
     FormsModule,
     ReactiveFormsModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
     AuthModule.forRoot(

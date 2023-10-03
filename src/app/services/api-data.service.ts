@@ -30,6 +30,16 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'services/retrieveServices');
   }
 
+  async _getBusinessOwnerDetails() {
+
+    return await this.http.get(this.apiUrl + 'settings/getSettings');
+  }
+
+  async _getBusinessHoursDetails() {
+
+    return await this.http.get(this.apiUrl + 'settings/getBusinessHours');
+  }
+
   async getStaffBookingList() {
 
     return await this.http.get(this.apiUrl + 'bookings/retrieveBookings');
@@ -52,16 +62,21 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'user/retrieveUserDetails?email=' + email);
   }
 
-  async updateProfile(data: any, email: string) {
+  async updateProfile(data: any) {
 
-    let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
-      .set('Cache-Control', 'no-cache')
-      .set('Content-Type', 'application/json-patch+json')
+    // let header = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
+    //   .set('Cache-Control', 'no-cache')
+    //   .set('Content-Type', 'application/json-patch+json')
 
-    // console.log('header', header)
-    // console.log('dd')
+    // return await this.http.post(this.apiUrl + 'user/updateUserDetails?email=' + email, data, { headers: header, })
+    const headers = {
+      'content-type': 'application/json',
+      'Cache-Control': 'no-cache'
+      };
+    const body = JSON.stringify(data);
 
-    return await this.http.post(this.apiUrl + 'user/updateUserDetails?email=' + email, data, { headers: header, })
+    console.log('body--' , data);
+    return this.http.post(this.apiUrl + 'user/updateUserDetails', body, { 'headers': headers })
   }
 
   async deleteBooking(id: any) {
@@ -89,17 +104,26 @@ export class ApiDataService {
     return await this.http.get(this.apiUrl + 'bookings/removeUsersPendingBooking?userId=' + user_id);
   }
 
+  async _createPayment(data: any) {
+    // let headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.token)
+    //   .set('Cache-Control', 'no-cache');
 
-  async _updateUserId () {
+    // return await this.http.post(this.apiUrl + 'stripe/create-charge', data, { headers: header })
+    const headers = { 'Cache-Control': 'no-cache'  };
+    return this.http.post(this.apiUrl + 'stripe/create-charge', data , { 'headers': headers });
+  }
+
+
+  async _updateUserId() {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
 
         if (response !== undefined) {
-          
-          await this.http.get(this.apiUrl + 'user/validateUserExists?email='+response.email).subscribe(
-            (response: any) => {}, 
-            (error: any) => {}
+
+          await this.http.get(this.apiUrl + 'user/validateUserExists?email=' + response.email).subscribe(
+            (response: any) => { },
+            (error: any) => { }
           );
 
         }
@@ -123,7 +147,7 @@ export class ApiDataService {
       res.present();
 
       res.onDidDismiss().then((dis) => {
-        //console.log("loader dismiss");
+
       })
     });
 
@@ -132,7 +156,7 @@ export class ApiDataService {
   async dismiss() {
 
     this.isLoading = false;
-    return await this.loadingController.dismiss().then(() => console.log('dismissed'));
+    return await this.loadingController.dismiss().then(() => { });
   }
 
 
@@ -146,11 +170,35 @@ export class ApiDataService {
 
       res.present();
       res.onDidDismiss().then((dis) => {
-
-
-        //console.log("alert closed");
       })
     });
 
   }
+  async presentAlertWithHeader(header: any, message: any) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: header,
+      message: message,
+      buttons: ['OK']
+    }).then((res) => {
+
+      res.present();
+      res.onDidDismiss().then((dis) => {
+      })
+    });
+
+  }
+
+  async _getProducts() {
+    return await this.http.get(this.apiUrl + 'product/retrieveProducts');
+  }
+
+  async _getCategories() {
+    return await this.http.get(this.apiUrl + 'product/retrieveProductCategory');
+  }
+  async addReview(data: any) {
+
+    return await this.http.post(this.apiUrl + 'feedBack/addNewFeedback', data);
+  }
+
 }
