@@ -17,7 +17,7 @@ export class HomePageComponent implements OnInit {
   LIST: any = [
     [
       {
-        id: 1 , is_icon: false, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image: ''
+        id: 1 , is_icon: true, name:'today', text: 'Book Now' ,router_link: '/make-a-booking' , image : this.imageService.BOOK_NOW
       },
       {
         id: 2 , is_icon: true, name:'store', text: 'Online Store' , router_link: '/' , image : this.imageService.COMING_SOON
@@ -28,7 +28,7 @@ export class HomePageComponent implements OnInit {
         id: 3 , is_icon: true, name:'card_giftcard', text: 'Buy a voucher',router_link: '/' , image: this.imageService.COMING_SOON
       },
       {
-        id: 4 , is_icon: true, name:'groups', text: 'About us' ,router_link: '/', image: this.imageService.COMING_SOON
+        id: 4 , is_icon: true, name:'groups', text: 'About us' ,router_link: '/contact-us', image: this.imageService.ABOUT_US_IMG
       },
     ],
     [
@@ -44,23 +44,52 @@ export class HomePageComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     public imageService: ImageService,
-    private dataService: DataService,
+    public dataService: DataService,
   ) {
 
-    //console.log('LIST----', this.LIST)
   }
 
   ngOnInit() {
-    
   }
 
   async ionViewWillEnter () {
 
-    //console.log('texting.........')
 
+    await this.dataService._getOwnerColor();
     await this.apiData._updateUserId();
 
     await this.checkPreviousUrl();
+    await this._getBusinessOwnerDetails();
+  }
+
+  async _getBusinessOwnerDetails () {
+
+    await (await this.apiData._getBusinessOwnerDetails()).subscribe(
+      async (response: any) => {
+
+        if (response.length > 0) {
+
+          // console.log('background---' , this.dataService.BACKGROUND_COLOR);
+          // console.log('button---' , this.dataService.BUTTON_COLOR);
+          // console.log('text---' , this.dataService.TEXT_COLOR);
+
+          await this.dataService._setOwnerData(response[0]);
+
+          await this.dataService._getOwnerColor();
+
+          // console.log('after-------')
+          // console.log('background---' , this.dataService.BACKGROUND_COLOR);
+          // console.log('button---' , this.dataService.BUTTON_COLOR);
+          // console.log('text---' , this.dataService.TEXT_COLOR);
+
+
+        }
+      },
+      (error: any) => {
+
+        console.log('error-----' , error)
+      }
+    );
   }
 
   async checkPreviousUrl () {
@@ -68,20 +97,19 @@ export class HomePageComponent implements OnInit {
     let get_previous_url = await this.dataService.getPreviousUrl()
 
     if (get_previous_url != '') {
-      
+
       let url = `/${get_previous_url}`
       this.router.navigate([ url ]);
       this.dataService.removePreviousUrl();
     }
-    //console.log('yes')
+
   }
 
   async navigate (link: any) {
 
     if (link == '/make-a-booking') {
-      
+
     }
-    //console.log('link', link)
     await this.router.navigate([link])
 
   }

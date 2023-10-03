@@ -1,0 +1,81 @@
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};" [fullscreen]="true">
+  <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  </div>
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+    <h2>About Us</h2>
+  </ion-card>
+  <ion-grid class="card-list" style="color : {{this.dataService.TEXT_COLOR}}!important; ">
+    <ion-row>
+      <ion-col size="12">
+        <ion-img [src]="this.imageService.JADE_SIGN_IMG" class="jade_sign_img"></ion-img>
+        <ion-text class="bio">Quick bio on the company of what they like & hobbies and what they are qualified in will be added here.</ion-text>
+      </ion-col>
+      <ion-col size="12">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="3" class="ion-align-self-center ion-text-center">
+              <ion-icon name="timer-outline"></ion-icon>
+            </ion-col>
+            <ion-col size="9" class="ion-text-center">
+                <ion-text class="item-header-txt">Opening Hours</ion-text>
+                <div class="hours">
+                  <h6 *ngFor="let hours of HOURS_DETAILS">
+                    <ion-text *ngIf="!hours.open_status">{{ hours.day }} - Closed </ion-text>
+                    <ion-text *ngIf="hours.open_status">{{ hours.day }} {{ hours.start_time }} - {{ hours?.end_time}} </ion-text>
+                  </h6>
+                </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+      <hr>
+      <ion-col size="12">
+        <a style="color : {{this.dataService.TEXT_COLOR}}!important" href="mailto:{{OWNER_INFO?.default_email}}" style="text-decoration: none !important;">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="3" class="ion-align-self-center ion-text-center">
+              <ion-icon name="mail-open-outline"></ion-icon>
+            </ion-col>
+            <ion-col size="9" class="owner_info">
+                <ion-text>{{ OWNER_INFO?.default_email }}</ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </a>
+      </ion-col>
+      <hr>
+      <ion-col size="12">
+        <a style="color : {{this.dataService.TEXT_COLOR}}!important" href="tel:{{OWNER_INFO?.tel}}" style="text-decoration: none !important;">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="3" class="ion-align-self-center ion-text-center">
+                <ion-icon name="call"></ion-icon>
+              </ion-col>
+              <ion-col size="9" class="owner_info">
+                  <ion-text> {{  OWNER_INFO?.tel }}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </a>
+      </ion-col>
+      <hr>
+      <ion-col size="12">
+        <a style="color : {{this.dataService.TEXT_COLOR}}!important" href="http://jadeamberbeautystudio.com/" target=”_blank” style="text-decoration: none !important;">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="3" class="ion-align-self-center ion-text-center">
+                <ion-icon name="globe-outline"></ion-icon>
+              </ion-col>
+              <ion-col size="9" class="owner_info">
+                  <ion-text>www.jadeamberbeautystudio.com</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<app-footer></app-footer>

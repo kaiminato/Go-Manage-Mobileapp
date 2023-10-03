@@ -30,7 +30,10 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
             "scripts": [],
             "aot": false,
             "vendorChunk": true,
@@ -54,6 +57,38 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "c10001": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.c10001.ts"
+                }
+              ]
+            },
+            "c10002": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.c10002.ts"
                 }
               ]
             },
@@ -130,7 +165,15 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "app:build:prod",
+              "browserTarget": "app:build:production",
+              "port": 4300
+            },
+            "c10001": {
+              "browserTarget": "app:build:c10001",
+              "port": 4300
+            },
+            "c10002": {
+              "browserTarget": "app:build:c10002",
               "port": 4300
             },
             "test": {
