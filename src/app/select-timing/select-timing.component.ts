@@ -681,7 +681,7 @@ export class SelectTimingComponent implements OnInit {
 
 
     let daysConfig = [];
-
+    console.log("all_dates",all_dates);
     for (let value of all_dates){
 
       let is_date_working = await staff_rota.filter( data => data.workDate == value);
@@ -699,7 +699,7 @@ export class SelectTimingComponent implements OnInit {
       }
 
     }
-
+    console.log("daysConfig",daysConfig);
     this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
 
   }
@@ -813,7 +813,7 @@ export class SelectTimingComponent implements OnInit {
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
   }
 
-  async _returnDateInBetween (start_date = new Date() , end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 1))) {
+  async _returnDateInBetween (start_date = new Date() , end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 10))) {
 
     for(var date_list=[],d=new Date(start_date);d<=new Date(end_date);d.setDate(d.getDate()+1))
     {
