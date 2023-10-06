@@ -665,8 +665,6 @@ export class SelectTimingComponent implements OnInit {
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota =  [];
     let current_date =  await this.getCurrentDate();
-    console.log('staff_detail--' , staff_detail);
-
 
 
     if (staff_detail[0].staffDetailFormatted != null) {
@@ -813,7 +811,7 @@ export class SelectTimingComponent implements OnInit {
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
   }
 
-  async _returnDateInBetween (start_date = new Date() , end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 10))) {
+  async _returnDateInBetween (start_date = new Date() , end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 100))) {
 
     for(var date_list=[],d=new Date(start_date);d<=new Date(end_date);d.setDate(d.getDate()+1))
     {
