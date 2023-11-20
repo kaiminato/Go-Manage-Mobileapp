@@ -28,8 +28,8 @@ export class CartInfoComponent implements OnInit {
     private location: Location,
   ) { }
 
-  ngOnInit() {}
-  async ionViewWillEnter (){
+  ngOnInit() { }
+  async ionViewWillEnter() {
     this.PRODUCT_LIST = [];
     this.productIdArr = this.activatedRoute.snapshot.paramMap.get('productIdArr').split(',');
     await this._getProducts();
@@ -38,50 +38,46 @@ export class CartInfoComponent implements OnInit {
   async _getProducts() {
     await this.apiData.presentLoading();
     await (await this.apiData._getProducts()).subscribe(
-      async (response: any ) => {
+      async (response: any) => {
         await this.apiData.dismiss();
         this.PRODUCT_RESPONSE = response;
 
-        for(let productId of this.productIdArr){
-          console.log("this is productid", productId);
-          let get_product =  await this.PRODUCT_RESPONSE.filter( data => data.id == Number(productId));
+        for (let productId of this.productIdArr) {
+          let get_product = await this.PRODUCT_RESPONSE.filter(data => data.id == Number(productId));
           if (get_product.length > 0) {
             get_product = get_product[0];
-            if(1 > get_product.quantity){
+            if (1 > get_product.quantity) {
               get_product['no_of_item'] = 0;
             }
-            else{
+            else {
               get_product['no_of_item'] = 1;
             }
             this.PRODUCT_LIST.push(get_product);
           }
         }
-        if(!this.PRODUCT_LIST){
+        if (!this.PRODUCT_LIST) {
           this.isEmptyCart = true;
         }
-        else{
+        else {
           this._calculatePrice();
         }
       },
       async (error: any) => {
         await this.apiData.dismiss();
         this.isEmptyCart = true;
-        console.log("this is error",error);
       }
     );
   }
 
-  async _cartProductItemChange (index: any , value_type: string) {
+  async _cartProductItemChange(index: any, value_type: string) {
 
     this.PRODUCT_LIST[index]['no_of_item'] = value_type == 'increment' ? ++this.PRODUCT_LIST[index]['no_of_item'] : --this.PRODUCT_LIST[index]['no_of_item'];
     this._calculatePrice();
   }
 
-  async _calculatePrice () {
-    console.log("yeah")
+  async _calculatePrice() {
     this.SUB_TOTAL = 0;
-    for (let value of this.PRODUCT_LIST){
-      console.log("this is value",value);
+    for (let value of this.PRODUCT_LIST) {
       this.SUB_TOTAL += (value.price * value.no_of_item);
     }
 
