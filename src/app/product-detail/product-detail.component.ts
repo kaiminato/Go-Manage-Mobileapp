@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router , ActivatedRoute} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
@@ -29,9 +29,9 @@ export class ProductDetailComponent implements OnInit {
     public imageService: ImageService,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  async ionViewWillEnter (){
+  async ionViewWillEnter() {
 
     this.PRODUCT_ID = this.activatedRoute.snapshot.params['id'];
     await this._getProducts();
@@ -39,14 +39,12 @@ export class ProductDetailComponent implements OnInit {
   async _getProducts() {
     await this.apiData.presentLoading();
     await (await this.apiData._getProducts()).subscribe(
-      async (response: any ) => {
+      async (response: any) => {
         await this.apiData.dismiss();
         this.PRODUCT_LIST = response;
         this.PRODUCT_RESPONSE = response;
-        console.log("this is product list", this.PRODUCT_RESPONSE);
-        this.PRODUCT_Detail_ARR =  await this.PRODUCT_RESPONSE.filter( data => data.id == Number(this.PRODUCT_ID));
+        this.PRODUCT_Detail_ARR = await this.PRODUCT_RESPONSE.filter(data => data.id == Number(this.PRODUCT_ID));
         this.PRODUCT_Detail = this.PRODUCT_Detail_ARR[0];
-        console.log("this is product detail",this.PRODUCT_Detail);
         this.PRODUCT_IMG = this.PRODUCT_Detail.image;
         this.PRODUCT_PRICE = this.PRODUCT_Detail.price;
         this.PRODUCT_NAME = this.PRODUCT_Detail.name;
@@ -54,7 +52,6 @@ export class ProductDetailComponent implements OnInit {
       },
       async (error: any) => {
         await this.apiData.dismiss();
-        console.log("this is error",error);
       }
     );
   }

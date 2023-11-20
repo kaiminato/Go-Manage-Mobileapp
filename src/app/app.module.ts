@@ -82,20 +82,12 @@ const redirectUri = window.location.origin + `/contact-us`;
     IonicStorageModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    AuthModule.forRoot(
-      {
-        domain: environment.auth.domain,
-        clientId: environment.auth.clientId,
-        redirectUri,
-        cacheLocation: 'localstorage',
-        httpInterceptor: {
-          allowedList: ['http://localhost:8100'],
-        },
-
+    AuthModule.forRoot({
+      ...environment.auth,
+      httpInterceptor: {
+        ...environment.httpInterceptor,
       },
-
-
-    ),
+    }),
   ],
   providers: [
     ApiDataService,

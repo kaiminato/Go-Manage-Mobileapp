@@ -54,23 +54,23 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  async ionViewWillEnter () {
+  async ionViewWillEnter() {
 
     await this.apiData._updateUserId();
     await this._getUserInfo();
   }
 
-  async _getUserInfo (){
+  async _getUserInfo() {
 
     // await this.apiData.presentLoading();
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
         let userEmail;
-        if(response.hasOwnProperty('email')){
+        if (response.hasOwnProperty('email')) {
           userEmail = response.email;
         }
-        else{
+        else {
           userEmail = await this.dataService._getUserEmail();
         }
 
@@ -84,18 +84,18 @@ export class ProfileComponent implements OnInit {
             let user_details = user_info;
 
 
-            if (user_details.givenName == 'null' && user_details.familyName == 'null'){
+            if (user_details.givenName == 'null' && user_details.familyName == 'null') {
 
               let name_array = user_details.name.split(' ');
-              if (name_array.length >1) {
+              if (name_array.length > 1) {
 
-                this.SHORT_NAME = name_array[0].charAt(0).toUpperCase() +""+ (name_array[1] ? name_array[1].charAt(0).toUpperCase() : '');
+                this.SHORT_NAME = name_array[0].charAt(0).toUpperCase() + "" + (name_array[1] ? name_array[1].charAt(0).toUpperCase() : '');
 
                 this.LAST_NAME = '';
                 this.FIRST_NAME = name_array[0];
-                for(let i = 1; i < name_array.length; i++){
+                for (let i = 1; i < name_array.length; i++) {
 
-                  this.LAST_NAME += name_array[i]+ ' ';
+                  this.LAST_NAME += name_array[i] + ' ';
                 }
 
               } else {
@@ -107,21 +107,21 @@ export class ProfileComponent implements OnInit {
 
               if (user_details.hasOwnProperty('givenName')) {
 
-                this.SHORT_NAME = (<any> Array.from(user_details.givenName)[0]).toUpperCase() +""+(<any> Array.from(user_details.familyName)[0]).toUpperCase();
+                this.SHORT_NAME = (<any>Array.from(user_details.givenName)[0]).toUpperCase() + "" + (<any>Array.from(user_details.familyName)[0]).toUpperCase();
                 this.FIRST_NAME = user_details.givenName;
                 this.LAST_NAME = user_details.familyName;
               } else if (!user_details.hasOwnProperty('name')) {
 
-                this.SHORT_NAME = (<any> Array.from(user_details.email)[0]).toUpperCase();
+                this.SHORT_NAME = (<any>Array.from(user_details.email)[0]).toUpperCase();
               } else {
-                this.SHORT_NAME = (<any> Array.from(user_details.name)[0]).toUpperCase();
+                this.SHORT_NAME = (<any>Array.from(user_details.name)[0]).toUpperCase();
                 this.FIRST_NAME = user_details.name;
               }
             }
             this.USERGMID = user_details.userGMID;
             this.PHONE = user_details.phoneMobile;
             this.BIRTHDAY = user_details.dateOfBirth;
-            if(user_details.gender){
+            if (user_details.gender) {
               this.GENDER = user_details.gender.toUpperCase();
             }
             // if (user_details?.user_metadata) {
@@ -140,56 +140,56 @@ export class ProfileComponent implements OnInit {
           async (error: any) => {
 
             await this.apiData.dismiss();
-            await this.apiData.presentAlert('Get profile api error'+ JSON.stringify(error))
+            await this.apiData.presentAlert('Get profile api error' + JSON.stringify(error))
 
           }
         );
 
       },
-      async (error:any) => {
+      async (error: any) => {
         await this.apiData.dismiss();
 
-        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+        await this.apiData.presentAlert('auth api error' + JSON.stringify(error))
       }
     )
   }
 
-  async showForm (){
+  async showForm() {
     this.EDIT_PROFILE = true;
     this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE
   }
 
   async updateUser() {
-    if (!this.EMAIL){
+    if (!this.EMAIL) {
 
       await this.apiData.presentAlert("Email can't be empty")
       return
     }
-    if (!this.FIRST_NAME){
+    if (!this.FIRST_NAME) {
 
       await this.apiData.presentAlert("First name can't be empty")
       return
     }
 
-    if (!this.LAST_NAME){
+    if (!this.LAST_NAME) {
 
       await this.apiData.presentAlert("Last name can't be empty")
       return
     }
 
-    if (!this.GENDER){
+    if (!this.GENDER) {
 
       await this.apiData.presentAlert("Gender can't be empty")
       return
     }
 
-    if (!this.PHONE){
+    if (!this.PHONE) {
 
       await this.apiData.presentAlert("Phone can't be empty")
       return
     }
 
-    if (!this.BIRTHDAY){
+    if (!this.BIRTHDAY) {
 
       await this.apiData.presentAlert("Birthday can't be empty")
       return
@@ -223,27 +223,27 @@ export class ProfileComponent implements OnInit {
 
     await this.apiData.presentLoading();
 
-      (await this.apiData.updateProfile(data)).subscribe(
-        async (response: any) => {
+    (await this.apiData.updateProfile(data)).subscribe(
+      async (response: any) => {
+        await this.apiData.dismiss();
+        await this.apiData.presentAlert('Profile updated successfully');
+        this.EDIT_PROFILE = false;
+        this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
+      },
+      async (error: any) => {
+        if (error.status === 200) {
           await this.apiData.dismiss();
           await this.apiData.presentAlert('Profile updated successfully');
           this.EDIT_PROFILE = false;
           this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
-        },
-        async (error: any) => {
-          if(error.status === 200){
-            await this.apiData.dismiss();
-            await this.apiData.presentAlert('Profile updated successfully');
-            this.EDIT_PROFILE = false;
-            this.PROFILE_HEADER.edit_profile = this.EDIT_PROFILE;
-          }
-          else{
-            await this.apiData.dismiss();
-            await this.apiData.presentAlert('Server error, Please try again later');
-          }
         }
-      );
-    }
+        else {
+          await this.apiData.dismiss();
+          await this.apiData.presentAlert('Server error, Please try again later');
+        }
+      }
+    );
+  }
 
 
   navigation() {
