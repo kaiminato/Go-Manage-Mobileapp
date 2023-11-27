@@ -405,16 +405,16 @@ export class BookingSummaryComponent implements OnInit {
               let end_time = '';
 
               if (last_service_end_time == '') {
-                start_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00.000Z`;
+                start_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00`;
                 last_service_end_time = await this.addHours(this.BOOKINGS_DETAILS.timing_id.value,service.serviceDuration);
-                end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
+                end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00`;
               } else {
-                start_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
+                start_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00`;
                 last_service_end_time = await this.addHours(
                   last_service_end_time,
                   service.serviceDuration
                 );
-                end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00.000Z`;
+                end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00`;
               }
 
               const original_start_time = new Date(start_time);
@@ -434,8 +434,8 @@ export class BookingSummaryComponent implements OnInit {
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
-                endTime: new_end_time.toISOString(),
-                startTime: new_start_time.toISOString(),
+                endTime: new_end_time.toISOString().slice(0, -5),
+                startTime: new_start_time.toISOString().slice(0, -5),
                 isAllDay: false,
                 customer: null,
                 service: service.serviceName,
