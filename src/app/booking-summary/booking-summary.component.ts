@@ -424,16 +424,12 @@ export class BookingSummaryComponent implements OnInit {
               }
               const new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
               const new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
-
-              const endTimeString = moment(new_end_time).format('YYYY-MM-DDTHH:mm:ss'); // Format without timezone
-              const startTimeString = moment(new_start_time).format('YYYY-MM-DDTHH:mm:ss'); // Format without timezone
-
               data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
-                endTime: endTimeString,
-                startTime: startTimeString,
+                endTime: new_end_time.toISOString().slice(0, -5),
+                startTime: new_start_time.toISOString().slice(0, -5),
                 isAllDay: false,
                 customer: null,
                 service: service.serviceName,
