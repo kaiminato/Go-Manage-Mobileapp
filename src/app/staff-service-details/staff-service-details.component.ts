@@ -54,7 +54,7 @@ export class StaffServiceDetailsComponent implements OnInit {
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
 
       }
-    );
+      );
 
     this.STAFF_DETAIL[0].image = this.STAFF_DETAIL[0]?.employeeImg ? this.STAFF_DETAIL[0]?.employeeImg : this.imageService.DEFAULT_PERSON;
     this.HEADING = "2";
@@ -82,28 +82,28 @@ export class StaffServiceDetailsComponent implements OnInit {
 
       let categorie_ids = [...new Set(this.SERVICE_LIST.map(data => data.categoryId))];
       this.CATEGORY_LIST = [];
-      for(let category_id of categorie_ids){
+      for (let category_id of categorie_ids) {
         let service_list = this.SERVICE_LIST.filter(service => service.categoryId == category_id);
 
-        for(let service of service_list) {
-          if(this.PERFORMED_SERVICES.includes(service.id)){
+        for (let service of service_list) {
+          if (this.PERFORMED_SERVICES.includes(service.id)) {
             service['performed'] = true;
           }
-          else{
+          else {
             service['performed'] = false;
           }
         }
-        if (service_list.length > 0){
+        if (service_list.length > 0) {
 
           this.CATEGORY_LIST.push(
-                                  {
-                                    category_id: category_id,
-                                    category_name: service_list[0].categoryName,
-                                    is_open: false,
-                                    count:service_list.length,
-                                    services: service_list
-                                  }
-                                );
+            {
+              category_id: category_id,
+              category_name: service_list[0].categoryName,
+              is_open: false,
+              count: service_list.length,
+              services: service_list
+            }
+          );
 
 
         }
@@ -113,7 +113,7 @@ export class StaffServiceDetailsComponent implements OnInit {
       let booking_data = await this.dataService.getInitialBookingdata();
 
 
-      if (booking_data.servises.length > 0)  await this.__preFilledData();
+      if (booking_data.servises.length > 0) await this.__preFilledData();
 
     }
 
@@ -121,16 +121,16 @@ export class StaffServiceDetailsComponent implements OnInit {
 
   }
 
-  async __preFilledData () {
+  async __preFilledData() {
 
     let booking_data = await this.dataService.getInitialBookingdata();
 
-    for (let category of this.CATEGORY_LIST){
+    for (let category of this.CATEGORY_LIST) {
 
 
       for (let service of category.services) {
 
-        let checking_data = await booking_data.servises.filter( data => data.id == service.id)
+        let checking_data = await booking_data.servises.filter(data => data.id == service.id)
 
         if (checking_data.length > 0) {
           category.is_open = true;
@@ -149,13 +149,13 @@ export class StaffServiceDetailsComponent implements OnInit {
     await this.selectedServicesDetail();
   }
 
-  changeCategoryStatus (service_id: any , status){
+  changeCategoryStatus(service_id: any, status) {
 
-    this.CATEGORY_LIST[service_id].is_open = !status ;
+    this.CATEGORY_LIST[service_id].is_open = !status;
   }
 
 
-  changeServiceStatus (service_id: any ){
+  changeServiceStatus(service_id: any) {
 
 
     let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
@@ -174,9 +174,9 @@ export class StaffServiceDetailsComponent implements OnInit {
 
   }
 
-  async selectedServicesDetail (){
+  async selectedServicesDetail() {
 
-    let selected_service_details = this.SERVICE_LIST.filter( data => this.SELECTED_SERVICES.includes(data.id))
+    let selected_service_details = this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id))
 
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
@@ -191,10 +191,6 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.dataService.setSelectedServicesInBooking(selected_service_details);
 
   }
-
-
-
-
 
   navigation() {
     this.router.navigate(['/make-a-booking']);

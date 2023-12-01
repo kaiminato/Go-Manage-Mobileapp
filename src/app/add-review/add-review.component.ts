@@ -27,7 +27,7 @@ export class AddReviewComponent implements OnInit {
     public auth: AuthService,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
   async ionViewWillEnter() {
     this.getUserInfo();
     this.BOOKINGS_DETAILS = await this.dataService.getInitialBookingdata();
@@ -44,7 +44,7 @@ export class AddReviewComponent implements OnInit {
           });
       },
       async (error: any) => {
-        console.log("this is error",error);
+        console.log("this is error", error);
       })
   }
   setRating(rating: number) {
@@ -67,7 +67,7 @@ export class AddReviewComponent implements OnInit {
       async (error: any) => {
 
         await this.apiData.dismiss();
-        await this.apiData.presentAlertWithHeader("Failed","Something Went Wrong. Please try later.");
+        await this.apiData.presentAlertWithHeader("Failed", "Something Went Wrong. Please try later.");
       }
     );
   }
