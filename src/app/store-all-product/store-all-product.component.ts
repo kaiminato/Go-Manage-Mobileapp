@@ -1,8 +1,8 @@
-import { Component, OnInit , ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
-import { IonSlides} from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { ImageService } from '../services/image.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { ImageService } from '../services/image.service';
 export class StoreAllProductComponent implements OnInit {
 
 
-  @ViewChild('mySlider')  slides: IonSlides;
+  @ViewChild('mySlider') slides: IonSlides;
 
 
   HEADING: string = "Online Store";
@@ -44,9 +44,9 @@ export class StoreAllProductComponent implements OnInit {
     private imageService: ImageService,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  async ionViewWillEnter (){
+  async ionViewWillEnter() {
     this.PRODUCT_LIST = [];
     this.productIdArr = [];
     await this.getSelectedcategory();
@@ -55,20 +55,20 @@ export class StoreAllProductComponent implements OnInit {
     this.cart_num = 0;
   }
 
-  async selectCategory (index : any) {
+  async selectCategory(index: any) {
 
-    this.CATEGORY_TAGS.map( data => data.status = false);
+    this.CATEGORY_TAGS.map(data => data.status = false);
     this.CATEGORY_TAGS[index].status = true;
-    this.slides.slideTo(index,2000);
+    this.slides.slideTo(index, 2000);
     await this.getSelectedcategory();
   }
 
-  async getSelectedcategory () {
+  async getSelectedcategory() {
 
     let active_category = this.CATEGORY_TAGS.filter(data => data.status == true);
     this.SELECTED_CATEGORY = active_category.length > 0 ? active_category[0].name : '';
     this.SELECTED_CATEGORY_ID = active_category.length > 0 ? active_category[0].id : 0;
-    this.PRODUCT_LIST =  this.SELECTED_CATEGORY_ID !=0 ?  await this.PRODUCT_RESPONSE.filter( data => data.brandId == this.SELECTED_CATEGORY_ID) : this.PRODUCT_RESPONSE;
+    this.PRODUCT_LIST = this.SELECTED_CATEGORY_ID != 0 ? await this.PRODUCT_RESPONSE.filter(data => data.brandId == this.SELECTED_CATEGORY_ID) : this.PRODUCT_RESPONSE;
   }
 
   navigation() {
@@ -79,9 +79,9 @@ export class StoreAllProductComponent implements OnInit {
   async _getProducts() {
     await this.apiData.presentLoading();
     await (await this.apiData._getProducts()).subscribe(
-      async (response: any ) => {
+      async (response: any) => {
         await this.apiData.dismiss();
-        for(let response_item of response){
+        for (let response_item of response) {
           response_item['isActive'] = false;
         }
         this.PRODUCT_LIST = response;
@@ -89,45 +89,43 @@ export class StoreAllProductComponent implements OnInit {
       },
       async (error: any) => {
         await this.apiData.dismiss();
-        console.log("this is error",error);
       }
     );
   }
 
   async _getCategories() {
     await (await this.apiData._getCategories()).subscribe(
-      async (response: any ) => {
-        for(let response_item of response){
+      async (response: any) => {
+        for (let response_item of response) {
           response_item['status'] = false;
         }
-        const addedCategoryTags = { id: 0 , name: "All" , status: true };
+        const addedCategoryTags = { id: 0, name: "All", status: true };
         this.CATEGORY_TAGS = response;
-        console.log("response", response);
         this.CATEGORY_TAGS.unshift(addedCategoryTags);
       },
       async (error: any) => {
-        console.log("this is error",error);
+        console.log("this is error", error);
       }
     );
   }
 
   async onSearch(SEARCH_TEXT: string) {
-      this.PRODUCT_LIST = await this.PRODUCT_RESPONSE.filter( data =>
-        ((data.name.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
-        ||
-        ((data.description.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
-        );
+    this.PRODUCT_LIST = await this.PRODUCT_RESPONSE.filter(data =>
+      ((data.name.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
+      ||
+      ((data.description.toLocaleLowerCase()).indexOf(SEARCH_TEXT.toLocaleLowerCase()) != -1)
+    );
   }
 
-  async addCart (productId: any) {
+  async addCart(productId: any) {
     let is_exist_in_cart = await this.productIdArr.filter(data => data == productId);
-    if (is_exist_in_cart.length  == 0){
+    if (is_exist_in_cart.length == 0) {
       this.productIdArr.push(productId);
       this.cart_num++;
     }
 
-    for(let product of this.PRODUCT_LIST){
-      if(product.id == productId){
+    for (let product of this.PRODUCT_LIST) {
+      if (product.id == productId) {
         product.isActive = true;
       }
     }
