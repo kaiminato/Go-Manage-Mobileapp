@@ -1,10 +1,10 @@
-import { Component, OnInit , ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PickerController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
-import { IonSlides} from '@ionic/angular';
+import { IonSlides } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
@@ -18,7 +18,7 @@ import { Browser } from '@capacitor/browser';
 })
 export class SelectTimingComponent implements OnInit {
 
-  @ViewChild('mySlider')  slides: IonSlides;
+  @ViewChild('mySlider') slides: IonSlides;
   // @ViewChild('myCalander') myCalander!: ElementRef;
 
 
@@ -27,10 +27,10 @@ export class SelectTimingComponent implements OnInit {
   CURRENT_MONTH: number = this.dataService.CURRENT_MONTH;
   CURRENT_YEAR: number = this.dataService.CURRENT_YEAR;
   CURRENT_MONTH_VALUE: string = '';
-  DAYS_ARRAY : any = [];
-  MORNING_SHIFT : any = [];
-  EVENING_SHIFT : any = [];
-  ALL_SHIFT : any = [];
+  DAYS_ARRAY: any = [];
+  MORNING_SHIFT: any = [];
+  EVENING_SHIFT: any = [];
+  ALL_SHIFT: any = [];
   ACTIVE_DAY: number = 10;
   CANCEL_BOOKING_ID: number = 0;
   IS_STAFF: any = true;
@@ -44,7 +44,7 @@ export class SelectTimingComponent implements OnInit {
   IS_LOGIN: boolean = false;
   PENDING_BOOKING_TIMEOUT: any;
 
-  SHORT_MONTHS_NAME: any =  { Jan: 1,  Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9,  Oct: 10, Nov: 11 , Dec: 12};
+  SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
   currentSlideIndex: number;
 
   slideOpts = {
@@ -57,21 +57,21 @@ export class SelectTimingComponent implements OnInit {
   options: CalendarModalOptions = {
     //disableWeeks: [0, 6],
     daysConfig: [
-        // {
-        //   date: new Date('2023-03-02'),
-        //   disable: true,
-        //   cssClass:'line',
-        // },
-        // {
-        //   date: new Date('2023-03-03'),
-        //   disable: true,
-        // }
-      ]
-    };
+      // {
+      //   date: new Date('2023-03-02'),
+      //   disable: true,
+      //   cssClass:'line',
+      // },
+      // {
+      //   date: new Date('2023-03-03'),
+      //   disable: true,
+      // }
+    ]
+  };
 
-    markDisabled: any = (date: Date) => {
-      var current = new Date();
-      return date < current;
+  markDisabled: any = (date: Date) => {
+    var current = new Date();
+    return date < current;
   };
   constructor(
     private router: Router,
@@ -83,18 +83,18 @@ export class SelectTimingComponent implements OnInit {
     private modalController: ModalController,
     public auth: AuthService,
     private apiData: ApiDataService,
-    ) {
-    }
+  ) {
+  }
 
 
-    async _datePickerClosed () {
+  async _datePickerClosed() {
 
-      this.IS_CALNDER_OPEN = false;
-    }
+    this.IS_CALNDER_OPEN = false;
+  }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  async ionViewWillEnter () {
+  async ionViewWillEnter() {
 
     this.activateRoute.queryParams
       .subscribe(params => {
@@ -102,16 +102,16 @@ export class SelectTimingComponent implements OnInit {
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
 
       }
-    );
+      );
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH]+" "+ this.CURRENT_YEAR
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR
 
     let booking_data = await this.dataService.getInitialBookingdata();
     //let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
     // this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
-    this.DAYS_ARRAY =  await this._getDaysByYear(this.CURRENT_YEAR);
+    this.DAYS_ARRAY = await this._getDaysByYear(this.CURRENT_YEAR);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
 
 
@@ -129,13 +129,13 @@ export class SelectTimingComponent implements OnInit {
 
   }
 
-  async ionViewWillLeave () {
+  async ionViewWillLeave() {
 
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
   }
 
-  async _preFilledData () {
+  async _preFilledData() {
 
     this.IS_CALNDER_OPEN = false;
     let booking_data = await this.dataService.getInitialBookingdata();
@@ -147,10 +147,10 @@ export class SelectTimingComponent implements OnInit {
     //await this.modalController.dismiss();
 
     await this._getDayList();
-    if (booking_data.timing_id != ''){
+    if (booking_data.timing_id != '') {
 
       setTimeout(() => {
-        this.ALL_SHIFT[booking_data.timing_id.id-1].is_active = true;
+        this.ALL_SHIFT[booking_data.timing_id.id - 1].is_active = true;
       }, 300);
     }
 
@@ -158,9 +158,9 @@ export class SelectTimingComponent implements OnInit {
   }
 
 
-  async _selectTiming (id: number , is_disabled : any){
+  async _selectTiming(id: number, is_disabled: any) {
 
-    if (is_disabled) return ;
+    if (is_disabled) return;
 
     let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
 
@@ -176,13 +176,13 @@ export class SelectTimingComponent implements OnInit {
     let starting_date_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
 
-    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration -1)
+    ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration - 1)
     ending_date_time = new Date(ending_date_time);
 
     let pen_book_end_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
     pen_book_end_time.setMinutes(pen_book_end_time.getMinutes() + total_duration)
     pen_book_end_time = new Date(pen_book_end_time);
-    pen_book_end_time = <any> await this.returnDateTimeFormat(pen_book_end_time);
+    pen_book_end_time = <any>await this.returnDateTimeFormat(pen_book_end_time);
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
     let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
@@ -207,7 +207,7 @@ export class SelectTimingComponent implements OnInit {
 
     // Check services's time is under office timing
 
-    let office_last_shift = new Date (`${get_booking_data.date} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}` );
+    let office_last_shift = new Date(`${get_booking_data.date} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}`);
     let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
 
     if (ending_date_time > office_closed_time) {
@@ -220,9 +220,9 @@ export class SelectTimingComponent implements OnInit {
 
       await this.dataService.setPreviousUrl('select-a-time');
       this.auth
-      .buildAuthorizeUrl()
-      .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-      .subscribe();
+        .buildAuthorizeUrl()
+        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+        .subscribe();
 
       return
     }
@@ -231,69 +231,56 @@ export class SelectTimingComponent implements OnInit {
 
     await this.apiData.presentLoading();
 
-    await this.auth.getUser().subscribe(
+    this.auth.getUser().subscribe(
       async (response: any) => {
-        //response.email = 'gomanagetest@gmail.com';
         let userEmail;
-        if(response.hasOwnProperty('email')){
+        if (response.hasOwnProperty('email')) {
           userEmail = response.email;
         }
-        else{
+        else {
           const altEmail = await this.dataService._getUserEmail();
-          if(altEmail){
+          if (altEmail) {
             userEmail = altEmail;
           }
           else {
-            setTimeout(() => { this.router.navigate(['/profile'])}, 200);
+            setTimeout(() => { this.router.navigate(['/profile']); }, 200);
             return;
           }
         }
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
-
-
-
             let data = {
-                          "userId": user_info.userGMID,
-                          "staffId": get_booking_data.staff_id,
-                          "isPending": 1,
-                          "startTime": create_pending_booking_start_time,
-                          "endTime": pen_book_end_time,
-                          "serviceId": get_booking_data.servises[0].id
-                      };
+              "userId": user_info.userGMID,
+              "staffId": get_booking_data.staff_id,
+              "isPending": 1,
+              "startTime": create_pending_booking_start_time,
+              "endTime": pen_book_end_time,
+              "serviceId": get_booking_data.servises[0].id
+            };
 
             (await this.apiData.createPendingAppointment(data)).subscribe(
-              async (response: any) => {
+              async () => {
 
                 await this.apiData.dismiss();
               },
-              async (error:any) => {
+              async (error: any) => {
                 await this.apiData.dismiss();
 
                 if (error.status == 200) {
 
-                  await this.dataService.setBookingData(get_booking_data)
+                  await this.dataService.setBookingData(get_booking_data);
+                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
 
-                  // remove temprary booking after 5 minutes = 300000
+                } else if (error.status == 201) {
 
-                  // this.PENDING_BOOKING_TIMEOUT =  setTimeout(async () => {
+                  await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
 
-                  //   this.removePendingBooking();
-                  // }, 300000);
-
-                  setTimeout(() => { this.router.navigate(['/booking-summary'] , { queryParams: this.CANCEL_BOOKING_ID == 0? {} :{ id: this.CANCEL_BOOKING_ID } }) }, 200);
-
-                } else if (error.status == 201){
-
-                  // await this.apiService.presentAlert('Shift not available')
-                  await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
-
-                  return
+                  return;
 
                 } else {
 
 
-                  await this.apiData.presentAlert('pending booking server error'+ JSON.stringify(error))
+                  await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                 }
               }
             );
@@ -301,16 +288,16 @@ export class SelectTimingComponent implements OnInit {
 
           },
 
-          async (error:any) => {
+          async (error: any) => {
             await this.apiData.dismiss();
-            await this.apiData.presentAlert('user profile error'+ JSON.stringify(error))
+            await this.apiData.presentAlert('user profile error' + JSON.stringify(error));
           }
-        )
+        );
 
       },
-      async (error:any) => {
+      async (error: any) => {
         await this.apiData.dismiss();
-        await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+        await this.apiData.presentAlert('auth api error' + JSON.stringify(error));
       }
     );
   }
@@ -322,31 +309,31 @@ export class SelectTimingComponent implements OnInit {
     return date.getMonth() + 1;
   }
 
-  async _getDayList () {
+  async _getDayList() {
 
     let today_date = new Date(this.DATE);
     let year: any = today_date.getFullYear();
-    let month:any = today_date.getMonth() + 1;
+    let month: any = today_date.getMonth() + 1;
     // let day_list = await this._getDays(month , year);
     let day_list = await this._getDaysByYear(year);
 
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()]+" "+ year
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()] + " " + year
 
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    let staff_availability_dates =  [];
+    let staff_availability_dates = [];
 
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && new Date(data.workDate) >= new Date(yesterday))
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(yesterday))
       }
     }
 
-    for (let value of day_list){
+    for (let value of day_list) {
 
-      let is_date_working = await staff_availability_dates.filter( data => data.workDate == value.full_date);
+      let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
 
 
       if (is_date_working.length == 0) { // if rota not exist according for date
@@ -354,7 +341,7 @@ export class SelectTimingComponent implements OnInit {
         value.is_disabled = true
       } else {
 
-        let is_all_shift_booked =  (await this._isDateDisabled(value.full_date)).filter( data => !data.is_disabled); // Check is all shift of date is booked or not
+        let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
 
         if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
       }
@@ -367,25 +354,25 @@ export class SelectTimingComponent implements OnInit {
     let active_index_array = await day_list.filter(data => data.is_active);
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
     let active_index_array_index = day_list.indexOf(active_index_array[0]);
-    this.slides.slideTo(active_index_array_index-1,1000);
+    this.slides.slideTo(active_index_array_index - 1, 1000);
 
     await this._getShiftList();
   }
 
-  async _getShiftList () {
+  async _getShiftList() {
 
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    let staff_availability_dates =  [];
+    let staff_availability_dates = [];
 
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
 
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && data.workDate == this.DATE)
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && data.workDate == this.DATE)
       }
     }
 
-    let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(this.DATE));
+    let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.DATE));
     let shift_start_time: any = '';
     let shift_end_time: any = ''
 
@@ -401,13 +388,13 @@ export class SelectTimingComponent implements OnInit {
         shift_end_time = staff_availability_dates[0]?.endShiftTime;
       }
 
-      shift_end_time  = new Date(`${this.DATE}T${shift_end_time}`);
+      shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
       shift_end_time.setMinutes(shift_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
 
-      shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes())+":"+(shift_end_time.getSeconds() == 0 ? '00': shift_end_time.getSeconds())
+      shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds())
 
       // Get shift timing list
-      this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time , shift_end_time);
+      this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time, shift_end_time);
 
       // Shift disabled based on break time---- start
 
@@ -474,7 +461,7 @@ export class SelectTimingComponent implements OnInit {
       for (let shift_value of this.ALL_SHIFT) {
         let shift__date_time = new Date(`${this.DATE}T${shift_value.value}:00`);
         const current_date_time = new Date();
-        if(current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()){
+        if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
           shift_value.is_disabled = true; // Disabled the shift
         }
       }
@@ -490,7 +477,7 @@ export class SelectTimingComponent implements OnInit {
 
             for (let i = 1; i < total_shift_will_count; i++) {
 
-              let num = Number(index)+i;
+              let num = Number(index) + i;
 
 
               if (typeof this.ALL_SHIFT[num] !== 'undefined') {
@@ -522,30 +509,30 @@ export class SelectTimingComponent implements OnInit {
 
   }
 
-  async _getDays(month: any , year: any) {
+  async _getDays(month: any, year: any) {
 
-    month = month.toString().length > 1 ? month : '0'+month
+    month = month.toString().length > 1 ? month : '0' + month
 
     let date = new Date();
     let firstDay = (new Date(parseInt(year), parseInt(month), 1)).getDate();
-    let lastDay = (new Date(parseInt(year), parseInt(month) , 0)).getDate();
+    let lastDay = (new Date(parseInt(year), parseInt(month), 0)).getDate();
 
     let days_list = [];
 
-    for (let i = 1; i <= lastDay; i++){
+    for (let i = 1; i <= lastDay; i++) {
 
-      let new_date = new Date(`${year}-${month}-${ i < 10 ? '0'+i : i}`);
+      let new_date = new Date(`${year}-${month}-${i < 10 ? '0' + i : i}`);
       var dayName = this.dataService.SHORT_DAYS_NAME[new_date.getDay()];
 
       days_list.push({
-                        day_number: i < 10 ? '0'+i : i.toString(),
-                        is_disabled: false,
-                        is_active: false,
-                        month: month,
-                        year: year ,
-                        day_name: dayName ,
-                        full_date: year + '-' + month + '-' + (i < 10 ? '0'+i : i)
-                      })
+        day_number: i < 10 ? '0' + i : i.toString(),
+        is_disabled: false,
+        is_active: false,
+        month: month,
+        year: year,
+        day_name: dayName,
+        full_date: year + '-' + month + '-' + (i < 10 ? '0' + i : i)
+      })
 
     }
     return days_list;
@@ -554,37 +541,37 @@ export class SelectTimingComponent implements OnInit {
     let days_list = [];
 
     for (let m = 0; m < 12; m++) {
-        let month = (m + 1).toString().padStart(2, '0');
-        let firstDay = (new Date(parseInt(year), m, 1)).getDate();
-        let lastDay = (new Date(parseInt(year), m + 1, 0)).getDate();
+      let month = (m + 1).toString().padStart(2, '0');
+      let firstDay = (new Date(parseInt(year), m, 1)).getDate();
+      let lastDay = (new Date(parseInt(year), m + 1, 0)).getDate();
 
-        for (let i = 1; i <= lastDay; i++) {
-            let new_date = new Date(`${year}-${month}-${i.toString().padStart(2, '0')}`);
-            let dayName = this.dataService.SHORT_DAYS_NAME[new_date.getDay()];
+      for (let i = 1; i <= lastDay; i++) {
+        let new_date = new Date(`${year}-${month}-${i.toString().padStart(2, '0')}`);
+        let dayName = this.dataService.SHORT_DAYS_NAME[new_date.getDay()];
 
-            days_list.push({
-                day_number: i.toString().padStart(2, '0'),
-                is_disabled: false,
-                is_active: false,
-                month: month,
-                year: year,
-                day_name: dayName,
-                full_date: `${year}-${month}-${i.toString().padStart(2, '0')}`
-            });
-        }
+        days_list.push({
+          day_number: i.toString().padStart(2, '0'),
+          is_disabled: false,
+          is_active: false,
+          month: month,
+          year: year,
+          day_name: dayName,
+          full_date: `${year}-${month}-${i.toString().padStart(2, '0')}`
+        });
+      }
     }
 
     return days_list;
-}
+  }
 
 
-  async _selectDateRangeSlider(day: any, is_disabled: any, month: any, year: any , index: any) {
+  async _selectDateRangeSlider(day: any, is_disabled: any, month: any, year: any, index: any) {
     if (is_disabled) return;
     this.DATE = `${year}-${month}-${day}`;
 
     for (let value of this.DAYS_ARRAY) value.is_active = false;
     this.DAYS_ARRAY[index]['is_active'] = true;
-    this.slides.slideTo(index-1,1000);
+    this.slides.slideTo(index - 1, 1000);
     await this._getShiftList();
   }
   async getDaysBySlideChange(nextMonth, nextYear) {
@@ -597,8 +584,8 @@ export class SelectTimingComponent implements OnInit {
   }
   slideChanged() {
     this.slides.getActiveIndex().then(index => {
-      this.CURRENT_MONTH = this.getMonthFromDayIndex(index, this.CURRENT_YEAR)-1;
-      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH]+" "+ this.CURRENT_YEAR;
+      this.CURRENT_MONTH = this.getMonthFromDayIndex(index, this.CURRENT_YEAR) - 1;
+      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR;
     });
   }
   async _onDateSelect(selected_date: any) {
@@ -609,13 +596,13 @@ export class SelectTimingComponent implements OnInit {
     await this._getDayList();
   }
 
-  async _getDisabledDate () {
+  async _getDisabledDate() {
     let all_dates = await this._returnDateInBetween();
 
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    let staff_rota =  [];
-    let current_date =  await this.getCurrentDate();
+    let staff_rota = [];
+    let current_date = await this.getCurrentDate();
 
 
     if (staff_detail[0].staffDetailFormatted != null) {
@@ -623,26 +610,26 @@ export class SelectTimingComponent implements OnInit {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
 
         // Get  staff rota
-        staff_rota = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
+        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
       }
     }
 
 
 
     let daysConfig = [];
-    for (let value of all_dates){
+    for (let value of all_dates) {
 
-      let is_date_working = await staff_rota.filter( data => data.workDate == value);
+      let is_date_working = await staff_rota.filter(data => data.workDate == value);
 
       if (is_date_working.length == 0) { // If rota not found on current loop date
 
-        daysConfig.push({date: new Date(value) , disable: true});
+        daysConfig.push({ date: new Date(value), disable: true });
 
       } else {
 
-        let is_all_shift_booked =  (await this._isDateDisabled(value)).filter( data => !data.is_disabled);
+        let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
 
-        if (is_all_shift_booked.length == 0) daysConfig.push({date: new Date(value) , disable: true});
+        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
 
       }
 
@@ -655,22 +642,22 @@ export class SelectTimingComponent implements OnInit {
 
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    let staff_rota =  [];
-    let current_date =  await this.getCurrentDate();
+    let staff_rota = [];
+    let current_date = await this.getCurrentDate();
 
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
 
         // Get  staff rota
-        staff_rota = await staff_detail[0].staffDetailFormatted.filter( data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
+        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
       }
     }
 
-    let is_date_working = await staff_rota.filter( data => data.workDate == value);
+    let is_date_working = await staff_rota.filter(data => data.workDate == value);
 
-    let current_date_booking = await this.STAFF_BOOKING_LIST.filter( data => data.startTime.includes(value));
+    let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(value));
     let shift_start_time: any = '';
-    let shift_end_time: any   = '';
+    let shift_end_time: any = '';
 
     if (is_date_working.length > 1) {
 
@@ -681,76 +668,76 @@ export class SelectTimingComponent implements OnInit {
       shift_end_time = is_date_working[0]?.endShiftTime;
     }
 
-    shift_end_time  = new Date(`${value}T${shift_end_time}`);
+    shift_end_time = new Date(`${value}T${shift_end_time}`);
     shift_end_time.setMinutes(shift_end_time.getMinutes() - 30); // Last timing not included as shift so removing the last shift (endtime)
 
-    shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes())+":"+(shift_end_time.getSeconds() == 0 ? '00': shift_end_time.getSeconds())
+    shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds())
 
 
-    let all_shift_list = await this._returnTimesInBetween(shift_start_time , shift_end_time); // Get shift timing list
+    let all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time); // Get shift timing list
 
 
-        // Shift disabled based on break time---- start
+    // Shift disabled based on break time---- start
 
-        for (let shift_value of all_shift_list) {
+    for (let shift_value of all_shift_list) {
 
-          if (!shift_value.is_disabled) { // If shift is not disabled
+      if (!shift_value.is_disabled) { // If shift is not disabled
 
-            let shift__date_time = new Date(`${value}T${shift_value.value}:00`);
+        let shift__date_time = new Date(`${value}T${shift_value.value}:00`);
 
-            for (let values of is_date_working) {
-              if (values.outOfOfficeFrom != null && values.outOfOfficeTo != null) {
+        for (let values of is_date_working) {
+          if (values.outOfOfficeFrom != null && values.outOfOfficeTo != null) {
 
-                let break_start_time = new Date(`${value}T${values.outOfOfficeFrom}`);
-                let break_end_time = new Date(`${value}T${values.outOfOfficeTo}`)
-                break_end_time.setMinutes(break_end_time.getMinutes() - 1);
+            let break_start_time = new Date(`${value}T${values.outOfOfficeFrom}`);
+            let break_end_time = new Date(`${value}T${values.outOfOfficeTo}`)
+            break_end_time.setMinutes(break_end_time.getMinutes() - 1);
 
-                // Shift will be disabled if shift time will exist in between break start & break end time
-                if (break_start_time.getTime() <= shift__date_time.getTime() && break_end_time.getTime() >= shift__date_time.getTime()) {
+            // Shift will be disabled if shift time will exist in between break start & break end time
+            if (break_start_time.getTime() <= shift__date_time.getTime() && break_end_time.getTime() >= shift__date_time.getTime()) {
 
-                  shift_value.is_disabled = true; // Disabled the shift
-                }
+              shift_value.is_disabled = true; // Disabled the shift
+            }
 
-              }
+          }
+        }
+      }
+
+    }
+
+    // Shift disabled based on break time---- end
+
+    // Shift disabled based on Booking time -- start
+
+    if (current_date_booking.length > 0) { // If bookings exist on selected date
+
+      for (let shift_value of all_shift_list) {
+
+        if (!shift_value.is_disabled) { // If shift is not disabled
+
+          let shift__date_time = new Date(`${value}T${shift_value.value}:00`);
+          for (let booking_value of current_date_booking) {
+
+            let booking_start_time = new Date(booking_value.startTime);
+            let booking_end_time = new Date(booking_value.endTime);
+            booking_end_time.setMinutes(booking_end_time.getMinutes() - 1);
+
+            // Shift will be disabled if shift time will exist in between booking start & booking end time
+            if (booking_start_time.getTime() <= shift__date_time.getTime() && booking_end_time.getTime() >= shift__date_time.getTime()) {
+
+              shift_value.is_disabled = true; // Disabled the shift
             }
           }
 
         }
-
-        // Shift disabled based on break time---- end
-
-        // Shift disabled based on Booking time -- start
-
-        if (current_date_booking.length > 0) { // If bookings exist on selected date
-
-          for (let shift_value of all_shift_list) {
-
-            if (!shift_value.is_disabled) { // If shift is not disabled
-
-              let shift__date_time = new Date(`${value}T${shift_value.value}:00`);
-              for (let booking_value of current_date_booking) {
-
-                let booking_start_time = new Date(booking_value.startTime);
-                let booking_end_time = new Date(booking_value.endTime);
-                booking_end_time.setMinutes(booking_end_time.getMinutes() - 1);
-
-                // Shift will be disabled if shift time will exist in between booking start & booking end time
-                if (booking_start_time.getTime() <= shift__date_time.getTime() && booking_end_time.getTime() >= shift__date_time.getTime()) {
-
-                  shift_value.is_disabled = true; // Disabled the shift
-                }
-              }
-
-            }
-          }
+      }
 
 
 
-        }
+    }
 
-        // Shift disabled based on Booking time -- end
+    // Shift disabled based on Booking time -- end
 
-        return all_shift_list
+    return all_shift_list
 
   }
 
@@ -760,44 +747,43 @@ export class SelectTimingComponent implements OnInit {
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
   }
 
-  async _returnDateInBetween (start_date = new Date() , end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 100))) {
+  async _returnDateInBetween(start_date = new Date(), end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 100))) {
 
-    for(var date_list=[],d=new Date(start_date);d<=new Date(end_date);d.setDate(d.getDate()+1))
-    {
-        let today_date = new Date(d);
-        let year:any = today_date.getFullYear();
-        let month:any  = today_date.getMonth() + 1; // Months start at 0!
-        let day: any = today_date.getDate();
+    for (var date_list = [], d = new Date(start_date); d <= new Date(end_date); d.setDate(d.getDate() + 1)) {
+      let today_date = new Date(d);
+      let year: any = today_date.getFullYear();
+      let month: any = today_date.getMonth() + 1; // Months start at 0!
+      let day: any = today_date.getDate();
 
-        if (day < 10) day = '0' + day;
-        if (month < 10) month = '0' + month;
+      if (day < 10) day = '0' + day;
+      if (month < 10) month = '0' + month;
 
-        date_list.push(year + '-' + month + '-' + day);
+      date_list.push(year + '-' + month + '-' + day);
 
     }
 
     return date_list;
   }
 
-  async getCurrentDate () {
+  async getCurrentDate() {
 
     let today_date = new Date();
     let year: any = today_date.getFullYear();
-    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let month: any = today_date.getMonth() + 1; // Months start at 0!
     let day: any = today_date.getDate();
 
     if (day < 10) day = '0' + day;
     if (month < 10) month = '0' + month;
 
-    return  year + '-' + month + '-' + day;
+    return year + '-' + month + '-' + day;
 
   }
 
-  async returnDateTimeFormat (date_time){
+  async returnDateTimeFormat(date_time) {
 
     let today_date = new Date(date_time);
     let year: any = today_date.getFullYear();
-    let month:any = today_date.getMonth() + 1; // Months start at 0!
+    let month: any = today_date.getMonth() + 1; // Months start at 0!
     let day: any = today_date.getDate();
     let hours: any = today_date.getHours();
     let minutes: any = today_date.getMinutes();
@@ -807,7 +793,7 @@ export class SelectTimingComponent implements OnInit {
     if (hours < 10) hours = '0' + hours;
     if (minutes < 10) minutes = '0' + minutes;
 
-    return  await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes +':00.000Z';
+    return await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':00.000';
   }
 
   async _returnTimesInBetween(start, end) {
@@ -839,60 +825,60 @@ export class SelectTimingComponent implements OnInit {
       let ampm = H < 12 ? " AM" : " PM";
       timeString = h + timeString.substr(2, 3) + ampm;
       result.push({
-                    id: result.length + 1 ,
-                    time: timeString ,
-                    value: value,
-                    is_active: false,
-                    is_disabled: false,
-                    soft_disabled: false
-                  });
+        id: result.length + 1,
+        time: timeString,
+        value: value,
+        is_active: false,
+        is_disabled: false,
+        soft_disabled: false
+      });
     }
 
     return result;
   }
 
 
-  async removePendingBooking () {
+  async removePendingBooking() {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
         let userEmail;
-        if(response.hasOwnProperty('email')){
+        if (response.hasOwnProperty('email')) {
           userEmail = response.email;
         }
-        else{
+        else {
           userEmail = await this.dataService._getUserEmail();
         }
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
-              (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
-                (response: any) => {
-                },
+            (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
+              (response: any) => {
+              },
 
-                (error: any) => {
-                }
-              );
+              (error: any) => {
+              }
+            );
           },
 
-          async (error:any) => {
+          async (error: any) => {
             await this.apiData.dismiss();
           }
         )
 
       },
-      async (error:any) => {
+      async (error: any) => {
         await this.apiData.dismiss();
       }
     );
   }
 
 
-  async checkLogin () {
+  async checkLogin() {
 
     await this.auth.getUser().subscribe(
-      async (user_data: any) =>{
+      async (user_data: any) => {
 
-        if (user_data !== undefined){
+        if (user_data !== undefined) {
 
           this.IS_LOGIN = true;
 
