@@ -17,7 +17,7 @@ export class SelectDeliverComponent implements OnInit {
   HEADING: string = "Select delivery";
   DELIVERY: boolean = false;
   SUB_TOTAL: number = 0;
-  stripe ;
+  stripe;
   card: any;
   EMAIL: any;
   PAYMENT_MODEL_OPEN: boolean = false;
@@ -32,8 +32,8 @@ export class SelectDeliverComponent implements OnInit {
     private location: Location,
   ) { }
 
-  ngOnInit() {}
-  async ionViewWillEnter(){
+  ngOnInit() { }
+  async ionViewWillEnter() {
     this.SUB_TOTAL = Number(this.activatedRoute.snapshot.paramMap.get('SUB_TOTAL'));
     let owner_data = await this.dataService._getOwnerData();
 
@@ -41,7 +41,6 @@ export class SelectDeliverComponent implements OnInit {
       this.stripe = Stripe(owner_data.stripe_publishable_key);
       this.STRIPE_FLAG = owner_data.stripe;
     }
-    console.log('owner_data.stripe_publishable_key-----' , owner_data.stripe_publishable_key)
     await this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
@@ -53,7 +52,7 @@ export class SelectDeliverComponent implements OnInit {
     await this._setupStripe();
   }
   async confirm() {
-    if(this.STRIPE_FLAG){
+    if (this.STRIPE_FLAG) {
       this.PAYMENT_MODEL_OPEN = true;
     }
     else {
@@ -72,7 +71,7 @@ export class SelectDeliverComponent implements OnInit {
         fontSize: '16px',
         '::placeholder': {
           color: '#aab7c4',
-          class:'vijay'
+          class: 'vijay'
         }
       },
       invalid: {
@@ -82,7 +81,6 @@ export class SelectDeliverComponent implements OnInit {
     };
 
     this.card = elements.create('card', { style: style, hidePostalCode: true });
-    //console.log(this.card);
     this.card.mount('#card-element');
 
     this.card.addEventListener('change', event => {
@@ -97,55 +95,48 @@ export class SelectDeliverComponent implements OnInit {
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', event => {
       event.preventDefault();
-      //console.log(event)
 
       this.stripe.createToken(this.card).then(result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          console.log('result' , result);
           this._createPayment(result.token.id);
         }
       });
     });
-    }
+  }
 
 
-    async _createPayment(token: any) {
+  async _createPayment(token: any) {
 
-      let amount = this.SUB_TOTAL;
-      let formData = new FormData();
-      console.log("this is eamil", this.EMAIL);
-      console.log("this is amount", amount);
-      formData.append('email' , this.EMAIL);
-      formData.append('token' , token);
-      formData.append('amount' , amount.toString());
-      formData.append('transactionType' , String(3));
-      formData.append('description' , "Online Store Payment");
-      await this.apiData.presentLoading();
-      console.log('token----' , token);
-      await (await this.apiData._createPayment(formData)).subscribe(
-        async (response: any) => {
+    let amount = this.SUB_TOTAL;
+    let formData = new FormData();
+    formData.append('email', this.EMAIL);
+    formData.append('token', token);
+    formData.append('amount', amount.toString());
+    formData.append('transactionType', String(3));
+    formData.append('description', "Online Store Payment");
+    await this.apiData.presentLoading();
+    await (await this.apiData._createPayment(formData)).subscribe(
+      async (response: any) => {
 
-          console.log('stripe respnose' , response);
-
-          if (response.id) {
-            // this.RECIPT_URL = response.receiptUrl;
-            await this.apiData.dismiss();
-            await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
-          } else {
-            // alert(response.details);
-
-          }
-        },
-        async (error: any) => {
-          // alert('server error');
+        if (response.id) {
+          // this.RECIPT_URL = response.receiptUrl;
           await this.apiData.dismiss();
-          await this.apiData.presentAlertWithHeader("Payment Failed","Something Went Wrong. Please try later.");
+          await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+        } else {
+          // alert(response.details);
+
         }
-      );
-    }
+      },
+      async (error: any) => {
+        // alert('server error');
+        await this.apiData.dismiss();
+        await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
+      }
+    );
+  }
   navigation() {
     // this.router.navigate(['/cart-detail']);
     this.location.back();
