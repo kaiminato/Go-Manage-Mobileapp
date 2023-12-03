@@ -75,7 +75,6 @@ export class HomePageComponent implements OnInit {
         }
       },
       (error: any) => {
-
         console.log('error-----', error)
       }
     );
