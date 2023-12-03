@@ -36,7 +36,6 @@ import { StoreAllProductComponent } from './store-all-product/store-all-product.
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
-import { StripeTestComponent } from './stripe-test/stripe-test.component';
 import { environment } from '../environments/environment';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 
@@ -70,7 +69,6 @@ const redirectUri = window.location.origin + `/contact-us`;
     ProductDetailComponent,
     CartInfoComponent,
     SelectDeliverComponent,
-    StripeTestComponent,
     ContactUsComponent
   ],
   imports: [
