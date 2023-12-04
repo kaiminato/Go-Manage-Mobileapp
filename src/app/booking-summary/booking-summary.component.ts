@@ -206,7 +206,8 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async _createPayment(token: any) {
-    let amount = this.TOTAL_AMOUNT * 100;
+    // Hardcoded deposit value
+    let amount = 100;
     let formData = new FormData();
     formData.append('email', this.EMAIL);
     formData.append('token', token);
@@ -228,14 +229,12 @@ export class BookingSummaryComponent implements OnInit {
 
           await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
         } else {
-          // alert(response.details);
           await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
         }
       },
       async (error: any) => {
         await this.apiData.dismiss();
         await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
-        // alert('server error');
       }
     );
   }
@@ -370,9 +369,6 @@ export class BookingSummaryComponent implements OnInit {
       return;
     }
 
-
-    // await this.dataService.removePreviousUrl();
-
     let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00.000`;
     let end_time = await this.addHours(this.BOOKINGS_DETAILS.timing_id.value, this.TOTAL_DURATION);
     let ending_date_time = `${this.BOOKINGS_DETAILS.date}T${end_time}:00.000`;
@@ -394,7 +390,6 @@ export class BookingSummaryComponent implements OnInit {
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
             // Get current user data
-
             let last_service_end_time = '';
             for (let service of this.BOOKINGS_DETAILS.servises) {
               let start_time = '';

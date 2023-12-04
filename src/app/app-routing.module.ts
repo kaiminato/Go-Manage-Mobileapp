@@ -21,7 +21,6 @@ import { StoreAllProductComponent } from './store-all-product/store-all-product.
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
-import { StripeTestComponent } from './stripe-test/stripe-test.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { ClearCacheGuard } from './clear-cache-gaurd';
 
@@ -139,18 +138,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'stripe',
-    component: StripeTestComponent,
-  },
-  {
     path: '',
     component: HomePageComponent,
     //canActivate: [AuthGuard]
   },
-  // {
-  //   path: '**',
-  //   component: AboutUsComponent
-  // },
 ];
 
 @NgModule({
