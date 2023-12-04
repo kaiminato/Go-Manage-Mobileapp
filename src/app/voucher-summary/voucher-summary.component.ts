@@ -290,7 +290,7 @@ export class VoucherSummaryComponent implements OnInit {
         initialBalance: this.voucherData.price,
         remainingBalance: this.voucherData.price,
         clientEmail: this.SEND_VOUCHER_TO,
-        clientFirstName: // this.voucherData.info.first_name,
+        clientFirstName: this.voucherData.info.first_name,
         clientSurname: '',
         description: 'Gift',
         emailTo: this.SEND_REEIPT_TO,
