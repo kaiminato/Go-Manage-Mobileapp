@@ -19,11 +19,7 @@ export class MakeABookingComponent implements OnInit {
   TOTAL_PRICE: any = 0;
   CANCEL_BOOKING_ID: number = 0;
 
-  STAFF_LIST: any = [
-    // {id:1, firstName: 'Jade', lastName: 'amber', image: this.imageService.DEFAULT_PERSON},
-    // {id:2, firstName: 'Testing', lastName: 'amber', image:  this.imageService.DEFAULT_PERSON},
-    // {id:3, firstName: 'Tester', lastName: 'amber', image:  this.imageService.DEFAULT_PERSON},
-  ];
+  STAFF_LIST: any = [];
 
   SERVICE_LIST: any = [];
 
