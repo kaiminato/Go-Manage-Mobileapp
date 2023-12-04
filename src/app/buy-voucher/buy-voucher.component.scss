@@ -71,6 +71,19 @@ ion-content {
           padding-top: 10px;
           padding-bottom: 10px;
           width: 100%;
+
+          ion-text {
+            /* Styles to disable text icon when hovering */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+          }
+      
+          ion-text:hover::after {
+            display: none; /* Hide the text icon on hover */
+          }
         }
 
     }
