@@ -80,3 +80,112 @@ ion-modal {
   .inner-scroll {
         overflow-y: hidden !important;
     }
+
+
+
+
+
+
+
+ion-content {
+  .modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    -webkit-animation-name: fadeIn; /* Fade in the background */
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s
+  }
+
+  .modal-content {
+    position: fixed;
+    bottom: 0;
+    background-color: white;
+    width: 99%;
+    left: 0%;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slideIn;
+    animation-duration: 0.4s;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .close {
+    position: absolute;
+    top: 0px;
+    right: 17px;
+    color: white;
+    // float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .modal-header {
+    padding: 2px 16px;
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .Confirm {
+    --border-radius: 20px;
+    ion-text{
+      font-weight: bold;
+    }
+  }
+  .online-payment-txt{
+    border-radius: 5px;
+    border: 2px solid white;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 28px;
+  }
+  .welcome-card{
+    margin: 0px;
+    border-radius: 20px;
+  }
+  .modal-footer {
+    padding: 2px 16px;
+    color: white;
+  }
+
+  /* Add Animation */
+  @-webkit-keyframes slideIn {
+    from {bottom: -300px; opacity: 0}
+    to {bottom: 0; opacity: 1}
+  }
+
+  @keyframes slideIn {
+    from {bottom: -300px; opacity: 0}
+    to {bottom: 0; opacity: 1}
+  }
+
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0}
+    to {opacity: 1}
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0}
+    to {opacity: 1}
+  }
+}
