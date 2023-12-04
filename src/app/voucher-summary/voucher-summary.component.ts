@@ -6,7 +6,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
-import {ImageService} from "../services/image.service";
+import { ImageService } from "../services/image.service";
 declare var Stripe;
 
 @Component({
@@ -98,7 +98,7 @@ export class VoucherSummaryComponent implements OnInit {
   }
 
   async _createPayment(token: any) {
-    let amount = this.voucherData.price*1000;
+    let amount = this.voucherData.price * 100;
     let formData = new FormData();
     // formData.append('email', this.EMAIL);
     formData.append('email', this.SEND_REEIPT_TO);
@@ -134,7 +134,7 @@ export class VoucherSummaryComponent implements OnInit {
     );
   }
 
-  async ionViewWillEnter () {
+  async ionViewWillEnter() {
     this.voucherData = await this.dataService.getVoucherData();
     await this.apiData.presentLoading();
 
@@ -175,29 +175,29 @@ export class VoucherSummaryComponent implements OnInit {
 
   }
 
-  async ionViewDidLeave () {
+  async ionViewDidLeave() {
 
 
     await this.closeModel();
   }
 
-  async closeModel (){
+  async closeModel() {
 
     this.modalController.dismiss();
   }
 
-  async formInitialize (){
+  async formInitialize() {
 
     this.form = this.formBuilder.group({
-      caredit_card_number: [null, [Validators.required, Validators.minLength(16) , Validators.maxLength(16) , Validators.pattern('[0-9]*')]],
-      credit_month: [null, [Validators.required, Validators.minLength(1) , Validators.maxLength(2) , Validators.pattern('[0-9]*')]],
-      caredit_year: [null, [Validators.required, Validators.minLength(4) , Validators.maxLength(4) , Validators.pattern('[0-9]*')]],
-      caredit_cvc: [null, [Validators.required, Validators.minLength(3) , Validators.maxLength(3) , Validators.pattern('[0-9]*')]],
+      caredit_card_number: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(16), Validators.pattern('[0-9]*')]],
+      credit_month: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(2), Validators.pattern('[0-9]*')]],
+      caredit_year: [null, [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]*')]],
+      caredit_cvc: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(3), Validators.pattern('[0-9]*')]],
 
     });
   }
 
-  async payPayment () {
+  async payPayment() {
 
     this.submitted = true;
 
@@ -222,14 +222,14 @@ export class VoucherSummaryComponent implements OnInit {
 
         await this.apiData.dismiss();
 
-        if (response.code == 200){
+        if (response.code == 200) {
 
           await this.alertPresent(response.msg)
         } else {
           await this.apiData.presentAlert(response.msg)
         }
       },
-      async (error : any) => {
+      async (error: any) => {
         await this.apiData.dismiss();
 
         await this.apiData.presentAlert('Please start node js first for payment')
@@ -256,7 +256,7 @@ export class VoucherSummaryComponent implements OnInit {
   }
 
 
-  async buy () {
+  async buy() {
     this.PAYMENT_MODEL_OPEN = true;
   }
 
