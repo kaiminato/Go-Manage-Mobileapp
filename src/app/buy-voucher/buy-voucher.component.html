@@ -37,8 +37,8 @@
             placeholder="Custom"
             [class.active]="price_detail.is_active"
             [class.inactive]="!price_detail.is_active"
-            [ngStyle]="{'--background': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
-            'color': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            [ngStyle]="{'font-size':'0.8rem','--background': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            'color': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#2f373d',
             '--background-activated': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
             'border': !price_detail.is_active ? '2px solid' + this.dataService.TEXT_COLOR : '2px solid #f7f8fb'}"
             *ngIf="!price_detail.is_button"

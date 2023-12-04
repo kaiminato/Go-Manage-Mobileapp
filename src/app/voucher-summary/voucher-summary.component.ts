@@ -98,7 +98,7 @@ export class VoucherSummaryComponent implements OnInit {
   }
 
   async _createPayment(token: any) {
-    let amount = this.voucherData.price;
+    let amount = this.voucherData.price*1000;
     let formData = new FormData();
     // formData.append('email', this.EMAIL);
     formData.append('email', this.SEND_REEIPT_TO);
