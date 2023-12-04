@@ -112,7 +112,6 @@ export class VoucherSummaryComponent implements OnInit {
       async (response: any) => {
 
         await this.apiData.dismiss();
-        console.log("response2: ", response);
         if (response.id) {
           /*this.RECIPT_URL = response.receiptUrl;
 
@@ -137,7 +136,6 @@ export class VoucherSummaryComponent implements OnInit {
 
   async ionViewWillEnter () {
     this.voucherData = await this.dataService.getVoucherData();
-    console.log("this.voucherData: ", this.voucherData);
     await this.apiData.presentLoading();
 
     let owner_data = await this.dataService._getOwnerData();
@@ -148,23 +146,10 @@ export class VoucherSummaryComponent implements OnInit {
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
-        console.log("getUser: ", response);
         let voucher_data = await this.dataService.getVoucherData();
-        console.log("_getOwnerData: ", await this.dataService._getOwnerData());
-
-
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
-            console.log("user_info: ", user_info);
             this.userInfo = user_info;
-            (await this.apiData.retrieveClientInformation(this.userInfo.userGMID)).subscribe(
-              async (v: any) => {
-                console.log("v: ", v);
-              },
-              async (error: any) => {
-
-
-              });
           },
           async (error: any) => {
             await this.apiData.dismiss();
@@ -281,7 +266,6 @@ export class VoucherSummaryComponent implements OnInit {
   }
 
   private async setupVoucher(response: any) {
-    console.log("setupVoucher");
     let today = new Date();
     let fiveYearsFromNow = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate());
     let f = fiveYearsFromNow.toISOString().split('T')[0];
@@ -323,6 +307,5 @@ export class VoucherSummaryComponent implements OnInit {
 
 
       });
-    // console.log("addNewVoucher", await this.apiData.addNewVoucher(data));
   }
 }

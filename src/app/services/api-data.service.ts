@@ -45,7 +45,6 @@ export class ApiDataService {
       case 'GET':
         return await this.http.get<any>(endpoint);
       case 'POST':
-        console.log("MAKING REQUEST TO: ", endpoint);
         return await this.http.post<any>(endpoint, data, requestOptions);
       case 'DELETE':
         return await this.http.delete<any>(endpoint, requestOptions);
