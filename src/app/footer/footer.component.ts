@@ -26,13 +26,13 @@ export class FooterComponent implements OnInit {
     private alertController: AlertController,
     private apiData: ApiDataService,
     private imageService: ImageService,
-    ) {
+  ) {
 
     this.checkLogin();
 
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   async logout() {
 
@@ -41,8 +41,8 @@ export class FooterComponent implements OnInit {
 
     const alert = await this.alertController.create({
       header: 'Do you want Logout ?',
-      cssClass:'my-custom-class',
-      backdropDismiss:false, // alert will not close automaticall if we click outside of alert
+      cssClass: 'my-custom-class',
+      backdropDismiss: false, // alert will not close automaticall if we click outside of alert
       buttons: [
         {
           text: 'No',
@@ -59,16 +59,16 @@ export class FooterComponent implements OnInit {
 
             // Use the SDK to build the logout URL
             this.auth
-            .buildLogoutUrl({ returnTo })
-            .pipe(
-              tap((url) => {
-                // Call the logout fuction, but only log out locally
-                this.auth.logout({ localOnly: true });
-                // Redirect to Auth0 using the Browser plugin, to clear the user's session
-                Browser.open({ url , windowName: '_self' });
-              })
-            )
-            .subscribe();
+              .buildLogoutUrl({ returnTo })
+              .pipe(
+                tap((url) => {
+                  // Call the logout fuction, but only log out locally
+                  this.auth.logout({ localOnly: true });
+                  // Redirect to Auth0 using the Browser plugin, to clear the user's session
+                  Browser.open({ url, windowName: '_self' });
+                })
+              )
+              .subscribe();
           },
         },
       ],
@@ -79,20 +79,20 @@ export class FooterComponent implements OnInit {
 
   }
 
-  async login () {
+  async login() {
 
     //await this.dataService.setPreviousUrl('select-a-time');
-      this.auth
+    this.auth
       .buildAuthorizeUrl()
       .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
       .subscribe();
   }
 
 
-  async checkLogin () {
+  async checkLogin() {
 
     await this.auth.getUser().subscribe(
-      async (user_data: any) =>{
+      async (user_data: any) => {
 
         this.IS_LOGIN = user_data !== undefined ? true : false;
 
