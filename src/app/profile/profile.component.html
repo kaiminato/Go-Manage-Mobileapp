@@ -53,7 +53,7 @@
               <ion-label>
                 <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Phone</ion-text>
               </ion-label>
-              <ion-input [(ngModel)]="PHONE" type="number" (keypress)="numberOnlyValidation($event)"  style="border: 1px solid {{this.dataService.TEXT_COLOR}};"></ion-input>
+              <ion-input [(ngModel)]="PHONE" type="string" (keypress)="numberOnlyValidation($event)"  style="border: 1px solid {{this.dataService.TEXT_COLOR}};"></ion-input>
             </ion-col>
           </ion-row>
           <ion-row>
