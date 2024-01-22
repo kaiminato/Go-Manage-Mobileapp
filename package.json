@@ -35,6 +35,7 @@
     "aws-sdk": "^2.1454.0",
     "ion2-calendar": "^3.5.0",
     "ionicons": "^6.0.3",
+    "libphonenumber-js": "^1.10.53",
     "moment": "^2.29.4",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
