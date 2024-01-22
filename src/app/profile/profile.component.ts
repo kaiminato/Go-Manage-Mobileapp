@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { DataService } from '../services/data.service';
+import parsePhoneNumber from 'libphonenumber-js'
 
 @Component({
   selector: 'app-profile',
@@ -106,7 +107,6 @@ export class ProfileComponent implements OnInit {
 
 
               if (user_details.hasOwnProperty('givenName')) {
-
                 this.SHORT_NAME = (<any>Array.from(user_details.givenName)[0]).toUpperCase() + "" + (<any>Array.from(user_details.familyName)[0]).toUpperCase();
                 this.FIRST_NAME = user_details.givenName;
                 this.LAST_NAME = user_details.familyName;
@@ -119,7 +119,7 @@ export class ProfileComponent implements OnInit {
               }
             }
             this.USERGMID = user_details.userGMID;
-            this.PHONE = user_details.phoneMobile;
+            this.PHONE = parsePhoneNumber(user_details.phoneMobile, 'IE').number;
             this.BIRTHDAY = user_details.dateOfBirth;
             if (user_details.gender) {
               this.GENDER = user_details.gender.toUpperCase();
