@@ -417,8 +417,13 @@ export class BookingSummaryComponent implements OnInit {
               else {
                 daylight_saving_time = 0;
               }
-              const new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
-              const new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
+              let new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
+              let new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
+
+              let offset = new_start_time.getTimezoneOffset();
+              new_start_time = new Date(new_start_time.getTime() - (offset*60*1000));
+              offset = new_end_time.getTimezoneOffset()
+              new_end_time = new Date(new_end_time.getTime() - (offset*60*1000));
               data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,

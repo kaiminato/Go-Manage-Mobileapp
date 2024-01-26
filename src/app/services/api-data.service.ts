@@ -111,7 +111,6 @@ export class ApiDataService {
   }
 
   async retrievSingleUserBooking(user_id: any) {
-
     return await this.makeRequest('GET', this.apiUrl + 'bookings/retrieveSingleUserBookings?userId=' + user_id);
   }
 

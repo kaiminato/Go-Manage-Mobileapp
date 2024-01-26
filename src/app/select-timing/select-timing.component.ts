@@ -310,15 +310,12 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _getDayList() {
-
     let today_date = new Date(this.DATE);
     let year: any = today_date.getFullYear();
     let month: any = today_date.getMonth() + 1;
     // let day_list = await this._getDays(month , year);
     let day_list = await this._getDaysByYear(year);
-
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()] + " " + year
-
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()] + " " + year;
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_availability_dates = [];
@@ -584,12 +581,11 @@ export class SelectTimingComponent implements OnInit {
   }
   slideChanged() {
     this.slides.getActiveIndex().then(index => {
-      this.CURRENT_MONTH = this.getMonthFromDayIndex(index, this.CURRENT_YEAR) - 1;
+      this.CURRENT_MONTH = this.getMonthFromDayIndex(index + 1, this.CURRENT_YEAR);
       this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR;
     });
   }
   async _onDateSelect(selected_date: any) {
-
     this.DATE = selected_date;
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
