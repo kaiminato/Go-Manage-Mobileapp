@@ -64,8 +64,7 @@ export class MyBookingListComponent implements OnInit {
         }
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
-
-            (await this.apiData.retrievSingleUserBooking(user_info.userGMID)).subscribe(
+            (await this.apiData.retrievSingleUserBooking(user_info.UserGMID)).subscribe(
               async (response: any) => {
                 if (response.length >0) {
 
