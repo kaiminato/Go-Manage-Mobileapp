@@ -245,7 +245,10 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-
+  capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  
   navigation() {
 
     this.router.navigate(['/']);
