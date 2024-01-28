@@ -39,13 +39,15 @@
               <ion-label>
                 <ion-text style="color: {{this.dataService.TEXT_COLOR}};">First Name</ion-text>
               </ion-label>
-              <ion-input [(ngModel)]="FIRST_NAME"  style="border: 1px solid {{this.dataService.TEXT_COLOR}};"></ion-input>
+              <ion-input [(ngModel)]="FIRST_NAME"  style="border: 1px solid {{this.dataService.TEXT_COLOR}};"
+              (ngModelChange)="FIRST_NAME = capitalizeFirstLetter(FIRST_NAME)"></ion-input>
             </ion-col>
             <ion-col size="6">
               <ion-label>
                 <ion-text style="color: {{this.dataService.TEXT_COLOR}};">Last Name</ion-text>
               </ion-label>
-              <ion-input [(ngModel)]="LAST_NAME"  style="border: 1px solid {{this.dataService.TEXT_COLOR}};"></ion-input>
+              <ion-input [(ngModel)]="LAST_NAME"  style="border: 1px solid {{this.dataService.TEXT_COLOR}};"
+              (ngModelChange)="LAST_NAME = capitalizeFirstLetter(LAST_NAME)"></ion-input>
             </ion-col>
           </ion-row>
           <ion-row>
