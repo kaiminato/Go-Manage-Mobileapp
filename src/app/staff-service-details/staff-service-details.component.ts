@@ -76,8 +76,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   async getServiceList() {
 
     this.SERVICE_LIST = await this.dataService.getServiceList();
-
-
+    
     if (this.SERVICE_LIST.length > 0) {
 
       let categorie_ids = [...new Set(this.SERVICE_LIST.map(data => data.categoryId))];
@@ -156,19 +155,24 @@ export class StaffServiceDetailsComponent implements OnInit {
 
 
   changeServiceStatus(service_id: any) {
-
-
     let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
+    let flag = false;
 
     if (is_already_exist.length > 0) {
-
-
       this.SELECTED_SERVICES = this.SELECTED_SERVICES.filter(data => data != service_id);
+      flag = false;
     } else {
-
+      flag = true;
       this.SELECTED_SERVICES.push(service_id);
     }
 
+    for (let category of this.CATEGORY_LIST) {
+      for (let service of category.services) {
+        if (service.id == service_id) {
+          service.is_checked = flag;
+        }
+      }
+    }
 
     this.selectedServicesDetail();
 
