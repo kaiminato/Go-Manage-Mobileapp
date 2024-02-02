@@ -93,7 +93,6 @@ export class StaffServiceDetailsComponent implements OnInit {
           }
         }
         if (service_list.length > 0) {
-
           this.CATEGORY_LIST.push(
             {
               category_id: category_id,
@@ -103,8 +102,6 @@ export class StaffServiceDetailsComponent implements OnInit {
               services: service_list
             }
           );
-
-
         }
 
       }
