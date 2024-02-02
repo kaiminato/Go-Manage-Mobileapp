@@ -123,7 +123,6 @@ export class SelectTimingComponent implements OnInit {
     if (booking_data.date != '') {
       await this._preFilledData();
     } else {
-
       this.IS_CALNDER_OPEN = true;
     }
 
@@ -323,21 +322,18 @@ export class SelectTimingComponent implements OnInit {
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(yesterday))
+        yesterday.setHours(0, 0, 0);
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
       }
     }
 
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
-
-
       if (is_date_working.length == 0) { // if rota not exist according for date
 
         value.is_disabled = true
       } else {
-
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
 
         if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
@@ -635,7 +631,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _isDateDisabled(value: any) {
-
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
@@ -650,13 +645,11 @@ export class SelectTimingComponent implements OnInit {
     }
 
     let is_date_working = await staff_rota.filter(data => data.workDate == value);
-
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(value));
     let shift_start_time: any = '';
     let shift_end_time: any = '';
 
     if (is_date_working.length > 1) {
-
       shift_start_time = is_date_working[0]?.startShiftTime;
       shift_end_time = is_date_working[1]?.endShiftTime;
     } else {
@@ -877,8 +870,6 @@ export class SelectTimingComponent implements OnInit {
         if (user_data !== undefined) {
 
           this.IS_LOGIN = true;
-
-
           clearTimeout(this.PENDING_BOOKING_TIMEOUT)
         }
       }

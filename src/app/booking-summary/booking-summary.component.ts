@@ -58,7 +58,7 @@ export class BookingSummaryComponent implements OnInit {
     const customer_email = await this.dataService._getUserEmail();
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
-      this.stripe = Stripe(owner_data.stripe_publishable_key ? owner_data.stripe_publishable_key : "");
+      this.stripe = Stripe(owner_data.stripe_publishable_key ? owner_data.stripe_publishable_key : "pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd");
       this.STRIPE_FLAG = owner_data.stripe;
     }
     this.auth.getUser().subscribe(
