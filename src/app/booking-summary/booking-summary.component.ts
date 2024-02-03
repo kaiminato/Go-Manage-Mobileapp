@@ -11,7 +11,6 @@ import { AlertController } from '@ionic/angular';
 import moment from 'moment';
 
 declare var Stripe;
-
 @Component({
   selector: 'app-booking-summary',
   templateUrl: './booking-summary.component.html',
@@ -360,12 +359,9 @@ export class BookingSummaryComponent implements OnInit {
   }
   async saveBooking() {
     if (!this.IS_LOGIN) {
-      await this.dataService.setPreviousUrl('booking-summary');
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
-
+      this.auth.loginWithRedirect({
+        appState: { target: '/booking-summary' }
+      })
       return;
     }
 
