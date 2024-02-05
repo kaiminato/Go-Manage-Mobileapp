@@ -46,7 +46,6 @@ export class HomePageComponent implements OnInit {
     public imageService: ImageService,
     public dataService: DataService,
   ) {
-
   }
 
   ngOnInit() {
@@ -58,7 +57,6 @@ export class HomePageComponent implements OnInit {
     await this.dataService._getOwnerColor();
     await this.apiData._updateUserId();
 
-    await this.checkPreviousUrl();
     await this._getBusinessOwnerDetails();
   }
 
@@ -70,7 +68,6 @@ export class HomePageComponent implements OnInit {
         if (response.length > 0) {
 
           await this.dataService._setOwnerData(response[0]);
-
           await this.dataService._getOwnerColor();
         }
       },
@@ -78,19 +75,20 @@ export class HomePageComponent implements OnInit {
         console.log('error-----', error)
       }
     );
-  }
 
-  async checkPreviousUrl() {
-
-    let get_previous_url = await this.dataService.getPreviousUrl()
-
-    if (get_previous_url != '') {
-
-      let url = `/${get_previous_url}`
-      this.router.navigate([url]);
-      this.dataService.removePreviousUrl();
-    }
-
+    await (await this.apiData._getStripePublicKey()).subscribe(
+      async (response: any) => {
+        let ownerData = await this.dataService._getOwnerData();
+        ownerData = {
+          ...ownerData,
+          stripe_publishable_key : response
+        }
+        await this.dataService._setOwnerData(ownerData);
+      },
+      (error: any) => {
+        console.log('error-----', error)
+      }
+    );
   }
 
   async navigate(link: any) {

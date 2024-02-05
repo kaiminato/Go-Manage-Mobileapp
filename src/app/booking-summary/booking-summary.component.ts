@@ -206,13 +206,14 @@ export class BookingSummaryComponent implements OnInit {
 
   async _createPayment(token: any) {
     // Hardcoded deposit value
-    let amount = 100;
-    let formData = new FormData();
-    formData.append('email', this.EMAIL);
-    formData.append('token', token);
-    formData.append('amount', amount.toString());
-    formData.append('transactionType', String(1));
-    formData.append('description', 'Booking Deposit Payment');
+    let amount = this.TOTAL_AMOUNT * 100;
+    let formData = {
+      'email': this.EMAIL,
+      'token': token,
+      'amount': amount.toString(),
+      'transactionType': String(1),
+      'description': 'Booking Deposit Payment'
+    }
     await this.apiData.presentLoading();
 
     await (await this.apiData._createPayment(formData)).subscribe(
