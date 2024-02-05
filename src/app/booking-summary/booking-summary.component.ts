@@ -57,7 +57,7 @@ export class BookingSummaryComponent implements OnInit {
     const customer_email = await this.dataService._getUserEmail();
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
-      this.stripe = Stripe(owner_data.stripe_publishable_key ? owner_data.stripe_publishable_key : "pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd");
+      this.stripe = Stripe(owner_data.stripe_publishable_key);
       this.STRIPE_FLAG = owner_data.stripe;
     }
     this.auth.getUser().subscribe(
@@ -204,16 +204,30 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  async _getCurrentDateTime() {
+
+    var currentdate = new Date();
+
+    let year = currentdate.getFullYear();
+    let month = (currentdate.getMonth() + 1) < 10 ? "0" + (currentdate.getMonth() + 1) : (currentdate.getMonth() + 1);
+    let date = currentdate.getDate() < 10 ? "0" + currentdate.getDate() : currentdate.getDate();
+    let hour = currentdate.getHours() < 10 ? "0" + currentdate.getHours() : currentdate.getHours();
+    let minutes = currentdate.getMinutes() < 10 ? "0" + currentdate.getMinutes() : currentdate.getMinutes();
+    let seconds = currentdate.getSeconds() < 10 ? "0" + currentdate.getSeconds() : currentdate.getSeconds();
+
+    return await `${year}-${month}-${date} ${hour}:${minutes}:${seconds}`;
+  }
+
   async _createPayment(token: any) {
     // Hardcoded deposit value
     let amount = this.TOTAL_AMOUNT * 100;
-    let formData = {
-      'email': this.EMAIL,
-      'token': token,
-      'amount': amount.toString(),
-      'transactionType': String(1),
-      'description': 'Booking Deposit Payment'
-    }
+    let formData = new FormData();
+    // formData.append('email', this.EMAIL);
+    formData.append('email', this.EMAIL);
+    formData.append('token', token);
+    formData.append('amount', amount.toString());
+    formData.append('transactionType', String(1));
+    formData.append('description', 'Booking Deposit Payment');
     await this.apiData.presentLoading();
 
     await (await this.apiData._createPayment(formData)).subscribe(
