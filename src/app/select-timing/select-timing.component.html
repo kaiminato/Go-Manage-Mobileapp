@@ -54,6 +54,48 @@
     </ion-grid>
   </div>
 
+  <ion-modal [isOpen]="IS_CONFIRM_OPEN" class="auto-height">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title style="color : {{this.dataService.TEXT_COLOR}} !important;">Do you want to Continue or Reselect the datetime?</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <div class="inner-content" style="padding : 10px;">
+        <div class="card-list">
+          <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">      
+            <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
+              <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> Date and Time
+                <br/>
+                <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ DATE }} at {{ STARTING_TIME }}</ion-text>
+              </ion-text>
+            </ion-item>
+            <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
+              <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> Duration
+                <br/>
+                <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ TOTAL_DURATION }} minutes, ends at {{ ENDING_TIME }}</ion-text>
+              </ion-text>
+            </ion-item>
+            <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
+              <br/>
+              <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ STUDIO_NAME }} Studio</ion-text>
+            </ion-item>
+            <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
+              <br/>
+              <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ SERVICE_NAME }}</ion-text>
+            </ion-item>
+          </ion-list>
+        </div>
+        <ion-button class="ion-margin" shape="round" expand="full" fill="outline" (click)="closeConfirm()"
+          >Cancel</ion-button
+        >
+        <ion-button class="ion-margin" shape="round" expand="full" (click)="confirmPresaved()"
+          >Confirm</ion-button
+        >
+      </div>
+    </ng-template>
+  </ion-modal>
+
   <ion-modal [isOpen]="IS_CALNDER_OPEN" [breakpoints]="[0.1, 0.5, 1]" [initialBreakpoint]="0.8" (willDismiss)="_datePickerClosed()">
 
     <ng-template>

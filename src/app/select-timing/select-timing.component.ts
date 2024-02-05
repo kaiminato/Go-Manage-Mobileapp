@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { PickerController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, IonModal } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
@@ -16,14 +16,21 @@ import { Browser } from '@capacitor/browser';
   templateUrl: './select-timing.component.html',
   styleUrls: ['./select-timing.component.scss'],
 })
-export class SelectTimingComponent implements OnInit {
 
+export class SelectTimingComponent implements OnInit {
+  @ViewChild(IonModal) modal: IonModal;
   @ViewChild('mySlider') slides: IonSlides;
   // @ViewChild('myCalander') myCalander!: ElementRef;
 
-
   ID: any = '';
   HEADING: string = "3";
+  TOTAL_DURATION: any = 0;
+  STARTING_TIME: string;
+  ENDING_TIME: string;
+  STUDIO_NAME: string = '';
+  SERVICE_NAME: string = '';
+  TOTAL_AMOUNT: any = 0;
+  TIME_ID: any = 0;
   CURRENT_MONTH: number = this.dataService.CURRENT_MONTH;
   CURRENT_YEAR: number = this.dataService.CURRENT_YEAR;
   CURRENT_MONTH_VALUE: string = '';
@@ -35,6 +42,7 @@ export class SelectTimingComponent implements OnInit {
   CANCEL_BOOKING_ID: number = 0;
   IS_STAFF: any = true;
   IS_CALNDER_OPEN: boolean = false;
+  IS_CONFIRM_OPEN: boolean = false;
   DATE: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
@@ -42,6 +50,7 @@ export class SelectTimingComponent implements OnInit {
   MONTH_NAME_LIST: any = [];
   DISABLED_DATES_ARRAY: any = [];
   IS_LOGIN: boolean = false;
+  BOOKING_WITH_STAFF: any = true;
   PENDING_BOOKING_TIMEOUT: any;
 
   SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
@@ -123,16 +132,95 @@ export class SelectTimingComponent implements OnInit {
     if (booking_data.date != '') {
       await this._preFilledData();
     } else {
-
       this.IS_CALNDER_OPEN = true;
     }
 
+    let response = await this.dataService.getSelectTimingInfo();
+    if(response["flag"] == "true"){
+      
+      booking_data.date = response["selectedDate"]
+      booking_data.timing_id = response["selectedTime"]
+      
+      this.TIME_ID = response["selectedTimingId"]
+
+      this.dataService.saveSelectTimingInfo("false", "", "", "")
+
+      this.DATE = response["selectedDate"];
+      this.SERVICE_NAME = booking_data.servises[0].serviceName;
+      this.IS_CALNDER_OPEN = false;
+      this.IS_CONFIRM_OPEN = true;
+      await this._getDayList();
+
+      this.BOOKING_WITH_STAFF =
+        booking_data.booking_type == this.dataService.BOOKING_WITH_STAFF
+          ? true
+          : false;
+
+          booking_data.staff_details = await this.dataService.getStaffDetail(
+            booking_data.staff_id
+      );
+      let shift_timing_details = await this.dataService.getShift(
+        booking_data.date
+      );
+      booking_data.shift_timing_details =
+        await shift_timing_details.filter(
+          (data) => data.id == booking_data.timing_id.id
+        );
+
+      let [start_time, am_pm] = booking_data.timing_id.time.split(' ');
+
+
+      this.STARTING_TIME = `${start_time}${am_pm}`;
+
+      for (let service of booking_data.servises) {
+        this.TOTAL_DURATION += service.serviceDuration;
+        this.TOTAL_AMOUNT += service.servicePrice;
+      }
+
+      let owner_details = await this.dataService._getOwnerData();
+
+      this.STUDIO_NAME = owner_details != '' ? owner_details['site_name'] + " " + owner_details['businessAddress'] : '';
+
+      let [year, month, day] = booking_data.date.split('-');
+      let new_date = new Date(booking_data.date);
+      let get_month_name = await this.dataService.MONTHS_NAME[new_date.getMonth()];
+
+      this.DATE = `${day} ${get_month_name} ${year}`;
+
+      var now = new Date(`${booking_data.date}T${booking_data.timing_id.value}:00`);
+
+
+      now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
+
+      now = new Date(now); // Date object
+
+      let { without_space_time } = await this.formatAMPM(now);
+      this.ENDING_TIME = without_space_time;
+
+      this._onDateSelect(response["selectedDate"])
+    }
   }
 
   async ionViewWillLeave() {
 
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
+  }
+
+  async formatAMPM(date) {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    let str_time = hours + ':' + minutes + ' ' + ampm;
+    let str_time_without_space = hours + ':' + minutes + ampm;
+
+    return await {
+      with_space_time: str_time,
+      without_space_time: str_time_without_space,
+    };
   }
 
   async _preFilledData() {
@@ -153,8 +241,6 @@ export class SelectTimingComponent implements OnInit {
         this.ALL_SHIFT[booking_data.timing_id.id - 1].is_active = true;
       }, 300);
     }
-
-
   }
 
 
@@ -166,7 +252,6 @@ export class SelectTimingComponent implements OnInit {
 
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.DATE;
-
     get_booking_data.timing_id = selecetd_shift[0];
 
     let total_duration = 0;
@@ -217,14 +302,14 @@ export class SelectTimingComponent implements OnInit {
     }
 
     if (!this.IS_LOGIN) {
+      await this.dataService.saveSelectTimingInfo("true", this.DATE,  JSON.stringify(get_booking_data.timing_id), String(id));
 
-      await this.dataService.setPreviousUrl('select-a-time');
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
-
+      this.auth.loginWithRedirect({
+        appState: { target: '/select-a-time' }
+      })
       return
+    } else {
+      await this.dataService.saveSelectTimingInfo("false", this.DATE,  String(id), String(id));
     }
 
     for (let shift of this.ALL_SHIFT) shift.is_active = shift.id == id ? true : false;
@@ -265,21 +350,16 @@ export class SelectTimingComponent implements OnInit {
               },
               async (error: any) => {
                 await this.apiData.dismiss();
-
                 if (error.status == 200) {
-
                   await this.dataService.setBookingData(get_booking_data);
                   setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
-
                 } else if (error.status == 201) {
-
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
-
                   return;
-
+                } else if (error.status == 500) {
+                  await this.dataService.setBookingData(get_booking_data);
+                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);                  
                 } else {
-
-
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                 }
               }
@@ -310,15 +390,12 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _getDayList() {
-
     let today_date = new Date(this.DATE);
     let year: any = today_date.getFullYear();
     let month: any = today_date.getMonth() + 1;
     // let day_list = await this._getDays(month , year);
     let day_list = await this._getDaysByYear(year);
-
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()] + " " + year
-
+    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()] + " " + year;
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_availability_dates = [];
@@ -326,21 +403,18 @@ export class SelectTimingComponent implements OnInit {
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(yesterday))
+        yesterday.setHours(0, 0, 0);
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
       }
     }
 
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
-
-
       if (is_date_working.length == 0) { // if rota not exist according for date
 
         value.is_disabled = true
       } else {
-
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
 
         if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
@@ -357,6 +431,15 @@ export class SelectTimingComponent implements OnInit {
     this.slides.slideTo(active_index_array_index - 1, 1000);
 
     await this._getShiftList();
+  }
+
+  closeConfirm(){
+    this.IS_CONFIRM_OPEN = false;
+  }
+
+  confirmPresaved(){
+    this.IS_CONFIRM_OPEN = false;
+    this._selectTiming(this.TIME_ID, false);
   }
 
   async _getShiftList() {
@@ -584,12 +667,11 @@ export class SelectTimingComponent implements OnInit {
   }
   slideChanged() {
     this.slides.getActiveIndex().then(index => {
-      this.CURRENT_MONTH = this.getMonthFromDayIndex(index, this.CURRENT_YEAR) - 1;
-      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR;
+      this.CURRENT_MONTH = this.getMonthFromDayIndex(index + 1, this.CURRENT_YEAR);
+      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1] + " " + this.CURRENT_YEAR;
     });
   }
   async _onDateSelect(selected_date: any) {
-
     this.DATE = selected_date;
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
@@ -639,7 +721,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _isDateDisabled(value: any) {
-
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
@@ -654,13 +735,11 @@ export class SelectTimingComponent implements OnInit {
     }
 
     let is_date_working = await staff_rota.filter(data => data.workDate == value);
-
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(value));
     let shift_start_time: any = '';
     let shift_end_time: any = '';
 
     if (is_date_working.length > 1) {
-
       shift_start_time = is_date_working[0]?.startShiftTime;
       shift_end_time = is_date_working[1]?.endShiftTime;
     } else {
@@ -776,7 +855,6 @@ export class SelectTimingComponent implements OnInit {
     if (month < 10) month = '0' + month;
 
     return year + '-' + month + '-' + day;
-
   }
 
   async returnDateTimeFormat(date_time) {
@@ -874,15 +952,12 @@ export class SelectTimingComponent implements OnInit {
 
 
   async checkLogin() {
-
     await this.auth.getUser().subscribe(
       async (user_data: any) => {
 
         if (user_data !== undefined) {
 
           this.IS_LOGIN = true;
-
-
           clearTimeout(this.PENDING_BOOKING_TIMEOUT)
         }
       }

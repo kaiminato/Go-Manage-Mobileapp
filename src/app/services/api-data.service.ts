@@ -77,8 +77,11 @@ export class ApiDataService {
   }
 
   async _getBusinessOwnerDetails() {
-
     return await this.makeRequest('GET', this.apiUrl + 'settings/getSettings');
+  }
+
+  async _getStripePublicKey() {
+    return await this.makeRequest('GET', this.apiUrl + 'settings/getStripePublicKey');
   }
 
   async _getBusinessHoursDetails() {
@@ -111,7 +114,6 @@ export class ApiDataService {
   }
 
   async retrievSingleUserBooking(user_id: any) {
-
     return await this.makeRequest('GET', this.apiUrl + 'bookings/retrieveSingleUserBookings?userId=' + user_id);
   }
 
