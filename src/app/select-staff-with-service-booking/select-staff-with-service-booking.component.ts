@@ -368,11 +368,9 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
 
   async _selectStaff(staff_id: any) { // not in use-----
     if (!this.IS_LOGIN) {
-      await this.dataService.setPreviousUrl('select-staff-with-service-booking');
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
+      this.auth.loginWithRedirect({
+        appState: { target: '/select-staff-with-service-booking' }
+      })
       return
     }
 

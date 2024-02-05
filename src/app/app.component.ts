@@ -25,8 +25,6 @@ export class AppComponent {
     });
 
     this.dataService._getOwnerColor();
-
-    this.authUserService.handleAuthentication(); // Trigger authentication handling
   }
 
   ngOnInit(): void {
@@ -35,7 +33,6 @@ export class AppComponent {
       domain: environment.auth.domain,
       clientId: environment.auth.clientId
     })
-
-    this.authUserService.handleAuthentication(); // Trigger authentication handling
+    // this.authUserService.handleAuthentication(); // Trigger authentication handling
   }
 }
