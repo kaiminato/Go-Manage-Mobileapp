@@ -31,10 +31,8 @@
         <ion-grid *ngIf="service.is_open">
           <ion-row *ngFor="let service_detail of service.services; let index_number = index" class="service_order_list">
             <!-- <ion-col size="1" ></ion-col> -->
-            <ion-col size="12" *ngIf="service_detail.performed">
+            <ion-col size="12">
               <ion-item class="service_detail ion-no-padding"   detail="false" >
-
-
                 <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
                   <ion-icon name="information-circle-outline"  style="color: black;"></ion-icon>
                 </ion-button>
@@ -51,7 +49,7 @@
                 <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
                   <h3>{{ service_detail.serviceName }}</h3>
                   <ion-text class="service_count"> {{ service_detail.servicePrice | currency: 'EUR'}} </ion-text>
-                  <ion-checkbox style="--background-checked: {{this.dataService.BUTTON_COLOR}} !important" slot="end" [disabled]="!service_detail.performed" (ionChange)="changeServiceStatus( service_detail.id )" [checked]="service_detail.is_checked"></ion-checkbox>
+                  <ion-checkbox style="--background-checked: {{this.dataService.BUTTON_COLOR}} !important" slot="end" [disabled]="service_detail.performed" (ionChange)="changeServiceStatus( service_detail.id )" [checked]="service_detail.is_checked"></ion-checkbox>
                 </ion-label>
 
               </ion-item>

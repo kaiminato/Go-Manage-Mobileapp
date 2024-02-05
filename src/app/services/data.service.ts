@@ -42,6 +42,12 @@ export class DataService {
   public VOUCHER_SEND_TYPE_SOME_ELSE: any = 2;
   public VOUCHER_DATA_KEY: any = 'voucher_data';
   public LOGGED_IN_PREVIOUS_URL_KEY = 'previous_url';
+
+  public RELOAD_AFTER_LOGIN = 'reload_after_login';
+  public PRE_SELECTED_DATE = 'pre_selected_date';
+  public PRE_SELECTED_TIME = 'pre_selected_time';
+  public PRE_SELECTED_TIME_ID = 'pre_selected_time_id';
+
   public BACKGROUND_COLOR: string = '#ffffff';
   public BUTTON_COLOR: string = '#047473';
   public TEXT_COLOR: string = '#047473';
@@ -605,6 +611,35 @@ export class DataService {
 
     let previous_url: any = await sessionStorage.getItem(this.LOGGED_IN_PREVIOUS_URL_KEY);
     return await previous_url == undefined || previous_url == null ? '' : previous_url;
+  }
+
+  async saveSelectTimingInfo(flag: string, selectedDate: string, selectedTime: string,
+    selectedTimingId: string) {
+    console.log(flag, selectedDate, selectedTime);
+    
+    await sessionStorage.setItem(this.RELOAD_AFTER_LOGIN, flag);
+    await sessionStorage.setItem(this.PRE_SELECTED_DATE, selectedDate);
+    await sessionStorage.setItem(this.PRE_SELECTED_TIME_ID, selectedTimingId);
+    return await sessionStorage.setItem(this.PRE_SELECTED_TIME, selectedTime);
+  }
+
+  async getSelectTimingInfo() {
+    let preSelectedDate: any = await sessionStorage.getItem(this.PRE_SELECTED_DATE);
+    let preSelectedTime: any = await sessionStorage.getItem(this.PRE_SELECTED_TIME);
+    let preSelectedTimingId: any = await sessionStorage.getItem(this.PRE_SELECTED_TIME_ID);
+    let r_flag: any = await sessionStorage.getItem(this.RELOAD_AFTER_LOGIN);
+    let response = {
+      flag : r_flag == undefined || r_flag == null ? 'false' : r_flag,
+      selectedDate : preSelectedDate,
+      selectedTime : JSON.parse(preSelectedTime),
+      selectedTimingId : preSelectedTimingId
+    };
+    return response;
+  }
+
+  async getSelectTimingFlag(){
+    let flag = await sessionStorage.getItem(this.RELOAD_AFTER_LOGIN);
+    return await flag == undefined || flag == null ? '' : flag;
   }
 
   async removePreviousUrl() {

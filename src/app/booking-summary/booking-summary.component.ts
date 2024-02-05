@@ -11,7 +11,6 @@ import { AlertController } from '@ionic/angular';
 import moment from 'moment';
 
 declare var Stripe;
-
 @Component({
   selector: 'app-booking-summary',
   templateUrl: './booking-summary.component.html',
@@ -205,10 +204,25 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  async _getCurrentDateTime() {
+
+    var currentdate = new Date();
+
+    let year = currentdate.getFullYear();
+    let month = (currentdate.getMonth() + 1) < 10 ? "0" + (currentdate.getMonth() + 1) : (currentdate.getMonth() + 1);
+    let date = currentdate.getDate() < 10 ? "0" + currentdate.getDate() : currentdate.getDate();
+    let hour = currentdate.getHours() < 10 ? "0" + currentdate.getHours() : currentdate.getHours();
+    let minutes = currentdate.getMinutes() < 10 ? "0" + currentdate.getMinutes() : currentdate.getMinutes();
+    let seconds = currentdate.getSeconds() < 10 ? "0" + currentdate.getSeconds() : currentdate.getSeconds();
+
+    return await `${year}-${month}-${date} ${hour}:${minutes}:${seconds}`;
+  }
+
   async _createPayment(token: any) {
     // Hardcoded deposit value
-    let amount = 100;
+    let amount = this.TOTAL_AMOUNT * 100;
     let formData = new FormData();
+    // formData.append('email', this.EMAIL);
     formData.append('email', this.EMAIL);
     formData.append('token', token);
     formData.append('amount', amount.toString());
@@ -360,12 +374,9 @@ export class BookingSummaryComponent implements OnInit {
   }
   async saveBooking() {
     if (!this.IS_LOGIN) {
-      await this.dataService.setPreviousUrl('booking-summary');
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
-
+      this.auth.loginWithRedirect({
+        appState: { target: '/booking-summary' }
+      })
       return;
     }
 
@@ -417,8 +428,13 @@ export class BookingSummaryComponent implements OnInit {
               else {
                 daylight_saving_time = 0;
               }
-              const new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
-              const new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
+              let new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
+              let new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
+
+              let offset = new_start_time.getTimezoneOffset();
+              new_start_time = new Date(new_start_time.getTime() - (offset*60*1000));
+              offset = new_end_time.getTimezoneOffset()
+              new_end_time = new Date(new_end_time.getTime() - (offset*60*1000));
               data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
