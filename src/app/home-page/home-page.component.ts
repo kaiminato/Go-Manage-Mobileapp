@@ -78,15 +78,19 @@ export class HomePageComponent implements OnInit {
 
     await (await this.apiData._getStripePublicKey()).subscribe(
       async (response: any) => {
-        let ownerData = await this.dataService._getOwnerData();
-        ownerData = {
-          ...ownerData,
-          stripe_publishable_key : response
-        }
-        await this.dataService._setOwnerData(ownerData);
       },
-      (error: any) => {
-        console.log('error-----', error)
+      async (error: any) => {
+        if(error.status == 200){
+          console.log(error.error.text);
+          let ownerData = await this.dataService._getOwnerData();
+          ownerData = {
+            ...ownerData,
+            stripe_publishable_key : error.error.text
+          }
+          await this.dataService._setOwnerData(ownerData);
+        }else{
+          console.log('error-----', error)
+        }
       }
     );
   }
