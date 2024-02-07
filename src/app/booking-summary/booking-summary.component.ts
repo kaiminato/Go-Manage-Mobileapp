@@ -57,9 +57,9 @@ export class BookingSummaryComponent implements OnInit {
     const customer_email = await this.dataService._getUserEmail();
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
-      this.stripe = Stripe(owner_data.stripe_publishable_key);
       this.STRIPE_FLAG = owner_data.stripe;
     }
+
     this.auth.getUser().subscribe(
       async (response: any) => {
         if (response.hasOwnProperty('email')) {
@@ -85,7 +85,21 @@ export class BookingSummaryComponent implements OnInit {
       (error: any) => {
       }
     );
-    await this._setupStripe();// Initialize stripe token
+
+    await (await this.apiData._getStripePublicKey()).subscribe(
+      async (response: any) => {
+      },
+      async (error: any) => {
+        if(error.status == 200){
+          this.stripe = Stripe(error.error.text);
+          await this._setupStripe();// Initialize stripe token
+        }else{
+          console.log('error-----', error)
+        }
+      }
+    );
+    
+    
   }
   confirm() {
     if (this.STRIPE_FLAG) {
