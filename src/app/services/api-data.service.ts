@@ -108,6 +108,11 @@ export class ApiDataService {
     return await this.makeRequest('POST', this.apiUrl + 'user/updateUserDetails', body)
   }
 
+  async addUser(data: any) {
+    const body = JSON.stringify(data);
+    return await this.makeRequest('POST', this.apiUrl + 'user/addUser', body)
+  }
+
   async deleteBooking(id: any) {
 
     return await this.makeRequest('DELETE', this.apiUrl + 'bookings/deleteBooking/' + id)
