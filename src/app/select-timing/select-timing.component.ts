@@ -107,11 +107,9 @@ export class SelectTimingComponent implements OnInit {
 
     this.activateRoute.queryParams
       .subscribe(params => {
-
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-
       }
-      );
+    );
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR
@@ -122,7 +120,6 @@ export class SelectTimingComponent implements OnInit {
     // this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     this.DAYS_ARRAY = await this._getDaysByYear(this.CURRENT_YEAR);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
-
 
     await this.checkLogin();
     await this._getDisabledDate();
@@ -137,20 +134,16 @@ export class SelectTimingComponent implements OnInit {
 
     let response = await this.dataService.getSelectTimingInfo();
     if(response["flag"] == "true"){
-      
       booking_data.date = response["selectedDate"]
       booking_data.timing_id = response["selectedTime"]
       
       this.TIME_ID = response["selectedTimingId"]
-
       this.dataService.saveSelectTimingInfo("false", "", "", "")
-
       this.DATE = response["selectedDate"];
       this.SERVICE_NAME = booking_data.servises[0].serviceName;
       this.IS_CALNDER_OPEN = false;
       this.IS_CONFIRM_OPEN = true;
       await this._getDayList();
-
       this.BOOKING_WITH_STAFF =
         booking_data.booking_type == this.dataService.BOOKING_WITH_STAFF
           ? true
@@ -169,16 +162,13 @@ export class SelectTimingComponent implements OnInit {
 
       let [start_time, am_pm] = booking_data.timing_id.time.split(' ');
 
-
       this.STARTING_TIME = `${start_time}${am_pm}`;
-
       for (let service of booking_data.servises) {
         this.TOTAL_DURATION += service.serviceDuration;
         this.TOTAL_AMOUNT += service.servicePrice;
       }
 
       let owner_details = await this.dataService._getOwnerData();
-
       this.STUDIO_NAME = owner_details != '' ? owner_details['site_name'] + " " + owner_details['businessAddress'] : '';
 
       let [year, month, day] = booking_data.date.split('-');
@@ -188,17 +178,14 @@ export class SelectTimingComponent implements OnInit {
       this.DATE = `${day} ${get_month_name} ${year}`;
 
       var now = new Date(`${booking_data.date}T${booking_data.timing_id.value}:00`);
-
-
       now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
-
       now = new Date(now); // Date object
-
       let { without_space_time } = await this.formatAMPM(now);
       this.ENDING_TIME = without_space_time;
-
       this._onDateSelect(response["selectedDate"])
     }
+
+    
   }
 
   async ionViewWillLeave() {
@@ -243,7 +230,6 @@ export class SelectTimingComponent implements OnInit {
     }
   }
 
-
   async _selectTiming(id: number, is_disabled: any) {
 
     if (is_disabled) return;
@@ -283,12 +269,9 @@ export class SelectTimingComponent implements OnInit {
     }
 
     if (!is_passed) {
-
       await this.apiService.presentAlert('Shift not available')
       return;
     }
-
-
 
     // Check services's time is under office timing
 
@@ -345,7 +328,6 @@ export class SelectTimingComponent implements OnInit {
 
             (await this.apiData.createPendingAppointment(data)).subscribe(
               async () => {
-
                 await this.apiData.dismiss();
               },
               async (error: any) => {
@@ -364,8 +346,6 @@ export class SelectTimingComponent implements OnInit {
                 }
               }
             );
-
-
           },
 
           async (error: any) => {
@@ -954,11 +934,42 @@ export class SelectTimingComponent implements OnInit {
   async checkLogin() {
     await this.auth.getUser().subscribe(
       async (user_data: any) => {
-
         if (user_data !== undefined) {
-
           this.IS_LOGIN = true;
           clearTimeout(this.PENDING_BOOKING_TIMEOUT)
+
+          let userEmail;
+          if (user_data.hasOwnProperty('email')) {
+            userEmail = user_data.email;
+          }
+          else {
+            return;
+          }
+
+          (await this.apiData.getMyProfile(userEmail)).subscribe(
+            async (user_info: any) => {
+              if(user_info.statusCodeValue == 500) {
+                (await this.apiData.addUser({email : userEmail})).subscribe(
+                  async (response: any) => {
+                    await this.apiData.dismiss();
+                  },
+                  async (error: any) => {
+                    if (error.status === 200) {
+                      await this.apiData.dismiss();
+                    }
+                    else {
+                      await this.apiData.dismiss();
+                      await this.apiData.presentAlert('Server error, Please try again later');
+                    }
+            
+                  }
+                );
+              }
+            },
+            async (error: any) => {
+              
+            }
+          );
         }
       }
     );
