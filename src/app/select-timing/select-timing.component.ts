@@ -318,7 +318,7 @@ export class SelectTimingComponent implements OnInit {
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
             let data = {
-              "userId": user_info.userGMID,
+              "userId": user_info.UserGMID,
               "staffId": get_booking_data.staff_id,
               "isPending": 1,
               "startTime": create_pending_booking_start_time,
@@ -909,7 +909,7 @@ export class SelectTimingComponent implements OnInit {
         }
         (await this.apiData.getMyProfile(userEmail)).subscribe(
           async (user_info: any) => {
-            (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
+            (await this.apiData.removeUserPendingBoking(user_info.UserGMID)).subscribe(
               (response: any) => {
               },
 
@@ -948,26 +948,24 @@ export class SelectTimingComponent implements OnInit {
 
           (await this.apiData.getMyProfile(userEmail)).subscribe(
             async (user_info: any) => {
-              if(user_info.statusCodeValue == 500) {
-                (await this.apiData.addUser({email : userEmail})).subscribe(
-                  async (response: any) => {
+              (await this.apiData.addUser({email : userEmail})).subscribe(
+                async (response: any) => {
+                  await this.apiData.dismiss();
+                },
+                async (error: any) => {
+                  if (error.status === 200) {
                     await this.apiData.dismiss();
-                  },
-                  async (error: any) => {
-                    if (error.status === 200) {
-                      await this.apiData.dismiss();
-                    }
-                    else {
-                      await this.apiData.dismiss();
-                      await this.apiData.presentAlert('Server error, Please try again later');
-                    }
-            
                   }
-                );
-              }
+                  else {
+                    await this.apiData.dismiss();
+                    await this.apiData.presentAlert('Server error, Please try again later');
+                  }
+                }
+              );
             },
             async (error: any) => {
-              
+              await this.apiData.dismiss();
+              await this.apiData.presentAlert('Server error, Please try again later');
             }
           );
         }

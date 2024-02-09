@@ -40,7 +40,7 @@ export class AddReviewComponent implements OnInit {
       async (response: any) => {
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
-            this.user_id = user_info.userGMID;
+            this.user_id = user_info.UserGMID;
           });
       },
       async (error: any) => {
