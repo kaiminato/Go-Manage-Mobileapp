@@ -412,7 +412,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
           async (user_info: any) => {
 
             let data = {
-              "userId": user_info.UserGMID,
+              "userId": user_info.userGMID,
               "staffId": staff_id,
               "isPending": 1,
               "startTime": create_pending_booking_start_time,
@@ -489,7 +489,7 @@ export class SelectStaffWithServiceBookingComponent implements OnInit {
           async (user_info: any) => {
 
 
-            (await this.apiData.removeUserPendingBoking(user_info.UserGMID)).subscribe(
+            (await this.apiData.removeUserPendingBoking(user_info.userGMID)).subscribe(
               () => {
               },
 
