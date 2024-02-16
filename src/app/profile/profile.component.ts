@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   HOME_LOCATION: string = '';
   PHONE: string = '';
   RESPONSE: any;
-  UserGMID: any;
+  USERGMID: any;
 
   constructor(
     private router: Router,
@@ -118,7 +118,7 @@ export class ProfileComponent implements OnInit {
                 this.FIRST_NAME = user_details.name;
               }
             }
-            this.UserGMID = user_details.UserGMID;
+            this.USERGMID = user_details.userGMID;
             this.PHONE = parsePhoneNumber(user_details.phoneMobile, 'IE').number;
             this.BIRTHDAY = user_details.dateOfBirth;
             if (user_details.gender) {
@@ -218,7 +218,7 @@ export class ProfileComponent implements OnInit {
       // address: this.HOME_LOCATION,
       gender: this.GENDER,
       dateOfBirth: this.BIRTHDAY,
-      UserGMID: this.UserGMID,
+      userGMID: this.USERGMID,
     }
 
     await this.apiData.presentLoading();

@@ -36,7 +36,7 @@ export class BookingSummaryComponent implements OnInit {
   PAYMENT_MODEL_OPEN: boolean = false;
   STRIPE_FLAG: boolean;
   EMAIL: string;
-  UserGMID: any;
+  userGMID: any;
   RECIPT_URL: string = '';
 
   constructor(
@@ -71,7 +71,7 @@ export class BookingSummaryComponent implements OnInit {
 
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
-            this.UserGMID = user_info.UserGMID;
+            this.userGMID = user_info.userGMID;
             if (user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == '') {
               this.presentAlert(this.EMAIL);
             } else {
@@ -337,7 +337,7 @@ export class BookingSummaryComponent implements OnInit {
       givenName: save_data.first_name,
       familyName: save_data.last_name,
       phoneMobile: save_data.phone,
-      UserGMID: this.UserGMID
+      userGMID: this.userGMID
     };
 
     await this.apiData.presentLoading();
@@ -451,7 +451,7 @@ export class BookingSummaryComponent implements OnInit {
               new_end_time = new Date(new_end_time.getTime() - (offset*60*1000));
               data.push({
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
-                clientId: user_info.UserGMID,
+                clientId: user_info.userGMID,
                 description: '',
                 endTime: new_end_time.toISOString().slice(0, -5),
                 startTime: new_start_time.toISOString().slice(0, -5),
