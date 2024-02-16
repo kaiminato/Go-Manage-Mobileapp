@@ -204,11 +204,12 @@ export class BookingSummaryComponent implements OnInit {
     });
 
     var form = document.getElementById('payment-form');
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit', async event => {
+      await this.apiData.presentLoading();
       event.preventDefault();
-
-      this.stripe.createToken(this.card).then(result => {
+      this.stripe.createToken(this.card).then(async result => {
         if (result.error) {
+          await this.apiData.dismiss();
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
@@ -242,12 +243,10 @@ export class BookingSummaryComponent implements OnInit {
     formData.append('amount', amount.toString());
     formData.append('transactionType', String(1));
     formData.append('description', 'Booking Deposit Payment');
-    await this.apiData.presentLoading();
 
     await (await this.apiData._createPayment(formData)).subscribe(
       async (response: any) => {
-
-        await this.apiData.dismiss();
+        this.PAYMENT_MODEL_OPEN = false;
         if (response.id) {
           this.RECIPT_URL = response.receiptUrl;
 
@@ -259,6 +258,7 @@ export class BookingSummaryComponent implements OnInit {
         } else {
           await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
         }
+        await this.apiData.dismiss();
       },
       async (error: any) => {
         await this.apiData.dismiss();
