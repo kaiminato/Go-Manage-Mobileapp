@@ -5,7 +5,7 @@
   <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
     <h2>Booking Summary</h2>
   </ion-card>
-  <div class="card-list">
+  <div class="card-list" style="padding-bottom: 40px;">
     <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
       <ion-img slot="end" [src]="this.dataService.APP_HOME_PAGE_ICON" class="ion-margin-bottom"></ion-img>
 
@@ -53,15 +53,16 @@
 
       </ion-item>
 
-      <ion-button
-        class="ion-margin-bottom ion-margin-top details_no_border"
-        (click)="confirm()"
-        style="--background : {{this.dataService.BUTTON_COLOR}} !important; --background-activated: {{this.dataService.BUTTON_COLOR}}"
-        >
-        <ion-text>Confirm</ion-text>
-      </ion-button>
+      
 
     </ion-list>
+    <ion-button *ngIf="!PAYMENT_MODEL_OPEN"
+        class="ion-margin-bottom ion-margin-top details_no_border"
+        (click)="saveBooking()"
+        style="--background : {{this.dataService.BUTTON_COLOR}} !important; --background-activated: {{this.dataService.BUTTON_COLOR}}; position:fixed; z-index: 999; bottom : 50px; left : 50%; width : 140px; margin-left : -70px;"
+        >
+        <ion-text>Confirm</ion-text>
+    </ion-button>
   </div>
   <!-- payment model -->
 
