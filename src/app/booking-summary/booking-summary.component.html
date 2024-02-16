@@ -56,7 +56,7 @@
       
 
     </ion-list>
-    <ion-button
+    <ion-button *ngIf="!PAYMENT_MODEL_OPEN"
         class="ion-margin-bottom ion-margin-top details_no_border"
         (click)="confirm()"
         style="--background : {{this.dataService.BUTTON_COLOR}} !important; --background-activated: {{this.dataService.BUTTON_COLOR}}; position:fixed; z-index: 999; bottom : 50px; left : 50%; width : 140px; margin-left : -70px;"
