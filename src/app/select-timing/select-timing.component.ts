@@ -120,7 +120,8 @@ export class SelectTimingComponent implements OnInit {
     // this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     this.DAYS_ARRAY = await this._getDaysByYear(this.CURRENT_YEAR);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
-
+    
+    await this._getStaffBookingList();
     await this.checkLogin();
     await this._getDisabledDate();
     this.DATE = await this.getCurrentDate();
@@ -186,6 +187,19 @@ export class SelectTimingComponent implements OnInit {
     }
 
     
+  }
+
+  async _getStaffBookingList() {
+
+    (await this.apiData.getStaffBookingList()).subscribe(
+      (response: any) => {
+        this.dataService.setStaffBookingList(response);
+        this.STAFF_BOOKING_LIST = response;
+      },
+      (error: any) => {
+        alert(JSON.stringify(error))
+      }
+    );
   }
 
   async ionViewWillLeave() {
