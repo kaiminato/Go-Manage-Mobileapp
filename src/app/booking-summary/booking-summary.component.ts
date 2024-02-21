@@ -101,6 +101,14 @@ export class BookingSummaryComponent implements OnInit {
     
     
   }
+  confirm() {
+    if (this.STRIPE_FLAG) {
+      this.PAYMENT_MODEL_OPEN = true;
+    }
+    else {
+      this.saveBooking();
+    }
+  }
   async _onEnterData() {
     this.activateRoute.queryParams.subscribe((params) => {
       this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
@@ -240,11 +248,13 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
         this.PAYMENT_MODEL_OPEN = false;
         if (response.id) {
-          await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+          this.RECIPT_URL = response.receiptUrl;
 
-          setTimeout(() => {
-            this.router.navigate(['/booking-complete']);
-          }, 300);
+          this.BOOKINGS_DETAILS.reciept_url = this.RECIPT_URL;
+          await this.dataService.setBookingData(this.BOOKINGS_DETAILS)
+          this.saveBooking();
+
+          await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
         } else {
           await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
         }
@@ -461,22 +471,25 @@ export class BookingSummaryComponent implements OnInit {
               async (response: any) => {
 
                 await this.apiData.dismiss();
+
+                setTimeout(() => {
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
               },
               async (error: any) => {
 
                 await this.apiData.dismiss();
 
+                setTimeout(() => {
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
+
                 if (this.CANCEL_BOOKING_ID != 0) {
-                  await this.apiData.presentAlert(
-                    'save booking error : ' + JSON.stringify(error)
-                  );
                   await this.deleteBooking();
-                } else {
-                  if (this.STRIPE_FLAG) {
-                    this.PAYMENT_MODEL_OPEN = true;
-                  }
                 }
-                
+                setTimeout(() => {
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
               }
             );
           },
