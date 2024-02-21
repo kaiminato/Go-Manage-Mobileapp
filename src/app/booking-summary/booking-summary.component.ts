@@ -286,30 +286,16 @@ export class BookingSummaryComponent implements OnInit {
                 end_time = `${this.BOOKINGS_DETAILS.date}T${last_service_end_time}:00`;
               }
 
-              const original_start_time = new Date(start_time);
-              const original_end_time = new Date(end_time);
-              var daylight_saving_time;
-              if (this.isDstObserved(original_start_time)) {
-                daylight_saving_time = 1;
-              }
-              else {
-                daylight_saving_time = 0;
-              }
-              let new_start_time = new Date(original_start_time.setHours(original_start_time.getHours() - daylight_saving_time));
-              let new_end_time = new Date(original_end_time.setHours(original_end_time.getHours() - daylight_saving_time));
-
-              let offset = new_start_time.getTimezoneOffset();
-              new_start_time = new Date(new_start_time.getTime() - (offset*60*1000));
-              offset = new_end_time.getTimezoneOffset()
-              new_end_time = new Date(new_end_time.getTime() - (offset*60*1000));
+              const original_start_time = await this.returnDateTimeFormat(start_time);
+              const original_end_time = await this.returnDateTimeFormat(end_time);
 
               data.push({
                 //booking data
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
-                endTime: new_end_time.toISOString().slice(0, -5),
-                startTime: new_start_time.toISOString().slice(0, -5),
+                endTime: original_end_time,
+                startTime: original_start_time,
                 isAllDay: false,
                 customer: null,
                 service: service.serviceName,
@@ -370,7 +356,22 @@ export class BookingSummaryComponent implements OnInit {
     );
   }
 
+  async returnDateTimeFormat(date_time) {
 
+    let today_date = new Date(date_time);
+    let year: any = today_date.getFullYear();
+    let month: any = today_date.getMonth() + 1; // Months start at 0!
+    let day: any = today_date.getDate();
+    let hours: any = today_date.getHours();
+    let minutes: any = today_date.getMinutes();
+
+    if (day < 10) day = '0' + day;
+    if (month < 10) month = '0' + month;
+    if (hours < 10) hours = '0' + hours;
+    if (minutes < 10) minutes = '0' + minutes;
+
+    return await year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':00';
+  }
 
   async checkLogin() {
     await this.auth.getUser().subscribe((user_data: any) => {
@@ -480,14 +481,6 @@ export class BookingSummaryComponent implements OnInit {
       with_space_time: str_time,
       without_space_time: str_time_without_space,
     };
-  }
-  stdTimezoneOffset(date) {
-    const jan = new Date(date.getFullYear(), 0, 1);
-    const jul = new Date(date.getFullYear(), 6, 1);
-    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-  }
-  isDstObserved(date) {
-    return date.getTimezoneOffset() < this.stdTimezoneOffset(date);
   }
 
   async deleteBooking() {
