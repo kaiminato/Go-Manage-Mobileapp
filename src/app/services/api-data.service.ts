@@ -149,6 +149,9 @@ export class ApiDataService {
     return this.http.post(this.apiUrl + 'stripe/create-charge', data);
   }
 
+  async _createBookingWithPayment(data: any) {
+    return this.http.post(this.apiUrl + 'bookings/saveBookingWithPayment', data);
+  }
 
   async _updateUserId() {
 
