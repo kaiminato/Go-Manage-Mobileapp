@@ -98,6 +98,9 @@ export class BookingSummaryComponent implements OnInit {
         }
       }
     );
+
+    // this.stripe = Stripe("pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd");
+    //       await this._setupStripe();// Initialize stripe token
     
     
   }
@@ -327,14 +330,15 @@ export class BookingSummaryComponent implements OnInit {
             (await this.apiData._createBookingWithPayment(data)).subscribe(
               async (response: any) => {
                 this.PAYMENT_MODEL_OPEN = false;
-                await this.apiData.dismiss();
                 if(response.includes("Success")){
                   await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
-                  setTimeout(() => {
+                  setTimeout(async () => {
+                    await this.apiData.dismiss();
                     this.router.navigate(['/booking-complete']);
                   }, 300);
                 }
                 else {
+                  await this.apiData.dismiss();
                   await this.apiData.presentAlertWithHeader("Payment failed", response);
                 }
               },
