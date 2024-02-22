@@ -318,21 +318,24 @@ export class BookingSummaryComponent implements OnInit {
             (await this.apiData._createBookingWithPayment(data)).subscribe(
               async (response: any) => {
                 this.PAYMENT_MODEL_OPEN = false;
-                if(response.includes("Success")){
+                await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+                setTimeout(async () => {
+                  await this.apiData.dismiss();
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
+              },
+              async (error: any) => {
+                if(error.status == 200){
+                  this.PAYMENT_MODEL_OPEN = false;
                   await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
                   setTimeout(async () => {
                     await this.apiData.dismiss();
                     this.router.navigate(['/booking-complete']);
                   }, 300);
-                }
-                else {
+                } else {
                   await this.apiData.dismiss();
-                  await this.apiData.presentAlertWithHeader("Payment failed", response);
+                  await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
                 }
-              },
-              async (error: any) => {
-                await this.apiData.dismiss();
-                await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
               }
             );
           },
