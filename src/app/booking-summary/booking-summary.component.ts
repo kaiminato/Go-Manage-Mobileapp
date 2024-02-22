@@ -208,6 +208,7 @@ export class BookingSummaryComponent implements OnInit {
 
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', async event => {
+      if(this.apiData.isLoading == true)  return;
       await this.apiData.presentLoading();
       event.preventDefault();
       this.stripe.createToken(this.card).then(async result => {
@@ -219,6 +220,7 @@ export class BookingSummaryComponent implements OnInit {
           this._createBookingWithPayment(result.token.id);
         }
       });
+      
     });
   }
 
