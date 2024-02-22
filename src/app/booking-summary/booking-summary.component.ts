@@ -325,8 +325,17 @@ export class BookingSummaryComponent implements OnInit {
                 }, 300);
               },
               async (error: any) => {
-                await this.apiData.dismiss();
-                await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
+                if(error.status == 200){
+                  this.PAYMENT_MODEL_OPEN = false;
+                  await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+                  setTimeout(async () => {
+                    await this.apiData.dismiss();
+                    this.router.navigate(['/booking-complete']);
+                  }, 300);
+                } else {
+                  await this.apiData.dismiss();
+                  await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
+                }
               }
             );
           },
