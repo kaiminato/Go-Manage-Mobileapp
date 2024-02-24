@@ -121,7 +121,7 @@ export class SelectTimingComponent implements OnInit {
     this.DAYS_ARRAY = await this._getDaysByYear(this.CURRENT_YEAR);
     this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
     
-    await this._getStaffBookingList();
+    //await this._getStaffBookingList();
     await this.checkLogin();
     await this._getDisabledDate();
     this.DATE = await this.getCurrentDate();
