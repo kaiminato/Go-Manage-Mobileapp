@@ -876,7 +876,6 @@ export class SelectTimingComponent implements OnInit {
     var endH = parseInt(end.split(":")[0]);
     var endM = parseInt(end.split(":")[1]);
 
-
     for (var i = startH; i < endH; i++) {
       timesInBetween.push(i < 10 ? "0" + i + ":00" : i + ":00");
       timesInBetween.push(i < 10 ? "0" + i + ":30" : i + ":30");
