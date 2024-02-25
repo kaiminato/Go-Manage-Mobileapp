@@ -109,7 +109,7 @@ export class SelectTimingComponent implements OnInit {
       .subscribe(params => {
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
       }
-    );
+      );
 
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR
@@ -133,10 +133,10 @@ export class SelectTimingComponent implements OnInit {
     }
 
     let response = await this.dataService.getSelectTimingInfo();
-    if(response["flag"] == "true"){
+    if (response["flag"] == "true") {
       booking_data.date = response["selectedDate"]
       booking_data.timing_id = response["selectedTime"]
-      
+
       this.TIME_ID = response["selectedTimingId"]
       this.dataService.saveSelectTimingInfo("false", "", "", "")
       this.DATE = response["selectedDate"];
@@ -149,8 +149,8 @@ export class SelectTimingComponent implements OnInit {
           ? true
           : false;
 
-          booking_data.staff_details = await this.dataService.getStaffDetail(
-            booking_data.staff_id
+      booking_data.staff_details = await this.dataService.getStaffDetail(
+        booking_data.staff_id
       );
       let shift_timing_details = await this.dataService.getShift(
         booking_data.date
@@ -185,7 +185,7 @@ export class SelectTimingComponent implements OnInit {
       this._onDateSelect(response["selectedDate"])
     }
 
-    
+
   }
 
   async ionViewWillLeave() {
@@ -285,14 +285,14 @@ export class SelectTimingComponent implements OnInit {
     }
 
     if (!this.IS_LOGIN) {
-      await this.dataService.saveSelectTimingInfo("true", this.DATE,  JSON.stringify(get_booking_data.timing_id), String(id));
+      await this.dataService.saveSelectTimingInfo("true", this.DATE, JSON.stringify(get_booking_data.timing_id), String(id));
 
       this.auth.loginWithRedirect({
         appState: { target: '/select-a-time' }
       })
       return
     } else {
-      await this.dataService.saveSelectTimingInfo("false", this.DATE,  String(id), String(id));
+      await this.dataService.saveSelectTimingInfo("false", this.DATE, String(id), String(id));
     }
 
     for (let shift of this.ALL_SHIFT) shift.is_active = shift.id == id ? true : false;
@@ -340,7 +340,7 @@ export class SelectTimingComponent implements OnInit {
                   return;
                 } else if (error.status == 500) {
                   await this.dataService.setBookingData(get_booking_data);
-                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);                  
+                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
                 } else {
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                 }
@@ -413,11 +413,11 @@ export class SelectTimingComponent implements OnInit {
     await this._getShiftList();
   }
 
-  closeConfirm(){
+  closeConfirm() {
     this.IS_CONFIRM_OPEN = false;
   }
 
-  confirmPresaved(){
+  confirmPresaved() {
     this.IS_CONFIRM_OPEN = false;
     this._selectTiming(this.TIME_ID, false);
   }
@@ -862,8 +862,9 @@ export class SelectTimingComponent implements OnInit {
     var endH = parseInt(end.split(":")[0]);
     var endM = parseInt(end.split(":")[1]);
 
-    if (startM == 30)
-      startH++;
+    if (startM == 30) {
+      timesInBetween.push(startH < 10 ? "0" + startH + ":30" : startH + ":30"); // Add the exact half-hour start time
+    }
 
     for (var i = startH; i < endH; i++) {
       timesInBetween.push(i < 10 ? "0" + i + ":00" : i + ":00");
@@ -948,8 +949,8 @@ export class SelectTimingComponent implements OnInit {
 
           (await this.apiData.getMyProfile(userEmail)).subscribe(
             async (user_info: any) => {
-              if(user_info.statusCodeValue == 500) {
-                (await this.apiData.addUser({email : userEmail})).subscribe(
+              if (user_info.statusCodeValue == 500) {
+                (await this.apiData.addUser({ email: userEmail })).subscribe(
                   async (response: any) => {
                     await this.apiData.dismiss();
                   },
@@ -961,13 +962,13 @@ export class SelectTimingComponent implements OnInit {
                       await this.apiData.dismiss();
                       await this.apiData.presentAlert('Server error, Please try again later');
                     }
-            
+
                   }
                 );
               }
             },
             async (error: any) => {
-              
+
             }
           );
         }
