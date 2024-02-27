@@ -401,7 +401,6 @@ export class SelectTimingComponent implements OnInit {
         staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
       }
     }
-
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
@@ -422,7 +421,7 @@ export class SelectTimingComponent implements OnInit {
     let active_index_array = await day_list.filter(data => data.is_active);
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
     let active_index_array_index = day_list.indexOf(active_index_array[0]);
-    this.slides.slideTo(active_index_array_index - 1, 1000);
+    this.slides.slideTo(active_index_array_index, 1000);
 
     await this._getShiftList();
   }
@@ -437,7 +436,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _getShiftList() {
-
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_availability_dates = [];
@@ -448,6 +446,8 @@ export class SelectTimingComponent implements OnInit {
         staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && data.workDate == this.DATE)
       }
     }
+    console.log("getting shift list :", this.DATE);
+    console.log(staff_availability_dates);
 
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.DATE));
     let shift_start_time: any = '';
@@ -471,6 +471,7 @@ export class SelectTimingComponent implements OnInit {
       shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds())
 
       // Get shift timing list
+      console.log("getting shift : return times :", shift_start_time, shift_end_time);
       this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time, shift_end_time);
 
       // Shift disabled based on break time---- start
@@ -667,6 +668,7 @@ export class SelectTimingComponent implements OnInit {
   }
   async _onDateSelect(selected_date: any) {
     this.DATE = selected_date;
+    console.log("onDateSelect:", selected_date);
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
     await this._getDayList();
@@ -680,7 +682,6 @@ export class SelectTimingComponent implements OnInit {
     let staff_rota = [];
     let current_date = await this.getCurrentDate();
 
-
     if (staff_detail[0].staffDetailFormatted != null) {
 
       if (staff_detail[0].staffDetailFormatted.length > 0) {
@@ -691,27 +692,23 @@ export class SelectTimingComponent implements OnInit {
     }
 
 
-
     let daysConfig = [];
     for (let value of all_dates) {
 
       let is_date_working = await staff_rota.filter(data => data.workDate == value);
-
+      let tempDay = new Date(value);
+      let offset = tempDay.getTimezoneOffset()
+      tempDay = new Date(tempDay.getTime() + (offset*60*1000))
       if (is_date_working.length == 0) { // If rota not found on current loop date
-
-        daysConfig.push({ date: new Date(value), disable: true });
-
+        daysConfig.push({ date: new Date(tempDay), disable: true });
       } else {
-
         let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
-
-        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
+        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(tempDay), disable: true });
 
       }
 
     }
     this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
-
   }
 
   async _isDateDisabled(value: any) {
@@ -876,8 +873,11 @@ export class SelectTimingComponent implements OnInit {
     var endH = parseInt(end.split(":")[0]);
     var endM = parseInt(end.split(":")[1]);
 
-    if (startM == 30)
+    if (startM == 30){
+      timesInBetween.push(startH < 10 ? "0" + startH + ":30" : startH + ":30");
+      timesInBetween.push((startH + 1) < 10 ? "0" + (startH + 1) + ":00" : (startH + 1) + ":00");
       startH++;
+    }
 
     for (var i = startH; i < endH; i++) {
       timesInBetween.push(i < 10 ? "0" + i + ":00" : i + ":00");
