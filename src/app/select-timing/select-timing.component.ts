@@ -446,8 +446,6 @@ export class SelectTimingComponent implements OnInit {
         staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && data.workDate == this.DATE)
       }
     }
-    console.log("getting shift list :", this.DATE);
-    console.log(staff_availability_dates);
 
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.DATE));
     let shift_start_time: any = '';
@@ -471,7 +469,6 @@ export class SelectTimingComponent implements OnInit {
       shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds())
 
       // Get shift timing list
-      console.log("getting shift : return times :", shift_start_time, shift_end_time);
       this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time, shift_end_time);
 
       // Shift disabled based on break time---- start
@@ -668,7 +665,6 @@ export class SelectTimingComponent implements OnInit {
   }
   async _onDateSelect(selected_date: any) {
     this.DATE = selected_date;
-    console.log("onDateSelect:", selected_date);
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
     await this._getDayList();
