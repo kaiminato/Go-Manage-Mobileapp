@@ -90,10 +90,10 @@ export class BookingSummaryComponent implements OnInit {
       async (response: any) => {
       },
       async (error: any) => {
-        if(error.status == 200){
+        if (error.status == 200) {
           this.stripe = Stripe(error.error.text);
           await this._setupStripe();// Initialize stripe token
-        }else{
+        } else {
           console.log('error-----', error)
         }
       }
@@ -101,8 +101,8 @@ export class BookingSummaryComponent implements OnInit {
 
     // this.stripe = Stripe("pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd");
     //       await this._setupStripe();// Initialize stripe token
-    
-    
+
+
   }
   confirm() {
     if (this.STRIPE_FLAG) {
@@ -208,7 +208,7 @@ export class BookingSummaryComponent implements OnInit {
 
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', async event => {
-      if(this.apiData.isLoading == true)  return;
+      if (this.apiData.isLoading == true) return;
       await this.apiData.presentLoading();
       event.preventDefault();
       this.stripe.createToken(this.card).then(async result => {
@@ -220,7 +220,7 @@ export class BookingSummaryComponent implements OnInit {
           this._createBookingWithPayment(result.token.id);
         }
       });
-      
+
     });
   }
 
@@ -300,19 +300,19 @@ export class BookingSummaryComponent implements OnInit {
                 customer: null,
                 service: service.serviceName,
                 serviceId: service.id,
-                firstName: this.BOOKINGS_DETAILS.staff_details[0].firstName,
-                lastName: this.BOOKINGS_DETAILS.staff_details[0].lastName,
+                firstName: user_info.givenName,
+                lastName: user_info.familyName,
                 email: user_info.email,
                 phoneNumber: user_info.phoneMobile,
                 paymentReceipt: this.RECIPT_URL,
                 isApp: true, // 1 means booking booked from app side
 
                 //stripe data
-                stripeEmail : this.EMAIL,
-                token : token,
-                amount : amount.toString(),
-                transactionType : String(1),
-                stripeDescription : 'Booking Deposit Payment'
+                stripeEmail: this.EMAIL,
+                token: token,
+                amount: amount.toString(),
+                transactionType: String(1),
+                stripeDescription: 'Booking Deposit Payment'
               });
             }
             (await this.apiData._createBookingWithPayment(data)).subscribe(
@@ -325,7 +325,7 @@ export class BookingSummaryComponent implements OnInit {
                 }, 300);
               },
               async (error: any) => {
-                if(error.status == 200){
+                if (error.status == 200) {
                   this.PAYMENT_MODEL_OPEN = false;
                   await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
                   setTimeout(async () => {
