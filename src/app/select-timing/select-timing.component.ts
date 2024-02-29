@@ -871,7 +871,6 @@ export class SelectTimingComponent implements OnInit {
 
     if (startM == 30){
       timesInBetween.push(startH < 10 ? "0" + startH + ":30" : startH + ":30");
-      timesInBetween.push((startH + 1) < 10 ? "0" + (startH + 1) + ":00" : (startH + 1) + ":00");
       startH++;
     }
 
