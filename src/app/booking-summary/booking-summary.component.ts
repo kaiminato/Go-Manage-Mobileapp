@@ -5,10 +5,7 @@ import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 import { ApiDataService } from '../services/api-data.service';
 import { AuthService } from '@auth0/auth0-angular';
-import { mergeMap } from 'rxjs/operators';
-import { Browser } from '@capacitor/browser';
 import { AlertController } from '@ionic/angular';
-import moment from 'moment';
 
 declare var Stripe;
 @Component({
@@ -60,6 +57,13 @@ export class BookingSummaryComponent implements OnInit {
       this.STRIPE_FLAG = owner_data.stripe;
     }
 
+    this.activateRoute.queryParams
+      .subscribe(params => {
+
+        this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+      }
+    );
+
     this.auth.getUser().subscribe(
       async (response: any) => {
         if (response.hasOwnProperty('email')) {
@@ -99,19 +103,32 @@ export class BookingSummaryComponent implements OnInit {
       }
     );
 
-    // this.stripe = Stripe("pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd");
-    //       await this._setupStripe();// Initialize stripe token
-
+    
+     // Call this method at the end of your initialization logic
+     if (this.CANCEL_BOOKING_ID) {
+      // Skip Stripe initialization if CANCEL_BOOKING_ID is present
+      this.stripe = null;
+    } else {
+      // Initialize Stripe as before if CANCEL_BOOKING_ID is not present
+      this._setupStripe();
+    }
 
   }
+
   confirm() {
-    if (this.STRIPE_FLAG) {
+     // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
+     if (this.CANCEL_BOOKING_ID) {
+      // Directly create booking without payment if CANCEL_BOOKING_ID is present
+      this._createBookingWithPayment(null);
+    } else if (this.STRIPE_FLAG) {
+      // Show payment model if STRIPE_FLAG is true and no CANCEL_BOOKING_ID
       this.PAYMENT_MODEL_OPEN = true;
-    }
-    else {
+    } else {
+      // Create booking without payment if STRIPE_FLAG is false
       this._createBookingWithPayment("");
     }
   }
+
   async _onEnterData() {
     this.activateRoute.queryParams.subscribe((params) => {
       this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
@@ -249,9 +266,6 @@ export class BookingSummaryComponent implements OnInit {
       return;
     }
 
-    let starting_date_time = `${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00.000`;
-    let end_time = await this.addHours(this.BOOKINGS_DETAILS.timing_id.value, this.TOTAL_DURATION);
-    let ending_date_time = `${this.BOOKINGS_DETAILS.date}T${end_time}:00.000`;
     let data = [];
     console.clear();
 
@@ -291,6 +305,7 @@ export class BookingSummaryComponent implements OnInit {
 
               data.push({
                 //booking data
+                id: this.CANCEL_BOOKING_ID != null ? this.CANCEL_BOOKING_ID : null,
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.userGMID,
                 description: '',
@@ -314,11 +329,27 @@ export class BookingSummaryComponent implements OnInit {
                 transactionType: String(1),
                 stripeDescription: 'Booking Deposit Payment'
               });
+
+              if (this.CANCEL_BOOKING_ID) {
+                // Default Stripe-related fields to null
+                // This example assumes how your data might be structured. Adjust according to your actual data structure.
+                data.forEach(item => {
+                  item.stripeEmail = null;
+                  item.token = null;
+                  item.amount = null;
+                  item.transactionType = null;
+                  item.stripeDescription = null;
+                });
+              }
             }
             (await this.apiData._createBookingWithPayment(data)).subscribe(
               async (response: any) => {
                 this.PAYMENT_MODEL_OPEN = false;
-                await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+                const successHeader = this.CANCEL_BOOKING_ID ? "Booking Update Successful" : "Payment successful";
+                const successMessage = this.CANCEL_BOOKING_ID ? "Your booking has successfully been updated. Thank you" : "Please check your email for further details";
+
+                
+                await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                 setTimeout(async () => {
                   await this.apiData.dismiss();
                   this.router.navigate(['/booking-complete']);
@@ -326,8 +357,13 @@ export class BookingSummaryComponent implements OnInit {
               },
               async (error: any) => {
                 if (error.status == 200) {
+                  const successHeader = this.CANCEL_BOOKING_ID ? "Booking Update Successful" : "Payment successful";
+                  const successMessage = this.CANCEL_BOOKING_ID ? "Your booking has successfully been updated. Thank you" : "Please check your email for further details";
+
                   this.PAYMENT_MODEL_OPEN = false;
-                  await this.apiData.presentAlertWithHeader("Payment successful", "Please check your email for further details");
+                  this.router.navigate(['/booking-complete']);
+
+                  await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                   setTimeout(async () => {
                     await this.apiData.dismiss();
                     this.router.navigate(['/booking-complete']);
