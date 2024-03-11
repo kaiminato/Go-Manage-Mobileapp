@@ -240,7 +240,7 @@ export class BookingSummaryComponent implements OnInit {
 
   async _createBookingWithPayment(token: any) {
     // Hardcoded deposit value
-    let amount = 100;
+    let amount = 1;
 
     if (!this.IS_LOGIN) {
       this.auth.loginWithRedirect({
@@ -312,7 +312,7 @@ export class BookingSummaryComponent implements OnInit {
                 token : token,
                 amount : amount.toString(),
                 transactionType : String(1),
-                stripeDescription : 'Booking Deposit Payment'
+                stripeDescription : 'Booking with stripe 1€ for service - ' + service.serviceName
               });
             }
             (await this.apiData._createBookingWithPayment(data)).subscribe(
