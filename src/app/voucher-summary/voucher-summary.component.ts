@@ -83,11 +83,14 @@ export class VoucherSummaryComponent implements OnInit {
     });
 
     var form = document.getElementById('payment-form');
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit',async event => {
+      if (this.apiData.isLoading == true) return;
+      await this.apiData.presentLoading();
       event.preventDefault();
 
-      this.stripe.createToken(this.card).then(result => {
+      this.stripe.createToken(this.card).then(async result => {
         if (result.error) {
+          await this.apiData.dismiss();
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
@@ -140,7 +143,7 @@ export class VoucherSummaryComponent implements OnInit {
 
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
-      this.stripe = Stripe(owner_data.stripe_publishable_key);
+      //this.stripe = Stripe(owner_data.stripe_publishable_key);
       this.STRIPE_FLAG = owner_data.stripe;
     }
 
@@ -170,7 +173,19 @@ export class VoucherSummaryComponent implements OnInit {
         await this.apiData.presentAlert('server error')
       }
     );
-    await this._setupStripe();// Initialize stripe token
+    await (await this.apiData._getStripePublicKey()).subscribe(
+      async (response: any) => {
+      },
+      async (error: any) => {
+        if (error.status == 200) {
+          this.stripe = Stripe(error.error.text);
+          await this._setupStripe();// Initialize stripe token
+        } else {
+          console.log('error-----', error)
+        }
+      }
+    );
+    //await this._setupStripe();// Initialize stripe token
     await this.formInitialize();
 
   }
@@ -290,21 +305,36 @@ export class VoucherSummaryComponent implements OnInit {
           this.Voucher_Code = res.uniqueVoucherCode;
           let data2 = {
             "voucherCode": res.uniqueVoucherCode,
-            "receipient": this.SEND_VOUCHER_TO,
+            "receipient": this.SEND_REEIPT_TO,
             "initialBalance": this.voucherData.price
           };
           (await this.apiData.sendVoucher(data2)).subscribe(
             async (v: any) => {
-
+              setTimeout(async () => {
+                await this.apiData.dismiss();
+                this.router.navigate(['/voucher-summary']);
+              }, 300);
             },
             async (error: any) => {
-
+              if (error.status == 200) {
+                setTimeout(async () => {
+                  await this.apiData.dismiss();
+                  this.router.navigate(['/voucher-summary']);
+                }, 300);
+              }
+              else{
+                await this.apiData.dismiss();
+              }
 
             });
         }
       },
       async (error: any) => {
+        await this.apiData.dismiss();
 
+        await this.apiData.presentAlert(
+          'profile error' + JSON.stringify(error)
+        );
 
       });
   }
