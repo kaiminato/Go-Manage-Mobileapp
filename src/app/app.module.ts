@@ -13,6 +13,7 @@ import { MakeABookingComponent } from './make-a-booking/make-a-booking.component
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
+import { BookingFormComponent } from './booking-form/booking-form.component';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
@@ -38,6 +39,7 @@ import { CartInfoComponent } from './cart-info/cart-info.component';
 import { SelectDeliverComponent } from './select-deliver/select-deliver.component';
 import { environment } from '../environments/environment';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { SurveyModule } from "survey-angular-ui";
 
 const redirectUri = window.location.origin + `/contact-us`;
 
@@ -53,6 +55,7 @@ const redirectUri = window.location.origin + `/contact-us`;
     StaffServiceDetailsComponent,
     SelectTimingComponent,
     BookingSummaryComponent,
+    BookingFormComponent,
     BookingCompleteComponent,
     BuyVoucherComponent,
     AboutUsComponent,
@@ -80,6 +83,7 @@ const redirectUri = window.location.origin + `/contact-us`;
     IonicStorageModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    SurveyModule,
     AuthModule.forRoot({
       ...environment.auth,
       httpInterceptor: {
