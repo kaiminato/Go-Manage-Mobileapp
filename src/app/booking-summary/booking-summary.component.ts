@@ -6,6 +6,7 @@ import { ImageService } from '../services/image.service';
 import { ApiDataService } from '../services/api-data.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { AlertController } from '@ionic/angular';
+import config from '../../app/auth_config_local.json';
 
 declare var Stripe;
 @Component({
@@ -35,7 +36,8 @@ export class BookingSummaryComponent implements OnInit {
   EMAIL: string;
   userGMID: any;
   RECIPT_URL: string = '';
-
+  BOOKINGS_FORMS: any = [];
+  
   constructor(
     private router: Router,
     private location: Location,
@@ -75,7 +77,7 @@ export class BookingSummaryComponent implements OnInit {
 
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
-            this.userGMID = user_info.userGMID;
+            this.userGMID = user_info.UserGMID;
             if (user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == '') {
               this.presentAlert(this.EMAIL);
             } else {
@@ -307,7 +309,7 @@ export class BookingSummaryComponent implements OnInit {
                 //booking data
                 id: this.CANCEL_BOOKING_ID != null ? this.CANCEL_BOOKING_ID : null,
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
-                clientId: user_info.userGMID,
+                clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,
                 startTime: original_start_time,
@@ -348,7 +350,6 @@ export class BookingSummaryComponent implements OnInit {
                 const successHeader = this.CANCEL_BOOKING_ID ? "Booking Update Successful" : "Payment successful";
                 const successMessage = this.CANCEL_BOOKING_ID ? "Your booking has successfully been updated. Thank you" : "Please check your email for further details";
 
-                
                 await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                 setTimeout(async () => {
                   await this.apiData.dismiss();
@@ -362,7 +363,38 @@ export class BookingSummaryComponent implements OnInit {
 
                   this.PAYMENT_MODEL_OPEN = false;
                   this.router.navigate(['/booking-complete']);
-
+                  for (let service of this.BOOKINGS_DETAILS.servises) {
+                    (await this.apiData._getFormsByService(service.id)).subscribe(
+                      async (response: any) => {
+                        const forms = response;
+                        for (let form of forms) {
+                          if(!this.BOOKINGS_FORMS.includes(form.formId)) {
+                            this.BOOKINGS_FORMS.push(form.formId);
+                            (await this.apiData._sendMessageToClient({
+                              "phoneNumber": user_info.phoneMobile,
+                              "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                            })).subscribe(
+                              async (response: any) => {
+                              },
+                              async (error: any) => {
+                                if (error.status == 200) { console.log (error) } else {
+                                  await this.apiData.dismiss();
+                                  await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
+                                }
+                              }
+                            );
+                            this.createClientForm(user_info.UserGMID, form.formId);
+                          }
+                        }
+                      },
+                      async (error: any) => {
+                        if (error.status == 200) { console.log (error) } else {
+                          await this.apiData.dismiss();
+                          await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
+                        }
+                      }
+                    );
+                  }
                   await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                   setTimeout(async () => {
                     await this.apiData.dismiss();
@@ -393,6 +425,26 @@ export class BookingSummaryComponent implements OnInit {
         );
       }
     );
+  }
+
+  async createClientForm(clientId: any, formId: any) {
+    let clientFormdata = {
+      clientId: clientId,
+      formData: "",
+      formId: formId
+    }
+    await (await this.apiData._createClientForm(clientFormdata)).subscribe(
+      async (response: any) => {
+        console.log("response",response);
+      },
+      async (error: any) => {
+        console.log("error", error);
+        if (error.status == 200) {
+        } else {
+          alert('server error');
+        }
+      }
+    )
   }
 
   async returnDateTimeFormat(date_time) {
