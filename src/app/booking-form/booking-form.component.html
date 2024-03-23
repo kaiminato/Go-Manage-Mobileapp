@@ -1,0 +1,15 @@
+<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
+  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  </div>
+  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+    <h2>Booking Form</h2>
+  </ion-card>
+  <div class="card-list" style="padding-bottom: 40px;">
+    <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
+      <survey [model]="surveyModel"></survey>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+<app-footer></app-footer>

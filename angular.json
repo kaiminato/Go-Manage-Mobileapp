@@ -32,7 +32,8 @@
             ],
             "styles": [
               "src/theme/variables.scss",
-              "src/global.scss"
+              "src/global.scss",
+              "node_modules/survey-core/defaultV2.min.css"
             ],
             "scripts": [],
             "aot": false,
