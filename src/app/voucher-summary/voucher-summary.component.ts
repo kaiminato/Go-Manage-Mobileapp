@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { ImageService } from "../services/image.service";
+import { HttpClient } from  '@angular/common/http';
 declare var Stripe;
 
 @Component({
@@ -30,6 +31,7 @@ export class VoucherSummaryComponent implements OnInit {
   EMAIL: string;
   userInfo: any;
   voucherData: any;
+  private httpClient: HttpClient;
 
   stripe;
   card: any;
@@ -43,7 +45,8 @@ export class VoucherSummaryComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalController: ModalController,
     private alertController: AlertController,
-  ) { }
+    private http: HttpClient,
+  ) { this.httpClient = http; }
 
   ngOnInit() {
   }
@@ -280,6 +283,27 @@ export class VoucherSummaryComponent implements OnInit {
     this.router.navigate(['/buy-a-voucher']);
   }
 
+  async sendEmail(data: any) {
+
+    await (await this.apiData.sendMarketingEmailTemplate(data)).subscribe(
+      async (response: any) => {
+      },
+      async (error: any) => {
+        if (error.status == 200) {
+          setTimeout(async () => {
+            await this.apiData.dismiss();
+            this.router.navigate(['/voucher-summary']);
+          }, 300);
+        } else {
+          await this.apiData.dismiss();
+          await this.apiData.presentAlert(
+            'profile error' + JSON.stringify(error)
+          );
+        }
+      }
+    );
+  }
+
   private async setupVoucher(response: any) {
     let today = new Date();
     let fiveYearsFromNow = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate());
@@ -303,30 +327,26 @@ export class VoucherSummaryComponent implements OnInit {
           this.PAID = true;
           this.PAYMENT_MODEL_OPEN = false;
           this.Voucher_Code = res.uniqueVoucherCode;
-          let data2 = {
-            "voucherCode": res.uniqueVoucherCode,
-            "receipient": this.SEND_REEIPT_TO,
-            "initialBalance": this.voucherData.price
-          };
-          (await this.apiData.sendVoucher(data2)).subscribe(
-            async (v: any) => {
-              setTimeout(async () => {
-                await this.apiData.dismiss();
-                this.router.navigate(['/voucher-summary']);
-              }, 300);
-            },
-            async (error: any) => {
-              if (error.status == 200) {
-                setTimeout(async () => {
-                  await this.apiData.dismiss();
-                  this.router.navigate(['/voucher-summary']);
-                }, 300);
-              }
-              else{
-                await this.apiData.dismiss();
-              }
 
-            });
+          this.httpClient.get('../../assets/html/template.html', {responseType: 'text'})
+        .subscribe(data => {
+          var str = data;
+          var mapObj = {
+            '{{TOTAL_PAYMENT}}': this.voucherData.price,
+            '{{VOUCHER_CODE}}': res.uniqueVoucherCode,
+          };
+          str = str.replace(/{{TOTAL_PAYMENT}}|{{VOUCHER_CODE}}/gi, function(matched){
+            return mapObj[matched];
+          });
+          
+          let post_data = {
+            to: this.SEND_REEIPT_TO,
+            subject: "voucher",
+            content: str
+          };
+          this.sendEmail(post_data);
+        });
+         
         }
       },
       async (error: any) => {

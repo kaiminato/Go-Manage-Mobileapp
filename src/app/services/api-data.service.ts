@@ -135,6 +135,11 @@ export class ApiDataService {
     return await this.makeRequest('POST', this.apiUrl +'send-email/sendVoucher', data);
   }
 
+  async sendMarketingEmailTemplate(data) {
+    const headers = this.addBearerTokenHeader();
+    return this.http.post(this.apiUrl + 'send-email/send', data, { 'headers': headers })
+  }
+
   async createPendingAppointment(data: any) {
 
     return await this.makeRequest('POST', this.apiUrl + 'bookings/pendingBooking', data)
