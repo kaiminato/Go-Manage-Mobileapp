@@ -37,7 +37,8 @@ export class BookingSummaryComponent implements OnInit {
   userGMID: any;
   RECIPT_URL: string = '';
   BOOKINGS_FORMS: any = [];
-  
+  CLIENT_FORMS_LIST: any = [];
+
   constructor(
     private router: Router,
     private location: Location,
@@ -63,6 +64,15 @@ export class BookingSummaryComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+      }
+    );
+
+    await (await this.apiData._getAllClientForms()).subscribe(
+      async (response: any) => {
+        this.CLIENT_FORMS_LIST = response;
+      },
+      async (error: any) => {
+        alert('Something went wrong on server side. Please try again later')
       }
     );
 
@@ -369,21 +379,24 @@ export class BookingSummaryComponent implements OnInit {
                         const forms = response;
                         for (let form of forms) {
                           if(!this.BOOKINGS_FORMS.includes(form.formId)) {
-                            this.BOOKINGS_FORMS.push(form.formId);
-                            (await this.apiData._sendMessageToClient({
-                              "phoneNumber": user_info.phoneMobile,
-                              "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
-                            })).subscribe(
-                              async (response: any) => {
-                              },
-                              async (error: any) => {
-                                if (error.status == 200) { console.log (error) } else {
-                                  await this.apiData.dismiss();
-                                  await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
+                            const matchingItem = this.CLIENT_FORMS_LIST.find(item => item.formId === form.formId);
+                            if(matchingItem !== undefined && !matchingItem.isFormComplete) {
+                              this.BOOKINGS_FORMS.push(form.formId);
+                              (await this.apiData._sendMessageToClient({
+                                "phoneNumber": user_info.phoneMobile,
+                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                              })).subscribe(
+                                async (response: any) => {
+                                },
+                                async (error: any) => {
+                                  if (error.status == 200) { console.log (error) } else {
+                                    await this.apiData.dismiss();
+                                    await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
+                                  }
                                 }
-                              }
-                            );
-                            this.createClientForm(user_info.UserGMID, form.formId);
+                              );
+                              this.createClientForm(user_info.UserGMID, form.formId);
+                            }
                           }
                         }
                       },
