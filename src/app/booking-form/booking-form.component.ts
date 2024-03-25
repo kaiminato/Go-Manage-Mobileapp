@@ -48,25 +48,30 @@ export class BookingFormComponent implements OnInit {
             async (response: any) => {
               const matchingItem = response.find(item => item.formId === this.FORM_ID && parseInt(item.clientId) === this.userGMID);
               if(matchingItem !== undefined) {
-                this.CLIENT_FORM = matchingItem;
-                await (await this.apiData._getAllForms()).subscribe(
-                  async (response: any) => {
-                    const matchedItem = response.find(item => item.formId === this.FORM_ID);
-                    if(matchedItem !== undefined) {
-                      this.CLIENT_FORM_TEMPLATE = matchedItem;
-                      const survey = new Model(this.CLIENT_FORM_TEMPLATE.content);
-                      survey.onComplete.add(this.completeSurvey.bind(this));
-                      this.surveyModel = survey;
-                    } else {
-                      this.presentAlert("Form does not exist.");
+                if(matchingItem.isFormComplete) {
+                  this.presentAlert("You have already filled the form.");
+                  await this.apiData.dismiss();
+                } else {
+                  this.CLIENT_FORM = matchingItem;
+                  await (await this.apiData._getAllForms()).subscribe(
+                    async (response: any) => {
+                      const matchedItem = response.find(item => item.formId === this.FORM_ID);
+                      if(matchedItem !== undefined) {
+                        this.CLIENT_FORM_TEMPLATE = matchedItem;
+                        const survey = new Model(this.CLIENT_FORM_TEMPLATE.content);
+                        survey.onComplete.add(this.completeSurvey.bind(this));
+                        this.surveyModel = survey;
+                      } else {
+                        this.presentAlert("Form does not exist.");
+                      }
+                      await this.apiData.dismiss();
+                    },
+                    async (error: any) => {
+                      await this.apiData.dismiss();
+                      alert('Something went wrong on server side. Please try again later')
                     }
-                    await this.apiData.dismiss();
-                  },
-                  async (error: any) => {
-                    await this.apiData.dismiss();
-                    alert('Something went wrong on server side. Please try again later')
-                  }
-                );
+                  );
+                }
               } else {
                 this.presentAlert("Form does not exist.");
                 await this.apiData.dismiss();
