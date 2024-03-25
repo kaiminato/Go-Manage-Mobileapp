@@ -314,7 +314,6 @@ export class BookingFormComponent implements OnInit {
   }
 
   navigation() {
-    //this.router.navigate(['/select-a-time'])
     this.location.back();
   }
 }
