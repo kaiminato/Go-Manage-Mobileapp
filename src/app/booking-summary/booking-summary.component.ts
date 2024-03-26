@@ -372,16 +372,32 @@ export class BookingSummaryComponent implements OnInit {
                   const successMessage = this.CANCEL_BOOKING_ID ? "Your booking has successfully been updated. Thank you" : "Please check your email for further details";
 
                   this.PAYMENT_MODEL_OPEN = false;
-                  this.router.navigate(['/booking-complete']);
                   for (let service of this.BOOKINGS_DETAILS.servises) {
                     (await this.apiData._getFormsByService(service.id)).subscribe(
                       async (response: any) => {
                         const forms = response;
+                        console.log('test1', forms);
                         for (let form of forms) {
                           if(!this.BOOKINGS_FORMS.includes(form.formId)) {
+                            console.log('test2', form)
+                            this.BOOKINGS_FORMS.push(form.formId);
                             const matchingItem = this.CLIENT_FORMS_LIST.find(item => item.formId === form.formId);
+                            console.log('test3', matchingItem)
                             if(matchingItem !== undefined && !matchingItem.isFormComplete) {
-                              this.BOOKINGS_FORMS.push(form.formId);
+                              (await this.apiData._sendMessageToClient({
+                                "phoneNumber": user_info.phoneMobile,
+                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                              })).subscribe(
+                                async (response: any) => {
+                                },
+                                async (error: any) => {
+                                  if (error.status == 200) { console.log (error) } else {
+                                    await this.apiData.dismiss();
+                                    await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
+                                  }
+                                }
+                              );
+                            } else if(matchingItem === undefined) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
                                 "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
@@ -408,6 +424,7 @@ export class BookingSummaryComponent implements OnInit {
                       }
                     );
                   }
+                  this.router.navigate(['/booking-complete']);
                   await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                   setTimeout(async () => {
                     await this.apiData.dismiss();
