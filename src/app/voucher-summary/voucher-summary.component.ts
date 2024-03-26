@@ -306,7 +306,7 @@ export class VoucherSummaryComponent implements OnInit {
 
   private async setupVoucher(response: any) {
     let today = new Date();
-    let fiveYearsFromNow = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate());
+    let fiveYearsFromNow = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate(), 23, 59, 59);
     let f = fiveYearsFromNow.toISOString().split('T')[0];
     let data = [
       {
