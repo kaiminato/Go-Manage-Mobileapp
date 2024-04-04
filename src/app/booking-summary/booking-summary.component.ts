@@ -228,16 +228,15 @@ export class BookingSummaryComponent implements OnInit {
       if (this.apiData.isLoading == true) return;
       await this.apiData.presentLoading();
       event.preventDefault();
-      this.stripe.createToken(this.card).then(async result => {
+      this.stripe.createPaymentMethod({type:"card",card:this.card}).then(async result => {
         if (result.error) {
           await this.apiData.dismiss();
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
-          this._createBookingWithPayment(result.token.id);
+          this._createBookingWithPayment(result.paymentMethod.id);
         }
       });
-
     });
   }
 
@@ -255,7 +254,7 @@ export class BookingSummaryComponent implements OnInit {
     return await `${year}-${month}-${date} ${hour}:${minutes}:${seconds}`;
   }
 
-  async _createBookingWithPayment(token: any) {
+  async _createBookingWithPayment(paymentMethodId: any) {
     // Hardcoded deposit value
     let amount = 100;
 
@@ -307,7 +306,7 @@ export class BookingSummaryComponent implements OnInit {
                 //booking data
                 id: this.CANCEL_BOOKING_ID != null ? this.CANCEL_BOOKING_ID : null,
                 employeeId: this.BOOKINGS_DETAILS.staff_id,
-                clientId: user_info.userGMID,
+                clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,
                 startTime: original_start_time,
@@ -324,18 +323,17 @@ export class BookingSummaryComponent implements OnInit {
 
                 //stripe data
                 stripeEmail: this.EMAIL,
-                token: token,
+                paymentMethodId: paymentMethodId,
                 amount: amount.toString(),
                 transactionType: String(1),
                 stripeDescription: 'Booking Deposit Payment'
               });
-
               if (this.CANCEL_BOOKING_ID) {
                 // Default Stripe-related fields to null
                 // This example assumes how your data might be structured. Adjust according to your actual data structure.
                 data.forEach(item => {
                   item.stripeEmail = null;
-                  item.token = null;
+                  item.paymentMethodId = null;
                   item.amount = null;
                   item.transactionType = null;
                   item.stripeDescription = null;
