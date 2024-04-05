@@ -438,14 +438,13 @@ export class SelectTimingComponent implements OnInit {
   async _getShiftList() {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    console.log("staff_detail : " , staff_detail);
     let staff_availability_dates = [];
 
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
 
         staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && data.workDate == this.DATE)
-        console.log("staff_availabilit_dates : ", staff_availability_dates);
+
       }
     }
 
@@ -465,7 +464,7 @@ export class SelectTimingComponent implements OnInit {
             this.ALL_SHIFT.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
           }
         }
-        if(shift_end_time == '00:00:00'){
+        if(this.ALL_SHIFT == null || this.ALL_SHIFT.length == 0){
           shift_start_time = '00:00:00';
           shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
           shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
