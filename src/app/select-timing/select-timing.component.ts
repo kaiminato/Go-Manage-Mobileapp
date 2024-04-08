@@ -461,6 +461,9 @@ export class SelectTimingComponent implements OnInit {
           shift_start_time = value?.startShiftTime;
           shift_end_time = value?.endShiftTime;
           if(shift_end_time != '00:00:00'){
+            shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+            shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
+            shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
             this.ALL_SHIFT.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
           }
         }
@@ -475,12 +478,10 @@ export class SelectTimingComponent implements OnInit {
         shift_start_time = staff_availability_dates[0]?.startShiftTime;
         shift_end_time = staff_availability_dates[0]?.endShiftTime;
 
-        if(shift_end_time == '00:00:00'){
-          shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
-          shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
-          shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
-        
-        }
+        shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+        shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
+        shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
+  
         this.ALL_SHIFT = await this._returnTimesInBetween(shift_start_time, shift_end_time);
       }
 
