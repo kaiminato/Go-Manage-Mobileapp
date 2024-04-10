@@ -87,6 +87,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'add-a-review/:id',
+    component: AddReviewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'login',
     component: LoginButtonComponent,
     canActivate: [AuthGuard]

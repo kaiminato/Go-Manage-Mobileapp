@@ -33,7 +33,7 @@ export class HomePageComponent implements OnInit {
     ],
     [
       {
-        id: 5, is_icon: true, name: 'rate_review', text: 'Rate us', router_link: '/', image: this.imageService.COMING_SOON
+        id: 5, is_icon: true, name: 'rate_review', text: 'Rate us', router_link: '/add-a-review', image: this.imageService.RATE_US_IMG
       },
       {
         id: 6, is_icon: true, name: 'person_add', text: 'Refer a friend', router_link: '/', image: this.imageService.COMING_SOON
