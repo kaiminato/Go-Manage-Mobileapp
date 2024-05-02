@@ -4,6 +4,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
 import { AddReviewComponent } from './add-review/add-review.component';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
 import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
+import { BookingFormComponent } from './booking-form/booking-form.component';
 import { BuyVoucherComponent } from './buy-voucher/buy-voucher.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { LoginButtonComponent } from './login-button/login-button.component';
@@ -135,6 +136,11 @@ const routes: Routes = [
   {
     path: 'select-deliver',
     component: SelectDeliverComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'form/:formId',
+    component: BookingFormComponent,
     canActivate: [AuthGuard]
   },
   {
