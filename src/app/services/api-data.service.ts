@@ -158,6 +158,30 @@ export class ApiDataService {
     return this.http.post(this.apiUrl + 'bookings/saveBookingWithPayment', data);
   }
 
+  async _sendMessageToClient(data: any) {
+    return this.http.post(this.apiUrl + 'messaging/customSmsMessage', data);
+  }
+
+  async _getFormsByService(serviceId: any) {
+    return this.http.get(this.apiUrl + 'forms/getFormsByService/' + serviceId);
+  }
+
+  async _getAllForms() {
+    return this.http.get(this.apiUrl + 'forms/getAllForms');
+  }
+
+  async _createClientForm(data: any) {
+    return this.http.post(this.apiUrl + 'forms/createClientForm', data);
+  }
+
+  async _updateClientForm(data: any) {
+    return this.http.put(this.apiUrl + 'forms/updateClientForm', data);
+  }
+
+  async _getAllClientForms() {
+    return this.http.get(this.apiUrl + 'forms/getAllClientForms');
+  }
+
   async _updateUserId() {
 
     await this.auth.getUser().subscribe(
