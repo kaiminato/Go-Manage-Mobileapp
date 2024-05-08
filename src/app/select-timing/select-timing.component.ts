@@ -447,7 +447,6 @@ export class SelectTimingComponent implements OnInit {
 
       }
     }
-
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(this.DATE));
     let shift_start_time: any = '';
     let shift_end_time: any = ''
@@ -508,7 +507,7 @@ export class SelectTimingComponent implements OnInit {
       // Shift disabled based on break time---- start
 
       for (let shift_value of this.ALL_SHIFT) {
-
+        
         if (!shift_value.is_disabled) { // If shift is not disabled
 
           let shift__date_time = new Date(`${this.DATE}T${shift_value.value}:00`);
@@ -519,7 +518,6 @@ export class SelectTimingComponent implements OnInit {
               let break_start_time = new Date(`${this.DATE}T${value.outOfOfficeFrom}`);
               let break_end_time = new Date(`${this.DATE}T${value.outOfOfficeTo}`)
               break_end_time.setMinutes(break_end_time.getMinutes() - 1);
-
               // Shift will be disabled if shift time will exist in between break start & break end time
               if (break_start_time.getTime() <= shift__date_time.getTime() && break_end_time.getTime() >= shift__date_time.getTime()) {
                 shift_value.is_disabled = true; // Disabled the shift
@@ -543,7 +541,6 @@ export class SelectTimingComponent implements OnInit {
               let booking_start_time = new Date(booking_value.startTime);
               let booking_end_time = new Date(booking_value.endTime);
               booking_end_time.setMinutes(booking_end_time.getMinutes() - 1);
-
               // Shift will be disabled if shift time will exist in between booking start & booking end time
               if (booking_start_time.getTime() <= shift__date_time.getTime() && booking_end_time.getTime() >= shift__date_time.getTime()) {
 
@@ -563,9 +560,7 @@ export class SelectTimingComponent implements OnInit {
       for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
 
       booking_total_duration = booking_total_duration - 1;
-
       total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
-
       // Shift disabled based on current time
       for (let shift_value of this.ALL_SHIFT) {
         let shift__date_time = new Date(`${this.DATE}T${shift_value.value}:00`);
@@ -577,7 +572,8 @@ export class SelectTimingComponent implements OnInit {
 
       // Set Soft disabled
       if (total_shift_will_count != 1) {
-
+        let last_index = 0;
+        let neighbour_difference = 0;
         for (let index in this.ALL_SHIFT) {
 
           let checked_pass = true;
@@ -603,10 +599,17 @@ export class SelectTimingComponent implements OnInit {
             }
 
             if (!checked_pass) {
-
-              this.ALL_SHIFT[index]['is_disabled'] = true;
               this.ALL_SHIFT[index]['soft_disabled'] = true;
             }
+          }
+          else{
+            neighbour_difference = Number(index) - last_index;
+            if(neighbour_difference <= total_shift_will_count){
+              for (let i = last_index + 1; i < Number(index); i++) {
+                this.ALL_SHIFT[i]['is_disabled'] = true;
+              }
+            }
+            last_index = Number(index);
           }
         }
       }
