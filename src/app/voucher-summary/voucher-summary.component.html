@@ -34,7 +34,7 @@
     <ion-row class="gift-voucher-amount ion-margin">
       <ion-col size="12" class="ion-text-center ">
         <ion-text class="choose_amount_heading">Send voucher to:</ion-text>
-        <ion-text > {{SEND_VOUCHER_TO}} </ion-text>
+        <ion-text > {{SEND_REEIPT_TO}} </ion-text>
       </ion-col>
     </ion-row>
 
@@ -74,7 +74,7 @@
           <ion-card-header>
             <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
               <ion-col>Total Payment</ion-col>
-              <ion-col> {{ this.TOTAL_AMOUNT | currency: 'EUR'}} </ion-col>
+              <ion-col size="6.8"> {{ this.TOTAL_AMOUNT | currency: 'EUR'}} </ion-col>
             </ion-row>
           </ion-card-header>
           <ion-card-content>
