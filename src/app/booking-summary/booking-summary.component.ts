@@ -6,7 +6,6 @@ import { ImageService } from '../services/image.service';
 import { ApiDataService } from '../services/api-data.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { AlertController } from '@ionic/angular';
-import config from '../../app/auth_config_local.json';
 
 declare var Stripe;
 @Component({
@@ -280,6 +279,7 @@ export class BookingSummaryComponent implements OnInit {
 
     let data = [];
     console.clear();
+    let owner_details = await this.dataService._getOwnerData();
 
     await this.auth.getUser().subscribe(
       async (response: any) => {
@@ -386,7 +386,7 @@ export class BookingSummaryComponent implements OnInit {
                             if(matchingItem !== undefined && !matchingItem.isFormComplete) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
-                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "/form/" + form.formId + ". Looking forward to seeing you soon!"
                               })).subscribe(
                                 async (response: any) => {
                                 },
@@ -400,7 +400,7 @@ export class BookingSummaryComponent implements OnInit {
                             } else if(matchingItem === undefined) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
-                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + config.appUri + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "/form/" + form.formId + ". Looking forward to seeing you soon!"
                               })).subscribe(
                                 async (response: any) => {
                                 },
