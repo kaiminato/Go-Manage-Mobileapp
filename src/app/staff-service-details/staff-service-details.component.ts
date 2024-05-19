@@ -52,7 +52,7 @@ export class StaffServiceDetailsComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-
+        
       }
       );
 
@@ -107,14 +107,11 @@ export class StaffServiceDetailsComponent implements OnInit {
       }
 
       let booking_data = await this.dataService.getInitialBookingdata();
-
+ 
 
       if (booking_data.servises.length > 0) await this.__preFilledData();
 
     }
-
-
-
   }
 
   async __preFilledData() {

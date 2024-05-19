@@ -37,6 +37,7 @@ export class BookingSummaryComponent implements OnInit {
   RECIPT_URL: string = '';
   BOOKINGS_FORMS: any = [];
   CLIENT_FORMS_LIST: any = [];
+  staff_id: any = '';
 
   constructor(
     private router: Router,
@@ -59,6 +60,7 @@ export class BookingSummaryComponent implements OnInit {
       this.STRIPE_FLAG = owner_data.stripe;
     }
 
+    this.staff_id = this.activateRoute.snapshot.paramMap.get('id');
     this.activateRoute.queryParams
       .subscribe(params => {
 
@@ -317,7 +319,7 @@ export class BookingSummaryComponent implements OnInit {
               data.push({
                 //booking data
                 id: this.CANCEL_BOOKING_ID != null ? this.CANCEL_BOOKING_ID : null,
-                employeeId: this.BOOKINGS_DETAILS.staff_id,
+                employeeId: (this.staff_id != '' || this.staff_id != undefined)? this.staff_id : this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,
@@ -628,7 +630,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   navigation() {
-    //this.router.navigate(['/select-a-time'])
-    this.location.back();
+    this.router.navigate(['/select-a-time'])
+    //this.location.back();
   }
 }
