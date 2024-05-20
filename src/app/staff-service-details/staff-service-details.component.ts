@@ -46,6 +46,7 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
     this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.PERFORMED_SERVICES = this.STAFF_DETAIL[0].performedServices;
+    this.PERFORMED_SERVICES.sort((a, b) => a - b);
     await this.getServiceList();
 
     this.activateRoute.queryParams
