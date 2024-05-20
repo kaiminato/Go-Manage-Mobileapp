@@ -22,6 +22,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   PERFORMED_SERVICES: any = [];
   CATEGORY_LIST: any = [];
   SERVICE_LIST: any = [];
+  SELECTED_SERVICE_LIST: any = [];
   SELECTED_SERVICES: any = [];
 
   constructor(
@@ -45,7 +46,6 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
     this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.PERFORMED_SERVICES = this.STAFF_DETAIL[0].performedServices;
-
     await this.getServiceList();
 
     this.activateRoute.queryParams
@@ -74,15 +74,20 @@ export class StaffServiceDetailsComponent implements OnInit {
   }
 
   async getServiceList() {
-
+    this.SELECTED_SERVICE_LIST = [];
     this.SERVICE_LIST = await this.dataService.getServiceList();
-    
-    if (this.SERVICE_LIST.length > 0) {
+    for(let service_id of this.PERFORMED_SERVICES){
+      let filtered_service = this.SERVICE_LIST.filter(service => service.id == service_id)[0];
+      if(filtered_service != undefined){
+        this.SELECTED_SERVICE_LIST.push(filtered_service);
+      }
+    }
+    if (this.SELECTED_SERVICE_LIST.length > 0) {
 
-      let categorie_ids = [...new Set(this.SERVICE_LIST.map(data => data.categoryId))];
+      let categorie_ids = [...new Set(this.SELECTED_SERVICE_LIST.map(data => data.categoryId))];
       this.CATEGORY_LIST = [];
       for (let category_id of categorie_ids) {
-        let service_list = this.SERVICE_LIST.filter(service => service.categoryId == category_id);
+        let service_list = this.SELECTED_SERVICE_LIST.filter(service => service.categoryId == category_id);
 
         for (let service of service_list) {
           if (this.PERFORMED_SERVICES.includes(service.id)) {
