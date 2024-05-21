@@ -157,9 +157,23 @@ ion-content {
         .ion-text-date {
           font-size: 20px;
           margin-top: 3px;
-          color: #06a4af;
+          color: #047473;
         }
-
+        .no-available-text {
+          font-size: 20px;
+          color: black;
+          margin: auto;
+          margin-top: 10px;
+        }
+        .no-available-slot-text {
+          font-size: 20px;
+          color: white;
+          text-align: center;
+          padding: 3px;
+          border-radius: 8px;
+          border: 1px solid;
+          background-color: #047473;
+        }
     }
     .ion-col-custom {
       margin-top : 3px;

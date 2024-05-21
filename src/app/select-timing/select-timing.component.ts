@@ -214,8 +214,8 @@ export class SelectTimingComponent implements OnInit {
     );
   }
 
+  
   async getAllAvailableSlots() {
-
     (await this.apiData.getAllAvailableSlots()).subscribe(
       (response: any) => {
         this.ALL_AVAILABLE_SLOT = response;
@@ -1107,7 +1107,7 @@ export class SelectTimingComponent implements OnInit {
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
   }
 
-  async _returnDateInBetween(start_date = new Date(), end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 1))) {
+  async _returnDateInBetween(start_date = new Date(), end_date = new Date(new Date().setMonth(new Date().getMonth() + 1))) {
 
     for (var date_list = [], d = new Date(start_date); d <= new Date(end_date); d.setDate(d.getDate() + 1)) {
       let today_date = new Date(d);
@@ -1312,27 +1312,40 @@ export class SelectTimingComponent implements OnInit {
 
   async _getDisplayList(){
     let shift_list: any ;
-    for(let staff_available_slot of this.STAFF_AVAILABLE_SLOT){
-      shift_list = [];
-      if(staff_available_slot.availableSlots == undefined || staff_available_slot.availableSlots.length == 0) return;
-      shift_list = await this._returnShiftTimes(staff_available_slot.availableSlots);
-      for (let shift_value of shift_list) {
-        let shift__date_time = new Date(`${staff_available_slot.workDate}T${shift_value.value}:00`);
-        const current_date_time = new Date();
-        if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
-          shift_value.is_disabled = true; // Disabled the shift
-        }
-      }
 
-      if (this.STAFF_AVAILABLE_SLOT.length > 0) {
-   
+    let all_dates = await this._returnDateInBetween();
+
+    for (let value of all_dates) {
+
+      shift_list = [];
+
+      let is_date_working =  this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == value);
+
+      if (is_date_working.length == 0) { // If rota not found on current loop date
+        this.DISPLAY_LIST.push(
+          {
+            DATE: value,
+            id: value,
+            shift_list: shift_list
+          }
+        );
+      } else {
+        shift_list = await this._returnShiftTimes(is_date_working[0].availableSlots);
+        for (let shift_value of shift_list) {
+          let shift__date_time = new Date(`${is_date_working[0].workDate}T${shift_value.value}:00`);
+          const current_date_time = new Date();
+          if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+            shift_value.is_disabled = true; // Disabled the shift
+          }
+        }
+    
         // Shift disabled based on Booking time -- end
         let booking_data = await this.dataService.getInitialBookingdata();
         let booking_total_duration = 0;
         let total_shift_will_count = 1;
-  
+    
         for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
-  
+    
         booking_total_duration = booking_total_duration - 1;
         total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 5) : (~~(booking_total_duration / 5) + 1);
         // Set Soft disabled
@@ -1378,17 +1391,14 @@ export class SelectTimingComponent implements OnInit {
             }
           }
         }
-      } else {
-        return
+        this.DISPLAY_LIST.push(
+          {
+            DATE: is_date_working[0].workDate,
+            id: is_date_working[0].workDate,
+            shift_list: shift_list
+          }
+        );
       }
-
-      this.DISPLAY_LIST.push(
-        {
-          DATE: staff_available_slot.workDate,
-          id: staff_available_slot.workDate,
-          shift_list: shift_list
-        }
-      );
     }
     this.DISPLAY_LIST.sort((a, b) => {
       return (new Date(`${a.DATE}`)).getTime() - (new Date(`${b.DATE}`)).getTime();
