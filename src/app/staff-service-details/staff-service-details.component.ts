@@ -54,7 +54,7 @@ export class StaffServiceDetailsComponent implements OnInit {
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
         
       }
-      );
+    );
 
     this.STAFF_DETAIL[0].image = this.STAFF_DETAIL[0]?.employeeImg ? this.STAFF_DETAIL[0]?.employeeImg : this.imageService.DEFAULT_PERSON;
     this.HEADING = "2";
