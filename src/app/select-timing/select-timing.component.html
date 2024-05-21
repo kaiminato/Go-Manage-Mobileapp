@@ -61,8 +61,15 @@
             <ion-text>Choose other staff</ion-text>
           </div>
         </ion-col>
+        <ion-col *ngIf="data.shift_list.length == 0">
+          <div class="no-available-slot-text">
+            <ion-text> No Available Slots </ion-text>
+          </div>
+        </ion-col>
       </ion-row>
-      
+      <ion-row *ngIf="DISPLAY_LIST.length == 0" >
+        <ion-text class="no-available-text"> Not Available </ion-text>
+      </ion-row>
     </ion-grid>
   </div>
 
