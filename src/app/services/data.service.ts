@@ -407,8 +407,8 @@ export class DataService {
 
   async _getOwnerData() {
 
-    let owner_data = await sessionStorage.getItem(this.OWNER_DATA_KEY);
-    return await owner_data == undefined || owner_data == null ? [] : JSON.parse(owner_data);
+    let owner_data =  sessionStorage.getItem(this.OWNER_DATA_KEY);
+    return  owner_data == undefined || owner_data == null ? [] : JSON.parse(owner_data);
   }
 
   async _getOwnerColor() {
@@ -553,10 +553,10 @@ export class DataService {
     return await sessionStorage.setItem(this.BOOKING_KEY, JSON.stringify(data))
   }
 
-  async getInitialBookingdata() {
+  getInitialBookingdata() {
 
-    let data = await sessionStorage.getItem(this.BOOKING_KEY);
-    return await data == undefined ? '' : JSON.parse(data);
+    let data =  sessionStorage.getItem(this.BOOKING_KEY);
+    return  data == undefined ? '' : JSON.parse(data);
   }
 
   async resetDateTimeInitialBookingData(data: any) {
@@ -631,7 +631,7 @@ export class DataService {
     let response = {
       flag : r_flag == undefined || r_flag == null ? 'false' : r_flag,
       selectedDate : preSelectedDate,
-      selectedTime : JSON.parse(preSelectedTime),
+      selectedTime : preSelectedTime,
       selectedTimingId : preSelectedTimingId
     };
     return response;

@@ -8,6 +8,7 @@ import { IonSlides, IonModal } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
+import { ImageService } from '../services/image.service';
 import { mergeMap } from 'rxjs/operators';
 import { Browser } from '@capacitor/browser';
 
@@ -19,9 +20,9 @@ import { Browser } from '@capacitor/browser';
 
 export class SelectTimingComponent implements OnInit {
   @ViewChild(IonModal) modal: IonModal;
-  @ViewChild('mySlider') slides: IonSlides;
+  // @ViewChild('mySlider') slides: IonSlides;
   // @ViewChild('myCalander') myCalander!: ElementRef;
-
+  isVisible: boolean = false;
   ID: any = '';
   HEADING: string = "3";
   TOTAL_DURATION: any = 0;
@@ -43,6 +44,7 @@ export class SelectTimingComponent implements OnInit {
   IS_STAFF: any = true;
   IS_CALNDER_OPEN: boolean = false;
   IS_CONFIRM_OPEN: boolean = false;
+  SELECT_STAFF_OPEN : boolean = false;
   DATE: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
@@ -52,6 +54,15 @@ export class SelectTimingComponent implements OnInit {
   IS_LOGIN: boolean = false;
   BOOKING_WITH_STAFF: any = true;
   PENDING_BOOKING_TIMEOUT: any;
+
+  ALL_AVAILABLE_SLOT : any = [];
+  STAFF_AVAILABLE_SLOT: any = [];
+
+  SELECT_STAFF_ID: any;
+
+  STAFF_LIST: any = [];
+
+  DISPLAY_LIST: any = [];
 
   SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
   currentSlideIndex: number;
@@ -64,17 +75,7 @@ export class SelectTimingComponent implements OnInit {
   };
 
   options: CalendarModalOptions = {
-    //disableWeeks: [0, 6],
     daysConfig: [
-      // {
-      //   date: new Date('2023-03-02'),
-      //   disable: true,
-      //   cssClass:'line',
-      // },
-      // {
-      //   date: new Date('2023-03-03'),
-      //   disable: true,
-      // }
     ]
   };
 
@@ -92,8 +93,24 @@ export class SelectTimingComponent implements OnInit {
     private modalController: ModalController,
     public auth: AuthService,
     private apiData: ApiDataService,
+    public imageService: ImageService,
   ) {
+    let booking_data =  this.dataService.getInitialBookingdata();
+    this.SELECT_STAFF_ID = booking_data?.staff_id;
+    this.apiData.presentLoading();
+    this.getAllAvailableSlots();
+    this.getAllAvailableSlotsByEmployee(booking_data?.staff_id);
+    this.DATE = this.getCurrentDate();
+    setTimeout(() => {
+      this._getNewDisabledDate();
+      this._getNewShiftList();
+      this._getDisplayList();
+      this.isVisible = true;
+      this.apiData.dismiss();
+    }, 500);
+
   }
+
 
 
   async _datePickerClosed() {
@@ -111,22 +128,17 @@ export class SelectTimingComponent implements OnInit {
       }
       );
 
+    this.STAFF_LIST = [];
+
     this.MONTH_NAME_LIST = await this.dataService.MONTHS_NAME;
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR
 
     let booking_data = await this.dataService.getInitialBookingdata();
-    //let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-
-    // this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
     this.DAYS_ARRAY = await this._getDaysByYear(this.CURRENT_YEAR);
-    this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id)
-
-    //await this._getStaffBookingList();
+    this.STAFF_BOOKING_LIST = await this.dataService.getStaffBookingDetail(booking_data?.staff_id);
+    this.SELECT_STAFF_ID = booking_data?.staff_id;
+    this.getStaffList();
     await this.checkLogin();
-    await this._getDisabledDate();
-    this.DATE = await this.getCurrentDate();
-    await this._getDayList();
-
     if (booking_data.date != '') {
       await this._preFilledData();
     } else {
@@ -144,7 +156,7 @@ export class SelectTimingComponent implements OnInit {
       this.SERVICE_NAME = booking_data.servises[0].serviceName;
       this.IS_CALNDER_OPEN = false;
       this.IS_CONFIRM_OPEN = true;
-      await this._getDayList();
+      //await this._getDayList();
       this.BOOKING_WITH_STAFF =
         booking_data.booking_type == this.dataService.BOOKING_WITH_STAFF
           ? true
@@ -202,6 +214,45 @@ export class SelectTimingComponent implements OnInit {
     );
   }
 
+  
+  async getAllAvailableSlots() {
+    (await this.apiData.getAllAvailableSlots()).subscribe(
+      (response: any) => {
+        this.ALL_AVAILABLE_SLOT = response;
+        
+      },
+      (error: any) => {
+        alert(JSON.stringify(error))
+      }
+    );
+  }
+
+  async getAllAvailableSlotsByEmployee(employeeId: any) {
+
+    (await this.apiData.getAllAvailableSlotsByEmployee(employeeId)).subscribe(
+      (response: any) => {
+        this.STAFF_AVAILABLE_SLOT = response;
+      },
+      (error: any) => {
+        alert(JSON.stringify(error))
+      }
+    );
+  }
+
+  async getStaffList() {
+    await (await this.apiData.getStaffList()).subscribe(
+      async (response: any) => {
+        if (response.length > 0) {
+          this.STAFF_LIST = response;
+          await this.dataService.setStaffList(response)
+        }
+      },
+      async (error: any) => {
+        alert(JSON.stringify(error));
+      }
+    );
+  }
+
   async ionViewWillLeave() {
 
     this.IS_CALNDER_OPEN = false;
@@ -211,7 +262,7 @@ export class SelectTimingComponent implements OnInit {
   async formatAMPM(date) {
     let hours = date.getHours();
     let minutes = date.getMinutes();
-    let ampm = hours >= 12 ? 'pm' : 'am';
+    let ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
     minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -235,7 +286,8 @@ export class SelectTimingComponent implements OnInit {
 
     //await this.modalController.dismiss();
 
-    await this._getDayList();
+    //await this._getDayList();
+    if(this.ALL_SHIFT.length == 0) return;
     if (booking_data.timing_id != '') {
 
       setTimeout(() => {
@@ -244,11 +296,14 @@ export class SelectTimingComponent implements OnInit {
     }
   }
 
-  async _selectTiming(id: number, is_disabled: any) {
+  async _selectTiming(selected_date:any, id: number, is_disabled: any) {
+
+    this.DATE = selected_date;
 
     if (is_disabled) return;
 
-    let selecetd_shift = this.ALL_SHIFT.filter(data => data.id == id);
+    let selected_shift_list = this.DISPLAY_LIST.filter(data => data.DATE == selected_date);
+    let selecetd_shift = (selected_shift_list[0].shift_list).filter(data => data.id == id);
 
     let get_booking_data = await this.dataService.getInitialBookingdata();
     get_booking_data.date = this.DATE;
@@ -272,24 +327,9 @@ export class SelectTimingComponent implements OnInit {
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
     let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
 
-    let is_passed = true;
-    for (let shift of this.ALL_SHIFT) {
-
-      let new_date = new Date(`${this.DATE} ${shift.value}`);
-
-      if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
-        is_passed = false;
-      }
-    }
-
-    if (!is_passed) {
-      await this.apiService.presentAlert('Shift not available')
-      return;
-    }
-
     // Check services's time is under office timing
 
-    let office_last_shift = new Date(`${get_booking_data.date} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}`);
+    let office_last_shift = new Date(`${get_booking_data.date} ${selected_shift_list[0].shift_list[selected_shift_list[0].shift_list.length - 1].value}`);
     let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
 
     if (ending_date_time > office_closed_time) {
@@ -309,7 +349,6 @@ export class SelectTimingComponent implements OnInit {
       await this.dataService.saveSelectTimingInfo("false", this.DATE, String(id), String(id));
     }
 
-    for (let shift of this.ALL_SHIFT) shift.is_active = shift.id == id ? true : false;
 
     await this.apiData.presentLoading();
 
@@ -348,13 +387,13 @@ export class SelectTimingComponent implements OnInit {
                 await this.apiData.dismiss();
                 if (error.status == 200) {
                   await this.dataService.setBookingData(get_booking_data);
-                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
+                  setTimeout(() => { this.router.navigate(['/booking-summary',this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
                 } else if (error.status == 201) {
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                   return;
                 } else if (error.status == 500) {
                   await this.dataService.setBookingData(get_booking_data);
-                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
+                  setTimeout(() => { this.router.navigate(['/booking-summary', this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
                 } else {
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                 }
@@ -421,18 +460,23 @@ export class SelectTimingComponent implements OnInit {
     let active_index_array = await day_list.filter(data => data.is_active);
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
     let active_index_array_index = day_list.indexOf(active_index_array[0]);
-    this.slides.slideTo(active_index_array_index, 1000);
+    // this.slides.slideTo(active_index_array_index, 1000);
 
     await this._getShiftList();
   }
 
   closeConfirm() {
     this.IS_CONFIRM_OPEN = false;
+    for(let shift of this.ALL_SHIFT){
+      if(shift.value == this.STARTING_TIME){
+        shift.is_active = false;
+      }
+    }
   }
 
   confirmPresaved() {
     this.IS_CONFIRM_OPEN = false;
-    this._selectTiming(this.TIME_ID, false);
+    this._selectTiming(this.DATE, this.TIME_ID, false);
   }
 
   async _getShiftList() {
@@ -621,6 +665,83 @@ export class SelectTimingComponent implements OnInit {
 
   }
 
+  async _getNewShiftList(){
+    let current_date_available_slots = await this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == this.DATE);
+    if(current_date_available_slots == undefined || current_date_available_slots.length == 0) return;
+    this.ALL_SHIFT = await this._returnShiftTimes(current_date_available_slots[0].availableSlots);
+    for (let shift_value of this.ALL_SHIFT) {
+      let shift__date_time = new Date(`${this.DATE}T${shift_value.value}:00`);
+      const current_date_time = new Date();
+      if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+        shift_value.is_disabled = true; // Disabled the shift
+      }
+    }
+    this._isDisabledBasedServicesDuration();
+  }
+
+  async _isDisabledBasedServicesDuration(){
+    if (this.STAFF_AVAILABLE_SLOT.length > 0) {
+   
+      // Shift disabled based on Booking time -- end
+      let booking_data = await this.dataService.getInitialBookingdata();
+      let booking_total_duration = 0;
+      let total_shift_will_count = 1;
+
+      for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+      booking_total_duration = booking_total_duration - 1;
+      total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 5) : (~~(booking_total_duration / 5) + 1);
+      // Set Soft disabled
+      if (total_shift_will_count != 1) {
+        let last_index = 0;
+        let neighbour_difference = 0;
+        for (let index in this.ALL_SHIFT) {
+
+          let checked_pass = true;
+
+          if (this.ALL_SHIFT[index]['is_disabled'] == false) {
+
+            for (let i = 1; i < total_shift_will_count; i++) {
+
+              let num = Number(index) + i;
+
+
+              if (typeof this.ALL_SHIFT[num] !== 'undefined') {
+
+                if (this.ALL_SHIFT[num]['is_disabled'] == true && checked_pass == true) {
+
+                  checked_pass = false;
+                }
+
+              } else {
+
+                checked_pass = false;
+              }
+            }
+
+            if (!checked_pass) {
+              this.ALL_SHIFT[index]['is_disabled'] = true;
+            }
+          }
+          else{
+            neighbour_difference = Number(index) - last_index;
+            if(neighbour_difference <= total_shift_will_count){
+              for (let i = last_index + 1; i < Number(index); i++) {
+                this.ALL_SHIFT[i]['is_disabled'] = true;
+              }
+            }
+            last_index = Number(index);
+          }
+        }
+      }
+    } else {
+
+      return
+    }
+    return
+
+  }
+
   async _getDays(month: any, year: any) {
 
     month = month.toString().length > 1 ? month : '0' + month
@@ -683,7 +804,7 @@ export class SelectTimingComponent implements OnInit {
 
     for (let value of this.DAYS_ARRAY) value.is_active = false;
     this.DAYS_ARRAY[index]['is_active'] = true;
-    this.slides.slideTo(index - 1, 1000);
+    // this.slides.slideTo(index - 1, 1000);
     await this._getShiftList();
   }
   async getDaysBySlideChange(nextMonth, nextYear) {
@@ -695,16 +816,19 @@ export class SelectTimingComponent implements OnInit {
     await this._getShiftList();
   }
   slideChanged() {
-    this.slides.getActiveIndex().then(index => {
-      this.CURRENT_MONTH = this.getMonthFromDayIndex(index + 1, this.CURRENT_YEAR);
-      this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1] + " " + this.CURRENT_YEAR;
-    });
+    // this.slides.getActiveIndex().then(index => {
+    //   this.CURRENT_MONTH = this.getMonthFromDayIndex(index + 1, this.CURRENT_YEAR);
+    //   this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1] + " " + this.CURRENT_YEAR;
+    // });
   }
   async _onDateSelect(selected_date: any) {
     this.DATE = selected_date;
     this.IS_CALNDER_OPEN = false;
-    await this.modalController.dismiss();
-    await this._getDayList();
+    const desiredDateId = this.DATE;
+    const element = document.getElementById(desiredDateId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+    }
   }
 
   async _getDisabledDate() {
@@ -736,6 +860,28 @@ export class SelectTimingComponent implements OnInit {
         daysConfig.push({ date: new Date(tempDay), disable: true });
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
+        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(tempDay), disable: true });
+
+      }
+
+    }
+    this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
+  }
+
+  async _getNewDisabledDate(){
+
+    let booking_data = await this.dataService.getInitialBookingdata();
+    let all_dates = await this._returnDateInBetween();
+    let daysConfig = [];
+    for (let value of all_dates) {
+      let is_date_working =  this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == value);
+      let tempDay = new Date(value);
+      let offset = tempDay.getTimezoneOffset()
+      tempDay = new Date(tempDay.getTime() + (offset*60*1000))
+      if (is_date_working.length == 0) { // If rota not found on current loop date
+        daysConfig.push({ date: new Date(tempDay), disable: true });
+      } else {
+        let is_all_shift_booked = (await this._isNewDateDisabled(value)).filter(data => !data.is_disabled);
         if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(tempDay), disable: true });
 
       }
@@ -878,13 +1024,90 @@ export class SelectTimingComponent implements OnInit {
 
   }
 
+  async _isNewDateDisabled(value: any){
+    let all_shift_list: any = [];
+    if(this.STAFF_AVAILABLE_SLOT.length != 0) {
+
+      let current_available_slots = this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == value);
+      all_shift_list = await this._returnShiftTimes(current_available_slots[0].availableSlots);
+        // Shift disabled based on current time
+        for (let shift_value of all_shift_list) {
+          let shift__date_time = new Date(`${value}T${shift_value.value}:00`);
+          const current_date_time = new Date();
+          if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+            shift_value.is_disabled = true; // Disabled the shift
+          }
+        }
+        //   // Shift disabled based on Booking time -- end
+        let booking_data = await this.dataService.getInitialBookingdata();
+        let booking_total_duration = 0;
+        let total_shift_will_count = 1;
+
+        for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+        booking_total_duration = booking_total_duration - 1;
+        total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 5) : (~~(booking_total_duration / 5) + 1);
+        // Set Soft disabled
+        if (total_shift_will_count != 1) {
+          let last_index = 0;
+          let neighbour_difference = 0;
+          for (let index in all_shift_list) {
+
+            let checked_pass = true;
+
+            if (all_shift_list[index]['is_disabled'] == false) {
+
+              for (let i = 1; i < total_shift_will_count; i++) {
+
+                let num = Number(index) + i;
+
+
+                if (typeof all_shift_list[num] !== 'undefined') {
+
+                  if (all_shift_list[num]['is_disabled'] == true && checked_pass == true) {
+
+                    checked_pass = false;
+                  }
+
+                } else {
+
+                  checked_pass = false;
+                }
+              }
+
+              if (!checked_pass) {
+                all_shift_list[index]['is_disabled'] = true;
+              }
+            }
+            else{
+              neighbour_difference = Number(index) - last_index;
+              if(neighbour_difference <= total_shift_will_count){
+                for (let i = last_index + 1; i < Number(index); i++) {
+                  all_shift_list[i]['is_disabled'] = true;
+                }
+              }
+              last_index = Number(index);
+            }
+          }
+        }
+      return all_shift_list;
+    }
+    else {
+      return [];
+    }
+    
+
+    // Shift disabled based on Booking time -- end
+
+    
+  }
 
   async openPicker() {
 
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
   }
 
-  async _returnDateInBetween(start_date = new Date(), end_date = new Date(new Date().setFullYear(new Date().getFullYear() + 100))) {
+  async _returnDateInBetween(start_date = new Date(), end_date = new Date(new Date().setMonth(new Date().getMonth() + 1))) {
 
     for (var date_list = [], d = new Date(start_date); d <= new Date(end_date); d.setDate(d.getDate() + 1)) {
       let today_date = new Date(d);
@@ -902,7 +1125,7 @@ export class SelectTimingComponent implements OnInit {
     return date_list;
   }
 
-  async getCurrentDate() {
+  getCurrentDate() {
 
     let today_date = new Date();
     let year: any = today_date.getFullYear();
@@ -975,6 +1198,27 @@ export class SelectTimingComponent implements OnInit {
     return result;
   }
 
+  async _returnShiftTimes(availableSlots: any){
+
+    let result = [];
+    for (let timeString of availableSlots) {
+
+      let value = timeString;
+      let H = +timeString.substr(0, 2);
+      let h = (H % 12) || 12;
+      let ampm = H < 12 ? " AM" : " PM";
+      timeString = h + timeString.substr(2, 3) + ampm;
+      result.push({
+        id: result.length + 1,
+        time: timeString,
+        value: value.substr(0, 5),
+        is_active: false,
+        is_disabled: false,
+        soft_disabled: false
+      });
+    }
+    return result;
+  }
 
   async removePendingBooking() {
 
@@ -1054,10 +1298,110 @@ export class SelectTimingComponent implements OnInit {
       }
     );
   }
-
+  _selectOtherStaff() {
+    this.SELECT_STAFF_OPEN = true;
+  }
   navigation() {
-
     this.location.back();
   }
 
+  SelectStaff(staff_id: any) {
+    this.SELECT_STAFF_ID = staff_id;
+    this.SELECT_STAFF_OPEN = false;
+  }
+
+  async _getDisplayList(){
+    let shift_list: any ;
+
+    let all_dates = await this._returnDateInBetween();
+
+    for (let value of all_dates) {
+
+      shift_list = [];
+
+      let is_date_working =  this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == value);
+
+      if (is_date_working.length == 0) { // If rota not found on current loop date
+        this.DISPLAY_LIST.push(
+          {
+            DATE: value,
+            id: value,
+            shift_list: shift_list
+          }
+        );
+      } else {
+        shift_list = await this._returnShiftTimes(is_date_working[0].availableSlots);
+        for (let shift_value of shift_list) {
+          let shift__date_time = new Date(`${is_date_working[0].workDate}T${shift_value.value}:00`);
+          const current_date_time = new Date();
+          if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+            shift_value.is_disabled = true; // Disabled the shift
+          }
+        }
+    
+        // Shift disabled based on Booking time -- end
+        let booking_data = await this.dataService.getInitialBookingdata();
+        let booking_total_duration = 0;
+        let total_shift_will_count = 1;
+    
+        for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+    
+        booking_total_duration = booking_total_duration - 1;
+        total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 5) : (~~(booking_total_duration / 5) + 1);
+        // Set Soft disabled
+        if (total_shift_will_count != 1) {
+          let last_index = 0;
+          let neighbour_difference = 0;
+          for (let index in shift_list) {
+  
+            let checked_pass = true;
+  
+            if (shift_list[index]['is_disabled'] == false) {
+  
+              for (let i = 1; i < total_shift_will_count; i++) {
+  
+                let num = Number(index) + i;
+  
+  
+                if (typeof shift_list[num] !== 'undefined') {
+  
+                  if (shift_list[num]['is_disabled'] == true && checked_pass == true) {
+  
+                    checked_pass = false;
+                  }
+  
+                } else {
+  
+                  checked_pass = false;
+                }
+              }
+  
+              if (!checked_pass) {
+                shift_list[index]['is_disabled'] = true;
+              }
+            }
+            else{
+              neighbour_difference = Number(index) - last_index;
+              if(neighbour_difference <= total_shift_will_count){
+                for (let i = last_index + 1; i < Number(index); i++) {
+                  shift_list[i]['is_disabled'] = true;
+                }
+              }
+              last_index = Number(index);
+            }
+          }
+        }
+        this.DISPLAY_LIST.push(
+          {
+            DATE: is_date_working[0].workDate,
+            id: is_date_working[0].workDate,
+            shift_list: shift_list
+          }
+        );
+      }
+    }
+    this.DISPLAY_LIST.sort((a, b) => {
+      return (new Date(`${a.DATE}`)).getTime() - (new Date(`${b.DATE}`)).getTime();
+    });
+  }
 }
