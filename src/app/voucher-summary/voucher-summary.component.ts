@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { ImageService } from "../services/image.service";
-import { HttpClient } from  '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 declare var Stripe;
 
 @Component({
@@ -86,7 +86,7 @@ export class VoucherSummaryComponent implements OnInit {
     });
 
     var form = document.getElementById('payment-form');
-    form.addEventListener('submit',async event => {
+    form.addEventListener('submit', async event => {
       if (this.apiData.isLoading == true) return;
       await this.apiData.presentLoading();
       event.preventDefault();
@@ -110,7 +110,7 @@ export class VoucherSummaryComponent implements OnInit {
     formData.append('email', this.SEND_REEIPT_TO);
     formData.append('token', token);
     formData.append('amount', amount.toString());
-    formData.append('transactionType', String(1));
+    formData.append('transactionType', String(4));
     formData.append('description', 'Booking Deposit Payment');
     await this.apiData.presentLoading();
 
@@ -328,25 +328,25 @@ export class VoucherSummaryComponent implements OnInit {
           this.PAYMENT_MODEL_OPEN = false;
           this.Voucher_Code = res.uniqueVoucherCode;
 
-          this.httpClient.get('../../assets/html/template.html', {responseType: 'text'})
-        .subscribe(data => {
-          var str = data;
-          var mapObj = {
-            '{{TOTAL_PAYMENT}}': this.voucherData.price,
-            '{{VOUCHER_CODE}}': res.uniqueVoucherCode,
-          };
-          str = str.replace(/{{TOTAL_PAYMENT}}|{{VOUCHER_CODE}}/gi, function(matched){
-            return mapObj[matched];
-          });
-          
-          let post_data = {
-            to: this.SEND_REEIPT_TO,
-            subject: "voucher",
-            content: str
-          };
-          this.sendEmail(post_data);
-        });
-         
+          this.httpClient.get('../../assets/html/template.html', { responseType: 'text' })
+            .subscribe(data => {
+              var str = data;
+              var mapObj = {
+                '{{TOTAL_PAYMENT}}': this.voucherData.price,
+                '{{VOUCHER_CODE}}': res.uniqueVoucherCode,
+              };
+              str = str.replace(/{{TOTAL_PAYMENT}}|{{VOUCHER_CODE}}/gi, function (matched) {
+                return mapObj[matched];
+              });
+
+              let post_data = {
+                to: this.SEND_REEIPT_TO,
+                subject: "voucher",
+                content: str
+              };
+              this.sendEmail(post_data);
+            });
+
         }
       },
       async (error: any) => {
