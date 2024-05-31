@@ -1,51 +1,42 @@
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8TSCSYCRMQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-
-  gtag('config', 'G-8TSCSYCRMQ');
-</script>
 <ion-footer class="ion-no-border">
   <ion-toolbar>
 
-    <ion-tabs>
-      <ion-tab-bar slot="bottom" style="--background : {{this.dataService.BUTTON_COLOR}}">
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" style="--background : {{this.dataService.BUTTON_COLOR}}">
 
 
-        <ion-tab-button [routerLink]="['/']">
-          <ion-img [src]="this.imageService.HOME"></ion-img>
-          <ion-text>Home</ion-text>
-        </ion-tab-button>
+      <ion-tab-button [routerLink]="['/']">
+        <ion-img [src]="this.imageService.HOME"></ion-img>
+        <ion-text >Home</ion-text>
+      </ion-tab-button>
 
-        <ion-tab-button [routerLink]="['/my-booking-list']">
-          <ion-img [src]="this.imageService.BOOKING"></ion-img>
-          <ion-text>Bookings</ion-text>
-        </ion-tab-button>
+      <ion-tab-button [routerLink]="['/my-booking-list']">
+        <ion-img [src]="this.imageService.BOOKING"></ion-img>
+        <ion-text >Bookings</ion-text>
+      </ion-tab-button>
 
 
-        <ion-tab-button [routerLink]="['/profile']">
-          <ion-img [src]="this.imageService.PROFILE"></ion-img>
-          <ion-text>Profile</ion-text>
-        </ion-tab-button>
+      <ion-tab-button [routerLink]="['/profile']">
+        <ion-img [src]="this.imageService.PROFILE"></ion-img>
+        <ion-text >Profile</ion-text>
+      </ion-tab-button>
 
-        <ion-tab-button (click)="logout()" *ngIf="IS_LOGIN">
-          <ion-img [src]="this.imageService.LOGOUT"></ion-img>
-          <ion-text>Logout</ion-text>
-        </ion-tab-button>
+      <ion-tab-button (click)="logout()" *ngIf="IS_LOGIN">
+        <ion-img [src]="this.imageService.LOGOUT"></ion-img>
+        <ion-text >Logout</ion-text>
+      </ion-tab-button>
 
-        <ion-tab-button (click)="login()" *ngIf="!IS_LOGIN">
-          <ion-icon name="log-in"></ion-icon>
-          <ion-text>Login</ion-text>
-        </ion-tab-button>
+      <ion-tab-button (click)="login()" *ngIf="!IS_LOGIN">
+        <ion-icon name="log-in" ></ion-icon>
+        <ion-text >Login</ion-text>
+      </ion-tab-button>
 
-        <!-- <ion-tab-button [routerLink]="['/stripe']">
+      <!-- <ion-tab-button [routerLink]="['/stripe']">
         <ion-icon name="person" ></ion-icon>
         <ion-text>stripe</ion-text>
       </ion-tab-button> -->
 
-      </ion-tab-bar>
-    </ion-tabs>
-  </ion-toolbar>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-toolbar>
 </ion-footer>
