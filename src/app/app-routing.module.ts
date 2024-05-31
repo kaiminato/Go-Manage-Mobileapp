@@ -53,7 +53,7 @@ const routes: Routes = [
     //canActivate: [AuthGuard]
   },
   {
-    path: 'booking-summary/:id',
+    path: 'booking-summary',
     component: BookingSummaryComponent,
     //canActivate: [AuthGuard]
   },

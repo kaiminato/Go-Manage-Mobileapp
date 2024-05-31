@@ -35,7 +35,7 @@
 
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ service.serviceName }}
           <br/>
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ SELECTEC_STAFF[0].firstName }} {{SELECTEC_STAFF[0].lastName}}</ion-text>
+          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text>
         </ion-text>
 
         <ion-text slot="end" style="color : {{this.dataService.TEXT_COLOR}} !important;" class="ion-margin-bottom" *ngIf="service.servicePrice != 0"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
