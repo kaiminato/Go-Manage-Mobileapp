@@ -107,14 +107,21 @@ export class VoucherSummaryComponent implements OnInit {
     let amount = this.voucherData.price * 100;
     let formData = new FormData();
     // formData.append('email', this.EMAIL);
-    formData.append('email', this.SEND_REEIPT_TO);
-    formData.append('token', token);
-    formData.append('amount', amount.toString());
-    formData.append('transactionType', String(4));
-    formData.append('description', 'Booking Deposit Payment');
+    // formData.append('email', this.SEND_REEIPT_TO);
+    // formData.append('token', token);
+    // formData.append('amount', amount.toString());
+    // formData.append('transactionType', String(4));
+    // formData.append('description', 'Booking Deposit Payment');
+    let post_data = {
+      email : this.SEND_REEIPT_TO,
+      transactionType : 4,
+      token : token,
+      amount : amount,
+      description : 'Voucher Payment : ' + amount.toString()
+    };
     await this.apiData.presentLoading();
 
-    await (await this.apiData._createPayment(formData)).subscribe(
+    await (await this.apiData._createPayment(post_data)).subscribe(
       async (response: any) => {
 
         await this.apiData.dismiss();
