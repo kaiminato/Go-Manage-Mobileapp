@@ -16,16 +16,9 @@ export class MyBookingListComponent implements OnInit {
   HEADING: string = "";
   IS_FUTURE_BOOKING_active: boolean = true;
   ALL_BOOKING_LIST: any = [];
-  FUTURE_BOOKING_LIST: any = [
-    // {id: 1 , date_time: 'Thu, 15 Sep at 16:30', service_name: 'Yumi Lash Lift', service_duration: '30 minuts'},
-    // {id: 2 , date_time: 'Thu, 15 Sep at 17:45', service_name: 'Brow Tint', service_duration: '30 minuts'},
-    // {id: 3 , date_time: 'Thu, 15 Sep at 19:30', service_name: 'Lip', service_duration: '30 minuts'},
-  ];
-  RECENT_BOOKING_LIST: any = [
-    // {id: 4 , date_time: 'Thu, 15 Sep at 12:30', service_name: 'YUnderarm', service_duration: '30 minuts'},
-    // {id: 5 , date_time: 'Thu, 15 Sep at 14:45', service_name: 'Full Arm', service_duration: '30 minuts'},
-    // {id: 6 , date_time: 'Thu, 15 Sep at 20:30', service_name: 'Half Arm', service_duration: '30 minuts'},
-  ];
+  FUTURE_BOOKING_LIST: any = [];
+  RECENT_BOOKING_LIST: any = [];
+  intervalId : any;
   constructor(
     private router: Router,
     private apiData: ApiDataService,
@@ -33,20 +26,26 @@ export class MyBookingListComponent implements OnInit {
     public auth: AuthService,
     private alertController: AlertController,
     private imageService: ImageService,
-  ) { }
-
-  ngOnInit() {}
-
-  async ionViewWillEnter () {
-
-    await this.getBookings();
-  }
-
-  async ionViewWillLeave () {
+  ) { 
+    this.getBookings();
     this.RECENT_BOOKING_LIST = [];
     this.FUTURE_BOOKING_LIST = [];
     this.ALL_BOOKING_LIST = [];
+  }
 
+  ngOnInit() {
+    
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId);
+  }
+
+  ionViewWillEnter () {
+    
+  }
+
+  async ionViewWillLeave () {
   }
 
   async getBookings () {
@@ -86,8 +85,8 @@ export class MyBookingListComponent implements OnInit {
                           service_duration: resultInMinutes + ' minutes',
                           id: booking.id,
                           date_time,
-                          start_time: this.subtractHourFromDate(booking.startTime),
-                          endTime: this.subtractHourFromDate(booking.endTime),
+                          start_time: booking.startTime,
+                          endTime: booking.endTime,
                           paymentReceipt: booking.paymentReceipt,
                           compare_date_time: booking.endTime.split('T')[0]
                       };
@@ -95,15 +94,14 @@ export class MyBookingListComponent implements OnInit {
                       this.ALL_BOOKING_LIST.push(data);
                   }
                 }
-
                 let currentDate = new Date();
-
-                this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => <any>new Date(currentDate).getTime() > <any>new Date(data.endTime).getTime())
-                this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (<any>new Date(currentDate).getTime() <= <any>new Date(data.endTime).getTime()) )
+                this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() > (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
+                this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() <= (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
                 // Sort array
 
                 this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
 
+                this.intervalId = setInterval(() => this.getAvailableBookings(), 5000);
                 await this.apiData.dismiss();
               },
               async (error: any) => {
@@ -129,6 +127,18 @@ export class MyBookingListComponent implements OnInit {
     );
 
 
+  }
+
+   getAvailableBookings(){
+    if (!this.ALL_BOOKING_LIST) {
+      return;
+  }
+    let currentDate = new Date();
+    this.RECENT_BOOKING_LIST =  this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() > (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
+    this.FUTURE_BOOKING_LIST =  this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() <= (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
+    // Sort array
+
+    this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
   }
 
   subtractHourFromDate(timeString: string): Date {
