@@ -10,6 +10,12 @@
       <ion-card-title>
         <img [src]="this.imageService.JADE_SIGN_IMG" style="width: 100%;">
       </ion-card-title>
+      <ion-item class="staff_dropdown">
+        <ion-label></ion-label>
+        <ion-select class="staff_select" [(ngModel)]="selectedOption" (ionChange)="onOptionChange()" interface="popover">
+          <ion-select-option  *ngFor="let staff of STAFF_LIST; let staff_index = index" [value]="staff.employee_id">{{staff.firstName}}  {{staff.lastName}}</ion-select-option>
+        </ion-select>
+      </ion-item>
       <ion-card-subtitle style="color : {{this.dataService.TEXT_COLOR}}!important">Please write your feedback</ion-card-subtitle>
 
     </ion-card-header>
