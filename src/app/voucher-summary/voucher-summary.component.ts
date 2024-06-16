@@ -117,7 +117,7 @@ export class VoucherSummaryComponent implements OnInit {
       transactionType : 4,
       token : token,
       amount : amount,
-      description : 'Voucher Payment : ' + amount.toString()
+      description : 'Voucher Payment : ' + this.voucherData.price.toString()
     };
     await this.apiData.presentLoading();
 
