@@ -37,6 +37,7 @@ export class BookingSummaryComponent implements OnInit {
   RECIPT_URL: string = '';
   BOOKINGS_FORMS: any = [];
   CLIENT_FORMS_LIST: any = [];
+  termsAccepted: boolean = false;
 
   constructor(
     private router: Router,

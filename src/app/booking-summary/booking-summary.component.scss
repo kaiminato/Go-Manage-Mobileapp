@@ -109,7 +109,7 @@ ion-content {
     cursor: pointer;
   }
 
-  .modal-header {
+  .card-header {
     padding: 2px 16px;
     color: white;
     border-top-left-radius: 20px;
@@ -120,6 +120,8 @@ ion-content {
     --border-radius: 20px;
     ion-text{
       font-weight: bold;
+      margin-left: 20px;
+      margin-right: 20px;
     }
   }
   .online-payment-txt{
@@ -131,7 +133,8 @@ ion-content {
     justify-content: center;
     align-items: center;
     padding: 10px;
-    margin-top: 28px;
+    margin-top: 20px;
+    color: white;
   }
   .welcome-card{
     margin: 0px;
@@ -141,7 +144,13 @@ ion-content {
     padding: 2px 16px;
     color: white;
   }
-
+  .term_conditions {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 7px;
+    margin-top: 5px;
+  }
   /* Add Animation */
   @-webkit-keyframes slideIn {
     from {bottom: -300px; opacity: 0}
