@@ -2,10 +2,7 @@
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
   <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
   </div>
-  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
-    <h2>Booking Summary</h2>
-  </ion-card>
-  <div class="card-list" style="padding-bottom: 40px;">
+  <div class="card-list" style="padding-bottom: 5px;">
     <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
       <ion-img slot="end" [src]="this.dataService.APP_HOME_PAGE_ICON" class="ion-margin-bottom"></ion-img>
 
@@ -32,7 +29,6 @@
 
       <ion-item button  class="details ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
 
-
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ service.serviceName }}
           <br/>
           <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text>
@@ -42,9 +38,7 @@
 
       </ion-item>
 
-
       <ion-item button  class="details_no_border ion-no-border ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false">
-
 
         <ion-text class="ion-margin-bottom ion-margin-top"> Total
         </ion-text>
@@ -53,65 +47,61 @@
 
       </ion-item>
 
-      
-
     </ion-list>
-    <ion-button *ngIf="!PAYMENT_MODEL_OPEN"
-        class="ion-margin-bottom ion-margin-top details_no_border"
-        (click)="confirm()"
-        style="--background : {{this.dataService.BUTTON_COLOR}} !important; --background-activated: {{this.dataService.BUTTON_COLOR}}; position:fixed; z-index: 999; bottom : 50px; left : 50%; width : 140px; margin-left : -70px;"
-        >
-        <ion-text>Confirm</ion-text>
-    </ion-button>
+
+    <div style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+      <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}; border-top-left-radius: 15px;border-top-right-radius: 15px;">
+        <h2 class="online-payment-txt">Online Payment</h2>
+      </div>
+      <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}};border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">
+        <ion-card class="welcome-card">
+          <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
+          <ion-card-header style="padding: 13px !important;">
+            <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
+              <ion-col>Total Payment</ion-col>
+              <ion-col> {{ 1 | currency: 'EUR'}} </ion-col>
+            </ion-row>
+          </ion-card-header>
+          <ion-card-content style="padding-bottom: 5px !important;">
+            <form action="/" method="post" id="payment-form">
+              <div class="form-row">
+                <div id="card-element">
+                    </div>
+                <!-- Used to display Element errors -->
+                <div id="card-errors" role="alert"></div>
+              </div>
+              <div class="term_conditions">
+                <ion-checkbox slot="start" [(ngModel)]="termsAccepted">
+                </ion-checkbox>
+                <ion-label style="margin-left: 10px; font-size: 12px;">
+                  <ion-text>I accept the </ion-text>
+                  <a href="https://www.gomanage.ie/terms&conditions">terms and conditions</a>
+                </ion-label>
+              </div>
+              <div style="display: flex;justify-content: center;">
+                <ion-button
+                type="submit"
+                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;border-radius: 10px;"
+                class="Confirm"
+                [disabled]="!termsAccepted"
+                >
+                <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
+                <ion-text>BOOK & PAY NOW</ion-text>
+                </ion-button>
+              </div>
+              <ion-text style="margin-top: 5px;">
+                "Please note bookings can be changed up
+                To 48 hours in advance. If the you fail to 
+                comply with the cancellation policy within
+                the terms & conditions you may be charged
+                the remaining balance."
+              </ion-text>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
   </div>
-  <!-- payment model -->
-
-  <!-- Trigger/Open The Modal -->
-<!-- <ion-button id="myBtn" (click)="PAYMENT_MODEL_OPEN = true;">Stripe Payent</ion-button> -->
-
-<!-- The Modal -->
-<div id="myModal" class="modal" style="display: {{ PAYMENT_MODEL_OPEN ? 'block' : 'none'}};">
-
-  <!-- Modal content -->
-  <div class="modal-content"  style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
-    <div class="modal-header" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
-      <span class="close" (click)="PAYMENT_MODEL_OPEN = false;">&times;</span>
-      <h2 class="online-payment-txt">Online Payment</h2>
-    </div>
-    <div class="modal-body" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
-      <ion-card class="welcome-card">
-        <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
-        <ion-card-header>
-          <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
-            <ion-col>Total Payment</ion-col>
-            <ion-col> {{ 1 | currency: 'EUR'}} </ion-col>
-          </ion-row>
-        </ion-card-header>
-        <ion-card-content>
-          <form action="/" method="post" id="payment-form">
-            <div class="form-row">
-              <div id="card-element">
-                  </div>
-              <!-- Used to display Element errors -->
-              <div id="card-errors" role="alert"></div>
-            </div>
-            <ion-button
-              type="submit"
-              style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;"
-              class="Confirm"
-              expand="full">
-              <ion-text>Confirm Payment</ion-text>
-            </ion-button>
-          </form>
-        </ion-card-content>
-      </ion-card>
-    </div>
-    <div class="modal-footer" style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}">
-      <h3>Modal Footer</h3>
-    </div>
-  </div>
-
-</div>
 
 </ion-content>
 
