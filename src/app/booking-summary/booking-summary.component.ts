@@ -37,6 +37,7 @@ export class BookingSummaryComponent implements OnInit {
   RECIPT_URL: string = '';
   BOOKINGS_FORMS: any = [];
   CLIENT_FORMS_LIST: any = [];
+  termsAccepted: boolean = false;
 
   constructor(
     private router: Router,
@@ -374,17 +375,14 @@ export class BookingSummaryComponent implements OnInit {
                     (await this.apiData._getFormsByService(service.id)).subscribe(
                       async (response: any) => {
                         const forms = response;
-                        console.log('test1', forms);
                         for (let form of forms) {
                           if(!this.BOOKINGS_FORMS.includes(form.formId)) {
-                            console.log('test2', form)
                             this.BOOKINGS_FORMS.push(form.formId);
                             const matchingItem = this.CLIENT_FORMS_LIST.find(item => item.formId === form.formId);
-                            console.log('test3', matchingItem)
                             if(matchingItem !== undefined && !matchingItem.isFormComplete) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
-                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "form/" + form.formId + ". Looking forward to seeing you soon!"
                               })).subscribe(
                                 async (response: any) => {
                                 },
@@ -398,7 +396,7 @@ export class BookingSummaryComponent implements OnInit {
                             } else if(matchingItem === undefined) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
-                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "/form/" + form.formId + ". Looking forward to seeing you soon!"
+                                "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "form/" + form.formId + ". Looking forward to seeing you soon!"
                               })).subscribe(
                                 async (response: any) => {
                                 },
