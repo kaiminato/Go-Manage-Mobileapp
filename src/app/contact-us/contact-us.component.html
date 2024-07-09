@@ -1,6 +1,6 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};" [fullscreen]="true">
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
-  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  <div class="green-background" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
   </div>
   <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
     <h2>About Us</h2>
@@ -9,7 +9,7 @@
     <ion-row>
       <ion-col size="12">
         <ion-img [src]="this.imageService.JADE_SIGN_IMG" class="jade_sign_img"></ion-img>
-        <ion-text class="bio">Quick bio on the company of what they like & hobbies and what they are qualified in will be added here.</ion-text>
+        <ion-text class="bio">{{ OWNER_INFO?.bio }}</ion-text>
       </ion-col>
       <ion-col size="12">
         <ion-grid>
@@ -68,7 +68,7 @@
                 <ion-icon name="globe-outline"></ion-icon>
               </ion-col>
               <ion-col size="9" class="owner_info">
-                  <ion-text>www.jadeamberbeautystudio.com</ion-text>
+                  <ion-text>{{  OWNER_INFO?.businessWebsite }}</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>

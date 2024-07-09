@@ -28,7 +28,7 @@ export class ContactUsComponent implements OnInit {
   async ionViewWillEnter () {
 
     this.OWNER_INFO = await this.dataService._getOwnerData();
-
+    console.log(this.OWNER_INFO);
     await this._getHoursDetails();
   }
 
