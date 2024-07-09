@@ -48,12 +48,15 @@ export class DataService {
   public PRE_SELECTED_TIME = 'pre_selected_time';
   public PRE_SELECTED_TIME_ID = 'pre_selected_time_id';
 
+
   public BACKGROUND_COLOR: string = '#ffffff';
   public BUTTON_COLOR: string = '#047473';
   public TEXT_COLOR: string = '#047473';
   public APP_HOME_PAGE_ICON: string = this.imageService.LOGO;
 
-  constructor(public imageService: ImageService,) { }
+  constructor(public imageService: ImageService,) {
+    
+  }
 
   async getMonths() {
 
@@ -425,10 +428,10 @@ export class DataService {
 
       owner_data = JSON.parse(owner_data)
 
-      // this.BACKGROUND_COLOR = owner_data['colour_primary'] != '' ? owner_data['colour_primary'] : this.BACKGROUND_COLOR;
-      // this.BUTTON_COLOR = owner_data['colour_secondary'] != '' ? owner_data['colour_secondary'] : this.BUTTON_COLOR;
-      // this.TEXT_COLOR = owner_data['colour_text'] != '' ? owner_data['colour_text'] : this.TEXT_COLOR;
-      // this.APP_HOME_PAGE_ICON = owner_data['logo'] != '' ? owner_data['logo'] : this.APP_HOME_PAGE_ICON;
+      this.BACKGROUND_COLOR = owner_data['colour_secondary'] != '' ? owner_data['colour_secondary'] : this.BACKGROUND_COLOR;
+      this.BUTTON_COLOR = owner_data['colour_primary'] != '' ? owner_data['colour_primary'] : this.BUTTON_COLOR;
+      this.TEXT_COLOR = owner_data['colour_text'] != '' ? owner_data['colour_text'] : this.TEXT_COLOR;
+      this.APP_HOME_PAGE_ICON = owner_data['logo'] != '' ? owner_data['logo'] : this.APP_HOME_PAGE_ICON;
 
     }
 
