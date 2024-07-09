@@ -34,7 +34,7 @@
           <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text>
         </ion-text>
 
-        <ion-text slot="end" style="color : {{this.dataService.TEXT_COLOR}} !important;" class="ion-margin-bottom" *ngIf="service.servicePrice != 0"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
+        <ion-text slot="end" style="color : {{this.dataService.TEXT_COLOR}} !important;" class="ion-margin-bottom" ="service.servicePrice != 0"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
 
       </ion-item>
 
@@ -43,7 +43,7 @@
         <ion-text class="ion-margin-bottom ion-margin-top"> Total
         </ion-text>
 
-        <ion-text slot="end" class="ion-margin-bottom ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;" *ngIf="TOTAL_AMOUNT != 0"> {{ TOTAL_AMOUNT | currency: 'EUR'}}</ion-text>
+        <ion-text slot="end" class="ion-margin-bottom ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;" ="TOTAL_AMOUNT != 0"> {{ TOTAL_AMOUNT | currency: 'EUR'}}</ion-text>
 
       </ion-item>
 
@@ -56,10 +56,20 @@
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}};border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">
         <ion-card class="welcome-card">
           <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
-          <ion-card-header style="padding: 13px !important;">
+          <ion-card-header style="padding: 13px 13px 0px 13px !important;">
             <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
               <ion-col>Total Payment</ion-col>
               <ion-col> {{ 1 | currency: 'EUR'}} </ion-col>
+            </ion-row>
+            <ion-row class="term_conditions">
+              <div class="term_conditions">
+                <ion-checkbox slot="start" [(ngModel)]="termsAccepted">
+                </ion-checkbox>
+                <ion-label style="margin-left: 10px; font-size: 12px;">
+                  <ion-text>I accept the </ion-text>
+                  <a href="https://www.gomanage.ie/terms&conditions">terms and conditions</a>
+                </ion-label>
+              </div>
             </ion-row>
           </ion-card-header>
           <ion-card-content style="padding-bottom: 5px !important;">
@@ -70,14 +80,7 @@
                 <!-- Used to display Element errors -->
                 <div id="card-errors" role="alert"></div>
               </div>
-              <div class="term_conditions">
-                <ion-checkbox slot="start" [(ngModel)]="termsAccepted">
-                </ion-checkbox>
-                <ion-label style="margin-left: 10px; font-size: 12px;">
-                  <ion-text>I accept the </ion-text>
-                  <a href="https://www.gomanage.ie/terms&conditions">terms and conditions</a>
-                </ion-label>
-              </div>
+              
               <div style="display: flex;justify-content: center;">
                 <ion-button
                 type="submit"
@@ -91,7 +94,7 @@
               </div>
               <ion-text style="margin-top: 5px;">
                 "Please note bookings can be changed up
-                To 48 hours in advance. If the you fail to 
+                To 48 hours in advance. If you fail to 
                 comply with the cancellation policy within
                 the terms & conditions you may be charged
                 the remaining balance."
