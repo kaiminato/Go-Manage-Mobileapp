@@ -40,11 +40,11 @@
       <ion-row>
         <ion-col size="12" class="heading"><ion-text class="ion-text-bold">   </ion-text></ion-col>
         <ion-col size="4" class="ion-text-center ion-margin-top" *ngFor="let shift of ALL_SHIFT"  (click)="_selectTiming(shift.id , shift.is_disabled)">
-          <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled" style="background-color: {{this.dataService.BUTTON_COLOR}}!important;" *ngIf ="shift.is_active">
+          <div [class.disbaled_shift] ="shift.is_disabled" style="background-color: {{this.dataService.BUTTON_COLOR}}!important;" *ngIf ="shift.is_active">
             <ion-icon name="time-outline"></ion-icon>
             <ion-text class="time" > {{ shift.time }}</ion-text>
           </div>
-          <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled" *ngIf ="!shift.is_active">
+          <div [class.disbaled_shift] ="shift.is_disabled" *ngIf ="!shift.is_active">
             <ion-icon name="time-outline"></ion-icon>
             <ion-text class="time" > {{ shift.time }}</ion-text>
           </div>
