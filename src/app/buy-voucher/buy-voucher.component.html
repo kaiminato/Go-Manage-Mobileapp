@@ -1,7 +1,7 @@
 <ion-content>
   <app-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [IS_BACK]="true"></app-header>
   <div class="" style="background : {{this.dataService.BUTTON_COLOR}}!important; "></div>
-  <div class="card-list" style="color : {{this.dataService.BUTTON_COLOR}}!important; ">
+  <div class="card-list" style="color : {{this.dataService.TEXT_COLOR}}!important; ">
     <ion-grid class="ion-no-margin ion-no-padding">
       <ion-row class="ion-no-margin ion-no-padding" style="margin-top: 10px;">
         <ion-col size="12" class="ion-text-center ion-no-margin ion-no-padding">
@@ -24,9 +24,9 @@
             *ngIf="price_detail.is_button"
             [class.active]="price_detail.is_active"
             [class.inactive]="!price_detail.is_active"
-            [ngStyle]="{'--background': price_detail.is_active ? this.dataService.BUTTON_COLOR : '#f7f8fb',
-            '--background-activated': price_detail.is_active ? this.dataService.BUTTON_COLOR : '#f7f8fb',
-            'border': !price_detail.is_active ? '2px solid' + this.dataService.BUTTON_COLOR : '2px solid #f7f8fb'}"
+            [ngStyle]="{'--background': price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            '--background-activated': price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            'border': !price_detail.is_active ? '2px solid' + this.dataService.TEXT_COLOR : '2px solid #f7f8fb'}"
             (click)="selectPrice(price_detail.id)"
             >
             <ion-text [ngStyle]="{'color': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb'}"> {{ price_detail.price | currency: 'EUR'}}</ion-text>
@@ -37,10 +37,10 @@
             placeholder="Custom"
             [class.active]="price_detail.is_active"
             [class.inactive]="!price_detail.is_active"
-            [ngStyle]="{'font-size':'0.8rem','--background': !price_detail.is_active ? this.dataService.BUTTON_COLOR : '#f7f8fb',
+            [ngStyle]="{'font-size':'0.8rem','--background': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
             'color': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#2f373d',
-            '--background-activated': !price_detail.is_active ? this.dataService.BUTTON_COLOR : '#f7f8fb',
-            'border': !price_detail.is_active ? '2px solid' + this.dataService.BUTTON_COLOR : '2px solid #f7f8fb'}"
+            '--background-activated': !price_detail.is_active ? this.dataService.TEXT_COLOR : '#f7f8fb',
+            'border': !price_detail.is_active ? '2px solid' + this.dataService.TEXT_COLOR : '2px solid #f7f8fb'}"
             *ngIf="!price_detail.is_button"
             (click)="selectPrice(price_detail.id)"
             [(ngModel)]="CUSTOM_PRICE"
