@@ -23,7 +23,7 @@
   </ion-grid>
 
   <div class="list card-list" *ngIf="IS_STAFF">
-    <ion-list lines="none" style="background-color: {{this.dataService.BUTTON_COLOR}} !important;">
+    <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
       <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false"
         style="border-bottom: 1px solid {{this.dataService.TEXT_COLOR}} !important; color: {{this.dataService.TEXT_COLOR}} !important"
         (click)="SelectStaff(value.employee_id)">
