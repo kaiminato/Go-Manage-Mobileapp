@@ -272,4 +272,13 @@ export class ApiDataService {
   async retrieveClientInformation(clientId:string) {
     return await this.makeRequest('GET', this.apiUrl + 'user/retrieveClientInformation?clientId='+clientId);
   }
+
+  async getAllAvailableSlots() {
+    return await this.makeRequest('GET', this.apiUrl + 'appointment/getAllAvailableSlots');
+  }
+
+  async getAllAvailableSlotsByEmployee(employeeId:any) {
+    return await this.makeRequest('GET', this.apiUrl + 'appointment/getAllAvailableSlotsByEmployee/'+employeeId);
+  }
+  
 }
