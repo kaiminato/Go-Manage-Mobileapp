@@ -163,6 +163,11 @@ ion-content {
   .list-md {
     padding-top: 8px !important;
   }
+  .form-row {
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 3px !important;
+  }
   /* Add Animation */
   @-webkit-keyframes slideIn {
     from {bottom: -300px; opacity: 0}
