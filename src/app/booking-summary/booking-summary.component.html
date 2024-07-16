@@ -57,6 +57,7 @@
         <ion-card class="welcome-card">
           <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
           <ion-card-header style="padding: 13px 13px 0px 13px !important;">
+          <ion-card-header style="padding: 13px 13px 0px 13px !important;">
             <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
               <ion-col>Total Payment</ion-col>
               <ion-col> {{ 1 | currency: 'EUR'}} </ion-col>
@@ -93,11 +94,7 @@
                 </ion-button>
               </div>
               <ion-text style="margin-top: 5px;">
-                "Please note bookings can be changed up
-                To 48 hours in advance. If you fail to 
-                comply with the cancellation policy within
-                the terms & conditions you may be charged
-                the remaining balance."
+                "Please note bookings can be changed up to 48 hours in advance of an appointment. If you fail to comply with the cancellation policy within the terms & conditions, you may be charged the remaining balance."
               </ion-text>
             </form>
           </ion-card-content>
