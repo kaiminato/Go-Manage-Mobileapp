@@ -1,5 +1,5 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}};">
-  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  <div class="green-background" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
   </div>
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="IS_STAFF"
     [IS_BACK]="true"></app-book-now-header>
@@ -40,7 +40,7 @@
   </div>
 
   <div class="list card-list" [class.ion-hide]="IS_STAFF">
-    <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;"
+    <ion-list lines="none" style="background-color: {{this.dataService.BUTTON_COLOR}} !important;"
       *ngFor="let service of CATEGORY_LIST; let service_index = index">
 
       <ion-item button class="service_detail" detail="false"

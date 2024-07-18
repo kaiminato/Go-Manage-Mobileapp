@@ -1,7 +1,7 @@
-<ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
+<ion-content style="--background: {{this.dataService.BUTTON_COLOR}}; color : {{this.dataService.BUTTON_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="true" [IS_BACK]="true"></app-book-now-header>
 
-  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  <div class="" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
   </div>
   <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
     <h2>Select a time</h2>
@@ -39,15 +39,14 @@
     <ion-grid class="all_shift">
       <ion-row>
         <ion-col size="12" class="heading"><ion-text class="ion-text-bold">   </ion-text></ion-col>
-        <ion-col
-          size="4"
-          class="ion-text-center ion-margin-top"
-          *ngFor="let shift of ALL_SHIFT"
-          (click)="_selectTiming(shift.id , shift.is_disabled)"
-          >
-          <div [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled">
+        <ion-col size="4" class="ion-text-center ion-margin-top" *ngFor="let shift of ALL_SHIFT"  (click)="_selectTiming(shift.id , shift.is_disabled)">
+          <div [class.disbaled_shift] ="shift.is_disabled" style="background-color: {{this.dataService.BUTTON_COLOR}}!important;" *ngIf ="shift.is_active">
             <ion-icon name="time-outline"></ion-icon>
-            <ion-text class="time"> {{ shift.time }}</ion-text>
+            <ion-text class="time" > {{ shift.time }}</ion-text>
+          </div>
+          <div [class.disbaled_shift] ="shift.is_disabled" *ngIf ="!shift.is_active">
+            <ion-icon name="time-outline"></ion-icon>
+            <ion-text class="time" > {{ shift.time }}</ion-text>
           </div>
         </ion-col>
       </ion-row>
