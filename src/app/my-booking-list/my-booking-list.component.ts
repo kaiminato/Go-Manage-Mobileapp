@@ -101,6 +101,8 @@ export class MyBookingListComponent implements OnInit {
 
                 this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
 
+                console.log(this.FUTURE_BOOKING_LIST)
+
                 this.intervalId = setInterval(() => this.getAvailableBookings(), 5000);
                 await this.apiData.dismiss();
               },

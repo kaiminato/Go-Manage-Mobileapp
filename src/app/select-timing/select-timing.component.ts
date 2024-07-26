@@ -1301,7 +1301,7 @@ export class SelectTimingComponent implements OnInit {
     this.SELECT_STAFF_OPEN = true;
   }
   navigation() {
-    this.location.back();
+    this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
 
   SelectStaff(staff_id: any) {
