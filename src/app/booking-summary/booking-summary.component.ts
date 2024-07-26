@@ -274,6 +274,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async _createBookingWithPayment(paymentMethodId: any) {
+    console.log("Hello workld"+paymentMethodId)
     // Hardcoded deposit value
     let amount = 100;
 
@@ -324,8 +325,8 @@ export class BookingSummaryComponent implements OnInit {
 
               data.push({
                 //booking data
-                id: this.CANCEL_BOOKING_ID != null ? this.CANCEL_BOOKING_ID : null,
-                employeeId: (this.staff_id != '' || this.staff_id != undefined)? this.staff_id : this.BOOKINGS_DETAILS.staff_id,
+                id: this.CANCEL_BOOKING_ID != null ? this.convertStringToInt(this.CANCEL_BOOKING_ID) : null,
+                employeeId: (this.staff_id != '' || this.staff_id != undefined)? this.convertStringToInt(this.staff_id) : this.convertStringToInt(this.BOOKINGS_DETAILS.staff_id),
                 clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,
@@ -632,8 +633,14 @@ export class BookingSummaryComponent implements OnInit {
     return time;
   }
 
+  convertStringToInt(str: any): number {
+    // Using parseInt
+    let result = parseInt(str, 10);
+    return result;
+}
+
   navigation() {
-    this.router.navigate(['/select-a-time'])
+    this.router.navigate(['/select-a-time'],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
     //this.location.back();
   }
 }
