@@ -866,15 +866,69 @@ export class SelectTimingComponent implements OnInit {
 
         }
       }
-
-
-
     }
 
     // Shift disabled based on Booking time -- end
+    let booking_total_duration = 0;
+    let total_shift_will_count = 1;
 
+    for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+    booking_total_duration = booking_total_duration - 1;
+    total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
+    // Shift disabled based on current time
+    for (let shift_value of all_shift_list) {
+      let shift__date_time = new Date(`${current_date}T${shift_value.value}:00`);
+      const current_date_time = new Date();
+      if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+        shift_value.is_disabled = true; // Disabled the shift
+      }
+    }
+
+    // Set Soft disabled
+    if (total_shift_will_count != 1) {
+      let last_index = 0;
+      let neighbour_difference = 0;
+      for (let index in all_shift_list) {
+        let checked_pass = true;
+
+        if (all_shift_list[index]['is_disabled'] == false && Number(index) != all_shift_list.length-1) {
+
+          for (let i = 1; i < total_shift_will_count; i++) {
+
+            let num = Number(index) + i;
+
+
+            if (typeof all_shift_list[num] !== 'undefined') {
+
+              if (all_shift_list[num]['is_disabled'] == true && checked_pass == true) {
+
+                checked_pass = false;
+              }
+
+            } else {
+
+              checked_pass = false;
+            }
+          }
+
+          if (!checked_pass) {
+            all_shift_list[index]['soft_disabled'] = true;
+          }
+        }
+        else{
+          neighbour_difference = Number(index) - last_index;
+          if(neighbour_difference <= total_shift_will_count){
+            for (let i = last_index + 1; i < Number(index); i++) {
+              all_shift_list[i]['is_disabled'] = true;
+            }
+          }
+          last_index = Number(index);
+        }
+      }
+    }
+    
     return all_shift_list
-
   }
 
 
