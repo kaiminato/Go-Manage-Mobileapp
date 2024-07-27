@@ -409,7 +409,7 @@ export class SelectTimingComponent implements OnInit {
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
 
-        if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
+        if (is_all_shift_booked.length == 0){ value.is_disabled = true; }// If all shift of date is booked
       }
 
       value.is_active = value.full_date == this.DATE ? true : false;
@@ -770,7 +770,7 @@ export class SelectTimingComponent implements OnInit {
           shift_start_time = value?.startShiftTime;
           shift_end_time = value?.endShiftTime;
           if(shift_end_time != '00:00:00'){
-            shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+            shift_end_time = new Date(`${current_date}T${shift_end_time}`);
             shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
             shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
             all_shift_list.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
@@ -779,7 +779,7 @@ export class SelectTimingComponent implements OnInit {
         if(all_shift_list == null || all_shift_list.length == 0){
           shift_start_time = '00:00:00';
           const end_time = shift_end_time;
-          shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+          shift_end_time = new Date(`${current_date}T${shift_end_time}`);
           shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
           shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
           all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time);
@@ -795,7 +795,7 @@ export class SelectTimingComponent implements OnInit {
         shift_start_time = is_date_working[0]?.startShiftTime;
         shift_end_time = is_date_working[0]?.endShiftTime;
         const end_time = shift_end_time;
-        shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+        shift_end_time = new Date(`${current_date}T${shift_end_time}`);
         shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
         shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
   
