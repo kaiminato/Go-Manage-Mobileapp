@@ -397,18 +397,16 @@ export class SelectTimingComponent implements OnInit {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
         yesterday.setHours(0, 0, 0);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
       }
     }
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
       if (is_date_working.length == 0) { // if rota not exist according for date
-
-        value.is_disabled = true
+        value.is_disabled = true  
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
-
         if (is_all_shift_booked.length == 0){ value.is_disabled = true; }// If all shift of date is booked
       }
 
@@ -598,7 +596,7 @@ export class SelectTimingComponent implements OnInit {
             }
 
             if (!checked_pass) {
-              this.ALL_SHIFT[index]['soft_disabled'] = true;
+              this.ALL_SHIFT[index]['is_disabled'] = true;
             }
           }
           else{
@@ -901,7 +899,7 @@ export class SelectTimingComponent implements OnInit {
 
             if (typeof all_shift_list[num] !== 'undefined') {
 
-              if (all_shift_list[num]['is_disabled'] == true && checked_pass == true) {
+              if (all_shift_list[num][''] == true && checked_pass == true) {
 
                 checked_pass = false;
               }
@@ -913,7 +911,7 @@ export class SelectTimingComponent implements OnInit {
           }
 
           if (!checked_pass) {
-            all_shift_list[index]['soft_disabled'] = true;
+            all_shift_list[index]['is_disabled'] = true;
           }
         }
         else{
