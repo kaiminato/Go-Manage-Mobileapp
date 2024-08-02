@@ -271,21 +271,6 @@ export class SelectTimingComponent implements OnInit {
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
     let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
 
-    let is_passed = true;
-    for (let shift of this.ALL_SHIFT) {
-
-      let new_date = new Date(`${this.DATE} ${shift.value}`);
-
-      if (starting_date_time <= new_date && ending_date_time >= new_date && shift.is_disabled) {
-        is_passed = false;
-      }
-    }
-
-    if (!is_passed) {
-      await this.apiService.presentAlert('Shift not available')
-      return;
-    }
-
     // Check services's time is under office timing
 
     let office_last_shift = new Date(`${get_booking_data.date} ${this.ALL_SHIFT[this.ALL_SHIFT.length - 1].value}`);
