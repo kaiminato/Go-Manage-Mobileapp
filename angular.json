@@ -93,6 +93,22 @@
                 }
               ]
             },
+            "c10003": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.c10003.ts"
+                }
+              ]
+            },
             "test": {
               "optimization": true,
               "outputHashing": "all",
@@ -175,6 +191,10 @@
             },
             "c10002": {
               "browserTarget": "app:build:c10002",
+              "port": 4300
+            },
+            "c10003": {
+              "browserTarget": "app:build:c10003",
               "port": 4300
             },
             "test": {

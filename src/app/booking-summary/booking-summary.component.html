@@ -1,6 +1,6 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
-  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  <div class="green-background" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
   </div>
   <div class="card-list" style="padding-bottom: 5px;">
     <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
@@ -74,14 +74,14 @@
           </ion-card-header>
           <ion-card-content style="padding-bottom: 5px !important;">
             <form action="/" method="post" id="payment-form">
-              <div class="form-row" style="border-color: {{this.dataService.TEXT_COLOR}} !important;">
+              <div class="form-row">
                 <div id="card-element">
                     </div>
                 <!-- Used to display Element errors -->
                 <div id="card-errors" role="alert"></div>
               </div>
               
-              <div style="display: flex;justify-content: center; margin-top: 4px;">
+              <div style="display: flex;justify-content: center;">
                 <ion-button
                 type="submit"
                 style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;border-radius: 10px;"
@@ -93,7 +93,11 @@
                 </ion-button>
               </div>
               <ion-text style="margin-top: 5px;">
-                "Please note bookings can be changed up to 48 hours in advance of an appointment. If you fail to comply with the cancellation policy within the terms & conditions, you may be charged the remaining balance."
+                "Please note bookings can be changed up
+                To 48 hours in advance. If you fail to 
+                comply with the cancellation policy within
+                the terms & conditions you may be charged
+                the remaining balance."
               </ion-text>
             </form>
           </ion-card-content>
