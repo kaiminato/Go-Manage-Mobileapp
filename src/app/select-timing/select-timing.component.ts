@@ -315,7 +315,6 @@ export class SelectTimingComponent implements OnInit {
 
     let starting_date_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
     let ending_date_time = new Date(`${this.DATE}T${selecetd_shift[0].value}`);
-
     ending_date_time.setMinutes(ending_date_time.getMinutes() + total_duration - 1)
     ending_date_time = new Date(ending_date_time);
 
