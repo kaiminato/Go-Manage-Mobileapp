@@ -37,6 +37,9 @@ export class BookingSummaryComponent implements OnInit {
   RECIPT_URL: string = '';
   BOOKINGS_FORMS: any = [];
   CLIENT_FORMS_LIST: any = [];
+  staff_id: any = '';
+  STAFF_LIST: any = [];
+  SELECTEC_STAFF:any;
   termsAccepted: boolean = false;
 
   constructor(
@@ -54,12 +57,16 @@ export class BookingSummaryComponent implements OnInit {
 
   async ionViewWillEnter() {
 
+    this.STAFF_LIST = await this.dataService.getStaffList();
     const customer_email = await this.dataService._getUserEmail();
     let owner_data = await this.dataService._getOwnerData();
     if (owner_data) {
       this.STRIPE_FLAG = owner_data.stripe;
     }
 
+    this.staff_id = this.activateRoute.snapshot.paramMap.get('id');
+
+    this.SELECTEC_STAFF = this.STAFF_LIST.filter(staff => staff.employee_id == this.staff_id);
     this.activateRoute.queryParams
       .subscribe(params => {
 
@@ -267,6 +274,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async _createBookingWithPayment(paymentMethodId: any) {
+    console.log("Hello workld"+paymentMethodId)
     // Hardcoded deposit value
     let amount = 100;
 
@@ -317,8 +325,8 @@ export class BookingSummaryComponent implements OnInit {
 
               data.push({
                 //booking data
-                id: this.CANCEL_BOOKING_ID != null ? this.CANCEL_BOOKING_ID : null,
-                employeeId: this.BOOKINGS_DETAILS.staff_id,
+                id: this.CANCEL_BOOKING_ID != null ? this.convertStringToInt(this.CANCEL_BOOKING_ID) : null,
+                employeeId: (this.staff_id != '' || this.staff_id != undefined)? this.convertStringToInt(this.staff_id) : this.convertStringToInt(this.BOOKINGS_DETAILS.staff_id),
                 clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,
@@ -625,8 +633,14 @@ export class BookingSummaryComponent implements OnInit {
     return time;
   }
 
+  convertStringToInt(str: any): number {
+    // Using parseInt
+    let result = parseInt(str, 10);
+    return result;
+}
+
   navigation() {
-    //this.router.navigate(['/select-a-time'])
-    this.location.back();
+    this.router.navigate(['/select-a-time'],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    //this.location.back();
   }
 }
