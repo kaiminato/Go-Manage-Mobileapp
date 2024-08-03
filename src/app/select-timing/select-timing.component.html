@@ -1,22 +1,30 @@
-<ion-content style="--background: {{this.dataService.BUTTON_COLOR}}; color : {{this.dataService.BUTTON_COLOR}} !important ">
+<ion-content *ngIf="isVisible" style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="true" [IS_BACK]="true"></app-book-now-header>
 
   <div class="" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
   </div>
-  <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
+  <!-- <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
     <h2>Select a time</h2>
-  </ion-card>
+  </ion-card> -->
   <div class="card-list">
     <ion-grid class="month_name" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
       <ion-row>
         <ion-col size="12" class="ion-text-center ">
-          <ion-text class="current_month_name">{{ CURRENT_MONTH_VALUE }}</ion-text>
-          <ion-icon name="calendar-outline" class="ion-float-right" (click)="openPicker()"></ion-icon>
+
+          <ion-calendar [(ngModel)]="date"
+          (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
+          [options]="options"
+          [type]="DATE_TYPE"
+          [format]="'YYYY-MM-DD'"
+          id="my-custom"
+
+          >
+          </ion-calendar>
 
         </ion-col>
       </ion-row>
 
-      <ion-row class="date-range-picker" *ngIf="DAYS_ARRAY">
+      <!-- <ion-row class="date-range-picker" *ngIf="DAYS_ARRAY">
         <ion-col size="12">
           <ion-slides pager="false" [options]="slideOpts" #mySlider (ionSlideDidChange)="slideChanged()">
             <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
@@ -33,22 +41,34 @@
           </ion-slides>
         </ion-col>
 
-      </ion-row>
+      </ion-row> -->
     </ion-grid>
 
     <ion-grid class="all_shift">
-      <ion-row>
-        <ion-col size="12" class="heading"><ion-text class="ion-text-bold">   </ion-text></ion-col>
-        <ion-col size="4" class="ion-text-center ion-margin-top" *ngFor="let shift of ALL_SHIFT"  (click)="_selectTiming(shift.id , shift.is_disabled)">
-          <div [class.disbaled_shift] ="shift.is_disabled" style="background-color: {{this.dataService.BUTTON_COLOR}}!important;" *ngIf ="shift.is_active">
+      <ion-row *ngFor="let data of DISPLAY_LIST" [id]="data.id">
+        <ion-col size="12" class="heading"><ion-text class="ion-text-bold ion-text-date"> {{data.DATE | date:'MMMM, dd' }}  </ion-text></ion-col>
+        <ion-col
+          size="4"
+          class="ion-text-center ion-margin-top ion-col-custom"
+          *ngFor="let shift of data.shift_list"
+          [class.disbaled_shift] ="shift.is_disabled"
+          >
+          <div class="inner-ion-col-custom" [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled" (click)="_selectTiming(data.DATE, shift.id , shift.is_disabled)">
             <ion-icon name="time-outline"></ion-icon>
-            <ion-text class="time" > {{ shift.time }}</ion-text>
+            <ion-text class="time"> {{ shift.time }}</ion-text>
           </div>
-          <div [class.disbaled_shift] ="shift.is_disabled" *ngIf ="!shift.is_active">
-            <ion-icon name="time-outline"></ion-icon>
-            <ion-text class="time" > {{ shift.time }}</ion-text>
+          <div class="ion-text-staff" (click)="_selectOtherStaff()">
+            <ion-text>Choose other staff</ion-text>
           </div>
         </ion-col>
+        <ion-col *ngIf="data.shift_list.length == 0">
+          <div class="no-available-slot-text">
+            <ion-text> No Available Slots </ion-text>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="DISPLAY_LIST.length == 0" >
+        <ion-text class="no-available-text"> Not Available </ion-text>
       </ion-row>
     </ion-grid>
   </div>
@@ -95,18 +115,28 @@
     </ng-template>
   </ion-modal>
 
-  <ion-modal [isOpen]="IS_CALNDER_OPEN" [breakpoints]="[0.1, 0.5, 1]" [initialBreakpoint]="0.8" (willDismiss)="_datePickerClosed()">
-
+  <ion-modal [isOpen]="SELECT_STAFF_OPEN" class="auto-height-modal">
     <ng-template>
-      <ion-calendar [(ngModel)]="date"
-          (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
-          [options]="options"
-          [type]="DATE_TYPE"
-          [format]="'YYYY-MM-DD'"
-          id="my-custom"
-          >
-      </ion-calendar>
-
+      <ion-header>
+        <ion-toolbar>
+          <ion-title style="color : {{this.dataService.TEXT_COLOR}} !important;">Select other available staff.</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <div class="list card-list-modal">
+          <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
+            <ion-item button *ngFor="let value of this.STAFF_LIST" class="staff_list" detail="false"
+              style="border-bottom: 1px solid {{this.dataService.TEXT_COLOR}} !important; color: {{this.dataService.TEXT_COLOR}} !important"
+              (click)="SelectStaff(value.employee_id)">
+      
+              <ion-thumbnail slot="start">
+                <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
+              </ion-thumbnail>
+              <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
+                <h3>{{ value.firstName }} {{ value.lastName }}</h3>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+      </div>
     </ng-template>
   </ion-modal>
 
