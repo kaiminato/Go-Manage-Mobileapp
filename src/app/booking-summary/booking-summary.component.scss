@@ -30,7 +30,7 @@ ion-content {
   .card-list {
     background-color: white;
     border-radius: 25px;
-    margin: 10px 20px;
+    margin: 20px;
     padding: 5px;
     box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
   }
@@ -39,11 +39,8 @@ ion-content {
       margin-left: auto;
       margin-right: auto;
   }
-  ion-item {
-    --min-height: 30px !important;
-  }
     .details {
-        font-size: 14px;
+        font-size: 17px;
         font-weight: bolder;
     }
     .details_tick {
@@ -52,7 +49,7 @@ ion-content {
       font-weight: lighter;
   }
     .details_no_border {
-        font-size: 15px;
+        font-size: 17px;
         font-weight: bolder;
         display: flex;
         justify-content: center;
@@ -112,7 +109,7 @@ ion-content {
     cursor: pointer;
   }
 
-  .card-header {
+  .modal-header {
     padding: 2px 16px;
     color: white;
     border-top-left-radius: 20px;
@@ -123,21 +120,18 @@ ion-content {
     --border-radius: 20px;
     ion-text{
       font-weight: bold;
-      margin-left: 20px;
-      margin-right: 20px;
     }
   }
   .online-payment-txt{
     border-radius: 5px;
     border: 2px solid white;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5px;
-    margin-top: 10px;
-    color: white;
+    padding: 10px;
+    margin-top: 28px;
   }
   .welcome-card{
     margin: 0px;
@@ -147,27 +141,7 @@ ion-content {
     padding: 2px 16px;
     color: white;
   }
-  .term_conditions {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 7px;
-    margin-top: 5px;
-  }
-  .ion-margin-top {
-    margin-top: 5px !important;
-  }
-  .ion-margin-bottom {
-    margin-bottom: 5px !important;
-  }
-  .list-md {
-    padding-top: 8px !important;
-  }
-  .form-row {
-    border: 1px solid;
-    border-radius: 5px;
-    padding: 3px !important;
-  }
+
   /* Add Animation */
   @-webkit-keyframes slideIn {
     from {bottom: -300px; opacity: 0}
