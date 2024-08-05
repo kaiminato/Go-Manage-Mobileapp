@@ -66,7 +66,7 @@ export class HomePageComponent implements OnInit {
       async (response: any) => {
 
         if (response.length > 0) {
-
+          console.log(response[0])
           await this.dataService._setOwnerData(response[0]);
           await this.dataService._getOwnerColor();
         }
