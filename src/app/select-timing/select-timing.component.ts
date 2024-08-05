@@ -1058,8 +1058,7 @@ export class SelectTimingComponent implements OnInit {
   }
 
   navigation() {
-
-    this.location.back();
+    this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
 
 }
