@@ -400,19 +400,17 @@ export class SelectTimingComponent implements OnInit {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
         yesterday.setHours(0, 0, 0);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
       }
     }
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
       if (is_date_working.length == 0) { // if rota not exist according for date
-
-        value.is_disabled = true
+        value.is_disabled = true  
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
-
-        if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
+        if (is_all_shift_booked.length == 0){ value.is_disabled = true; }// If all shift of date is booked
       }
 
       value.is_active = value.full_date == this.DATE ? true : false;
@@ -601,7 +599,7 @@ export class SelectTimingComponent implements OnInit {
             }
 
             if (!checked_pass) {
-              this.ALL_SHIFT[index]['soft_disabled'] = true;
+              this.ALL_SHIFT[index]['is_disabled'] = true;
             }
           }
           else{
@@ -773,7 +771,7 @@ export class SelectTimingComponent implements OnInit {
           shift_start_time = value?.startShiftTime;
           shift_end_time = value?.endShiftTime;
           if(shift_end_time != '00:00:00'){
-            shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+            shift_end_time = new Date(`${current_date}T${shift_end_time}`);
             shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
             shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
             all_shift_list.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
@@ -782,7 +780,7 @@ export class SelectTimingComponent implements OnInit {
         if(all_shift_list == null || all_shift_list.length == 0){
           shift_start_time = '00:00:00';
           const end_time = shift_end_time;
-          shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+          shift_end_time = new Date(`${current_date}T${shift_end_time}`);
           shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
           shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
           all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time);
@@ -798,7 +796,7 @@ export class SelectTimingComponent implements OnInit {
         shift_start_time = is_date_working[0]?.startShiftTime;
         shift_end_time = is_date_working[0]?.endShiftTime;
         const end_time = shift_end_time;
-        shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+        shift_end_time = new Date(`${current_date}T${shift_end_time}`);
         shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
         shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
   
@@ -869,15 +867,69 @@ export class SelectTimingComponent implements OnInit {
 
         }
       }
-
-
-
     }
 
     // Shift disabled based on Booking time -- end
+    let booking_total_duration = 0;
+    let total_shift_will_count = 1;
 
+    for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+    booking_total_duration = booking_total_duration - 1;
+    total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
+    // Shift disabled based on current time
+    for (let shift_value of all_shift_list) {
+      let shift__date_time = new Date(`${current_date}T${shift_value.value}:00`);
+      const current_date_time = new Date();
+      if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+        shift_value.is_disabled = true; // Disabled the shift
+      }
+    }
+
+    // Set Soft disabled
+    if (total_shift_will_count != 1) {
+      let last_index = 0;
+      let neighbour_difference = 0;
+      for (let index in all_shift_list) {
+        let checked_pass = true;
+
+        if (all_shift_list[index]['is_disabled'] == false && Number(index) != all_shift_list.length-1) {
+
+          for (let i = 1; i < total_shift_will_count; i++) {
+
+            let num = Number(index) + i;
+
+
+            if (typeof all_shift_list[num] !== 'undefined') {
+
+              if (all_shift_list[num][''] == true && checked_pass == true) {
+
+                checked_pass = false;
+              }
+
+            } else {
+
+              checked_pass = false;
+            }
+          }
+
+          if (!checked_pass) {
+            all_shift_list[index]['is_disabled'] = true;
+          }
+        }
+        else{
+          neighbour_difference = Number(index) - last_index;
+          if(neighbour_difference <= total_shift_will_count){
+            for (let i = last_index + 1; i < Number(index); i++) {
+              all_shift_list[i]['is_disabled'] = true;
+            }
+          }
+          last_index = Number(index);
+        }
+      }
+    }
+    
     return all_shift_list
-
   }
 
 
