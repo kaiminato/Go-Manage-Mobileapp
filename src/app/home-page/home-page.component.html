@@ -9,7 +9,7 @@
       <ion-row [class.first_row]="i == 0" [class.last_row]="i == 2">
         <ion-col size="6" class="ion-text-center" *ngFor="let value of row_value; let j = index">
 
-          <ion-card style="background : {{this.dataService.BUTTON_COLOR}}!important; " class="ion-text-center ion-no-margin" [class.left_card]="j==0" [class.right_card]="j==1" (click)="navigate(value.router_link)">
+          <ion-card style="background : {{this.dataService.BUTTON_COLOR}} !important; " class="ion-text-center ion-no-margin" [class.left_card]="j==0" [class.right_card]="j==1" (click)="navigate(value.router_link)">
 
             <ion-card-content >
 

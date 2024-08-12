@@ -5,9 +5,9 @@
   <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
     <h2>My Profile</h2>
   </ion-card>
-  <div class="card-list" style="background : {{this.dataService.TEXT_COLOR}}!important; color : {{this.dataService.TEXT_COLOR}}!important; ">
+  <div class="card-list" style="background : {{this.dataService.BACKGROUND_COLOR}}!important; color : {{this.dataService.TEXT_COLOR}}!important; ">
     <div class="card-content">
-      <div class="sec-green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+      <div class="sec-green-background" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
       </div>
       <div class="scroll-bar">
         <ion-grid>
@@ -15,7 +15,7 @@
             <ion-col size="12" class="ion-text-center">
               <div class="user-name-div">
                 <div class="user-name">
-                  <ion-text class="usr_name" *ngIf ="SHORT_NAME" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+                  <ion-text class="usr_name" *ngIf ="SHORT_NAME" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
                     {{SHORT_NAME}}
                     <!-- <span class="edit_icon">
                       <ion-icon name="pencil" class="pencili-icon" (click)="showForm()"></ion-icon>
