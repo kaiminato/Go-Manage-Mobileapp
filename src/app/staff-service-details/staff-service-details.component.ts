@@ -25,6 +25,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   SELECTED_SERVICE_LIST: any = [];
   SELECTED_SERVICES: any = [];
 
+  SERVICE_OPEN_NUMBER: number = 0;
   constructor(
     public router: Router,
     private activateRoute: ActivatedRoute,
@@ -99,6 +100,7 @@ export class StaffServiceDetailsComponent implements OnInit {
           }
         }
         if (service_list.length > 0) {
+          this.SERVICE_OPEN_NUMBER++;
           this.CATEGORY_LIST.push(
             {
               category_id: category_id,
@@ -128,8 +130,6 @@ export class StaffServiceDetailsComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
 
     for (let category of this.CATEGORY_LIST) {
-
-
       for (let service of category.services) {
 
         let checking_data = await booking_data.servises.filter(data => data.id == service.id)
@@ -154,6 +154,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   changeCategoryStatus(service_id: any, status) {
 
     this.CATEGORY_LIST[service_id].is_open = !status;
+    
   }
 
 
@@ -174,6 +175,7 @@ export class StaffServiceDetailsComponent implements OnInit {
         if (service.id == service_id) {
           service.is_checked = flag;
         }
+       
       }
     }
 
