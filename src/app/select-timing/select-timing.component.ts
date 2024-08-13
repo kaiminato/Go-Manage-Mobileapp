@@ -399,7 +399,7 @@ export class SelectTimingComponent implements OnInit {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
         yesterday.setHours(0, 0, 0);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
       }
     }
     for (let value of day_list) {
@@ -600,7 +600,7 @@ export class SelectTimingComponent implements OnInit {
             }
 
             if (!checked_pass) {
-              this.ALL_SHIFT[index]['is_disabled'] = true;
+              this.ALL_SHIFT[index]['soft_disabled'] = true;
             }
           }
           else{
@@ -772,7 +772,7 @@ export class SelectTimingComponent implements OnInit {
           shift_start_time = value?.startShiftTime;
           shift_end_time = value?.endShiftTime;
           if(shift_end_time != '00:00:00'){
-            shift_end_time = new Date(`${current_date}T${shift_end_time}`);
+            shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
             shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
             shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
             all_shift_list.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
@@ -781,7 +781,7 @@ export class SelectTimingComponent implements OnInit {
         if(all_shift_list == null || all_shift_list.length == 0){
           shift_start_time = '00:00:00';
           const end_time = shift_end_time;
-          shift_end_time = new Date(`${current_date}T${shift_end_time}`);
+          shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
           shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
           shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
           all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time);
@@ -797,7 +797,7 @@ export class SelectTimingComponent implements OnInit {
         shift_start_time = is_date_working[0]?.startShiftTime;
         shift_end_time = is_date_working[0]?.endShiftTime;
         const end_time = shift_end_time;
-        shift_end_time = new Date(`${current_date}T${shift_end_time}`);
+        shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
         shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
         shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
   
@@ -1108,7 +1108,7 @@ export class SelectTimingComponent implements OnInit {
   }
 
   navigation() {
-    this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    this.location.back();
   }
 
 }
