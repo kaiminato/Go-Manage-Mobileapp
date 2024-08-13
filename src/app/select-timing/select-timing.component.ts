@@ -727,7 +727,6 @@ export class SelectTimingComponent implements OnInit {
     let daysConfig = [];
    
     for (let value of all_dates) {
-
       let is_date_working = await staff_rota.filter(data => data.workDate == value);
       let tempDay = new Date(value);
       let offset = tempDay.getTimezoneOffset()
