@@ -25,9 +25,9 @@
                 <div class="day-name">
                   {{value.day_name}}
                 </div>
-                <ion-text class="ion-text-uppercase" [class.active]=" value.is_active"
-                [class.disabled]=" value.is_disabled"
-                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"><b>{{value.day_number}} </b></ion-text>
+                <ion-text class="ion-text-uppercase" [class.active]="value.is_active"
+                [class.disabled]="value.is_disabled"
+                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"><b>{{value.day_number}}</b></ion-text>
               </div>
             </ion-slide>
           </ion-slides>
