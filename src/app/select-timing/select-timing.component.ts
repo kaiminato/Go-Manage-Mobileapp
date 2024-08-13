@@ -975,8 +975,6 @@ export class SelectTimingComponent implements OnInit {
 
     return result;
   }
-
-
   async removePendingBooking() {
 
     await this.auth.getUser().subscribe(
