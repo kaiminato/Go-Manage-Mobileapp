@@ -54,7 +54,7 @@ export class SelectTimingComponent implements OnInit {
   PENDING_BOOKING_TIMEOUT: any;
 
   SELECT_STAFF_ID: any;
-
+  SELECT_TIME: any = [];
   SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
   currentSlideIndex: number;
 
@@ -138,11 +138,13 @@ export class SelectTimingComponent implements OnInit {
 
     let response = await this.dataService.getSelectTimingInfo();
     if (response["flag"] == "true") {
-      booking_data.date = response["selectedDate"]
-      booking_data.timing_id = response["selectedTime"]
+      booking_data.date = response["selectedDate"];
 
-      this.TIME_ID = response["selectedTimingId"]
-      this.dataService.saveSelectTimingInfo("false", "", "", "")
+     
+      booking_data.timing_id = response["selectedTime"];
+      
+      this.TIME_ID = response["selectedTimingId"];
+      this.dataService.saveSelectTimingInfo("false", "", "", "");
       this.DATE = response["selectedDate"];
       this.SERVICE_NAME = booking_data.servises[0].serviceName;
       this.IS_CALNDER_OPEN = false;
@@ -163,10 +165,12 @@ export class SelectTimingComponent implements OnInit {
         await shift_timing_details.filter(
           (data) => data.id == booking_data.timing_id.id
         );
-
-      let [start_time, am_pm] = booking_data.timing_id.time.split(' ');
-
+      let time = response["selectedTime"].split(',')[1];
+      
+      let [start_time, am_pm] = time.split('"')[3].split(' ');
+      
       this.STARTING_TIME = `${start_time}${am_pm}`;
+      
       for (let service of booking_data.servises) {
         this.TOTAL_DURATION += service.serviceDuration;
         this.TOTAL_AMOUNT += service.servicePrice;
@@ -181,7 +185,10 @@ export class SelectTimingComponent implements OnInit {
 
       this.DATE = `${day} ${get_month_name} ${year}`;
 
-      var now = new Date(`${booking_data.date}T${booking_data.timing_id.value}:00`);
+      let endtime = response["selectedTime"].split(',')[2];
+      
+      let end_time = endtime.split('"')[3];
+      var now = new Date(`${booking_data.date}T${end_time}:00`);
       now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
       now = new Date(now); // Date object
       let { without_space_time } = await this.formatAMPM(now);
