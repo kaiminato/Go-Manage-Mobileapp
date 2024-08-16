@@ -144,6 +144,7 @@ export class BookingSummaryComponent implements OnInit {
       this.PAYMENT_MODEL_OPEN = true;
     } else {
       // Create booking without payment if STRIPE_FLAG is false
+
       this._createBookingWithPayment("");
     }
   }
@@ -178,7 +179,6 @@ export class BookingSummaryComponent implements OnInit {
 
     let [start_time, am_pm] = this.BOOKINGS_DETAILS.timing_id.time.split(' ');
 
-
     this.STARTING_TIME = `${start_time}${am_pm}`;
 
     for (let service of this.BOOKINGS_DETAILS.servises) {
@@ -195,6 +195,7 @@ export class BookingSummaryComponent implements OnInit {
     let get_month_name = await this.dataService.MONTHS_NAME[new_date.getMonth()];
 
     this.DATE = `${day} ${get_month_name} ${year}`;
+
 
     var now = new Date(`${this.BOOKINGS_DETAILS.date}T${this.BOOKINGS_DETAILS.timing_id.value}:00`);
 
