@@ -54,7 +54,7 @@ export class SelectTimingComponent implements OnInit {
   PENDING_BOOKING_TIMEOUT: any;
 
   SELECT_STAFF_ID: any;
-
+  SELECT_TIME: any = [];
   SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
   currentSlideIndex: number;
 
@@ -138,11 +138,13 @@ export class SelectTimingComponent implements OnInit {
 
     let response = await this.dataService.getSelectTimingInfo();
     if (response["flag"] == "true") {
-      booking_data.date = response["selectedDate"]
-      booking_data.timing_id = response["selectedTime"]
+      booking_data.date = response["selectedDate"];
 
-      this.TIME_ID = response["selectedTimingId"]
-      this.dataService.saveSelectTimingInfo("false", "", "", "")
+     
+      booking_data.timing_id = response["selectedTime"];
+      
+      this.TIME_ID = response["selectedTimingId"];
+      this.dataService.saveSelectTimingInfo("false", "", "", "");
       this.DATE = response["selectedDate"];
       this.SERVICE_NAME = booking_data.servises[0].serviceName;
       this.IS_CALNDER_OPEN = false;
@@ -163,10 +165,12 @@ export class SelectTimingComponent implements OnInit {
         await shift_timing_details.filter(
           (data) => data.id == booking_data.timing_id.id
         );
-
-      let [start_time, am_pm] = booking_data.timing_id.time.split(' ');
-
+      let time = response["selectedTime"].split(',')[1];
+      
+      let [start_time, am_pm] = time.split('"')[3].split(' ');
+      
       this.STARTING_TIME = `${start_time}${am_pm}`;
+      
       for (let service of booking_data.servises) {
         this.TOTAL_DURATION += service.serviceDuration;
         this.TOTAL_AMOUNT += service.servicePrice;
@@ -181,7 +185,10 @@ export class SelectTimingComponent implements OnInit {
 
       this.DATE = `${day} ${get_month_name} ${year}`;
 
-      var now = new Date(`${booking_data.date}T${booking_data.timing_id.value}:00`);
+      let endtime = response["selectedTime"].split(',')[2];
+      
+      let end_time = endtime.split('"')[3];
+      var now = new Date(`${booking_data.date}T${end_time}:00`);
       now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
       now = new Date(now); // Date object
       let { without_space_time } = await this.formatAMPM(now);
@@ -357,7 +364,6 @@ export class SelectTimingComponent implements OnInit {
                 } else if (error.status == 500) {
                   await this.dataService.setBookingData(get_booking_data);
                   setTimeout(() => { this.router.navigate(['/booking-summary', this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
-                } else {
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                 }
               }
@@ -407,10 +413,12 @@ export class SelectTimingComponent implements OnInit {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
       if (is_date_working.length == 0) { // if rota not exist according for date
-        value.is_disabled = true  
+
+        value.is_disabled = true
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
-        if (is_all_shift_booked.length == 0){ value.is_disabled = true; }// If all shift of date is booked
+
+        if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
       }
 
       value.is_active = value.full_date == this.DATE ? true : false;
@@ -714,7 +722,7 @@ export class SelectTimingComponent implements OnInit {
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
     let current_date = await this.getCurrentDate();
-
+  
     if (staff_detail[0].staffDetailFormatted != null) {
 
       if (staff_detail[0].staffDetailFormatted.length > 0) {
@@ -724,20 +732,19 @@ export class SelectTimingComponent implements OnInit {
       }
     }
 
-
     let daysConfig = [];
+   
     for (let value of all_dates) {
-
       let is_date_working = await staff_rota.filter(data => data.workDate == value);
       let tempDay = new Date(value);
       let offset = tempDay.getTimezoneOffset()
       tempDay = new Date(tempDay.getTime() + (offset*60*1000))
       if (is_date_working.length == 0) { // If rota not found on current loop date
-        daysConfig.push({ date: new Date(tempDay), disable: true });
+        daysConfig.push({ date:  new Date(value), disable: true });
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
-        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(tempDay), disable: true });
-
+        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
+      
       }
 
     }
@@ -748,6 +755,7 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
+    
     let current_date = await this.getCurrentDate();
 
     if (staff_detail[0].staffDetailFormatted != null) {
@@ -886,7 +894,6 @@ export class SelectTimingComponent implements OnInit {
       }
     }
 
-    // Set Soft disabled
     if (total_shift_will_count != 1) {
       let last_index = 0;
       let neighbour_difference = 0;
@@ -912,7 +919,6 @@ export class SelectTimingComponent implements OnInit {
               checked_pass = false;
             }
           }
-
           if (!checked_pass) {
             all_shift_list[index]['is_disabled'] = true;
           }
@@ -930,6 +936,7 @@ export class SelectTimingComponent implements OnInit {
     }
     
     return all_shift_list
+
   }
 
 
@@ -1004,9 +1011,9 @@ export class SelectTimingComponent implements OnInit {
       timesInBetween.push(i < 10 ? "0" + i + ":30" : i + ":30");
     }
 
-    timesInBetween.push(endH + ":00");
+    timesInBetween.push(endH < 10 ? "0" + endH + ":00" : endH + ":00");
     if (endM == 30)
-      timesInBetween.push(endH + ":30")
+      timesInBetween.push(endH < 10 ? "0" + endH + ":30" : endH + ":30")
     let result = [];
 
     for (let timeString of timesInBetween) {
@@ -1028,8 +1035,6 @@ export class SelectTimingComponent implements OnInit {
 
     return result;
   }
-
-
   async removePendingBooking() {
 
     await this.auth.getUser().subscribe(
