@@ -136,7 +136,7 @@ export class BookingSummaryComponent implements OnInit {
 
   confirm() {
      // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
-     if (this.CANCEL_BOOKING_ID) {
+    if (this.CANCEL_BOOKING_ID) {
       // Directly create booking without payment if CANCEL_BOOKING_ID is present
       this._createBookingWithPayment(null);
     } else if (this.STRIPE_FLAG) {
@@ -144,8 +144,8 @@ export class BookingSummaryComponent implements OnInit {
       this.PAYMENT_MODEL_OPEN = true;
     } else {
       // Create booking without payment if STRIPE_FLAG is false
-
-      this._createBookingWithPayment("");
+      this.PAYMENT_MODEL_OPEN = true;
+      //this._createBookingWithPayment("");
     }
   }
 
