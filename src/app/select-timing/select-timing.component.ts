@@ -737,8 +737,9 @@ export class SelectTimingComponent implements OnInit {
     for (let value of all_dates) {
       let is_date_working = await staff_rota.filter(data => data.workDate == value);
       let tempDay = new Date(value);
-      let offset = tempDay.getTimezoneOffset()
-      tempDay = new Date(tempDay.getTime() + (offset*60*1000))
+      let offset = tempDay.getTimezoneOffset();
+      tempDay = new Date(tempDay.getTime() + (offset*60*1000));
+    
       if (is_date_working.length == 0) { // If rota not found on current loop date
         daysConfig.push({ date:  new Date(value), disable: true });
       } else {
@@ -748,7 +749,7 @@ export class SelectTimingComponent implements OnInit {
       }
 
     }
-    this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
+    this.options = { daysConfig: daysConfig } ;// Set Disabled Dates in Datepicker
   }
 
   async _isDateDisabled(value: any) {
