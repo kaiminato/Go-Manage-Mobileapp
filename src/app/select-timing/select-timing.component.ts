@@ -728,7 +728,7 @@ export class SelectTimingComponent implements OnInit {
         staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date));
       }
     }
-    console.log(staff_rota);
+    //console.log(staff_rota);
     let daysConfig = [];
     
     for (let value of all_dates) {
@@ -739,8 +739,8 @@ export class SelectTimingComponent implements OnInit {
         daysConfig.push({ date: new Date(value), disable: true });
       } else {
         // Uncomment and adjust below logic if needed
-        // let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
-        // if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
+        let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
+        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
       }
       
     }
