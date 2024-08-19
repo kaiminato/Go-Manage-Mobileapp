@@ -49,7 +49,7 @@
 
     </ion-list>
 
-    <div *ngif="this.CANCEL_BOOKING_ID == 0" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+    <div *ngIf="isVisible" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}; border-top-left-radius: 15px;border-top-right-radius: 15px;">
         <h2 class="online-payment-txt">Online Payment</h2>
       </div>
@@ -100,7 +100,7 @@
         </ion-card>
       </div>
     </div>
-    <div  *ngif="this.CANCEL_BOOKING_ID != 0" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+    <div  *ngIf="!isVisible" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}; border-top-left-radius: 15px;border-top-right-radius: 15px;">
         <h2 class="online-payment-txt">Online Payment</h2>
       </div>
