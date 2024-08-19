@@ -14,7 +14,7 @@ declare var Stripe;
   styleUrls: ['./booking-summary.component.scss'],
 })
 export class BookingSummaryComponent implements OnInit {
-
+  isVisible: boolean = true; 
   // stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
   stripe;
   card: any;
@@ -71,9 +71,15 @@ export class BookingSummaryComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+       
       }
     );
-
+    if(this.CANCEL_BOOKING_ID == 0){
+      this.isVisible = true;
+    }
+    else{
+      this.isVisible = false;
+    }
     await (await this.apiData._getAllClientForms()).subscribe(
       async (response: any) => {
         this.CLIENT_FORMS_LIST = response;
@@ -242,6 +248,7 @@ export class BookingSummaryComponent implements OnInit {
         displayError.textContent = '';
       }
     });
+
 
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', async event => {
