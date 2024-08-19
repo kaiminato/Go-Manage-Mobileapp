@@ -30,8 +30,9 @@
       <ion-item button  class="details ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
 
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ service.serviceName }}
-          <br/>
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text>
+          <!-- <br/>
+          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text> -->
+          
         </ion-text>
 
         <ion-text slot="end" style="color : {{this.dataService.TEXT_COLOR}} !important;" class="ion-margin-bottom" *ngIf="service.servicePrice != 0"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
@@ -57,9 +58,9 @@
         <ion-card class="welcome-card">
           <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
           <ion-card-header style="padding: 13px 13px 0px 13px !important;">
-            <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important;">
-              <ion-col>Total Payment</ion-col>
-              <ion-col> {{ 1 | currency: 'EUR'}} </ion-col>
+            <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important; text-align: center;">
+              <ion-col>Booking Deposit Due Now: {{ 1 | currency: 'EUR'}}</ion-col>
+              <!-- <ion-col> {{ 1 | currency: 'EUR'}} </ion-col> -->
             </ion-row>
             <ion-row class="term_conditions">
               <div class="term_conditions">
