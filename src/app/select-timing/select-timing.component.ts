@@ -401,7 +401,7 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_availability_dates = [];
-
+    
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
@@ -409,12 +409,12 @@ export class SelectTimingComponent implements OnInit {
         staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
       }
     }
+    
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
       if (is_date_working.length == 0) { // if rota not exist according for date
-
-        value.is_disabled = true
+        value.is_disabled = true;
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
 
