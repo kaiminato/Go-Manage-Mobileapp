@@ -1,6 +1,6 @@
 <ion-content style="--background: {{this.dataService.BACKGROUND_COLOR}}; color : {{this.dataService.BACKGROUND_COLOR}} !important ">
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
-  <div class="green-background" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+  <div class="green-background" style="background : {{this.dataService.BACKGROUND_COLOR}}!important; ">
   </div>
   <div class="card-list" style="padding-bottom: 5px; height: 85%;">
     <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important; display: block;height: 20%; overflow: auto;">
@@ -27,7 +27,7 @@
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ STUDIO_NAME }} Studio</ion-text>
       </ion-item> -->
 
-      <ion-item button  class="details ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
+      <ion-item button  class="details" style="height: 20px; color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
 
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ service.serviceName }}
           <!-- <br/>
