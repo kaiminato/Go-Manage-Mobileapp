@@ -9,7 +9,7 @@
   <div class="card-list">
     <ion-grid>
       <ion-row>
-        <ion-col size="12" class="new_booking_div" style="background : {{this.dataService.TEXT_COLOR}}!important; ">
+        <ion-col size="12" class="new_booking_div" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
           <ion-text class="new_booking_txt">New Booking</ion-text>
           <ion-button
             fill="clear"
@@ -86,7 +86,7 @@
             <div
               class="rescheduling-selection ion-text-center"
               [class.active-rescheduling-selection]="true"
-              style="background-color : {{this.dataService.TEXT_COLOR}}; border : 2px solid {{this.dataService.TEXT_COLOR}}"
+              style="background-color : {{this.dataService.BUTTON_COLOR}}; border : 2px solid {{this.dataService.TEXT_COLOR}}"
               expand="full"
               size="small"
               (click)="cancelBooking(booking.id)"
