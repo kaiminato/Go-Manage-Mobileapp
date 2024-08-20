@@ -102,12 +102,12 @@
     </div>
     <div  *ngIf="!isVisible" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}; border-top-left-radius: 15px;border-top-right-radius: 15px;">
-        <h2 class="online-payment-txt">Online Payment</h2>
+        <h2 class="online-payment-txt">REBOOK NOW</h2>
       </div>
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}};border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">
         <ion-card class="welcome-card">
           <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
-          <ion-card-header style="padding: 13px 13px 0px 13px !important;">
+          <ion-card-header style="padding: 13px 13px 0px 13px !important; display:none">
             <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important; text-align: center;">
               <ion-col style="display:none">Booking Deposit Due Now: {{ 1 | currency: 'EUR'}}</ion-col>
               <!-- <ion-col> {{ 1 | currency: 'EUR'}} </ion-col> -->
@@ -125,7 +125,7 @@
           </ion-card-header>
           <ion-card-content style="padding-bottom: 5px !important;">
             <form action="/" method="post" id="payment-form">
-              <div class="form-row" style="border-color: {{this.dataService.TEXT_COLOR}} !important; pointer-events: none;">
+              <div class="form-row" style="border-color: {{this.dataService.TEXT_COLOR}} !important; display:none; pointer-events: none;">
                 <div id="card-element">
                     </div>
                 <!-- Used to display Element errors -->
@@ -134,11 +134,11 @@
               
               <div style="display: flex;justify-content: center; margin-top: 4px;">
                 <ion-button
-                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;border-radius: 10px;"
+                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;border-radius: 10px; margin-top: 60px;"
                 class="Confirm"
                 >
                 <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
-                <ion-text (click)=" _createBookingWithPayment(null)">BOOK NOW</ion-text>
+                <ion-text (click)=" _createBookingWithPayment(null)">CONFIRM</ion-text>
                 </ion-button>
               </div>
               <ion-text style="margin-top: 5px; font-size: 10px;">
