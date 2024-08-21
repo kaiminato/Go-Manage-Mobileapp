@@ -213,7 +213,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async ionViewWillLeave() {
-
     this.IS_CALNDER_OPEN = false;
     await this.modalController.dismiss();
   }
@@ -401,7 +400,7 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_availability_dates = [];
-
+    
     if (staff_detail[0].staffDetailFormatted != null) {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
@@ -409,18 +408,19 @@ export class SelectTimingComponent implements OnInit {
         staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
       }
     }
+    
     for (let value of day_list) {
 
       let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
       if (is_date_working.length == 0) { // if rota not exist according for date
-
-        value.is_disabled = true
+        value.is_disabled = true;
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
-
+       // console.log(await this._isDateDisabled(value.full_date));
         if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
-      }
 
+      }
+      
       value.is_active = value.full_date == this.DATE ? true : false;
     }
 
@@ -698,7 +698,7 @@ export class SelectTimingComponent implements OnInit {
     this.DAYS_ARRAY = await this._getDays(nextMonth, nextYear);
     for (let value of this.DAYS_ARRAY) {
       value.is_active = false;
-      value.is_disabled = true;
+      value.is_disabled = false;
     }
     await this._getShiftList();
   }
@@ -717,39 +717,37 @@ export class SelectTimingComponent implements OnInit {
 
   async _getDisabledDate() {
     let all_dates = await this._returnDateInBetween();
-
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
     let current_date = await this.getCurrentDate();
   
     if (staff_detail[0].staffDetailFormatted != null) {
-
       if (staff_detail[0].staffDetailFormatted.length > 0) {
-
-        // Get  staff rota
-        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
+        // Get staff rota
+        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date));
       }
     }
-
+    //console.log(staff_rota);
     let daysConfig = [];
-   
+    
     for (let value of all_dates) {
-      let is_date_working = await staff_rota.filter(data => data.workDate == value);
-      let tempDay = new Date(value);
-      let offset = tempDay.getTimezoneOffset()
-      tempDay = new Date(tempDay.getTime() + (offset*60*1000))
+      // Correct use of filter without await
+      let is_date_working = await staff_rota.filter(data => new Date(data.workDate).getTime() == new Date(value).getTime());
+      
       if (is_date_working.length == 0) { // If rota not found on current loop date
-        daysConfig.push({ date:  new Date(value), disable: true });
+        daysConfig.push({ date: new Date(value), disable: true });
       } else {
+        // Uncomment and adjust below logic if needed
         let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
         if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
-      
       }
-
+      
     }
-    this.options = { daysConfig: daysConfig } // Set Disabled Dates in Datepicker
+    
+    this.options = { daysConfig: daysConfig }; // Set Disabled Dates in Datepicker
   }
+  
 
   async _isDateDisabled(value: any) {
     let booking_data = await this.dataService.getInitialBookingdata();
@@ -765,13 +763,14 @@ export class SelectTimingComponent implements OnInit {
         staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
       }
     }
-
+   
     let is_date_working = await staff_rota.filter(data => data.workDate == value);
+    
+    
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(value));
     let shift_start_time: any = '';
     let shift_end_time: any = '';
     let all_shift_list: any;
-
     if(is_date_working.length > 0){
       if (is_date_working.length > 1) {
         all_shift_list = [];
@@ -782,7 +781,7 @@ export class SelectTimingComponent implements OnInit {
             shift_end_time = new Date(`${current_date}T${shift_end_time}`);
             shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
             shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
-            all_shift_list.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
+            all_shift_list.push(await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
           }
         }
         if(all_shift_list == null || all_shift_list.length == 0){
@@ -807,8 +806,9 @@ export class SelectTimingComponent implements OnInit {
         shift_end_time = new Date(`${current_date}T${shift_end_time}`);
         shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
         shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
-  
+        
         all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time);
+      
         if(end_time == '00:00:00'){
           for (let shift_value of all_shift_list) {
             if (!shift_value.is_disabled) { // If shift is not disabled
@@ -941,7 +941,6 @@ export class SelectTimingComponent implements OnInit {
 
 
   async openPicker() {
-
     setTimeout(() => { this.IS_CALNDER_OPEN = true; }, 100);
   }
 
@@ -1029,7 +1028,7 @@ export class SelectTimingComponent implements OnInit {
         value: value,
         is_active: false,
         is_disabled: false,
-        soft_disabled: false
+        soft_disabled: false,
       });
     }
 
