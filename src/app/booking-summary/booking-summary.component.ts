@@ -14,7 +14,7 @@ declare var Stripe;
   styleUrls: ['./booking-summary.component.scss'],
 })
 export class BookingSummaryComponent implements OnInit {
-
+  isVisible: boolean = true; 
   // stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
   stripe;
   card: any;
@@ -71,9 +71,15 @@ export class BookingSummaryComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
+       
       }
     );
-
+    if(this.CANCEL_BOOKING_ID == 0){
+      this.isVisible = true;
+    }
+    else{
+      this.isVisible = false;
+    }
     await (await this.apiData._getAllClientForms()).subscribe(
       async (response: any) => {
         this.CLIENT_FORMS_LIST = response;
@@ -136,7 +142,7 @@ export class BookingSummaryComponent implements OnInit {
 
   confirm() {
      // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
-     if (this.CANCEL_BOOKING_ID) {
+    if (this.CANCEL_BOOKING_ID) {
       // Directly create booking without payment if CANCEL_BOOKING_ID is present
       this._createBookingWithPayment(null);
     } else if (this.STRIPE_FLAG) {
@@ -144,8 +150,8 @@ export class BookingSummaryComponent implements OnInit {
       this.PAYMENT_MODEL_OPEN = true;
     } else {
       // Create booking without payment if STRIPE_FLAG is false
-
-      this._createBookingWithPayment("");
+      this.PAYMENT_MODEL_OPEN = true;
+      //this._createBookingWithPayment("");
     }
   }
 
@@ -242,6 +248,7 @@ export class BookingSummaryComponent implements OnInit {
         displayError.textContent = '';
       }
     });
+
 
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', async event => {
