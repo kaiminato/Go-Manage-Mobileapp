@@ -202,7 +202,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   }
 
   navigation() {
-    this.router.navigate(['/make-a-booking']);
+    this.router.navigate(['/make-a-booking'],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
 
 }

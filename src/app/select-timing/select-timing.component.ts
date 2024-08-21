@@ -53,6 +53,8 @@ export class SelectTimingComponent implements OnInit {
   BOOKING_WITH_STAFF: any = true;
   PENDING_BOOKING_TIMEOUT: any;
 
+  SELECT_STAFF_ID: any;
+  SELECT_TIME: any = [];
   SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
   currentSlideIndex: number;
 
@@ -115,6 +117,7 @@ export class SelectTimingComponent implements OnInit {
     this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH] + " " + this.CURRENT_YEAR
 
     let booking_data = await this.dataService.getInitialBookingdata();
+    this.SELECT_STAFF_ID = booking_data?.staff_id;
     //let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
 
     // this.DAYS_ARRAY =  await this._getDays(this.CURRENT_MONTH , this.CURRENT_YEAR);
@@ -135,11 +138,13 @@ export class SelectTimingComponent implements OnInit {
 
     let response = await this.dataService.getSelectTimingInfo();
     if (response["flag"] == "true") {
-      booking_data.date = response["selectedDate"]
-      booking_data.timing_id = response["selectedTime"]
+      booking_data.date = response["selectedDate"];
 
-      this.TIME_ID = response["selectedTimingId"]
-      this.dataService.saveSelectTimingInfo("false", "", "", "")
+     
+      booking_data.timing_id = response["selectedTime"];
+      
+      this.TIME_ID = response["selectedTimingId"];
+      this.dataService.saveSelectTimingInfo("false", "", "", "");
       this.DATE = response["selectedDate"];
       this.SERVICE_NAME = booking_data.servises[0].serviceName;
       this.IS_CALNDER_OPEN = false;
@@ -160,10 +165,12 @@ export class SelectTimingComponent implements OnInit {
         await shift_timing_details.filter(
           (data) => data.id == booking_data.timing_id.id
         );
-
-      let [start_time, am_pm] = booking_data.timing_id.time.split(' ');
-
+      let time = response["selectedTime"].split(',')[1];
+      
+      let [start_time, am_pm] = time.split('"')[3].split(' ');
+      
       this.STARTING_TIME = `${start_time}${am_pm}`;
+      
       for (let service of booking_data.servises) {
         this.TOTAL_DURATION += service.serviceDuration;
         this.TOTAL_AMOUNT += service.servicePrice;
@@ -178,7 +185,10 @@ export class SelectTimingComponent implements OnInit {
 
       this.DATE = `${day} ${get_month_name} ${year}`;
 
-      var now = new Date(`${booking_data.date}T${booking_data.timing_id.value}:00`);
+      let endtime = response["selectedTime"].split(',')[2];
+      
+      let end_time = endtime.split('"')[3];
+      var now = new Date(`${booking_data.date}T${end_time}:00`);
       now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
       now = new Date(now); // Date object
       let { without_space_time } = await this.formatAMPM(now);
@@ -347,14 +357,13 @@ export class SelectTimingComponent implements OnInit {
                 await this.apiData.dismiss();
                 if (error.status == 200) {
                   await this.dataService.setBookingData(get_booking_data);
-                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
+                  setTimeout(() => { this.router.navigate(['/booking-summary', this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
                 } else if (error.status == 201) {
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                   return;
                 } else if (error.status == 500) {
                   await this.dataService.setBookingData(get_booking_data);
-                  setTimeout(() => { this.router.navigate(['/booking-summary'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
-                } else {
+                  setTimeout(() => { this.router.navigate(['/booking-summary', this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } }); }, 200);
                   await this.apiData.presentAlert('pending booking server error' + JSON.stringify(error));
                 }
               }
@@ -397,7 +406,7 @@ export class SelectTimingComponent implements OnInit {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
         var yesterday = new Date();
         yesterday.setHours(0, 0, 0);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) > new Date(yesterday))
+        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
       }
     }
     for (let value of day_list) {
@@ -598,7 +607,7 @@ export class SelectTimingComponent implements OnInit {
             }
 
             if (!checked_pass) {
-              this.ALL_SHIFT[index]['soft_disabled'] = true;
+              this.ALL_SHIFT[index]['is_disabled'] = true;
             }
           }
           else{
@@ -713,7 +722,7 @@ export class SelectTimingComponent implements OnInit {
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
     let current_date = await this.getCurrentDate();
-
+  
     if (staff_detail[0].staffDetailFormatted != null) {
 
       if (staff_detail[0].staffDetailFormatted.length > 0) {
@@ -723,20 +732,19 @@ export class SelectTimingComponent implements OnInit {
       }
     }
 
-
     let daysConfig = [];
+   
     for (let value of all_dates) {
-
       let is_date_working = await staff_rota.filter(data => data.workDate == value);
       let tempDay = new Date(value);
       let offset = tempDay.getTimezoneOffset()
       tempDay = new Date(tempDay.getTime() + (offset*60*1000))
       if (is_date_working.length == 0) { // If rota not found on current loop date
-        daysConfig.push({ date: new Date(tempDay), disable: true });
+        daysConfig.push({ date:  new Date(value), disable: true });
       } else {
         let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
-        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(tempDay), disable: true });
-
+        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
+      
       }
 
     }
@@ -747,6 +755,7 @@ export class SelectTimingComponent implements OnInit {
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
+    
     let current_date = await this.getCurrentDate();
 
     if (staff_detail[0].staffDetailFormatted != null) {
@@ -770,7 +779,7 @@ export class SelectTimingComponent implements OnInit {
           shift_start_time = value?.startShiftTime;
           shift_end_time = value?.endShiftTime;
           if(shift_end_time != '00:00:00'){
-            shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+            shift_end_time = new Date(`${current_date}T${shift_end_time}`);
             shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
             shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
             all_shift_list.push(...await this._returnTimesInBetween(shift_start_time, shift_end_time)) ;
@@ -779,7 +788,7 @@ export class SelectTimingComponent implements OnInit {
         if(all_shift_list == null || all_shift_list.length == 0){
           shift_start_time = '00:00:00';
           const end_time = shift_end_time;
-          shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+          shift_end_time = new Date(`${current_date}T${shift_end_time}`);
           shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
           shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());
           all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time);
@@ -795,7 +804,7 @@ export class SelectTimingComponent implements OnInit {
         shift_start_time = is_date_working[0]?.startShiftTime;
         shift_end_time = is_date_working[0]?.endShiftTime;
         const end_time = shift_end_time;
-        shift_end_time = new Date(`${this.DATE}T${shift_end_time}`);
+        shift_end_time = new Date(`${current_date}T${shift_end_time}`);
         shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
         shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
   
@@ -866,13 +875,66 @@ export class SelectTimingComponent implements OnInit {
 
         }
       }
-
-
-
     }
 
     // Shift disabled based on Booking time -- end
+    let booking_total_duration = 0;
+    let total_shift_will_count = 1;
 
+    for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
+
+    booking_total_duration = booking_total_duration - 1;
+    total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
+    // Shift disabled based on current time
+    for (let shift_value of all_shift_list) {
+      let shift__date_time = new Date(`${current_date}T${shift_value.value}:00`);
+      const current_date_time = new Date();
+      if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+        shift_value.is_disabled = true; // Disabled the shift
+      }
+    }
+
+    if (total_shift_will_count != 1) {
+      let last_index = 0;
+      let neighbour_difference = 0;
+      for (let index in all_shift_list) {
+        let checked_pass = true;
+
+        if (all_shift_list[index]['is_disabled'] == false && Number(index) != all_shift_list.length-1) {
+
+          for (let i = 1; i < total_shift_will_count; i++) {
+
+            let num = Number(index) + i;
+
+
+            if (typeof all_shift_list[num] !== 'undefined') {
+
+              if (all_shift_list[num][''] == true && checked_pass == true) {
+
+                checked_pass = false;
+              }
+
+            } else {
+
+              checked_pass = false;
+            }
+          }
+          if (!checked_pass) {
+            all_shift_list[index]['is_disabled'] = true;
+          }
+        }
+        else{
+          neighbour_difference = Number(index) - last_index;
+          if(neighbour_difference <= total_shift_will_count){
+            for (let i = last_index + 1; i < Number(index); i++) {
+              all_shift_list[i]['is_disabled'] = true;
+            }
+          }
+          last_index = Number(index);
+        }
+      }
+    }
+    
     return all_shift_list
 
   }
@@ -949,9 +1011,9 @@ export class SelectTimingComponent implements OnInit {
       timesInBetween.push(i < 10 ? "0" + i + ":30" : i + ":30");
     }
 
-    timesInBetween.push(endH + ":00");
+    timesInBetween.push(endH < 10 ? "0" + endH + ":00" : endH + ":00");
     if (endM == 30)
-      timesInBetween.push(endH + ":30")
+      timesInBetween.push(endH < 10 ? "0" + endH + ":30" : endH + ":30")
     let result = [];
 
     for (let timeString of timesInBetween) {
@@ -973,8 +1035,6 @@ export class SelectTimingComponent implements OnInit {
 
     return result;
   }
-
-
   async removePendingBooking() {
 
     await this.auth.getUser().subscribe(
@@ -1055,8 +1115,7 @@ export class SelectTimingComponent implements OnInit {
   }
 
   navigation() {
-
-    this.location.back();
+    this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
 
 }
