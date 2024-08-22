@@ -36,33 +36,27 @@ export class AppComponent {
       clientId: environment.auth.clientId
     });
 
-    this.presentConfirmDialog(); // Show dialog on init
+    //this.presentConfirmDialog(); // Show dialog on init
   }
 
-  async presentConfirmDialog() {
-    const alert = await this.alertController.create({
-      header: 'Confirm',
-      message: 'Do you agree to the terms and conditions?',
-      cssClass: 'my-custom-class',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            // Navigate to the login page when clicking Cancel
-            this.router.navigate(['']);
-          }
-        },
-        {
-          text: 'I Agree',
-          handler: () => {
-            // Navigate to the home page when clicking I Agree
-            this.router.navigate(['/home']);
-          }
-        }
-      ]
-    });
+  // async presentConfirmDialog() {
+  //   const alert = await this.alertController.create({
+  //     header: 'Cookies Consent',
+  //     message: 'This website use cookies to help you have a superior and more admissible browsing experience on the website.Read more',
+  //     cssClass: 'my-custom-class',
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           // Navigate to the login page when clicking Cancel
+  //           this.router.navigate(['']);
+  //         }
+  //       },
+       
+  //     ]
+  //   });
 
-    await alert.present();
-  }
+  //   await alert.present();
+  //}
 }
