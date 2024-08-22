@@ -1,0 +1,23 @@
+<div class="cookie-consent" *ngIf="!accepted">
+    <div class="cookie-content" [ngStyle]="{'border-color': dataService.BUTTON_COLOR}">
+        <h3 style="display: flex; justify-content: center; gap: 10px; color: {{dataService.BUTTON_COLOR}}">
+            <i class='fas fa-cookie-bite' style='font-size: 24px; color: {{dataService.BUTTON_COLOR}};'></i>
+            Cookies Consent
+        </h3>
+        <p>
+            This website uses cookies to ensure you get the best experience on our website. 
+            <a href="https://www.gomanage.ie/security/" target="_blank">Read more</a>.
+        </p>
+        <div class="button-content">
+            <button [ngStyle]="{
+                'background-color': dataService.BUTTON_COLOR,
+                'border-color': dataService.BUTTON_COLOR,
+                'color': dataService.BACKGROUND_COLOR
+            }" class="accept-button" (click)="accept()">Accept</button>
+            <button [ngStyle]="{
+                'border-color': dataService.BUTTON_COLOR,
+                'color': dataService.BUTTON_COLOR
+            }" class="cancel-button" (click)="decline()">Decline</button>
+        </div>
+    </div>
+</div>
