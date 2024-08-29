@@ -191,6 +191,9 @@ export class BookingSummaryComponent implements OnInit {
       this.TOTAL_DURATION += service.serviceDuration;
       this.TOTAL_AMOUNT += service.servicePrice;
     }
+    if(this.CANCEL_BOOKING_ID != 0){
+      this.TOTAL_AMOUNT = this.TOTAL_AMOUNT - 1;
+    }
 
     let owner_details = await this.dataService._getOwnerData();
 
@@ -282,7 +285,6 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   async _createBookingWithPayment(paymentMethodId: any) {
-    console.log("Hello workld"+paymentMethodId)
     // Hardcoded deposit value
     let amount = 100;
 
@@ -349,7 +351,6 @@ export class BookingSummaryComponent implements OnInit {
                 phoneNumber: user_info.phoneMobile,
                 paymentReceipt: this.RECIPT_URL,
                 isApp: true, // 1 means booking booked from app side
-
                 //stripe data
                 stripeEmail: this.EMAIL,
                 paymentMethodId: paymentMethodId,
