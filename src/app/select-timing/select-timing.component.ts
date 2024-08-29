@@ -392,47 +392,49 @@ export class SelectTimingComponent implements OnInit {
 
   async _getDayList() {
     let today_date = new Date(this.DATE);
-    let year: any = today_date.getFullYear();
-    let month: any = today_date.getMonth() + 1;
-    // let day_list = await this._getDays(month , year);
+    let year: number = today_date.getFullYear();
+    let month: number = today_date.getMonth() + 1;
     let day_list = await this._getDaysByYear(year);
-    this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[today_date.getMonth()] + " " + year;
+    this.CURRENT_MONTH_VALUE = `${this.MONTH_NAME_LIST[today_date.getMonth()]} ${year}`;
+    
     let booking_data = await this.dataService.getInitialBookingdata();
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
-    let staff_availability_dates = [];
-    
-    if (staff_detail[0].staffDetailFormatted != null) {
-      if (staff_detail[0].staffDetailFormatted.length > 0) {
-        var yesterday = new Date();
-        yesterday.setHours(0, 0, 0);
-        staff_availability_dates = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && (new Date(data.workDate)).getTime() >= (new Date(yesterday.getDate())).getTime())
-      }
+    let staff_availability_dates: any[] = [];
+
+    if (staff_detail[0].staffDetailFormatted != null && staff_detail[0].staffDetailFormatted.length > 0) {
+        let yesterday = new Date();
+        yesterday.setHours(0, 0, 0, 0); // reset time to midnight
+        staff_availability_dates = staff_detail[0].staffDetailFormatted.filter(data => 
+            data.description === '' && 
+            new Date(data.workDate).getTime() >= yesterday.getTime()
+        );
     }
-    
+
     for (let value of day_list) {
+        // Compare dates in a standardized way
+        let is_date_working = staff_availability_dates.filter(data => 
+            new Date(data.workDate).toISOString().slice(0, 10) === value.full_date.slice(0, 10)
+        );
 
-      let is_date_working = await staff_availability_dates.filter(data => data.workDate == value.full_date);
-      if (is_date_working.length == 0) { // if rota not exist according for date
-        value.is_disabled = true;
-      } else {
-        let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled); // Check is all shift of date is booked or not
-       // console.log(await this._isDateDisabled(value.full_date));
-        if (is_all_shift_booked.length == 0) value.is_disabled = true; // If all shift of date is booked
-
-      }
-      
-      value.is_active = value.full_date == this.DATE ? true : false;
+        if (is_date_working.length === 0) { // if rota does not exist for the date
+            value.is_disabled = true;
+        } else {
+            let is_all_shift_booked = (await this._isDateDisabled(value.full_date)).filter(data => !data.is_disabled);
+            if (is_all_shift_booked.length === 0) value.is_disabled = true; // If all shifts for the date are booked
+        }
+        value.is_active = value.full_date === this.DATE;
     }
 
     this.DAYS_ARRAY = day_list;
 
-    let active_index_array = await day_list.filter(data => data.is_active);
+    let active_index_array = day_list.filter(data => data.is_active);
     let active_index = active_index_array.length > 0 ? active_index_array[0].day_number : 0;
     let active_index_array_index = day_list.indexOf(active_index_array[0]);
     this.slides.slideTo(active_index_array_index, 1000);
 
     await this._getShiftList();
-  }
+}
+
 
   closeConfirm() {
     this.IS_CONFIRM_OPEN = false;
@@ -728,25 +730,30 @@ export class SelectTimingComponent implements OnInit {
         staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date));
       }
     }
-    //console.log(staff_rota);
+    console.log(staff_rota);
     let daysConfig = [];
-    
+   
     for (let value of all_dates) {
       // Correct use of filter without await
-      let is_date_working = await staff_rota.filter(data => new Date(data.workDate).getTime() == new Date(value).getTime());
+      let is_date_working = await staff_rota.filter(data => {
+        const workDate = new Date(data.workDate);
+        const inputDate = new Date(value);
+
+        return !isNaN(workDate.getTime()) && !isNaN(inputDate.getTime()) && workDate.getTime() === inputDate.getTime();
+      });
       
-      if (is_date_working.length == 0) { // If rota not found on current loop date
+      if (is_date_working.length === 0) { // If rota not found on current loop date
         daysConfig.push({ date: new Date(value), disable: true });
       } else {
-        // Uncomment and adjust below logic if needed
         let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
-        if (is_all_shift_booked.length == 0) daysConfig.push({ date: new Date(value), disable: true });
+        if (is_all_shift_booked.length === 0) {
+          daysConfig.push({ date: new Date(value), disable: true });
+        }
       }
-      
     }
-    
+
     this.options = { daysConfig: daysConfig }; // Set Disabled Dates in Datepicker
-  }
+    }
   
 
   async _isDateDisabled(value: any) {
@@ -763,9 +770,10 @@ export class SelectTimingComponent implements OnInit {
         staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
       }
     }
-   
+
     let is_date_working = await staff_rota.filter(data => data.workDate == value);
-    
+    console.log("is_date_working length:", is_date_working);
+    console.log("is_date_working length:", is_date_working.length);
     
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(value));
     let shift_start_time: any = '';
@@ -806,7 +814,7 @@ export class SelectTimingComponent implements OnInit {
         shift_end_time = new Date(`${current_date}T${shift_end_time}`);
         shift_end_time.setMinutes(shift_end_time.getMinutes() - 30);
         shift_end_time = shift_end_time.getHours() + ':' + (shift_end_time.getMinutes() == 0 ? '00' : shift_end_time.getMinutes()) + ":" + (shift_end_time.getSeconds() == 0 ? '00' : shift_end_time.getSeconds());      
-        
+  
         all_shift_list = await this._returnTimesInBetween(shift_start_time, shift_end_time);
       
         if(end_time == '00:00:00'){
