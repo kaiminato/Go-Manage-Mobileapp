@@ -1,0 +1,9 @@
+{
+  "domain": "dev-3h98vtcx.us.auth0.com",
+  "clientId": "SGJNdB3wW6bvFVSx30raRlfRONQD9WV4",
+  "clientSecret": "Jt1HnNXfuyk3HkQVSZT1ViCqmJKuBIrISPQHT8Lepr6tqHI4g1oLjIliaNVFXFJu",
+  "audience": "https://dev-sleet.gomanage.dev",
+  "apiUri": "https://103.35.188.251:8000/",
+  "appUri": "https://91.250.249.133:4500",
+  "errorPath": "/error"
+}
