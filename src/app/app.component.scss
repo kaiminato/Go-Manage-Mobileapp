@@ -1,0 +1,25 @@
+.my-custom-class {
+    --width: 90%;
+    --max-width: 400px; /* Maximum width */
+    --min-height: 200px;
+  }
+  
+  @media (min-width: 768px) {
+    .my-custom-class {
+      --width: 400px; /* Set to a specific width on larger screens */
+    }
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .close-icon {
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  ion-alert {
+    --width: 400px; /* Desired width */
+    --min-height: 200px; /* Desired minimum height */
+  }
