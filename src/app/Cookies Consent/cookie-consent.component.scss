@@ -1,0 +1,40 @@
+
+.cookie-consent {
+    width: 100%;
+    position: fixed; /* Fixes it to the viewport */
+    top: 0;          /* Aligns to the top */
+    left: 20;         /* Aligns to the left */
+    right: 20;        /* Stretches to the right */
+    bottom: 0;       /* Stretches to the bottom */
+    display: flex;   /* Enables flexbox */
+    align-items: center; /* Centers vertically */
+    justify-content: center; /* Centers horizontally */
+    background-color: rgb(0, 0, 0, 0.7); /* Background with transparency */
+    color: rgb(0, 0, 0);    /* Text color */
+    z-index: 1000;   /* Make sure it is on top */
+  }
+  
+  .cookie-content {
+    background: #ffffff; /* Background color of the content */
+    padding: 20px;    /* Padding for content */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Centered text */
+    border:solid 2px #0099ff;
+    margin: 10px;
+  }
+  .button-content{
+    display: flex;
+    justify-content: space-around;
+  }
+  .accept-button{
+    padding: 10px 30px;
+    border: solid 2px;
+    border-radius: 5px;
+  }
+  .cancel-button{
+    border-radius: 5px;
+    border: solid 2px;
+    padding: 10px 30px;
+  }
+  
+  

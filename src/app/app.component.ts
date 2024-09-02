@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { DataService } from './services/data.service';
-import { Platform } from '@ionic/angular';
-import { AuthUserService } from './AuthUserService'; // Create a service to handle authentication logic
+import { Platform, AlertController } from '@ionic/angular';
+import { AuthUserService } from './AuthUserService';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router'; // Import the Router
 
 @Component({
   selector: 'app-root',
@@ -14,13 +15,15 @@ export class AppComponent {
   constructor(
     private dataService: DataService,
     private platform: Platform,
-    private authUserService: AuthUserService,) {
-
-
+    private authUserService: AuthUserService,
+    private alertController: AlertController,
+    private router: Router // Inject the Router
+  ) {
     this.platform.ready().then(() => {
       if (this.platform.is('android')) {
+        // Android specific code
       } else if (this.platform.is('ios')) {
-      } else {
+        // iOS specific code
       }
     });
 
@@ -28,11 +31,32 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    // Import the module into the application, with configuration
     AuthModule.forRoot({
       domain: environment.auth.domain,
       clientId: environment.auth.clientId
-    })
-    // this.authUserService.handleAuthentication(); // Trigger authentication handling
+    });
+
+    //this.presentConfirmDialog(); // Show dialog on init
   }
+
+  // async presentConfirmDialog() {
+  //   const alert = await this.alertController.create({
+  //     header: 'Cookies Consent',
+  //     message: 'This website use cookies to help you have a superior and more admissible browsing experience on the website.Read more',
+  //     cssClass: 'my-custom-class',
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           // Navigate to the login page when clicking Cancel
+  //           this.router.navigate(['']);
+  //         }
+  //       },
+       
+  //     ]
+  //   });
+
+  //   await alert.present();
+  //}
 }

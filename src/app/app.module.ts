@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
+import { CookieConsentComponent } from './Cookies Consent/cookie-consent.component'; // Adjust the path as necessary
+
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { AppComponent } from './app.component';
@@ -72,7 +74,8 @@ const redirectUri = window.location.origin + `/contact-us`;
     ProductDetailComponent,
     CartInfoComponent,
     SelectDeliverComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    CookieConsentComponent
   ],
   imports: [
     BrowserModule,
@@ -90,6 +93,10 @@ const redirectUri = window.location.origin + `/contact-us`;
         ...environment.httpInterceptor,
       },
     }),
+    // AuthModule.forRoot({
+    //   domain: environment.auth.domain,
+    //   clientId: environment.auth.clientId
+    // })
   ],
   providers: [
     ApiDataService,

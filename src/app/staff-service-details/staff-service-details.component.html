@@ -70,10 +70,12 @@
             expand="block"
             [routerLink]="['/select-a-time']"
             [queryParams]="this.CANCEL_BOOKING_ID == 0 ? '' : {id: CANCEL_BOOKING_ID}"
-            style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important; "
+            [disabled]="this.SERVICE_OPEN_NUMBER == 0" 
+            [ngStyle]="{'--background': this.SERVICE_OPEN_NUMBER != 0 ? this.dataService.BUTTON_COLOR : 'gray'}" 
+            
             >
             <!-- [disabled]="TOTAL_SERVICE_SELECTED == '0'" -->
-
+            <!-- style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important; " -->
             <ion-text>Book now</ion-text>
             <!-- <span class="material-symbols-outlined booking-arrow">
               arrow_forward
