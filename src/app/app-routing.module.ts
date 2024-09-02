@@ -60,17 +60,17 @@ const routes: Routes = [
   {
     path: 'booking-complete',
     component: BookingCompleteComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'buy-a-voucher',
     component: BuyVoucherComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'voucher-summary',
     component: VoucherSummaryComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'about-us',
@@ -85,27 +85,27 @@ const routes: Routes = [
   {
     path: 'add-a-review',
     component: AddReviewComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'add-a-review/:id',
     component: AddReviewComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'login',
     component: LoginButtonComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'logout',
     component: LogoutButtonComponentComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'select-time-with-service-booking',
@@ -121,32 +121,32 @@ const routes: Routes = [
   {
     path: 'my-booking-list',
     component: MyBookingListComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'store-all-product',
     component: StoreAllProductComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'product-detail/:id',
     component: ProductDetailComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'cart-detail',
     component: CartInfoComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'select-deliver',
     component: SelectDeliverComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'form/:formId',
     component: BookingFormComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: '',
