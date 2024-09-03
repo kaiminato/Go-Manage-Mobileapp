@@ -1,8 +1,9 @@
-import config from '../app/auth_config_prod_louise.json';
+import config from '../app/auth_config_prod_c10002.json';
 
-const { domain, clientId, audience, apiUri, errorPath } = config as {
+const { domain, clientId, clientSecret, audience, apiUri, errorPath } = config as {
   domain: string;
   clientId: string;
+  clientSecret: string,
   audience?: string;
   apiUri: string;
   errorPath: string;
@@ -18,6 +19,7 @@ export const environment = {
   auth: {
     domain,
     clientId,
+    clientSecret,
     ...(audience && audience !== 'https://go-manage-production.eu.auth0.com/' ? { audience } : null),
     redirectUri: window.location.origin,
     errorPath,
