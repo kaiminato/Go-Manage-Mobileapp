@@ -723,38 +723,41 @@ export class SelectTimingComponent implements OnInit {
     let staff_detail = await this.dataService.getStaffDetail(booking_data.staff_id);
     let staff_rota = [];
     let current_date = await this.getCurrentDate();
-  
-    if (staff_detail[0].staffDetailFormatted != null) {
-      if (staff_detail[0].staffDetailFormatted.length > 0) {
-        // Get staff rota
-        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date));
-      }
+
+    if (staff_detail[0].staffDetailFormatted?.length) {
+      // Get staff rota
+      staff_rota = staff_detail[0].staffDetailFormatted.filter(data => 
+        data.description === '' && new Date(data.workDate) >= new Date(current_date)
+      );
     }
+
     console.log(staff_rota);
     let daysConfig = [];
    
     for (let value of all_dates) {
-      // Correct use of filter without await
-      let is_date_working = await staff_rota.filter(data => {
+      // Check if the date is working
+      const inputDate = new Date(value);
+      const is_date_working = staff_rota.filter(data => {
         const workDate = new Date(data.workDate);
-        const inputDate = new Date(value);
-
-        return !isNaN(workDate.getTime()) && !isNaN(inputDate.getTime()) && workDate.getTime() === inputDate.getTime();
+        const inputDateStr = inputDate.toISOString().split('T')[0]; // Getting YYYY-MM-DD
+        const workDateStr = workDate.toISOString().split('T')[0]; // Getting YYYY-MM-DD
+        return !isNaN(workDate.getTime()) && workDateStr === inputDateStr; // Compare only date parts
       });
       
       if (is_date_working.length === 0) { // If rota not found on current loop date
-        daysConfig.push({ date: new Date(value), disable: true });
+        daysConfig.push({ date: inputDate, disable: true });
       } else {
-        let is_all_shift_booked = (await this._isDateDisabled(value)).filter(data => !data.is_disabled);
-        if (is_all_shift_booked.length === 0) {
-          daysConfig.push({ date: new Date(value), disable: true });
+        const is_all_shift_booked = await this._isDateDisabled(value);
+        console.log(is_all_shift_booked);
+        if (is_all_shift_booked.filter(data => !data.is_disabled).length === 0) {
+          daysConfig.push({ date: inputDate, disable: true });
         }
       }
     }
 
-    this.options = { daysConfig: daysConfig }; // Set Disabled Dates in Datepicker
-    }
-  
+    this.options = { daysConfig }; // Set Disabled Dates in Datepicker
+  }
+
 
   async _isDateDisabled(value: any) {
     let booking_data = await this.dataService.getInitialBookingdata();
@@ -767,14 +770,17 @@ export class SelectTimingComponent implements OnInit {
       if (staff_detail[0].staffDetailFormatted.length > 0) {
 
         // Get  staff rota
-        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date))
+        staff_rota = await staff_detail[0].staffDetailFormatted.filter(data => data.description == '' && new Date(data.workDate) >= new Date(current_date));
       }
     }
 
-    let is_date_working = await staff_rota.filter(data => data.workDate == value);
-    console.log("is_date_working length:", is_date_working);
-    console.log("is_date_working length:", is_date_working.length);
-    
+    const inputDate = new Date(value);
+    const is_date_working = staff_rota.filter(data => {
+      const workDate = new Date(data.workDate);
+      const inputDateStr = inputDate.toISOString().split('T')[0]; // Getting YYYY-MM-DD
+      const workDateStr = workDate.toISOString().split('T')[0]; // Getting YYYY-MM-DD
+      return !isNaN(workDate.getTime()) && workDateStr === inputDateStr; // Compare only date parts
+    });
     let current_date_booking = await this.STAFF_BOOKING_LIST.filter(data => data.startTime.includes(value));
     let shift_start_time: any = '';
     let shift_end_time: any = '';
@@ -847,7 +853,6 @@ export class SelectTimingComponent implements OnInit {
 
             // Shift will be disabled if shift time will exist in between break start & break end time
             if (break_start_time.getTime() <= shift__date_time.getTime() && break_end_time.getTime() >= shift__date_time.getTime()) {
-
               shift_value.is_disabled = true; // Disabled the shift
             }
 
@@ -876,7 +881,6 @@ export class SelectTimingComponent implements OnInit {
 
             // Shift will be disabled if shift time will exist in between booking start & booking end time
             if (booking_start_time.getTime() <= shift__date_time.getTime() && booking_end_time.getTime() >= shift__date_time.getTime()) {
-
               shift_value.is_disabled = true; // Disabled the shift
             }
           }
@@ -894,13 +898,14 @@ export class SelectTimingComponent implements OnInit {
     booking_total_duration = booking_total_duration - 1;
     total_shift_will_count = booking_total_duration == 0 ? ~~(booking_total_duration / 30) : (~~(booking_total_duration / 30) + 1)
     // Shift disabled based on current time
-    for (let shift_value of all_shift_list) {
-      let shift__date_time = new Date(`${current_date}T${shift_value.value}:00`);
-      const current_date_time = new Date();
-      if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
-        shift_value.is_disabled = true; // Disabled the shift
-      }
-    }
+    // for (let shift_value of all_shift_list) {
+    //   let shift__date_time = new Date(`${current_date}T${shift_value.value}:00`);
+    //   const current_date_time = new Date();
+    //   if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
+    //     console.log("4444444444");
+    //     shift_value.is_disabled = true; // Disabled the shift
+    //   }
+    // }
 
     if (total_shift_will_count != 1) {
       let last_index = 0;
