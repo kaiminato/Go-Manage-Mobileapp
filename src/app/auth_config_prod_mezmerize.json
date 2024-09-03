@@ -1,7 +1,8 @@
 {
-  "domain": "go-manage-production.eu.auth0.com",
-  "clientId": "JazcSkxeycrOnJHjAaRs8VNJyVbctAvU",
-  "audience": "https://go-manage-production.eu.auth0.com/",
+  "domain": "mezmerize.eu.auth0.com",
+  "clientId": "tyMHH61PjGpq1ibUPjhUTgM2a9hOJ7Sr",
+  "clientSecret": "SPFXOUnN5ueNkD1M1o8fgGoKDDuf0L_hNBjfXZoT0CE5bVXSAsSUCONgAkRO9Wf8",
+  "audience": "https://mezmerize.eu.auth0.com/",
   "apiUri": "https://10003-Sleet.gomanage.io/",
   "appUri": "https://194.26.213.165:4300",
   "errorPath": "/error"
