@@ -11,7 +11,6 @@ import { AuthService } from '@auth0/auth0-angular';
 import { ImageService } from '../services/image.service';
 import { mergeMap } from 'rxjs/operators';
 import { Browser } from '@capacitor/browser';
-
 @Component({
   selector: 'app-select-timing',
   templateUrl: './select-timing.component.html',
@@ -61,6 +60,7 @@ export class SelectTimingComponent implements OnInit {
   SELECT_STAFF_ID: any;
 
   STAFF_LIST: any = [];
+  AVAILABLE_STAFF_LIST: any = [];
 
   DISPLAY_LIST: any = [];
 
@@ -232,8 +232,6 @@ export class SelectTimingComponent implements OnInit {
     (await this.apiData.getAllAvailableSlotsByEmployee(employeeId)).subscribe(
       (response: any) => {
         this.STAFF_AVAILABLE_SLOT = response;
-        console.log("1111111111111",response);
-        console.log("222222222222",this.STAFF_AVAILABLE_SLOT);
       },
       (error: any) => {
         alert(JSON.stringify(error))
@@ -298,7 +296,54 @@ export class SelectTimingComponent implements OnInit {
       }, 300);
     }
   }
+  async _selectOtherStaff(selected_date: any, id: number, selected_time: any) {
+    this.AVAILABLE_STAFF_LIST = [];
+    this.SELECT_STAFF_OPEN = true;
+    const formatted_time = this.formatTime(selected_time);
 
+    for (let staff of this.STAFF_LIST) {
+        if (staff.staffDetailFormatted) {
+            // Wait for the slots to be fetched for this staff member
+            (await this.apiData.getAllAvailableSlotsByEmployee(staff.employee_id)).subscribe(
+              (response: any) => {
+               
+                for (let i = 0; i < response.length; i++) {
+                  if (response[i].workDate == selected_date) {
+                      for (let j = 0; j < response[i].availableSlots.length; j++) {
+                          if (response[i].availableSlots[j] == formatted_time) {
+                              this.AVAILABLE_STAFF_LIST.push(staff);
+                          }
+                      }
+                  }
+              }
+              },
+              (error: any) => {
+                alert(JSON.stringify(error))
+              }
+            );
+           
+
+            // // Now that the available slots have been fetched, check if there are any available
+            // console.log("staff_available_slot", this.STAFF_AVAILABLE_SLOT);
+            
+        }
+    }
+}
+
+  formatTime(selected_time: string): string {
+    // Convert 12-hour format to 24-hour format
+    const [timePart, modifier] = selected_time.split(' ');
+    let [hours, minutes] = timePart.split(':').map(Number);
+    
+    if (modifier === 'PM' && hours < 12) {
+        hours += 12; // Convert to 24-hour format
+    } else if (modifier === 'AM' && hours === 12) {
+        hours = 0; // Midnight case
+    }
+
+    // Construct the final time string in "HH:mm:ss" format
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+  }
   async _selectTiming(selected_date:any, id: number, is_disabled: any) {
 
     this.DATE = selected_date;
@@ -666,7 +711,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _getNewShiftList(){
-    console.log("33333333333333",this.STAFF_AVAILABLE_SLOT);
     let current_date_available_slots = await this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == this.DATE);
     if(current_date_available_slots == undefined || current_date_available_slots.length == 0) return;
     this.ALL_SHIFT = await this._returnShiftTimes(current_date_available_slots[0].availableSlots);
@@ -681,7 +725,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _isDisabledBasedServicesDuration(){
-    console.log("44444444444",this.STAFF_AVAILABLE_SLOT);
     if (this.STAFF_AVAILABLE_SLOT.length > 0) {
    
       // Shift disabled based on Booking time -- end
@@ -871,7 +914,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _getNewDisabledDate(){
-    console.log("55555555",this.STAFF_AVAILABLE_SLOT);
     let booking_data = await this.dataService.getInitialBookingdata();
     let all_dates = await this._returnDateInBetween();
     let daysConfig = [];
@@ -1082,7 +1124,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _isNewDateDisabled(value: any){
-    console.log("6666666666666666",this.STAFF_AVAILABLE_SLOT);
     let all_shift_list: any = [];
     if(this.STAFF_AVAILABLE_SLOT.length != 0) {
 
@@ -1356,9 +1397,7 @@ export class SelectTimingComponent implements OnInit {
       }
     );
   }
-  _selectOtherStaff() {
-    this.SELECT_STAFF_OPEN = true;
-  }
+
   navigation() {
     this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
@@ -1369,7 +1408,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _getDisplayList(){
-    console.log("7777777777777",this.STAFF_AVAILABLE_SLOT);
     let shift_list: any ;
 
     let all_dates = await this._returnDateInBetween();
