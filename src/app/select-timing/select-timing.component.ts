@@ -173,7 +173,9 @@ export class SelectTimingComponent implements OnInit {
           (data) => data.id == booking_data.timing_id.id
         );
 
-      let [start_time, am_pm] = booking_data.timing_id.time.split(' ');
+      let time = response["selectedTime"].split(',')[1];
+    
+      let [start_time, am_pm] = time.split('"')[3].split(' ');
 
       this.STARTING_TIME = `${start_time}${am_pm}`;
       for (let service of booking_data.servises) {
@@ -190,7 +192,10 @@ export class SelectTimingComponent implements OnInit {
 
       this.DATE = `${day} ${get_month_name} ${year}`;
 
-      var now = new Date(`${booking_data.date}T${booking_data.timing_id.value}:00`);
+      let endtime = response["selectedTime"].split(',')[2];
+      
+      let end_time = endtime.split('"')[3];
+      var now = new Date(`${booking_data.date}T${end_time}:00`);
       now.setMinutes(now.getMinutes() + this.TOTAL_DURATION); // timestamp
       now = new Date(now); // Date object
       let { without_space_time } = await this.formatAMPM(now);
