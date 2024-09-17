@@ -55,7 +55,7 @@ export class MyBookingListComponent implements OnInit {
     await this.auth.getUser().subscribe(
       async (response: any) => {
         let userEmail;
-        if(response.hasOwnProperty('email')){
+        if(response && response.hasOwnProperty('email')){
           userEmail = response.email;
         }
         else{
