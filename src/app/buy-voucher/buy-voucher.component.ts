@@ -4,6 +4,8 @@ import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 import { AuthService } from '@auth0/auth0-angular';
+import { mergeMap } from 'rxjs/operators';
+import { Browser } from '@capacitor/browser';
 @Component({
   selector: 'app-buy-voucher',
   templateUrl: './buy-voucher.component.html',
@@ -26,7 +28,7 @@ export class BuyVoucherComponent implements OnInit {
   S_EMAIL: string = '';
   S_GIFTEE_EMAIL: string = '';
   S_GIFTEE_EMAIL_MESSAGE: string = '';
-
+  IS_LOGIN: boolean = false;
   userGMID: any;
   PRICE_LIST: any = [
     { id: 1 , price: 50 , is_active: false , is_button: true},
@@ -45,7 +47,9 @@ export class BuyVoucherComponent implements OnInit {
     
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 
   async ionViewWillEnter () {
 
@@ -61,37 +65,42 @@ export class BuyVoucherComponent implements OnInit {
     this.S_EMAIL = '';
     this.S_GIFTEE_EMAIL = '';
     this.S_GIFTEE_EMAIL_MESSAGE = '';
+    this.checkLogin();
+    if(this.IS_LOGIN){
+      this.auth.getUser().subscribe(
+        async (response: any) => {
+          if (response && response.hasOwnProperty('email')) { // Check if response is defined
+            this.F_EMAIL = response.email;
+          } else {
+            this.F_EMAIL = await this.dataService._getUserEmail();
+          }
+      
+          // Now safely calling getMyProfile with the EMAIL
+          (await this.apiData.getMyProfile(this.F_EMAIL)).subscribe(
+            async (user_info: any) => {
+              this.userGMID = user_info.UserGMID;
+              if (!user_info.givenName || user_info.givenName === 'null' || user_info.familyName === 'null' || 
+                  !user_info.familyName || !user_info.phoneMobile || user_info.phoneMobile === 'null') {
+                console.log("User GMID with missing info:");
+              } else {
+                this.F_FIRST_NAME = user_info.givenName;
+                this.F_LAST_NAME = user_info.familyName;
+              }
+            },
+            (error: any) => {
+              console.error("Error fetching user profile:", error);
+            }
+          );
+        },
+        (error: any) => {
+          console.error("Error fetching user:", error);
+        }
+      );
+    }
 
     let prefilled_data = await this.dataService.getVoucherData();
-    this.auth.getUser().subscribe(
-      async (response: any) => {
-        if (response && response.hasOwnProperty('email')) { // Check if response is defined
-          this.F_EMAIL = response.email;
-        } else {
-          this.F_EMAIL = await this.dataService._getUserEmail();
-        }
     
-        // Now safely calling getMyProfile with the EMAIL
-        (await this.apiData.getMyProfile(this.F_EMAIL)).subscribe(
-          async (user_info: any) => {
-            this.userGMID = user_info.UserGMID;
-            if (!user_info.givenName || user_info.givenName === 'null' || user_info.familyName === 'null' || 
-                !user_info.familyName || !user_info.phoneMobile || user_info.phoneMobile === 'null') {
-              console.log("User GMID with missing info:");
-            } else {
-              this.F_FIRST_NAME = user_info.givenName;
-              this.F_LAST_NAME = user_info.familyName;
-            }
-          },
-          (error: any) => {
-            console.error("Error fetching user profile:", error);
-          }
-        );
-      },
-      (error: any) => {
-        console.error("Error fetching user:", error);
-      }
-    );
+    
     
     if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
@@ -135,7 +144,13 @@ export class BuyVoucherComponent implements OnInit {
 
 
   async confirm () {
-
+    if (!this.IS_LOGIN) {
+      this.auth
+        .buildAuthorizeUrl()
+        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+        .subscribe();
+    }
+    
     let validate_email = /\S+@\S+\.\S+/;
 
     let data : any = {};
@@ -170,7 +185,7 @@ export class BuyVoucherComponent implements OnInit {
       }
 
     } else {
-
+      
       if (this.S_FIRST_NAME.trim() == '') return await this.apiData.presentAlert("First name can't be empty")
       if (this.S_LAST_NAME.trim() == '') return await this.apiData.presentAlert("Last name can't be empty")
       if (this.S_EMAIL.trim() == '') return await this.apiData.presentAlert("Email can't be empty")
@@ -193,6 +208,16 @@ export class BuyVoucherComponent implements OnInit {
     this.router.navigate(['/voucher-summary']);
 
 
+  }
+  async checkLogin() {
+
+    await this.auth.getUser().subscribe(
+      async (user_data: any) => {
+
+        this.IS_LOGIN = user_data !== undefined ? true : false;
+
+      }
+    );
   }
 
   navigation() {
