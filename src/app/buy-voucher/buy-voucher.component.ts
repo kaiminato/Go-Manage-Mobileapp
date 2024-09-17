@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
-
+import { AuthService } from '@auth0/auth0-angular';
 @Component({
   selector: 'app-buy-voucher',
   templateUrl: './buy-voucher.component.html',
@@ -27,6 +27,7 @@ export class BuyVoucherComponent implements OnInit {
   S_GIFTEE_EMAIL: string = '';
   S_GIFTEE_EMAIL_MESSAGE: string = '';
 
+  userGMID: any;
   PRICE_LIST: any = [
     { id: 1 , price: 50 , is_active: false , is_button: true},
     { id: 2 , price: 100 , is_active: false , is_button: true},
@@ -38,8 +39,11 @@ export class BuyVoucherComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     private dataService: DataService,
-    public imageService: ImageService
-  ) { }
+    public imageService: ImageService,
+    private auth: AuthService
+  ) { 
+    
+  }
 
   ngOnInit() {}
 
@@ -59,12 +63,42 @@ export class BuyVoucherComponent implements OnInit {
     this.S_GIFTEE_EMAIL_MESSAGE = '';
 
     let prefilled_data = await this.dataService.getVoucherData();
-
+    this.auth.getUser().subscribe(
+      async (response: any) => {
+        if (response && response.hasOwnProperty('email')) { // Check if response is defined
+          this.F_EMAIL = response.email;
+        } else {
+          this.F_EMAIL = await this.dataService._getUserEmail();
+        }
+    
+        // Now safely calling getMyProfile with the EMAIL
+        (await this.apiData.getMyProfile(this.F_EMAIL)).subscribe(
+          async (user_info: any) => {
+            this.userGMID = user_info.UserGMID;
+            if (!user_info.givenName || user_info.givenName === 'null' || user_info.familyName === 'null' || 
+                !user_info.familyName || !user_info.phoneMobile || user_info.phoneMobile === 'null') {
+              console.log("User GMID with missing info:");
+            } else {
+              this.F_FIRST_NAME = user_info.givenName;
+              this.F_LAST_NAME = user_info.familyName;
+            }
+          },
+          (error: any) => {
+            console.error("Error fetching user profile:", error);
+          }
+        );
+      },
+      (error: any) => {
+        console.error("Error fetching user:", error);
+      }
+    );
+    
     if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
 
   async preFilleddata () {
     let prefilled_data = await this.dataService.getVoucherData();
+  
 
     await this.selectPrice(prefilled_data.selected_price_id);
     let selected_data = await this.PRICE_LIST.filter( data => data.id == prefilled_data.selected_price_id)
@@ -123,8 +157,6 @@ export class BuyVoucherComponent implements OnInit {
 
     if (this.SEND_TO_ME) {
 
-
-
       if (this.F_FIRST_NAME.trim() == '') return await this.apiData.presentAlert("First name can't be empty")
       if (this.F_LAST_NAME.trim() == '') return await this.apiData.presentAlert("Last name can't be empty")
       if (this.F_EMAIL.trim() == '') return await this.apiData.presentAlert("Email can't be empty")
@@ -156,7 +188,6 @@ export class BuyVoucherComponent implements OnInit {
         giftee_email_message : this.S_GIFTEE_EMAIL_MESSAGE,
       }
     }
-
     await this.dataService.setVoucherData(data);
 
     this.router.navigate(['/voucher-summary']);
