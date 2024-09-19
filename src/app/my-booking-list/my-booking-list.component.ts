@@ -131,11 +131,17 @@ export class MyBookingListComponent implements OnInit {
         }
       );
     }
-    else {
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
+    // else {
+    //   this.auth
+    //     .buildAuthorizeUrl()
+    //     .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
+    //     .subscribe();
+    // }
+    else if (!this.IS_LOGIN) {
+      this.auth.loginWithRedirect({
+        appState: { target: '/my-booking-list' }
+      })
+      return;
     }
   }
 
