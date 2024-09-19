@@ -58,7 +58,7 @@
             <ion-text class="time"> {{ shift.time }}</ion-text>
           </div>
           <div class="ion-text-staff" (click)="_selectOtherStaff(data.DATE, shift.id , shift.time)">
-            <ion-text>Choose other staff</ion-text>
+            <ion-text>Choose staff</ion-text>
           </div>
         </ion-col>
         <ion-col *ngIf="data.shift_list.length == 0">
@@ -121,7 +121,7 @@
         <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;">
           <ion-header>
             <ion-toolbar>
-              <ion-title style="color : {{this.dataService.TEXT_COLOR}} !important; font-size: 16px;">Other available staff.</ion-title>
+              <ion-title style="color : {{this.dataService.TEXT_COLOR}} !important; font-size: 16px; text-align: center">Staff available for time</ion-title>
             </ion-toolbar>
           </ion-header>
           <ion-item button *ngFor="let value of this.AVAILABLE_STAFF_LIST" class="staff_list" detail="false"
@@ -137,7 +137,6 @@
         </ion-list>
       </div>
     </ng-template>
-    
   </ion-modal>
 
 
