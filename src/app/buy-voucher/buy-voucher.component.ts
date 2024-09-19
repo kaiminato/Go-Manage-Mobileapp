@@ -4,6 +4,7 @@ import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
 import { AuthService } from '@auth0/auth0-angular';
+import { AuthUserService } from '../AuthUserService';
 import { mergeMap } from 'rxjs/operators';
 import { Browser } from '@capacitor/browser';
 @Component({
@@ -42,14 +43,13 @@ export class BuyVoucherComponent implements OnInit {
     private apiData: ApiDataService,
     private dataService: DataService,
     public imageService: ImageService,
-    private auth: AuthService
+    private auth: AuthService,
+    private authusrService: AuthUserService,
   ) { 
     
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   async ionViewWillEnter () {
 
@@ -65,11 +65,12 @@ export class BuyVoucherComponent implements OnInit {
     this.S_EMAIL = '';
     this.S_GIFTEE_EMAIL = '';
     this.S_GIFTEE_EMAIL_MESSAGE = '';
-    this.checkLogin();
+    await this.checkLogin();
     if(this.IS_LOGIN){
       this.auth.getUser().subscribe(
         async (response: any) => {
           if (response && response.hasOwnProperty('email')) { // Check if response is defined
+
             this.F_EMAIL = response.email;
           } else {
             this.F_EMAIL = await this.dataService._getUserEmail();
@@ -144,11 +145,34 @@ export class BuyVoucherComponent implements OnInit {
 
 
   async confirm () {
+    // if (!this.IS_LOGIN) {
+    //   this.auth.buildAuthorizeUrl().subscribe({
+    //       next: async (url) => {
+    //           Browser.open({ url, windowName: '_self' }).then(async () => {
+    //               const isLoggedIn = await this.checkLogin(); // Await the promise
+    //               if (isLoggedIn) {
+    //                   this.router.navigate(['/buy-a-voucher']); // If login succeeded
+    //               } else {
+    //                   console.error('Login failed, redirecting to login page');
+    //                   this.router.navigate(['/login']);
+    //               }
+    //           });
+    //       },
+    //       error: (err) => {
+    //           console.error('Error during login:', err);
+    //           this.router.navigate(['/login']); // Redirect on error
+    //       }
+    //   });
+    // } else {
+    //     this.router.navigate(['/buy-a-voucher']); // User already logged in
+    // }
+
+
     if (!this.IS_LOGIN) {
-      this.auth
-        .buildAuthorizeUrl()
-        .pipe(mergeMap((url) => Browser.open({ url, windowName: '_self' })))
-        .subscribe();
+        this.auth.loginWithRedirect({
+        appState: { target: '/voucher-summary' }
+      })
+      return;
     }
     
     let validate_email = /\S+@\S+\.\S+/;
@@ -209,15 +233,20 @@ export class BuyVoucherComponent implements OnInit {
 
 
   }
-  async checkLogin() {
-
-    await this.auth.getUser().subscribe(
-      async (user_data: any) => {
-
-        this.IS_LOGIN = user_data !== undefined ? true : false;
-
-      }
-    );
+  checkLogin(): Promise<boolean> {
+    return new Promise((resolve) => {
+        this.auth.getUser().subscribe({
+            next: (user_data: any) => {
+                this.IS_LOGIN = user_data !== undefined;
+                resolve(this.IS_LOGIN);  // Resolves the promise with login state
+            },
+            error: (err) => {
+                console.error('Error checking login status:', err);
+                this.IS_LOGIN = false;
+                resolve(this.IS_LOGIN);  // Resolves with false on error
+            }
+        });
+    });
   }
 
   navigation() {
