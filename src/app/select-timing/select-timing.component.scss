@@ -12,11 +12,17 @@ ion-content {
   border-bottom-right-radius: 7px;
 }
 .card-list {
-  border-radius: 25px;
+  border-radius: 20px;
   margin: 20px;
   box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
   padding-bottom: 10px;
   background: white;
+  ion-grid {
+    background : white !important;
+  }
+}
+div.days-box{
+  padding: 0;
 }
 .page-title {
   border: 2px solid;
@@ -40,12 +46,21 @@ ion-content {
       font-weight: bold;
       color: white;
       ion-icon {
-        font-size: 30px;
+        font-size: 20px;
       }
       .current_month_name{
         margin-left:35px;
-        margin-top: 10px;
-        font-size: 22px;
+        margin-top: 3px;
+        font-size: 18px;
+      }
+      ion-calendar {
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        background-color: white;
+        padding: 0px;
+      }
+      ion-col {
+        padding: 0px !important;
       }
   }
 
@@ -55,7 +70,7 @@ ion-content {
       margin-top: 10px;
       .active {
           background-color: #fff;
-          color: black !important;
+          color: #047473 !important;
       }
 
       .disabled {
@@ -82,29 +97,42 @@ ion-content {
 
   .all_shift {
 
+    max-height: 42vh;
+    overflow: scroll;
+    margin: 0px 5px;
+
       .heading {
-          color: #383a3e;
+          color:  #9da0a7;
           font-weight: bold;
       }
 
       ion-icon {
-          margin-top: 5px;
+          margin-top: 0px;
       }
 
      .time {
           margin-left: 5px;
-          font-size: 16px;
+          margin-top: 2px;
+          font-size: 14px;
+          color:  #9da0a7 ;
       }
-
+      .time:hover {
+        color: white;
+      }
+      
       .active {
-          border: 1px solid #047473;
-          border-radius: 5px;
-          // background-color: rgb(35 138 134);
-          color: black;
-          padding: 4px;
+        background-color:  rgb(27, 199, 196);
+        color: white;
+        cursor: pointer;
+        padding:8px 7px;
+        border-radius: 5px;
+        ion-text {
+          color : white;
+        }
       }
 
       .disbaled_shift {
+          display: none;
           border: 1px solid white;
           border-radius: 5px;
           color: black;
@@ -113,8 +141,73 @@ ion-content {
               text-decoration: line-through;
           }
       }
-
+      .ion-text-staff {
+        margin-top: 5px;
+        font-size: 12px;
+        color:  #9da0a7 ;
+      }
+      .ion-text-staff:hover {
+        margin-top: 5px;
+        font-size: 12px;
+        color:  #60646d ;
+      }
+      .ion-text-staff:active {
+        margin-top: 5px;
+        font-size: 12px;
+        color:  #4f525a ;
+      }
+      .ion-text-date {
+        font-size: 20px;
+        margin-top: 3px;
+        color: #047473;
+      }
+      .no-available-text {
+        font-size: 20px;
+        color: black;
+        margin: auto;
+        margin-top: 10px;
+      }
+      .no-available-slot-text {
+        font-size: 20px;
+        color: white;
+        text-align: center;
+        padding: 3px;
+        border-radius: 8px;
+        border: 1px solid;
+        background-color: #047473;
+      }
   }
+  .ion-col-custom {
+    margin-top : 3px;
+  }
+  .inner-ion-col-custom:hover {
+    background-color:  rgb(27, 199, 196);
+    color: white;
+    padding:8px 7px;
+    cursor: pointer;
+  }
+  .inner-ion-col-custom:active {
+    background-color:  rgb(27, 199, 196);
+    color: white;
+    cursor: pointer;
+    padding:8px 7px;
+    border-radius: 5px;
+    ion-text {
+      color : white;
+    }
+  }
+  .inner-ion-col-custom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #9da0a7;
+    padding:8px 7px;
+    background-color: rgb(255, 255, 255);
+  }
+  
 
 }
 
@@ -136,4 +229,99 @@ ion-modal.auto-height {
         padding: 10px;
     }
 }
+}
+
+ion-modal.auto-height-modal {
+&.bottom {
+    align-items: flex-end;
+}
+
+height: 365px;
+overflow: hidden;
+width: 70%;
+margin: auto;
+border-radius: 20px;
+ion-backdrop {
+  background-color: transparent !important;
+}
+.ion-page {
+    position: relative;
+    display: block;
+    contain: content;
+    border-radius: 20px;
+    .inner-content {
+        max-height: 80vh;
+        padding: 10px;
+    }
+}
+}
+
+ion-modal {
+.list {
+  max-height: 65%;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.card-list-modal {
+  background-color: white;
+  padding: 10px 10px;
+  box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+  ion-list {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  max-height: 100%;
+}
+.staff_list {
+  margin: 10px;
+  --background: #fff;
+
+  ion-thumbnail {
+      border-radius: 15px !important;
+      padding: 3px;
+      border: 1px solid;
+      overflow: hidden;
+  }
+
+  h3{
+      font-weight: bold;
+      font-size: 20px;
+  }
+}
+ion-title {
+  font-size: 18px;
+}
+}
+:host ::ng-deep ion-calendar ion-button {
+color:  #929292 !important;
+}
+
+:host ::ng-deep ion-calendar ion-calendar-week ion-toolbar ul {
+color:  #adafb6  !important;
+}
+:host ::ng-deep ion-calendar ion-calendar-month p {
+color: rgb(12, 12, 12) !important;
+}
+
+:host ::ng-deep ion-calendar ion-calendar-month button:disabled p{
+color: #adafb6  !important;
+}
+
+:host ::ng-deep ion-calendar ion-calendar-month button.today{
+background-color: #e3dadf !important;
+}
+:host ::ng-deep ion-calendar ion-calendar-month button.on-selected p{
+color: white !important;
+}
+
+@media (max-width: 320px) {
+  .custom-calendar {
+    /* Adjust height for small screens */
+    max-height: 30vh; /* Adjust the maximum height */
+    height: auto; /* Allow height to adjust based on content */
+    width: 100%; /* Ensure it fills the width */
+  }
+}
+div.ion-delegate-host.ion-page{
+  justify-content: unset;
 }
