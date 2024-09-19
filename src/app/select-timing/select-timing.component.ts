@@ -1456,7 +1456,6 @@ export class SelectTimingComponent implements OnInit {
         let booking_data = await this.dataService.getInitialBookingdata();
         let booking_total_duration = 0;
         let total_shift_will_count = 1;
-        console.log("booking_data",booking_data);
         for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
     
         booking_total_duration = booking_total_duration - 1;
