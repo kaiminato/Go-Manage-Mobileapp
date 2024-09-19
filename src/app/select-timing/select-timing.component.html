@@ -46,7 +46,7 @@
 
     <ion-grid class="all_shift">
       <ion-row *ngFor="let data of DISPLAY_LIST" [id]="data.id">
-        <ion-col size="12" class="heading"><ion-text class="ion-text-bold ion-text-date"> {{data.DATE | date:'MMMM, dd' }}  </ion-text></ion-col>
+        <ion-col size="12" class="heading"><ion-text class="ion-text-bold ion-text-date" style="color: {{this.dataService.BUTTON_COLOR}} !important;"> {{data.DATE | date:'MMMM, dd' }}  </ion-text></ion-col>
         <ion-col
           size="4"
           class="ion-text-center ion-margin-top ion-col-custom"
@@ -62,7 +62,7 @@
           </div>
         </ion-col>
         <ion-col *ngIf="data.shift_list.length == 0">
-          <div class="no-available-slot-text">
+          <div class="no-available-slot-text" style="background-color: {{this.dataService.BUTTON_COLOR}} !important;">
             <ion-text> No Available Slots </ion-text>
           </div>
         </ion-col>
