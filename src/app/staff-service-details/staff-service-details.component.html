@@ -20,7 +20,7 @@
     <div class="service-list">
       <ion-list lines="none" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important;" class="ion-margin-start ion-margin-end" *ngFor="let service of CATEGORY_LIST; let service_index = index">
 
-        <ion-item button  class="service_detail"   detail="false" (click)="changeCategoryStatus(service_index, service.is_open)">
+        <ion-item button  class="service_detail" style="color : {{this.dataService.BUTTON_COLOR}} !important; "  detail="false" (click)="changeCategoryStatus(service_index, service.is_open)">
             <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; "> <h3>{{ service.category_name }}</h3>  </ion-label>
             <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important; " class="service_count">{{ service?.count }} Service </ion-text>
             <ion-icon
@@ -29,10 +29,10 @@
         </ion-item>
 
         <ion-grid *ngIf="service.is_open">
-          <ion-row *ngFor="let service_detail of service.services; let index_number = index" class="service_order_list">
+          <ion-row *ngFor="let service_detail of service.services; let index_number = index" class="service_order_list" >
             <!-- <ion-col size="1" ></ion-col> -->
-            <ion-col size="12">
-              <ion-item class="service_detail ion-no-padding"   detail="false" >
+            <ion-col size="12" >
+              <ion-item class="service_detail ion-no-padding" style="color : {{this.dataService.BUTTON_COLOR}} !important; "  detail="false" >
                 <ion-button fill="clear" id="top-center-{{service_detail.id}}" class="itemBtns">
                   <ion-icon name="information-circle-outline"  style="color: black;"></ion-icon>
                 </ion-button>
