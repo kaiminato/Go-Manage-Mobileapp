@@ -68,7 +68,7 @@ ion-content {
           // margin: 5px;
           border-radius: 5px;
           --background: #f6f5fa;
-          color: #047473;
+          color: #111111;
           border: 2px solid;
           .service_count {
               font-size: 15px;
@@ -143,8 +143,8 @@ ion-content {
           margin-top: 10px;
       }
       ion-button {
-          --background:  #047473;
-          --background-activated: #047473;
+        //   --background:  #047473;
+        //   --background-activated: #047473;
 
           .booking-arrow {
               margin-left: 20px;

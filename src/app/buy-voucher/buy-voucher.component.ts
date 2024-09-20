@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { ApiDataService } from '../services/api-data.service';
 import { DataService } from '../services/data.service';
 import { ImageService } from '../services/image.service';
-
+import { AuthService } from '@auth0/auth0-angular';
+import { AuthUserService } from '../AuthUserService';
+import { mergeMap } from 'rxjs/operators';
+import { Browser } from '@capacitor/browser';
 @Component({
   selector: 'app-buy-voucher',
   templateUrl: './buy-voucher.component.html',
@@ -26,7 +29,8 @@ export class BuyVoucherComponent implements OnInit {
   S_EMAIL: string = '';
   S_GIFTEE_EMAIL: string = '';
   S_GIFTEE_EMAIL_MESSAGE: string = '';
-
+  IS_LOGIN: boolean = false;
+  userGMID: any;
   PRICE_LIST: any = [
     { id: 1 , price: 50 , is_active: false , is_button: true},
     { id: 2 , price: 100 , is_active: false , is_button: true},
@@ -38,8 +42,12 @@ export class BuyVoucherComponent implements OnInit {
     private router: Router,
     private apiData: ApiDataService,
     private dataService: DataService,
-    public imageService: ImageService
-  ) { }
+    public imageService: ImageService,
+    private auth: AuthService,
+    private authusrService: AuthUserService,
+  ) { 
+    
+  }
 
   ngOnInit() {}
 
@@ -57,14 +65,50 @@ export class BuyVoucherComponent implements OnInit {
     this.S_EMAIL = '';
     this.S_GIFTEE_EMAIL = '';
     this.S_GIFTEE_EMAIL_MESSAGE = '';
+    await this.checkLogin();
+    if(this.IS_LOGIN){
+      this.auth.getUser().subscribe(
+        async (response: any) => {
+          if (response && response.hasOwnProperty('email')) { // Check if response is defined
+
+            this.F_EMAIL = response.email;
+          } else {
+            this.F_EMAIL = await this.dataService._getUserEmail();
+          }
+      
+          // Now safely calling getMyProfile with the EMAIL
+          (await this.apiData.getMyProfile(this.F_EMAIL)).subscribe(
+            async (user_info: any) => {
+              this.userGMID = user_info.UserGMID;
+              if (!user_info.givenName || user_info.givenName === 'null' || user_info.familyName === 'null' || 
+                  !user_info.familyName || !user_info.phoneMobile || user_info.phoneMobile === 'null') {
+                console.log("User GMID with missing info:");
+              } else {
+                this.F_FIRST_NAME = user_info.givenName;
+                this.F_LAST_NAME = user_info.familyName;
+              }
+            },
+            (error: any) => {
+              console.error("Error fetching user profile:", error);
+            }
+          );
+        },
+        (error: any) => {
+          console.error("Error fetching user:", error);
+        }
+      );
+    }
 
     let prefilled_data = await this.dataService.getVoucherData();
-
+    
+    
+    
     if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
 
   async preFilleddata () {
     let prefilled_data = await this.dataService.getVoucherData();
+  
 
     await this.selectPrice(prefilled_data.selected_price_id);
     let selected_data = await this.PRICE_LIST.filter( data => data.id == prefilled_data.selected_price_id)
@@ -101,7 +145,36 @@ export class BuyVoucherComponent implements OnInit {
 
 
   async confirm () {
+    // if (!this.IS_LOGIN) {
+    //   this.auth.buildAuthorizeUrl().subscribe({
+    //       next: async (url) => {
+    //           Browser.open({ url, windowName: '_self' }).then(async () => {
+    //               const isLoggedIn = await this.checkLogin(); // Await the promise
+    //               if (isLoggedIn) {
+    //                   this.router.navigate(['/buy-a-voucher']); // If login succeeded
+    //               } else {
+    //                   console.error('Login failed, redirecting to login page');
+    //                   this.router.navigate(['/login']);
+    //               }
+    //           });
+    //       },
+    //       error: (err) => {
+    //           console.error('Error during login:', err);
+    //           this.router.navigate(['/login']); // Redirect on error
+    //       }
+    //   });
+    // } else {
+    //     this.router.navigate(['/buy-a-voucher']); // User already logged in
+    // }
 
+
+    if (!this.IS_LOGIN) {
+        this.auth.loginWithRedirect({
+        appState: { target: '/voucher-summary' }
+      })
+      return;
+    }
+    
     let validate_email = /\S+@\S+\.\S+/;
 
     let data : any = {};
@@ -123,8 +196,6 @@ export class BuyVoucherComponent implements OnInit {
 
     if (this.SEND_TO_ME) {
 
-
-
       if (this.F_FIRST_NAME.trim() == '') return await this.apiData.presentAlert("First name can't be empty")
       if (this.F_LAST_NAME.trim() == '') return await this.apiData.presentAlert("Last name can't be empty")
       if (this.F_EMAIL.trim() == '') return await this.apiData.presentAlert("Email can't be empty")
@@ -138,7 +209,7 @@ export class BuyVoucherComponent implements OnInit {
       }
 
     } else {
-
+      
       if (this.S_FIRST_NAME.trim() == '') return await this.apiData.presentAlert("First name can't be empty")
       if (this.S_LAST_NAME.trim() == '') return await this.apiData.presentAlert("Last name can't be empty")
       if (this.S_EMAIL.trim() == '') return await this.apiData.presentAlert("Email can't be empty")
@@ -156,12 +227,26 @@ export class BuyVoucherComponent implements OnInit {
         giftee_email_message : this.S_GIFTEE_EMAIL_MESSAGE,
       }
     }
-
     await this.dataService.setVoucherData(data);
 
     this.router.navigate(['/voucher-summary']);
 
 
+  }
+  checkLogin(): Promise<boolean> {
+    return new Promise((resolve) => {
+        this.auth.getUser().subscribe({
+            next: (user_data: any) => {
+                this.IS_LOGIN = user_data !== undefined;
+                resolve(this.IS_LOGIN);  // Resolves the promise with login state
+            },
+            error: (err) => {
+                console.error('Error checking login status:', err);
+                this.IS_LOGIN = false;
+                resolve(this.IS_LOGIN);  // Resolves with false on error
+            }
+        });
+    });
   }
 
   navigation() {
