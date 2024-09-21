@@ -168,12 +168,7 @@ export class BuyVoucherComponent implements OnInit {
     // }
 
 
-    if (!this.IS_LOGIN) {
-        this.auth.loginWithRedirect({
-        appState: { target: '/voucher-summary' }
-      })
-      return;
-    }
+    
     
     let validate_email = /\S+@\S+\.\S+/;
 
@@ -228,7 +223,12 @@ export class BuyVoucherComponent implements OnInit {
       }
     }
     await this.dataService.setVoucherData(data);
-
+    if (!this.IS_LOGIN) {
+      this.auth.loginWithRedirect({
+        appState: { target: '/voucher-summary' }
+      })
+      return;
+    }
     this.router.navigate(['/voucher-summary']);
 
 
