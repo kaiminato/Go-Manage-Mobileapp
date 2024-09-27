@@ -29,7 +29,7 @@
         (click)="SelectStaff(value.employee_id)">
 
         <ion-thumbnail slot="start">
-          <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
+          <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg" style="border-radius: 50%;">
         </ion-thumbnail>
         <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
           <h3>{{ value.firstName }} {{ value.lastName }}</h3>

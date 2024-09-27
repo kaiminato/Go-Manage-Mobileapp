@@ -290,7 +290,7 @@ ion-modal {
   --background: #fff;
 
   ion-thumbnail {
-      border-radius: 15px !important;
+      border-radius: 50% !important;
       padding: 3px;
       border: 1px solid;
       overflow: hidden;
@@ -323,6 +323,15 @@ color: #adafb6  !important;
 :host ::ng-deep ion-calendar ion-calendar-month button.today{
 background-color: #e3dadf !important;
 }
+:host {
+  ::ng-deep ion-calendar {
+    ion-calendar-month button.on-selected {
+      background-color: var(--button-color) !important; /* No fallback */
+    }
+  }
+}
+
+
 :host ::ng-deep ion-calendar ion-calendar-month button.on-selected p{
 color: white !important;
 }
@@ -338,3 +347,4 @@ color: white !important;
 div.ion-delegate-host.ion-page{
   justify-content: unset;
 }
+
