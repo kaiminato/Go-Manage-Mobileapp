@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PickerController } from '@ionic/angular';
@@ -53,7 +53,6 @@ export class SelectTimingComponent implements OnInit {
   IS_LOGIN: boolean = false;
   BOOKING_WITH_STAFF: any = true;
   PENDING_BOOKING_TIMEOUT: any;
-
   ALL_AVAILABLE_SLOT : any = [];
   STAFF_AVAILABLE_SLOT: any = [];
 
@@ -117,9 +116,15 @@ export class SelectTimingComponent implements OnInit {
 
     this.IS_CALNDER_OPEN = false;
   }
-
-  ngOnInit() { }
-
+  ngOnInit() { 
+    const buttonColor = this.dataService.BUTTON_COLOR;
+    if (buttonColor) {
+      document.documentElement.style.setProperty('--button-color', buttonColor);
+    } else {
+      console.error('Button color is not defined'); // This will help you know if BUTTON_COLOR is undefined
+    }
+  }
+ 
   async ionViewWillEnter() {
 
     this.activateRoute.queryParams
@@ -880,6 +885,7 @@ export class SelectTimingComponent implements OnInit {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
     }
+
   }
 
   async _getDisabledDate() {
