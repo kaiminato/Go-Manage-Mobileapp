@@ -19,6 +19,7 @@
             [format]="'YYYY-MM-DD'"
             id="my-custom"
             style="--line-height: 0.5; --padding: 2px; width: 100%; max-height: 50vh; overflow: hidden;"
+            
           >
           </ion-calendar>
         </ion-col>
@@ -122,13 +123,19 @@
           <ion-header>
             <ion-toolbar>
               <ion-title style="color : {{this.dataService.TEXT_COLOR}} !important; font-size: 16px; text-align: center">Staff available for time</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="SELECT_STAFF_OPEN = false" fill="clear">
+                  <ion-icon name="close" style="color: {{this.dataService.TEXT_COLOR}} !important;"></ion-icon>
+                </ion-button>
+              </ion-buttons>
             </ion-toolbar>
+            
           </ion-header>
           <ion-item button *ngFor="let value of this.AVAILABLE_STAFF_LIST" class="staff_list" detail="false"
                 style="border-bottom: 1px solid {{this.dataService.TEXT_COLOR}} !important; color: {{this.dataService.TEXT_COLOR}} !important"
                 (click)="SelectStaff(value.employee_id)">
                 <ion-thumbnail slot="start">
-                  <img [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg">
+                  <img style="border-radius: 50% !important;" [src]="value.employeeImg == '' ? this.imageService.DEFAULT_PERSON : value.employeeImg" >
                 </ion-thumbnail>
                 <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important; ">
                   <h3>{{ value.firstName }} {{ value.lastName }}</h3>
