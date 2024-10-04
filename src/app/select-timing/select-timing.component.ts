@@ -722,7 +722,7 @@ export class SelectTimingComponent implements OnInit {
 
   async _getNewShiftList(){
     let current_date_available_slots = await this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == this.DATE);
-    console.log(current_date_available_slots);
+    //console.log(current_date_available_slots);
     if(current_date_available_slots == undefined || current_date_available_slots.length == 0) return;
     this.ALL_SHIFT = await this._returnShiftTimes(current_date_available_slots[0].availableSlots);
     for (let shift_value of this.ALL_SHIFT) {
@@ -1461,7 +1461,6 @@ export class SelectTimingComponent implements OnInit {
         );
       } else {
         shift_list = await this._returnShiftTimes(is_date_working[0].availableSlots);
-       
         for (let shift_value of shift_list) {
           for (const booking of this.STAFF_BOOKING_LIST) {// Shift disabled based on Booking time
             let booking_date_starTime = new Date(booking.startTime);
@@ -1473,7 +1472,7 @@ export class SelectTimingComponent implements OnInit {
               shift_value.is_disabled = true; // Disabled the shift
             }
 
-            if(booking_date_starTime.getMonth() == shift__date_time.getMonth() && booking_date_starTime.getDate() == shift__date_time.getDate() && shift__date_time.getTime() > booking_date_starTime.getTime() && shift__date_time.getTime() < booking_date_endTime.getTime()){
+            if(booking_date_starTime.getMonth() == shift__date_time.getMonth() && booking_date_starTime.getDate() == shift__date_time.getDate() && shift__date_time.getTime() >= booking_date_starTime.getTime() && shift__date_time.getTime() < booking_date_endTime.getTime()){
               shift_value.is_disabled = true; // Disabled the shift
             }
            
