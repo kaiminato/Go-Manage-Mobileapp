@@ -1499,6 +1499,9 @@ export class SelectTimingComponent implements OnInit {
         // let booking_data = await this.dataService.getInitialBookingdata();
         let booking_total_duration = 0;
         let total_shift_will_count = 1;
+
+        let availableSlotsCount = shift_list.length;
+
         for (let value of booking_data.servises) booking_total_duration += value.serviceDuration;
     
         booking_total_duration = booking_total_duration - 1;
@@ -1507,6 +1510,7 @@ export class SelectTimingComponent implements OnInit {
         if (total_shift_will_count != 1) {
           let last_index = 0;
           let neighbour_difference = 0;
+          
           for (let index in shift_list) {
             let checked_pass = true;
             if (shift_list[index]['is_disabled'] == false) {
@@ -1522,9 +1526,11 @@ export class SelectTimingComponent implements OnInit {
               }
               if (!checked_pass) {
                 shift_list[index]['is_disabled'] = true;
+                availableSlotsCount--;
               }
             }
             else{
+              availableSlotsCount--;
               neighbour_difference = Number(index) - last_index;
               if(neighbour_difference <= total_shift_will_count){
                 for (let i = last_index + 1; i < Number(index); i++) {
@@ -1535,13 +1541,16 @@ export class SelectTimingComponent implements OnInit {
             }
           }
         }
-        this.DISPLAY_LIST.push(
-          {
-            DATE: is_date_working[0].workDate,
-            id: is_date_working[0].workDate,
-            shift_list: shift_list
-          }
-        );
+        if (availableSlotsCount > 0){
+          this.DISPLAY_LIST.push(
+            {
+              DATE: is_date_working[0].workDate,
+              id: is_date_working[0].workDate,
+              shift_list: shift_list
+            }
+          );
+        }
+        
       }
     }
     this.DISPLAY_LIST.sort((a, b) => {
