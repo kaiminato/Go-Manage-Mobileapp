@@ -1541,16 +1541,16 @@ export class SelectTimingComponent implements OnInit {
             }
           }
         }
-        if (availableSlotsCount > 0){
-          this.DISPLAY_LIST.push(
-            {
-              DATE: is_date_working[0].workDate,
-              id: is_date_working[0].workDate,
-              shift_list: shift_list
-            }
-          );
+        if (availableSlotsCount <= 0){
+          shift_list = [];
         }
-        
+        this.DISPLAY_LIST.push(
+          {
+            DATE: is_date_working[0].workDate,
+            id: is_date_working[0].workDate,
+            shift_list: shift_list
+          }
+        );
       }
     }
     this.DISPLAY_LIST.sort((a, b) => {
