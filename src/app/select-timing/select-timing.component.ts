@@ -230,7 +230,6 @@ export class SelectTimingComponent implements OnInit {
     (await this.apiData.getAllAvailableSlots()).subscribe(
       (response: any) => {
         this.ALL_AVAILABLE_SLOT = response;
-       // console.log("ALL_AVAILABLE_SLOT",response);
       },
       (error: any) => {
         alert(JSON.stringify(error))
@@ -243,7 +242,6 @@ export class SelectTimingComponent implements OnInit {
     (await this.apiData.getAllAvailableSlotsByEmployee(employeeId)).subscribe(
       (response: any) => {
         this.STAFF_AVAILABLE_SLOT = response;
-       // console.log("STAFF_AVAILABLE_SLOT",response);
       },
       (error: any) => {
         alert(JSON.stringify(error))
@@ -295,11 +293,6 @@ export class SelectTimingComponent implements OnInit {
 
     this.DATE = booking_data.date;
 
-    //await this._onDateSelect(this.DATE);
-
-    //await this.modalController.dismiss();
-
-    //await this._getDayList();
     if(this.ALL_SHIFT.length == 0) return;
     if (booking_data.timing_id != '') {
 
@@ -315,7 +308,6 @@ export class SelectTimingComponent implements OnInit {
 
     for (let staff of this.STAFF_LIST) {
         if (staff.staffDetailFormatted) {
-            // Wait for the slots to be fetched for this staff member
             (await this.apiData.getAllAvailableSlotsByEmployee(staff.employee_id)).subscribe(
               (response: any) => {
                
@@ -333,11 +325,6 @@ export class SelectTimingComponent implements OnInit {
                 alert(JSON.stringify(error))
               }
             );
-           
-
-            // // Now that the available slots have been fetched, check if there are any available
-            // console.log("staff_available_slot", this.STAFF_AVAILABLE_SLOT);
-            
         }
     }
 }
@@ -724,7 +711,6 @@ export class SelectTimingComponent implements OnInit {
 
   async _getNewShiftList(){
     let current_date_available_slots = await this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == this.DATE);
-    //console.log(current_date_available_slots);
     if(current_date_available_slots == undefined || current_date_available_slots.length == 0) return;
     this.ALL_SHIFT = await this._returnShiftTimes(current_date_available_slots[0].availableSlots);
     for (let shift_value of this.ALL_SHIFT) {
@@ -1312,7 +1298,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _returnShiftTimes(availableSlots: any){
-    //console.log("availableSlots",availableSlots);
     let result = [];
     for (let timeString of availableSlots) {
 
@@ -1451,8 +1436,7 @@ export class SelectTimingComponent implements OnInit {
       shift_list = [];
 
       let is_date_working =  this.STAFF_AVAILABLE_SLOT.filter(data => data.workDate == value);
-      // console.log("STAFF_AVAILABLE_SLOT",this.STAFF_AVAILABLE_SLOT);
-      //console.log("is_date_working",is_date_working);
+
       if (is_date_working.length == 0) { // If rota not found on current loop date
         this.DISPLAY_LIST.push(
           {
@@ -1463,7 +1447,7 @@ export class SelectTimingComponent implements OnInit {
         );
       } else {
         shift_list = await this._returnShiftTimes(is_date_working[0].availableSlots);
-        //console.log("this.STAFF_BOOKING_LIST",this.STAFF_BOOKING_LIST);
+
         for (let shift_value of shift_list) {
           for (const booking of this.STAFF_BOOKING_LIST) {// Shift disabled based on Booking time
             let booking_date_starTime = new Date(booking.startTime);
@@ -1473,7 +1457,6 @@ export class SelectTimingComponent implements OnInit {
             const current_date_time = new Date();
             if (current_date_time.getMonth() == shift__date_time.getMonth() && current_date_time.getDate() == shift__date_time.getDate() && shift__date_time.getTime() < current_date_time.getTime()) {
               shift_value.is_disabled = true; // Disabled the shift
-              //console.log("111111111");
             }
 
             if(booking.employeeId == this.SELECT_STAFF_ID && booking_date_starTime.getMonth() == shift__date_time.getMonth() && 
@@ -1481,7 +1464,6 @@ export class SelectTimingComponent implements OnInit {
               shift__date_time.getTime() >= booking_date_starTime.getTime() && 
               shift__date_time.getTime() < booking_date_endTime.getTime()){
                 shift_value.is_disabled = true; // Disabled the shift
-                //console.log("222222222");
             }
            
 
