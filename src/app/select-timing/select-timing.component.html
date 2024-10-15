@@ -58,8 +58,8 @@
             <ion-icon name="time-outline"></ion-icon>
             <ion-text class="time"> {{ shift.time }}</ion-text>
           </div>
-          <!--<div class="ion-text-staff" (click)="_selectOtherStaff(data.DATE, shift.id , shift.time)">
-            <ion-text>Choose staff</ion-text> -->
+          <div class="ion-text-staff" (click)="_selectOtherStaff(data.DATE, shift.id , shift.time)">
+            <ion-text>Choose staff</ion-text>
           </div>
         </ion-col>
         <ion-col *ngIf="data.shift_list.length == 0">
