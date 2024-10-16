@@ -1,16 +1,15 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PickerController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
-import { IonSlides, IonModal } from '@ionic/angular';
+import { IonModal } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
 import { ImageService } from '../services/image.service';
-import { mergeMap } from 'rxjs/operators';
-import { Browser } from '@capacitor/browser';
+
 @Component({
   selector: 'app-select-timing',
   templateUrl: './select-timing.component.html',
@@ -19,8 +18,6 @@ import { Browser } from '@capacitor/browser';
 
 export class SelectTimingComponent implements OnInit {
   @ViewChild(IonModal) modal: IonModal;
-  // @ViewChild('mySlider') slides: IonSlides;
-  // @ViewChild('myCalander') myCalander!: ElementRef;
   isVisible: boolean = false;
   ID: any = '';
   HEADING: string = "3";
@@ -35,37 +32,24 @@ export class SelectTimingComponent implements OnInit {
   CURRENT_YEAR: number = this.dataService.CURRENT_YEAR;
   CURRENT_MONTH_VALUE: string = '';
   DAYS_ARRAY: any = [];
-  MORNING_SHIFT: any = [];
-  EVENING_SHIFT: any = [];
   ALL_SHIFT: any = [];
-  ACTIVE_DAY: number = 10;
   CANCEL_BOOKING_ID: number = 0;
-  IS_STAFF: any = true;
   IS_CALNDER_OPEN: boolean = false;
   IS_CONFIRM_OPEN: boolean = false;
   SELECT_STAFF_OPEN : boolean = false;
   DATE: string = '';
   DATE_TYPE: 'object';
   STAFF_BOOKING_LIST: any = [];
-  COMPAREBLE_DATES: any = [];
   MONTH_NAME_LIST: any = [];
-  DISABLED_DATES_ARRAY: any = [];
   IS_LOGIN: boolean = false;
   BOOKING_WITH_STAFF: any = true;
   PENDING_BOOKING_TIMEOUT: any;
   ALL_AVAILABLE_SLOT : any = [];
   STAFF_AVAILABLE_SLOT: any = [];
-
   SELECT_STAFF_ID: any;
-
   STAFF_LIST: any = [];
   AVAILABLE_STAFF_LIST: any = [];
-
   DISPLAY_LIST: any = [];
-
-  SHORT_MONTHS_NAME: any = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sept: 9, Oct: 10, Nov: 11, Dec: 12 };
-  currentSlideIndex: number;
-
   slideOpts = {
     slidesPerView: 6,
     initialSlide: 10,
@@ -85,8 +69,6 @@ export class SelectTimingComponent implements OnInit {
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
-    private location: Location,
-    private pickerCtrl: PickerController,
     public dataService: DataService,
     public apiService: ApiDataService,
     private modalController: ModalController,
@@ -301,33 +283,33 @@ export class SelectTimingComponent implements OnInit {
       }, 300);
     }
   }
-  async _selectOtherStaff(selected_date: any, id: number, selected_time: any) {
-    this.AVAILABLE_STAFF_LIST = [];
-    this.SELECT_STAFF_OPEN = true;
-    const formatted_time = this.formatTime(selected_time);
+  // async _selectOtherStaff(selected_date: any, id: number, selected_time: any) {
+  //   this.AVAILABLE_STAFF_LIST = [];
+  //   this.SELECT_STAFF_OPEN = true;
+  //   const formatted_time = this.formatTime(selected_time);
 
-    for (let staff of this.STAFF_LIST) {
-        if (staff.staffDetailFormatted) {
-            (await this.apiData.getAllAvailableSlotsByEmployee(staff.employee_id)).subscribe(
-              (response: any) => {
+  //   for (let staff of this.STAFF_LIST) {
+  //       if (staff.staffDetailFormatted) {
+  //           (await this.apiData.getAllAvailableSlotsByEmployee(staff.employee_id)).subscribe(
+  //             (response: any) => {
                
-                for (let i = 0; i < response.length; i++) {
-                  if (response[i].workDate == selected_date) {
-                      for (let j = 0; j < response[i].availableSlots.length; j++) {
-                          if (response[i].availableSlots[j] == formatted_time) {
-                              this.AVAILABLE_STAFF_LIST.push(staff);
-                          }
-                      }
-                  }
-              }
-              },
-              (error: any) => {
-                alert(JSON.stringify(error))
-              }
-            );
-        }
-    }
-}
+  //               for (let i = 0; i < response.length; i++) {
+  //                 if (response[i].workDate == selected_date) {
+  //                     for (let j = 0; j < response[i].availableSlots.length; j++) {
+  //                         if (response[i].availableSlots[j] == formatted_time) {
+  //                             this.AVAILABLE_STAFF_LIST.push(staff);
+  //                         }
+  //                     }
+  //                 }
+  //             }
+  //             },
+  //             (error: any) => {
+  //               alert(JSON.stringify(error))
+  //             }
+  //           );
+  //       }
+  //   }
+  // }
 
   formatTime(selected_time: string): string {
     // Convert 12-hour format to 24-hour format
@@ -859,12 +841,7 @@ export class SelectTimingComponent implements OnInit {
     }
     await this._getShiftList();
   }
-  slideChanged() {
-    // this.slides.getActiveIndex().then(index => {
-    //   this.CURRENT_MONTH = this.getMonthFromDayIndex(index + 1, this.CURRENT_YEAR);
-    //   this.CURRENT_MONTH_VALUE = this.MONTH_NAME_LIST[this.CURRENT_MONTH - 1] + " " + this.CURRENT_YEAR;
-    // });
-  }
+ 
   async _onDateSelect(selected_date: any) {
     this.DATE = selected_date;
     this.IS_CALNDER_OPEN = false;
@@ -1485,8 +1462,6 @@ export class SelectTimingComponent implements OnInit {
           }
         }
         //console.log("shift_list",JSON.stringify(shift_list));
-        // Shift disabled based on Booking time -- end
-        // let booking_data = await this.dataService.getInitialBookingdata();
         let booking_total_duration = 0;
         let total_shift_will_count = 1;
 
