@@ -3,9 +3,6 @@
 
   <div class="" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
   </div>
-  <!-- <ion-card style="color : {{this.dataService.TEXT_COLOR}} !important; " class="page-title">
-    <h2>Select a time</h2>
-  </ion-card> -->
   <div class="card-list">
     <ion-grid class="month_name" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
       <ion-row>
@@ -24,25 +21,6 @@
           </ion-calendar>
         </ion-col>
       </ion-row>
-
-      <!-- <ion-row class="date-range-picker" *ngIf="DAYS_ARRAY">
-        <ion-col size="12">
-          <ion-slides pager="false" [options]="slideOpts" #mySlider (ionSlideDidChange)="slideChanged()">
-            <ion-slide *ngFor="let value of DAYS_ARRAY;let i = index">
-
-              <div class="date-range">
-                <div class="day-name">
-                  {{value.day_name}}
-                </div>
-                <ion-text class="ion-text-uppercase" [class.active]=" value.is_active"
-                [class.disabled]=" value.is_disabled"
-                (click)="_selectDateRangeSlider(value.day_number, value.is_disabled, value.month, value.year , i)"><b>{{value.day_number}} </b></ion-text>
-              </div>
-            </ion-slide>
-          </ion-slides>
-        </ion-col>
-
-      </ion-row> -->
     </ion-grid>
 
     <ion-grid class="all_shift">
@@ -57,9 +35,6 @@
           <div class="inner-ion-col-custom" [class.active] ="shift.is_active" [class.disbaled_shift] ="shift.is_disabled" (click)="_selectTiming(data.DATE, shift.id , shift.is_disabled)">
             <ion-icon name="time-outline"></ion-icon>
             <ion-text class="time"> {{ shift.time }}</ion-text>
-          </div>
-          <div class="ion-text-staff" (click)="_selectOtherStaff(data.DATE, shift.id , shift.time)">
-            <ion-text>Choose staff</ion-text>
           </div>
         </ion-col>
         <ion-col *ngIf="data.shift_list.length == 0">
@@ -96,10 +71,6 @@
                 <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ TOTAL_DURATION }} minutes, ends at {{ ENDING_TIME }}</ion-text>
               </ion-text>
             </ion-item>
-            <!-- <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
-              <br/>
-              <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ STUDIO_NAME }} Studio</ion-text>
-            </ion-item> -->
             <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
               <br/>
               <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ SERVICE_NAME }}</ion-text>
@@ -145,8 +116,6 @@
       </div>
     </ng-template>
   </ion-modal>
-
-
 </ion-content>
 
 <app-footer></app-footer>
