@@ -124,15 +124,15 @@ export class ApiDataService {
 
   async purchaseVoucher(data: any) {
 
-    return await this.makeRequest('POST', this.apiUrl +'http://localhost:3001/my-testing', data)
+    return await this.makeRequest('POST', this.apiUrl + 'http://localhost:3001/my-testing', data)
   }
 
   async addNewVoucher(data: any) {
-    return await this.makeRequest('POST', this.apiUrl +'voucher/addNewVoucher', data);
+    return await this.makeRequest('POST', this.apiUrl + 'voucher/addNewVoucher', data);
   }
 
   async sendVoucher(data: any) {
-    return await this.makeRequest('POST', this.apiUrl +'send-email/sendVoucher', data);
+    return await this.makeRequest('POST', this.apiUrl + 'send-email/sendVoucher', data);
   }
 
   async sendMarketingEmailTemplate(data) {
@@ -269,16 +269,16 @@ export class ApiDataService {
     return await this.makeRequest('POST', this.apiUrl + 'feedBack/addNewFeedback', data);
   }
 
-  async retrieveClientInformation(clientId:string) {
-    return await this.makeRequest('GET', this.apiUrl + 'user/retrieveClientInformation?clientId='+clientId);
+  async retrieveClientInformation(clientId: string) {
+    return await this.makeRequest('GET', this.apiUrl + 'user/retrieveClientInformation?clientId=' + clientId);
   }
 
   async getAllAvailableSlots() {
     return await this.makeRequest('GET', this.apiUrl + 'appointment/getAllAvailableSlots');
   }
 
-  async getAllAvailableSlotsByEmployee(employeeId:any) {
-    return await this.makeRequest('GET', this.apiUrl + 'appointment/getAllAvailableSlotsByEmployee/'+employeeId);
+  async getAllAvailableSlotsByEmployee(employeeId: any) {
+    return await this.makeRequest('GET', this.apiUrl + 'appointment/getAllAvailableSlotsByEmployee/' + employeeId);
   }
-  
+
 }

@@ -14,8 +14,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { SelectTimingComponent } from './select-timing/select-timing.component';
 import { StaffServiceDetailsComponent } from './staff-service-details/staff-service-details.component';
 import { AuthGuard } from '@auth0/auth0-angular';
-import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
-import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
@@ -106,17 +104,6 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     // canActivate: [AuthGuard]
-  },
-  {
-    path: 'select-time-with-service-booking',
-    component: SelectTimingWithServiceBookingComponent,
-    //canActivate: [AuthGuard]
-  },
-
-  {
-    path: 'select-staff-with-service-booking',
-    component: SelectStaffWithServiceBookingComponent,
-    //canActivate: [AuthGuard]
   },
   {
     path: 'my-booking-list',
