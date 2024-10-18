@@ -42,8 +42,6 @@ export class StaffServiceDetailsComponent implements OnInit {
   async ionViewWillEnter() {
 
     this.SELECTED_SERVICES = [];
-    // this.TOTAL_SERVICE_SELECTED = 0;
-    // this.TOTAL_PRICE = 0;
     this.ID = this.activateRoute.snapshot.paramMap.get('id');
     this.STAFF_DETAIL = await this.dataService.getStaffDetail(this.ID);
     this.PERFORMED_SERVICES = this.STAFF_DETAIL[0].performedServices;
@@ -61,9 +59,6 @@ export class StaffServiceDetailsComponent implements OnInit {
     this.STAFF_DETAIL[0].image = this.STAFF_DETAIL[0]?.employeeImg ? this.STAFF_DETAIL[0]?.employeeImg : this.imageService.DEFAULT_PERSON;
     this.HEADING = "2";
 
-
-    //await this.getStaffBookingList();
-
     let booking_data = await this.dataService.getInitialBookingdata();
 
     if (booking_data.date != '') {
@@ -78,9 +73,9 @@ export class StaffServiceDetailsComponent implements OnInit {
   async getServiceList() {
     this.SELECTED_SERVICE_LIST = [];
     this.SERVICE_LIST = await this.dataService.getServiceList();
-    for(let service_id of this.PERFORMED_SERVICES){
+    for (let service_id of this.PERFORMED_SERVICES) {
       let filtered_service = this.SERVICE_LIST.filter(service => service.id == service_id)[0];
-      if(filtered_service != undefined){
+      if (filtered_service != undefined) {
         this.SELECTED_SERVICE_LIST.push(filtered_service);
       }
     }
@@ -154,7 +149,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   changeCategoryStatus(service_id: any, status) {
 
     this.CATEGORY_LIST[service_id].is_open = !status;
-    
+
   }
 
 
@@ -175,7 +170,7 @@ export class StaffServiceDetailsComponent implements OnInit {
         if (service.id == service_id) {
           service.is_checked = flag;
         }
-       
+
       }
     }
 
@@ -202,7 +197,7 @@ export class StaffServiceDetailsComponent implements OnInit {
   }
 
   navigation() {
-    this.router.navigate(['/make-a-booking'],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    this.router.navigate(['/make-a-booking'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
 
 }
