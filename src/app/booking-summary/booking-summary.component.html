@@ -2,7 +2,7 @@
   <app-book-now-header (navigation)="navigation()" [HEADING_TEXT]="this.HEADING" [BOOKING_WITH_STAFF]="BOOKING_WITH_STAFF" [IS_BACK]="true"></app-book-now-header>
   <div class="green-background" style="background : {{this.dataService.BUTTON_COLOR}}!important; "></div>
   <div class="card-list" style="padding-bottom: 5px; height: 84%;">
-    <ion-list lines="none" class="ion-margin-top" style="background-color: {{this.dataService.BACKGROUND_COLOR}} !important; display: block;height: 20%; overflow: auto;">
+    <ion-list lines="none" class="ion-margin-top" style="display: block;height: 20%; overflow: auto;">
       <!-- <ion-img slot="end" [src]="this.dataService.APP_HOME_PAGE_ICON" class="ion-margin-bottom"></ion-img>
 
       <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
@@ -49,7 +49,7 @@
 
     </ion-list>
 
-    <div *ngIf="isVisible" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+    <div *ngIf="isVisible">
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}; border-top-left-radius: 15px;border-top-right-radius: 15px;">
         <h2 class="online-payment-txt">Online Payment</h2>
       </div>
@@ -100,38 +100,15 @@
         </ion-card>
       </div>
     </div>
-    <div  *ngIf="!isVisible" style="background:{{this.dataService.BACKGROUND_COLOR}} !important;">
+    <div  *ngIf="!isVisible">
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}}; border-top-left-radius: 15px;border-top-right-radius: 15px;">
         <h2 class="online-payment-txt">REBOOK NOW</h2>
       </div>
       <div style="background:{{this.dataService.BUTTON_COLOR}} !important; border: 1px solid {{this.dataService.BUTTON_COLOR}};border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">
         <ion-card class="welcome-card">
           <ion-img [src]="this.imageService.STRIPE_IMAGE"></ion-img>
-          <ion-card-header style="padding: 13px 13px 0px 13px !important; display:none">
-            <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important; text-align: center;">
-              <ion-col style="display:none">Booking Deposit Due Now: {{ 1 | currency: 'EUR'}}</ion-col>
-              <!-- <ion-col> {{ 1 | currency: 'EUR'}} </ion-col> -->
-            </ion-row>
-            <ion-row class="term_conditions" style="pointer-events: none;">
-              <div class="term_conditions">
-                <ion-checkbox slot="start" [(ngModel)]="termsAccepted">
-                </ion-checkbox>
-                <ion-label style="margin-left: 10px; font-size: 12px;">
-                  <ion-text>I accept the </ion-text>
-                  <a href="https://www.gomanage.ie/terms-and-conditions/">Terms and Conditions</a>
-                </ion-label>
-              </div>
-            </ion-row>
-          </ion-card-header>
           <ion-card-content style="padding-bottom: 5px !important;">
-            <form action="/" method="post" id="payment-form">
-              <div class="form-row" style="border-color: {{this.dataService.TEXT_COLOR}} !important; display:none; pointer-events: none;">
-                <div id="card-element">
-                    </div>
-                <!-- Used to display Element errors -->
-                <div id="card-errors" role="alert"></div>
-              </div>
-              
+            <form action="/" method="post" id="rebooking-form">              
               <div style="display: flex;justify-content: center; margin-top: 4px;">
                 <ion-button
                 style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;border-radius: 10px; margin-top: 60px;"
