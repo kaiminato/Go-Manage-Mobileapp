@@ -7,6 +7,7 @@ import { ApiDataService } from '../services/api-data.service';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
 import { ImageService } from '../services/image.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-select-timing',
@@ -50,6 +51,7 @@ export class SelectTimingComponent implements OnInit {
     loop: false,
   };
   ALL_DISPLAY_LIST: any = [];
+  availableDates: string[] = [];
 
 
   options: CalendarModalOptions = {
@@ -73,6 +75,7 @@ export class SelectTimingComponent implements OnInit {
     public auth: AuthService,
     private apiData: ApiDataService,
     public imageService: ImageService,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef for change detection
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
     this.SELECT_STAFF_ID = this.BOOKING_DATA?.staff_id;
@@ -388,6 +391,12 @@ export class SelectTimingComponent implements OnInit {
         };
       });
 
+      // Extract availableDates from STAFF_AVAILABLE_SLOT
+      this.availableDates = this.STAFF_AVAILABLE_SLOT.map(slot => slot.workDate);
+
+      // Configure the calendar to disable dates not in availableDates
+      this.configureCalendar();
+
       // Initialize DISPLAY_LIST with slots for the current date
       this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
 
@@ -396,6 +405,47 @@ export class SelectTimingComponent implements OnInit {
     }
   }
 
+  /**
+   * Configure the calendar to disable dates not in availableDates
+   */
+  configureCalendar() {
+    const daysConfig = [];
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setMonth(today.getMonth() + 3); // Define the range (e.g., next 3 months)
+
+    let date = new Date(today);
+    while (date <= maxDate) {
+      const dateString = this.formatDate(date);
+      if (!this.availableDates.includes(dateString)) {
+        daysConfig.push({
+          date: new Date(date),
+          disable: true,
+          cssClass: 'disabled-date', // Optional: Add a CSS class for styling
+        });
+      }
+      date.setDate(date.getDate() + 1);
+    }
+
+    // Update the calendar options
+    this.options = {
+      ...this.options,
+      daysConfig: daysConfig,
+    };
+
+    // Trigger change detection to update the calendar
+    this.cdr.detectChanges();
+  }
+
+  /**
+ * Helper method to format Date object to 'YYYY-MM-DD' string
+ */
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
   formatTimeTo12Hr(timeString: string): string {
     let H = +timeString.substr(0, 2);
