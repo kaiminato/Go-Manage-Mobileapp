@@ -49,6 +49,8 @@ export class SelectTimingComponent implements OnInit {
     speed: 400,
     loop: false,
   };
+  ALL_DISPLAY_LIST: any = [];
+
 
   options: CalendarModalOptions = {
     daysConfig: [
@@ -164,7 +166,10 @@ export class SelectTimingComponent implements OnInit {
         now = new Date(now); // Date object
         let { without_space_time } = await this.formatAMPM(now);
         this.ENDING_TIME = without_space_time;
-        this._onDateSelect(response["selectedDate"])
+        this._onDateSelect(response["selectedDate"]); // This will filter DISPLAY_LIST
+      } else {
+        // If no pre-selected date, set DISPLAY_LIST to current date
+        this._onDateSelect(this.DATE);
       }
     } catch (error) {
       console.error('Error in ionViewWillEnter:', error);
@@ -367,7 +372,8 @@ export class SelectTimingComponent implements OnInit {
         return;
       }
 
-      this.DISPLAY_LIST = this.STAFF_AVAILABLE_SLOT.map((slotData) => {
+      // Map all available slots to ALL_DISPLAY_LIST
+      this.ALL_DISPLAY_LIST = this.STAFF_AVAILABLE_SLOT.map((slotData) => {
         return {
           DATE: slotData.workDate,
           id: slotData.workDate,
@@ -382,9 +388,11 @@ export class SelectTimingComponent implements OnInit {
         };
       });
 
+      // Initialize DISPLAY_LIST with slots for the current date
+      this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
+
     } catch (error) {
       console.error('Error in displayAvailableSlots:', error);
-      // Do not dismiss the loading here
     }
   }
 
@@ -414,15 +422,19 @@ export class SelectTimingComponent implements OnInit {
     });
   }
 
-  async _onDateSelect(selected_date: any) {
+  async _onDateSelect(selected_date: string) {
     this.DATE = selected_date;
     this.IS_CALNDER_OPEN = false;
+
+    // Filter DISPLAY_LIST to include only the selected date's slots
+    this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
+
+    // Scroll to the selected date's slot section
     const desiredDateId = this.DATE;
     const element = document.getElementById(desiredDateId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
     }
-
   }
 
   async openPicker() {
@@ -536,7 +548,10 @@ export class SelectTimingComponent implements OnInit {
     this.STAFF_AVAILABLE_SLOT = [];
 
     // Fetch new slots for the selected staff member
-    this.getAllAvailableSlotsByEmployee(staff_id);
+    this.getAllAvailableSlotsByEmployee(staff_id).then(() => {
+      // After fetching, filter DISPLAY_LIST based on the current DATE
+      this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
+    });
   }
 
 }

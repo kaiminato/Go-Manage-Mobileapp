@@ -9,7 +9,7 @@
     <ion-grid class="month_name" style="background : {{this.dataService.BUTTON_COLOR}}!important; ">
       <ion-row>
         <ion-col size="12" class="ion-text-center">
-          <ion-calendar class="custom-calendar" [(ngModel)]="date" (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
+          <ion-calendar class="custom-calendar" [(ngModel)]="DATE" (change)="_onDateSelect($event.format('YYYY-MM-DD'))"
             [options]="options" [type]="DATE_TYPE" [format]="'YYYY-MM-DD'" id="my-custom"
             style="--line-height: 0.5; --padding: 2px; width: 100%; max-height: 50vh; overflow: hidden;">
           </ion-calendar>
@@ -20,7 +20,7 @@
     <ion-grid class="all_shift">
       <ion-row *ngFor="let data of DISPLAY_LIST" [id]="data.id">
         <ion-col size="12" class="heading">
-          <ion-text class="ion-text-bold ion-text-date" style="color: {{ this.dataService.BUTTON_COLOR }} !important;">
+          <ion-text class="ion-text-bold ion-text-date" style="color: {{ dataService.BUTTON_COLOR }} !important;">
             {{ data.DATE | date: 'MMMM, dd' }}
           </ion-text>
         </ion-col>
@@ -33,7 +33,7 @@
           </div>
         </ion-col>
         <ion-col *ngIf="data.shift_list.length == 0">
-          <div class="no-available-slot-text" style="background-color: {{ this.dataService.BUTTON_COLOR }} !important;">
+          <div class="no-available-slot-text" style="background-color: {{ dataService.BUTTON_COLOR }} !important;">
             <ion-text> No Available Slots </ion-text>
           </div>
         </ion-col>
@@ -42,6 +42,7 @@
         <ion-text class="no-available-text"> Not Available </ion-text>
       </ion-row>
     </ion-grid>
+
   </div>
 
   <ion-modal [isOpen]="IS_CONFIRM_OPEN" class="auto-height">
