@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
 import { AuthUserService } from '../AuthUserService';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -281,4 +281,11 @@ export class ApiDataService {
     return await this.makeRequest('GET', this.apiUrl + 'appointment/getAllAvailableSlotsByEmployee/' + employeeId);
   }
 
+  async getSlotsAvailableForEmployeeAndServiceDuration(employeeId: number, serviceDuration: number) {
+    // Construct the URL with query parameters using template literals for clarity
+    const url = `${this.apiUrl}appointment/getSlotsAvailableForEmployeeAndServiceDuration?employeeId=${employeeId}&serviceDuration=${serviceDuration}`;
+
+    // Make the GET request using the updated URL
+    return await this.makeRequest('GET', url);
+  }
 }
