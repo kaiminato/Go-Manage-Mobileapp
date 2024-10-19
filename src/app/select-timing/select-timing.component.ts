@@ -191,22 +191,38 @@ export class SelectTimingComponent implements OnInit {
         (response: any) => {
           this.STAFF_AVAILABLE_SLOT = response;
           this.displayAvailableSlots();
+
+          // Automatically select the first available date
+          const firstAvailableDate = this.findFirstAvailableDate();
+          if (firstAvailableDate) {
+            this.DATE = firstAvailableDate; // Set the first available date
+            this._onDateSelect(firstAvailableDate); // Ensure it updates the displayed slots
+          }
+
           this.isVisible = true;
         },
         (error: any) => {
           console.error('Error fetching available slots:', error);
-          // Optionally, display an error message to the user
         }
       );
     } catch (error) {
       console.error('Error in getAllAvailableSlotsByEmployee:', error);
     }
   }
-
   ionViewWillLeave() {
     this.IS_CALNDER_OPEN = false;
     this.IS_CONFIRM_OPEN = false;
     this.SELECT_STAFF_OPEN = false;
+  }
+
+  // Function to find the first available date with slots
+  findFirstAvailableDate(): string | null {
+    for (const slot of this.STAFF_AVAILABLE_SLOT) {
+      if (slot.availableSlots && slot.availableSlots.length > 0) {
+        return slot.workDate;  // Return the first date with available slots
+      }
+    }
+    return null;  // Return null if no available date is found
   }
 
   async formatAMPM(date) {
