@@ -79,7 +79,7 @@ export class SelectTimingComponent implements OnInit {
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
     this.SELECT_STAFF_ID = this.BOOKING_DATA?.staff_id;
-    this.getAllAvailableSlotsByEmployee(this.BOOKING_DATA?.staff_id);
+    this.getAllAvailableSlotsByEmployee(this.BOOKING_DATA);
     this.DATE = this.getCurrentDate();
   }
 
@@ -180,9 +180,14 @@ export class SelectTimingComponent implements OnInit {
 
   }
 
-  async getAllAvailableSlotsByEmployee(employeeId: any) {
+  async getAllAvailableSlotsByEmployee(bookingData: any) {
+    // Calculate the total service duration
+    const totalDuration = bookingData.servises.reduce((sum: number, service: any) => {
+      return sum + service.serviceDuration;
+    }, 0);
+
     try {
-      (await this.apiData.getAllAvailableSlotsByEmployee(employeeId)).subscribe(
+      (await this.apiData.getSlotsAvailableForEmployeeAndServiceDuration(bookingData.staff_id, totalDuration)).subscribe(
         (response: any) => {
           this.STAFF_AVAILABLE_SLOT = response;
           this.displayAvailableSlots();
@@ -199,7 +204,6 @@ export class SelectTimingComponent implements OnInit {
   }
 
   ionViewWillLeave() {
-    console.log("leaving ion thing?")
     this.IS_CALNDER_OPEN = false;
     this.IS_CONFIRM_OPEN = false;
     this.SELECT_STAFF_OPEN = false;
