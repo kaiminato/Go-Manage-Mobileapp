@@ -286,6 +286,7 @@ export class BookingSummaryComponent implements OnInit {
 
   async _createBookingWithPayment(paymentMethodId: any) {
     // Hardcoded deposit value
+    await this.apiData.presentLoading();
     let amount = 100;
 
     if (!this.IS_LOGIN) {
@@ -299,7 +300,7 @@ export class BookingSummaryComponent implements OnInit {
     console.clear();
     let owner_details = await this.dataService._getOwnerData();
 
-    await this.auth.getUser().subscribe(
+    this.auth.getUser().subscribe(
       async (response: any) => {
         // Get auth data
         let userEmail;
@@ -401,7 +402,7 @@ export class BookingSummaryComponent implements OnInit {
                                 async (response: any) => {
                                 },
                                 async (error: any) => {
-                                  if (error.status == 200) { console.log(error) } else {
+                                  if (error.status == 200) { console.log(error); } else {
                                     await this.apiData.dismiss();
                                     await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                                   }
@@ -415,7 +416,7 @@ export class BookingSummaryComponent implements OnInit {
                                 async (response: any) => {
                                 },
                                 async (error: any) => {
-                                  if (error.status == 200) { console.log(error) } else {
+                                  if (error.status == 200) { console.log(error); } else {
                                     await this.apiData.dismiss();
                                     await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                                   }
@@ -427,14 +428,13 @@ export class BookingSummaryComponent implements OnInit {
                         }
                       },
                       async (error: any) => {
-                        if (error.status == 200) { console.log(error) } else {
+                        if (error.status == 200) { console.log(error); } else {
                           await this.apiData.dismiss();
                           await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                         }
                       }
                     );
                   }
-                  this.router.navigate(['/booking-complete']);
                   await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                   setTimeout(async () => {
                     await this.apiData.dismiss();
@@ -450,7 +450,6 @@ export class BookingSummaryComponent implements OnInit {
 
           async (error: any) => {
             await this.apiData.dismiss();
-
             await this.apiData.presentAlert(
               'profile error' + JSON.stringify(error)
             );
@@ -459,7 +458,6 @@ export class BookingSummaryComponent implements OnInit {
       },
       async (error: any) => {
         await this.apiData.dismiss();
-
         await this.apiData.presentAlert(
           'auth api error' + JSON.stringify(error)
         );
