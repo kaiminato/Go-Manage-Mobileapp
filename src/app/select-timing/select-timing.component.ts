@@ -299,6 +299,13 @@ export class SelectTimingComponent implements OnInit {
     // Check services's time is under office timing
 
     let office_last_shift = new Date(`${get_booking_data.date} ${selected_shift_list[0].shift_list[selected_shift_list[0].shift_list.length - 1].value}`);
+    let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
+
+    if (ending_date_time > office_closed_time) {
+
+      await this.apiService.presentAlert('Sorry outside of business owner working days')
+      return
+    }
 
     if (!this.IS_LOGIN) {
       await this.dataService.saveSelectTimingInfo("true", this.DATE, JSON.stringify(get_booking_data.timing_id), String(id));
