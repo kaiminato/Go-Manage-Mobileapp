@@ -4,9 +4,7 @@ import { DataService } from '../services/data.service';
 import { CalendarModalOptions } from 'ion2-calendar';
 import { IonModal } from '@ionic/angular';
 import { ApiDataService } from '../services/api-data.service';
-import { ModalController } from '@ionic/angular';
 import { AuthService } from '@auth0/auth0-angular';
-import { ImageService } from '../services/image.service';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -71,10 +69,8 @@ export class SelectTimingComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     public dataService: DataService,
     public apiService: ApiDataService,
-    private modalController: ModalController,
     public auth: AuthService,
     private apiData: ApiDataService,
-    public imageService: ImageService,
     private cdr: ChangeDetectorRef // Inject ChangeDetectorRef for change detection
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
@@ -430,32 +426,42 @@ export class SelectTimingComponent implements OnInit {
    */
   configureCalendar() {
     const daysConfig = [];
-    const today = new Date();
-    const maxDate = new Date();
-    maxDate.setMonth(today.getMonth() + 3); // Define the range (e.g., next 3 months)
 
-    let date = new Date(today);
-    while (date <= maxDate) {
-      const dateString = this.formatDate(date);
-      if (!this.availableDates.includes(dateString)) {
-        daysConfig.push({
-          date: new Date(date),
-          disable: true,
-          cssClass: 'disabled-date', // Optional: Add a CSS class for styling
-        });
-      }
-      date.setDate(date.getDate() + 1);
+    const today = new Date();
+    const twoYearsFromNow = new Date();
+    twoYearsFromNow.setFullYear(today.getFullYear() + 2); // Limit to 2 years in the future
+
+    // Disable all dates by default, only enable dates in availableDates
+    let currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    while (currentDate <= twoYearsFromNow) {
+      const dateString = this.formatDate(currentDate); // Format as 'YYYY-MM-DD'
+
+      // Check if the current date is available
+      const isAvailable = this.availableDates.includes(dateString);
+
+      daysConfig.push({
+        date: new Date(currentDate),
+        disable: !isAvailable,  // Disable the date if not in availableDates
+        cssClass: isAvailable ? 'enabled-date' : 'disabled-date',  // Add CSS class to differentiate
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1); // Move to the next date
     }
 
-    // Update the calendar options
+    // Update calendar options with the new daysConfig
     this.options = {
       ...this.options,
       daysConfig: daysConfig,
+      from: today,   // Start from today
+      to: twoYearsFromNow, // Prevent navigation beyond two years from now
     };
 
     // Trigger change detection to update the calendar
     this.cdr.detectChanges();
   }
+
+
 
   /**
  * Helper method to format Date object to 'YYYY-MM-DD' string
