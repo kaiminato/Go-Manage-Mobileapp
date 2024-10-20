@@ -14,7 +14,7 @@ declare var Stripe;
   styleUrls: ['./booking-summary.component.scss'],
 })
 export class BookingSummaryComponent implements OnInit {
-  isVisible: boolean = true;
+  isVisible: boolean = true; 
   // stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
   stripe;
   card: any;
@@ -39,7 +39,7 @@ export class BookingSummaryComponent implements OnInit {
   CLIENT_FORMS_LIST: any = [];
   staff_id: any = '';
   STAFF_LIST: any = [];
-  SELECTEC_STAFF: any;
+  SELECTEC_STAFF:any;
   termsAccepted: boolean = false;
 
   constructor(
@@ -71,13 +71,13 @@ export class BookingSummaryComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-
+       
       }
-      );
-    if (this.CANCEL_BOOKING_ID == 0) {
+    );
+    if(this.CANCEL_BOOKING_ID == 0){
       this.isVisible = true;
     }
-    else {
+    else{
       this.isVisible = false;
     }
     await (await this.apiData._getAllClientForms()).subscribe(
@@ -128,9 +128,9 @@ export class BookingSummaryComponent implements OnInit {
       }
     );
 
-
-    // Call this method at the end of your initialization logic
-    if (this.CANCEL_BOOKING_ID) {
+    
+     // Call this method at the end of your initialization logic
+     if (this.CANCEL_BOOKING_ID) {
       // Skip Stripe initialization if CANCEL_BOOKING_ID is present
       this.stripe = null;
     } else {
@@ -141,7 +141,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   confirm() {
-    // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
+     // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
     if (this.CANCEL_BOOKING_ID) {
       // Directly create booking without payment if CANCEL_BOOKING_ID is present
       this._createBookingWithPayment(null);
@@ -191,7 +191,7 @@ export class BookingSummaryComponent implements OnInit {
       this.TOTAL_DURATION += service.serviceDuration;
       this.TOTAL_AMOUNT += service.servicePrice;
     }
-    if (this.CANCEL_BOOKING_ID != 0) {
+    if(this.CANCEL_BOOKING_ID != 0){
       this.TOTAL_AMOUNT = this.TOTAL_AMOUNT - 1;
     }
 
@@ -258,7 +258,7 @@ export class BookingSummaryComponent implements OnInit {
       if (this.apiData.isLoading == true) return;
       await this.apiData.presentLoading();
       event.preventDefault();
-      this.stripe.createPaymentMethod({ type: "card", card: this.card }).then(async result => {
+      this.stripe.createPaymentMethod({type:"card",card:this.card}).then(async result => {
         if (result.error) {
           await this.apiData.dismiss();
           var errorElement = document.getElementById('card-errors');
@@ -378,7 +378,10 @@ export class BookingSummaryComponent implements OnInit {
                 const successMessage = this.CANCEL_BOOKING_ID ? "Your booking has successfully been updated. Thank you" : "Please check your email for further details";
 
                 await this.apiData.presentAlertWithHeader(successHeader, successMessage);
-                this.router.navigate(['/booking-complete']);
+                setTimeout(async () => {
+                  await this.apiData.dismiss();
+                  this.router.navigate(['/booking-complete']);
+                }, 300);
               },
               async (error: any) => {
                 if (error.status == 200) {
@@ -473,7 +476,7 @@ export class BookingSummaryComponent implements OnInit {
     }
     await (await this.apiData._createClientForm(clientFormdata)).subscribe(
       async (response: any) => {
-        console.log("response", response);
+        console.log("response",response);
       },
       async (error: any) => {
         console.log("error", error);
@@ -641,10 +644,10 @@ export class BookingSummaryComponent implements OnInit {
     // Using parseInt
     let result = parseInt(str, 10);
     return result;
-  }
+}
 
   navigation() {
-    this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    this.router.navigate(['/select-a-time'],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
     //this.location.back();
   }
 }
