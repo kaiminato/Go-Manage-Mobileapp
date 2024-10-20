@@ -31,8 +31,6 @@ import { BookNowHeaderComponent } from './book-now-header/book-now-header.compon
 import { ProfileComponent } from './profile/profile.component';
 
 import { ApiDataService } from './services/api-data.service';
-import { SelectTimingWithServiceBookingComponent } from './select-timing-with-service-booking/select-timing-with-service-booking.component';
-import { SelectStaffWithServiceBookingComponent } from './select-staff-with-service-booking/select-staff-with-service-booking.component';
 import { MyBookingListComponent } from './my-booking-list/my-booking-list.component';
 import { VoucherSummaryComponent } from './voucher-summary/voucher-summary.component';
 import { StoreAllProductComponent } from './store-all-product/store-all-product.component';
@@ -66,8 +64,6 @@ const redirectUri = window.location.origin + `/contact-us`;
     LogoutButtonComponentComponent,
     BookNowHeaderComponent,
     ProfileComponent,
-    SelectTimingWithServiceBookingComponent,
-    SelectStaffWithServiceBookingComponent,
     MyBookingListComponent,
     VoucherSummaryComponent,
     StoreAllProductComponent,
