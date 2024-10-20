@@ -14,7 +14,7 @@ declare var Stripe;
   styleUrls: ['./booking-summary.component.scss'],
 })
 export class BookingSummaryComponent implements OnInit {
-  isVisible: boolean = true; 
+  isVisible: boolean = true;
   // stripe = Stripe('pk_test_51LonaPHrqYp23LTOaGG8jWkMsITXNGuJ7vRIvKo28blmVx9C7XtcBT0bfOufKQvfJU6FUNZbiHfgA9cOAfLlMKN300JZWgyFVd');
   stripe;
   card: any;
@@ -39,7 +39,7 @@ export class BookingSummaryComponent implements OnInit {
   CLIENT_FORMS_LIST: any = [];
   staff_id: any = '';
   STAFF_LIST: any = [];
-  SELECTEC_STAFF:any;
+  SELECTEC_STAFF: any;
   termsAccepted: boolean = false;
 
   constructor(
@@ -71,13 +71,13 @@ export class BookingSummaryComponent implements OnInit {
       .subscribe(params => {
 
         this.CANCEL_BOOKING_ID = params.hasOwnProperty('id') ? params.id : 0;
-       
+
       }
-    );
-    if(this.CANCEL_BOOKING_ID == 0){
+      );
+    if (this.CANCEL_BOOKING_ID == 0) {
       this.isVisible = true;
     }
-    else{
+    else {
       this.isVisible = false;
     }
     await (await this.apiData._getAllClientForms()).subscribe(
@@ -128,9 +128,9 @@ export class BookingSummaryComponent implements OnInit {
       }
     );
 
-    
-     // Call this method at the end of your initialization logic
-     if (this.CANCEL_BOOKING_ID) {
+
+    // Call this method at the end of your initialization logic
+    if (this.CANCEL_BOOKING_ID) {
       // Skip Stripe initialization if CANCEL_BOOKING_ID is present
       this.stripe = null;
     } else {
@@ -141,7 +141,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   confirm() {
-     // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
+    // Check for CANCEL_BOOKING_ID to skip payment modal and go directly to booking creation
     if (this.CANCEL_BOOKING_ID) {
       // Directly create booking without payment if CANCEL_BOOKING_ID is present
       this._createBookingWithPayment(null);
@@ -191,7 +191,7 @@ export class BookingSummaryComponent implements OnInit {
       this.TOTAL_DURATION += service.serviceDuration;
       this.TOTAL_AMOUNT += service.servicePrice;
     }
-    if(this.CANCEL_BOOKING_ID != 0){
+    if (this.CANCEL_BOOKING_ID != 0) {
       this.TOTAL_AMOUNT = this.TOTAL_AMOUNT - 1;
     }
 
@@ -258,7 +258,7 @@ export class BookingSummaryComponent implements OnInit {
       if (this.apiData.isLoading == true) return;
       await this.apiData.presentLoading();
       event.preventDefault();
-      this.stripe.createPaymentMethod({type:"card",card:this.card}).then(async result => {
+      this.stripe.createPaymentMethod({ type: "card", card: this.card }).then(async result => {
         if (result.error) {
           await this.apiData.dismiss();
           var errorElement = document.getElementById('card-errors');
@@ -336,7 +336,7 @@ export class BookingSummaryComponent implements OnInit {
               data.push({
                 //booking data
                 id: this.CANCEL_BOOKING_ID != null ? this.convertStringToInt(this.CANCEL_BOOKING_ID) : null,
-                employeeId: (this.staff_id != '' || this.staff_id != undefined)? this.convertStringToInt(this.staff_id) : this.convertStringToInt(this.BOOKINGS_DETAILS.staff_id),
+                employeeId: (this.staff_id != '' || this.staff_id != undefined) ? this.convertStringToInt(this.staff_id) : this.convertStringToInt(this.BOOKINGS_DETAILS.staff_id),
                 clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,
@@ -377,10 +377,7 @@ export class BookingSummaryComponent implements OnInit {
                 const successMessage = this.CANCEL_BOOKING_ID ? "Your booking has successfully been updated. Thank you" : "Please check your email for further details";
 
                 await this.apiData.presentAlertWithHeader(successHeader, successMessage);
-                setTimeout(async () => {
-                  await this.apiData.dismiss();
-                  this.router.navigate(['/booking-complete']);
-                }, 300);
+                this.router.navigate(['/booking-complete']);
               },
               async (error: any) => {
                 if (error.status == 200) {
@@ -393,10 +390,10 @@ export class BookingSummaryComponent implements OnInit {
                       async (response: any) => {
                         const forms = response;
                         for (let form of forms) {
-                          if(!this.BOOKINGS_FORMS.includes(form.formId)) {
+                          if (!this.BOOKINGS_FORMS.includes(form.formId)) {
                             this.BOOKINGS_FORMS.push(form.formId);
                             const matchingItem = this.CLIENT_FORMS_LIST.find(item => item.formId === form.formId);
-                            if(matchingItem !== undefined && !matchingItem.isFormComplete) {
+                            if (matchingItem !== undefined && !matchingItem.isFormComplete) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
                                 "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "form/" + form.formId + ". Looking forward to seeing you soon!"
@@ -404,13 +401,13 @@ export class BookingSummaryComponent implements OnInit {
                                 async (response: any) => {
                                 },
                                 async (error: any) => {
-                                  if (error.status == 200) { console.log (error) } else {
+                                  if (error.status == 200) { console.log(error) } else {
                                     await this.apiData.dismiss();
                                     await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                                   }
                                 }
                               );
-                            } else if(matchingItem === undefined) {
+                            } else if (matchingItem === undefined) {
                               (await this.apiData._sendMessageToClient({
                                 "phoneNumber": user_info.phoneMobile,
                                 "smsMessage": "Hi " + user_info.givenName + ", to save time please fill out this form before your appointment tomorrow here " + owner_details["mobileAppUrl"] + "form/" + form.formId + ". Looking forward to seeing you soon!"
@@ -418,7 +415,7 @@ export class BookingSummaryComponent implements OnInit {
                                 async (response: any) => {
                                 },
                                 async (error: any) => {
-                                  if (error.status == 200) { console.log (error) } else {
+                                  if (error.status == 200) { console.log(error) } else {
                                     await this.apiData.dismiss();
                                     await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                                   }
@@ -430,7 +427,7 @@ export class BookingSummaryComponent implements OnInit {
                         }
                       },
                       async (error: any) => {
-                        if (error.status == 200) { console.log (error) } else {
+                        if (error.status == 200) { console.log(error) } else {
                           await this.apiData.dismiss();
                           await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                         }
@@ -478,7 +475,7 @@ export class BookingSummaryComponent implements OnInit {
     }
     await (await this.apiData._createClientForm(clientFormdata)).subscribe(
       async (response: any) => {
-        console.log("response",response);
+        console.log("response", response);
       },
       async (error: any) => {
         console.log("error", error);
@@ -646,10 +643,10 @@ export class BookingSummaryComponent implements OnInit {
     // Using parseInt
     let result = parseInt(str, 10);
     return result;
-}
+  }
 
   navigation() {
-    this.router.navigate(['/select-a-time'],{ queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
     //this.location.back();
   }
 }
