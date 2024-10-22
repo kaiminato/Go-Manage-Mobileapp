@@ -84,7 +84,10 @@ export class ProfileComponent implements OnInit {
             this.RESPONSE = user_info;
             let user_details = user_info;
 
-
+            if (user_details.hasOwnProperty('UserGMID')) {
+              this.USERGMID = user_details.UserGMID;
+            }
+            
             if (user_details.givenName == 'null' && user_details.familyName == 'null') {
 
               let name_array = user_details.name.split(' ');
@@ -118,24 +121,13 @@ export class ProfileComponent implements OnInit {
                 this.FIRST_NAME = user_details.name;
               }
             }
-            this.USERGMID = user_details.userGMID;
+
+            this.USERGMID = user_details.UserGMID;
             this.PHONE = parsePhoneNumber(user_details.phoneMobile, 'IE').number;
             this.BIRTHDAY = user_details.dateOfBirth;
             if (user_details.gender) {
               this.GENDER = user_details.gender.toUpperCase();
             }
-            // if (user_details?.user_metadata) {
-            //   let [date , month , year] = user_details.user_metadata.dob.split('/')
-            //   this.EMAIL = user_details.email;
-            //   this.GENDER = user_details.user_metadata.gender.toUpperCase()
-            //   this.BIRTHDAY = `${year}-${month}-${date}`;
-            //   this.ABOUT_ME = user_details.user_metadata.aboutMe;
-            //   this.UNIT_OF_MEASURE = user_details.user_metadata.unitOfMeasure;
-            //   this.HEIGHT = user_details.user_metadata.height;
-            //   this.WEIGHT = user_details.user_metadata.weight;
-            //   let address_value = JSON.parse(user_details.user_metadata?.addresses[0])
-            //   this.HOME_LOCATION = address_value?.work_address;
-            // }
           },
           async (error: any) => {
 
@@ -195,20 +187,6 @@ export class ProfileComponent implements OnInit {
       return
     }
 
-    // if (this.HOME_LOCATION == ''){
-
-    //   await this.apiData.presentAlert("Home location can't be empty")
-    //   return
-    // }
-
-    // let [year , month , date] = this.BIRTHDAY.split('-');
-    // let D_O_B = `${date}-${month}-${year}`;
-
-    // let dat = {
-    //   gender: this.GENDER,
-    //   birth: D_O_B,
-    //   HOME_LOCATION: this.HOME_LOCATION
-    // }
     await this.dataService._setUserEmail(this.EMAIL);
     let data = {
       email: this.EMAIL,
@@ -218,9 +196,9 @@ export class ProfileComponent implements OnInit {
       // address: this.HOME_LOCATION,
       gender: this.GENDER,
       dateOfBirth: this.BIRTHDAY,
-      userGMID: this.USERGMID,
+      UserGMID: this.USERGMID,
     }
-
+    console.log(data);
     await this.apiData.presentLoading();
 
     (await this.apiData.updateProfile(data)).subscribe(
