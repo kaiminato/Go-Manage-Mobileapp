@@ -466,6 +466,7 @@ export class BookingSummaryComponent implements OnInit {
         );
       }
     );
+    await this.apiData.dismiss();
   }
 
   async createClientForm(clientId: any, formId: any) {
