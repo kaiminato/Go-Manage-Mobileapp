@@ -45,6 +45,40 @@
 
   </div>
 
+  <!-- Popup to show service_booking on component load -->
+<ion-modal #loadModal [isOpen]="showLoadModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Booking Details</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeLoadModal()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <p>{{ serviceBooking }}</p>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Popup to show service_booking after time selection -->
+<ion-modal #timeSelectModal [isOpen]="showTimeSelectModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Booking Confirmation</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeTimeSelectModal()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <p>{{ serviceBooking }}</p>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
   <ion-modal [isOpen]="IS_CONFIRM_OPEN" class="auto-height">
     <ng-template>
       <ion-header>
