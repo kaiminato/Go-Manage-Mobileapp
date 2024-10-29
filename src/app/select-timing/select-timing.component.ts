@@ -15,9 +15,6 @@ import { ChangeDetectorRef } from '@angular/core';
 
 export class SelectTimingComponent implements OnInit {
   @ViewChild(IonModal) modal: IonModal;
-  @ViewChild('timeSelectModal') timeSelectModal: IonModal;
-  @ViewChild('loadModal') loadModal: IonModal;
-
   isVisible: boolean = false;
   ID: any = '';
   HEADING: string = "3";
@@ -53,9 +50,6 @@ export class SelectTimingComponent implements OnInit {
   };
   ALL_DISPLAY_LIST: any = [];
   availableDates: string[] = [];
-  serviceBooking: string = '';
-  showLoadModal: boolean = false;
-  showTimeSelectModal: boolean = false;
 
 
   options: CalendarModalOptions = {
@@ -98,28 +92,8 @@ export class SelectTimingComponent implements OnInit {
     } else {
       console.error('Button color is not defined'); // This will help you know if BUTTON_COLOR is undefined
     }
-
-        this.loadServiceBooking();
   }
 
-  loadServiceBooking() {
-    // Load the "service_booking" data from sessionStorage
-    this.serviceBooking = sessionStorage.getItem('service_booking') || 'No booking data available';
-    
-    // Show the modal if there is booking data available
-    if (this.serviceBooking !== 'No booking data available') {
-      this.showLoadModal = true;
-    }
-  }
-
-  closeLoadModal() {
-    this.showLoadModal = false;
-  }
-
-  closeTimeSelectModal() {
-    this.showTimeSelectModal = false;
-  }
-  
   async ionViewWillEnter() {
     try {
       this.activateRoute.queryParams
