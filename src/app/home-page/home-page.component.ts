@@ -49,6 +49,18 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkInstagramBrowserAndClearStorage();
+  }
+
+  checkInstagramBrowserAndClearStorage() {
+    const userAgent = navigator.userAgent || navigator.vendor;
+    const isInstagramBrowser = userAgent.includes('Instagram');
+
+    if (isInstagramBrowser) {
+      sessionStorage.clear();
+      localStorage.clear();
+      console.log('Session and local storage cleared for Instagram in-app browser');
+    }
   }
 
   async ionViewWillEnter() {
