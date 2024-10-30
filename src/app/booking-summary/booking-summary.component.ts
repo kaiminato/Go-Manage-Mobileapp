@@ -333,11 +333,17 @@ export class BookingSummaryComponent implements OnInit {
 
               const original_start_time = await this.returnDateTimeFormat(start_time);
               const original_end_time = await this.returnDateTimeFormat(end_time);
-
+              let employeeId;
+              if(this.BOOKINGS_DETAILS.booking_type == 2){
+                employeeId = this.convertStringToInt(service.staff_id);
+              }
+              else{
+                employeeId = this.convertStringToInt(this.BOOKINGS_DETAILS.staff_id);
+              }
               data.push({
                 //booking data
                 id: this.CANCEL_BOOKING_ID != null ? this.convertStringToInt(this.CANCEL_BOOKING_ID) : null,
-                employeeId: (this.staff_id != '' || this.staff_id != undefined) ? this.convertStringToInt(this.staff_id) : this.convertStringToInt(this.BOOKINGS_DETAILS.staff_id),
+                employeeId: employeeId? employeeId : this.BOOKINGS_DETAILS.staff_id,
                 clientId: user_info.UserGMID,
                 description: '',
                 endTime: original_end_time,

@@ -14,6 +14,8 @@ import { DataService } from '../services/data.service';
 export class MakeABookingComponent implements OnInit {
 
   IS_STAFF: any = true;
+
+  SELECT_STAFF:any = false;
   HEADING: string = "1";
   TOTAL_SERVICE_SELECTED: any = 0;
   TOTAL_PRICE: any = 0;
@@ -26,6 +28,8 @@ export class MakeABookingComponent implements OnInit {
   CATEGORY_LIST: any = [];
   SELECTED_SERVICES: any = [];
   isIOS: boolean;
+  SELECTED_SERVICE_LIST: any = [];
+  AVAILABLE_STAFF_LIST: any = [];
   constructor(
     public imageService: ImageService,
     private router: Router,
@@ -62,14 +66,15 @@ export class MakeABookingComponent implements OnInit {
       }
       );
 
-    this.SELECTED_SERVICES = []
+    this.SELECTED_SERVICES = [];
+    this.SELECTED_SERVICE_LIST = [];
     this.TOTAL_SERVICE_SELECTED = 0;
     this.TOTAL_PRICE = 0;
     this.STAFF_LIST = [];
     this.SERVICE_LIST = [];
     this.CATEGORY_LIST = [];
     this.IS_STAFF = true;
-
+    this.SELECT_STAFF = false;
     await this.getStaffList();
   }
 
@@ -157,7 +162,7 @@ export class MakeABookingComponent implements OnInit {
     if (get_pre_filled_data != '') {
 
       this.IS_STAFF = get_pre_filled_data.booking_type == this.dataService.BOOKING_WITH_STAFF ? true : false;
-
+      this.IS_STAFF = true;
       if (get_pre_filled_data.booking_type == this.dataService.BOOKING_WITH_SERVICE) {
         for (let service of get_pre_filled_data.servises) {
 
@@ -214,51 +219,112 @@ export class MakeABookingComponent implements OnInit {
   changeServiceStatus(service_id: any) {
 
     let is_already_exist = this.SELECTED_SERVICES.filter(data => data == service_id);
+    let flag = false;
 
     if (is_already_exist.length > 0) {
-
       this.SELECTED_SERVICES = this.SELECTED_SERVICES.filter(data => data != service_id);
+      flag = false;
     } else {
+      flag = true;
       this.SELECTED_SERVICES.push(service_id);
     }
 
-    this.selectedServicesDetail();
+    for (let category of this.CATEGORY_LIST) {
+      for (let service of category.services) {
+        if (service.id == service_id) {
+          service.is_checked = flag;
+        }
 
+      }
+    }
+    this.selectedServicesDetail();
   }
 
   async selectedServicesDetail() {
-
+    
     let selected_service_details = await this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id))
 
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
     this.TOTAL_PRICE = 0;
     if (selected_service_details.length > 0) {
-
+     
       for (let service_detail of selected_service_details) {
-
+        const data = {
+          available_staffs : await this.STAFF_LIST.filter(data => data.performedServices.includes(service_detail.id))
+        }
+        
+        this.AVAILABLE_STAFF_LIST.push(data);
+        
         this.TOTAL_PRICE += parseFloat(service_detail.servicePrice)
       }
     }
-
+    this.SELECTED_SERVICE_LIST = selected_service_details;
     this.dataService.setSelectedServicesInBooking(selected_service_details);
   }
 
   async setServicesInBooking() {
+    this.SELECT_STAFF = true;
+    
+    this.HEADING  = "2";
+    // let selected_service = this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id))
 
+    // let initial_data = { ... await this.dataService.BOOKING_INITIAL_DATA };
+    // initial_data.servises = selected_service;
+
+    // initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
+
+    // await this.dataService.setInitialBooking(initial_data);
+    //this.router.navigate(['/select-time-with-service-booking'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
+  }
+  async selectStaffWithService(staff_id: any) {
+    this.SELECT_STAFF = true;
     let selected_service = this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id))
 
     let initial_data = { ... await this.dataService.BOOKING_INITIAL_DATA };
     initial_data.servises = selected_service;
-
+    initial_data.staff_id = staff_id;
+    initial_data.servises[this.index].staff_id = staff_id;
     initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
 
+
     await this.dataService.setInitialBooking(initial_data);
-    this.router.navigate(['/select-time-with-service-booking'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
+    //this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
   }
-
+  
   navigation() {
-
-    this.router.navigate(['/']);
+    if(this.IS_STAFF){
+      this.router.navigate(['/']);
+    }
+    else{
+      this.router.navigate(['/make a booking']);
+    }
+    
   }
+  selectedStaff: any = []; // Initialize to null for the placeholder
+  service: any; // Your actual service type
+  dropdownOpen: boolean = false;
 
+
+  dropdownStates: { [key: number]: boolean } = {};
+  index : number;
+  selectedStaff_List: any = [];
+  toggleDropdown(index: number): void {
+    this.index = index;
+    this.dropdownStates[index] = !this.dropdownStates[index];
+  }
+  selectStaff(staff: any, event: MouseEvent) {
+    
+    event.stopPropagation(); // Prevent the click event from bubbling up
+    this.selectedStaff[this.index] = staff;
+    this.dropdownStates[this.index] = false;
+
+    // Optional: Call any method here to handle the selection
+    if(staff !== undefined){
+      this.selectStaffWithService(staff.employee_id);
+    }
+    this.selectedStaff_List = this.selectedStaff.filter(data=>data != undefined);
+  }
+  gotoDatePicker(){
+    this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
+  }
 }
