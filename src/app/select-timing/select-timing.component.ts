@@ -41,6 +41,8 @@ export class SelectTimingComponent implements OnInit {
   STAFF_AVAILABLE_SLOT: any = [];
   SELECT_STAFF_ID: any;
   AVAILABLE_STAFF_LIST: any = [];
+
+  STAFF_AVAILABLE_SLOT_LIST: any = [];
   DISPLAY_LIST: any = [];
   slideOpts = {
     slidesPerView: 6,
@@ -64,6 +66,7 @@ export class SelectTimingComponent implements OnInit {
 
 
   BOOKING_DATA: any = [];
+  BOOKING_TYPE: any;
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
@@ -74,6 +77,8 @@ export class SelectTimingComponent implements OnInit {
     private cdr: ChangeDetectorRef // Inject ChangeDetectorRef for change detection
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
+    this.BOOKING_TYPE = this.BOOKING_DATA?.booking_type;
+    console.log("this.BOOKING_TYPE",this.BOOKING_TYPE);
     this.SELECT_STAFF_ID = this.BOOKING_DATA?.staff_id;
     this.getAllAvailableSlotsByEmployee(this.BOOKING_DATA);
     this.DATE = this.getCurrentDate();
@@ -499,17 +504,69 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _onDateSelect(selected_date: string) {
-    this.DATE = selected_date;
-    this.IS_CALNDER_OPEN = false;
+    if(this.BOOKING_TYPE == 2){
+      this.DATE = selected_date;
+      this.IS_CALNDER_OPEN = false;
+      const totalDuration = this.BOOKING_DATA.servises.reduce((sum: number, service: any) => {
+        return sum + service.serviceDuration;
+      }, 0);
+      this.STAFF_AVAILABLE_SLOT_LIST = [];
 
-    // Filter DISPLAY_LIST to include only the selected date's slots
-    this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
+      try {
+        for (let i = 0; i < this.BOOKING_DATA.servises.length; i++) {
+          let staff_id = this.BOOKING_DATA.servises[i].staff_id;
 
-    // Scroll to the selected date's slot section
-    const desiredDateId = this.DATE;
-    const element = document.getElementById(desiredDateId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+          // Await the API call and convert Observable to Promise
+          const response = await (await this.apiData.getSlotsAvailableForEmployeeAndServiceDuration(staff_id, totalDuration)).toPromise();
+
+          this.ALL_DISPLAY_LIST = response.map((slotData) => {
+            return {
+              DATE: slotData.workDate,
+              id: slotData.workDate,
+              shift_list: slotData.availableSlots.map((time, index) => ({
+                id: index,
+                time: this.formatTimeTo12Hr(time),
+                value: time.substr(0, 5),
+                is_active: false,
+                is_disabled: false,
+                soft_disabled: false,
+              })),
+            };
+          });
+
+          this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
+
+          if (i > 0) {
+            this.DISPLAY_LIST[0].shift_list = this.DISPLAY_LIST[0].shift_list.filter(item1 =>
+              this.STAFF_AVAILABLE_SLOT_LIST[0]?.shift_list?.some(item2 => item1.value === item2.value)
+            );
+          }
+
+          // Store DISPLAY_LIST in STAFF_AVAILABLE_SLOT_LIST at the end of each iteration
+          this.STAFF_AVAILABLE_SLOT_LIST = this.DISPLAY_LIST;
+        }
+        const desiredDateId = this.DATE;
+        const element = document.getElementById(desiredDateId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+        }
+      } catch (error) {
+        console.error('Error in getAllAvailableSlotsByEmployee:', error);
+      }
+    }
+    else{
+      this.DATE = selected_date;
+      this.IS_CALNDER_OPEN = false;
+  
+      // Filter DISPLAY_LIST to include only the selected date's slots
+      this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
+  
+      // Scroll to the selected date's slot section
+      const desiredDateId = this.DATE;
+      const element = document.getElementById(desiredDateId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+      }
     }
   }
 
