@@ -267,6 +267,8 @@ export class MakeABookingComponent implements OnInit {
     this.SELECT_STAFF = true;
     
     this.HEADING  = "2";
+
+    this.selectWithoutStaffWithService();
     // let selected_service = this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id))
 
     // let initial_data = { ... await this.dataService.BOOKING_INITIAL_DATA };
@@ -291,6 +293,47 @@ export class MakeABookingComponent implements OnInit {
     await this.dataService.setInitialBooking(initial_data);
     //this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
   }
+  async selectWithoutStaffWithService() {
+    this.SELECT_STAFF = true;
+    let selected_service = this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id));
+    let index = 0;
+    for(let services of this.SELECTED_SERVICES){
+      let staff_id = this.getStaffId(index);
+      if(staff_id!==0){
+        let initial_data = { ... await this.dataService.BOOKING_INITIAL_DATA };
+        initial_data.servises = selected_service;
+        initial_data.staff_id = staff_id;
+        initial_data.servises[index].staff_id = staff_id;
+        initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
+        await this.dataService.setInitialBooking(initial_data);
+        index++;
+      }
+    }
+
+
+    
+    //this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
+  }
+  getStaffId(index : any):number {
+    
+    console.log("this.STAFF_LIST",this.AVAILABLE_STAFF_LIST);
+    for(let i = 0; i < this.AVAILABLE_STAFF_LIST[index].available_staffs.length; i++){
+      if(this.AVAILABLE_STAFF_LIST[index].available_staffs[i].role == 1){
+        return this.AVAILABLE_STAFF_LIST[index].available_staffs[i].employee_id;
+      }
+      else if(this.AVAILABLE_STAFF_LIST[index].available_staffs[i].role == 2){
+        return this.AVAILABLE_STAFF_LIST[index].available_staffs[i].employee_id;
+      }
+      else if(this.AVAILABLE_STAFF_LIST[index].available_staffs[i].role == 3){
+        return this.AVAILABLE_STAFF_LIST[index].available_staffs[i].employee_id;
+      }
+      else if(this.AVAILABLE_STAFF_LIST[index].available_staffs[i].role == 4){
+        return this.AVAILABLE_STAFF_LIST[index].available_staffs[i].employee_id;
+      }
+    } 
+    return 0;
+ 
+  }
   
   navigation() {
     if(this.IS_STAFF){
@@ -309,6 +352,7 @@ export class MakeABookingComponent implements OnInit {
   dropdownStates: { [key: number]: boolean } = {};
   index : number;
   selectedStaff_List: any = [];
+  availableStaff_List: any = [];
   toggleDropdown(index: number): void {
     this.index = index;
     this.dropdownStates[index] = !this.dropdownStates[index];
@@ -322,6 +366,9 @@ export class MakeABookingComponent implements OnInit {
     // Optional: Call any method here to handle the selection
     if(staff !== undefined){
       this.selectStaffWithService(staff.employee_id);
+    }
+    else{
+      this.selectWithoutStaffWithService();
     }
     this.selectedStaff_List = this.selectedStaff.filter(data=>data != undefined);
   }

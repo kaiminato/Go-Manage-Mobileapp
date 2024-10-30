@@ -541,10 +541,12 @@ export class SelectTimingComponent implements OnInit {
               this.STAFF_AVAILABLE_SLOT_LIST[0]?.shift_list?.some(item2 => item1.value === item2.value)
             );
           }
-
+          //console.log("this.STAFF_AVAILABLE_SLOT_LIST",this.STAFF_AVAILABLE_SLOT_LIST);
           // Store DISPLAY_LIST in STAFF_AVAILABLE_SLOT_LIST at the end of each iteration
           this.STAFF_AVAILABLE_SLOT_LIST = this.DISPLAY_LIST;
         }
+        this.DISPLAY_LIST = this.STAFF_AVAILABLE_SLOT_LIST;
+        //console.log("this.DISPLAY_LIST",this.DISPLAY_LIST);
         const desiredDateId = this.DATE;
         const element = document.getElementById(desiredDateId);
         if (element) {
