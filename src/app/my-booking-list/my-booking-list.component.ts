@@ -20,6 +20,7 @@ export class MyBookingListComponent implements OnInit {
   ALL_BOOKING_LIST: any = [];
   FUTURE_BOOKING_LIST: any = [];
   RECENT_BOOKING_LIST: any = [];
+  STAFF_LIST: any = [];
   IS_LOGIN: boolean = false;
   intervalId : any;
   constructor(
@@ -34,10 +35,26 @@ export class MyBookingListComponent implements OnInit {
     this.RECENT_BOOKING_LIST = [];
     this.FUTURE_BOOKING_LIST = [];
     this.ALL_BOOKING_LIST = [];
+    this.STAFF_LIST = [];
   }
 
   ngOnInit() {
-    
+  }
+
+  async getStaffList() {
+
+     (await this.apiData.getStaffList()).subscribe(
+      async (response: any) => {
+
+        if (response.length > 0) {
+          this.STAFF_LIST = response;
+          this.getBookings();
+        }
+      },
+      async (error: any) => {
+        alert(JSON.stringify(error));
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -45,66 +62,73 @@ export class MyBookingListComponent implements OnInit {
   }
 
   ionViewWillEnter () {
-    this.getBookings();
+    this.getStaffList();
   }
 
   async ionViewWillLeave () {
+    
+    
   }
 
   async getBookings () {
+    
     if(this.IS_LOGIN){
       await this.apiData.presentLoading();
 
-      await this.auth.getUser().subscribe(
+      this.auth.getUser().subscribe(
         async (response: any) => {
           let userEmail;
-          if(response && response.hasOwnProperty('email')){
+          if (response && response.hasOwnProperty('email')) {
             userEmail = response.email;
           }
-          else{
+          else {
             userEmail = await this.dataService._getUserEmail();
           }
           (await this.apiData.getMyProfile(userEmail)).subscribe(
             async (user_info: any) => {
               (await this.apiData.retrievSingleUserBooking(user_info.UserGMID)).subscribe(
                 async (response: any) => {
-                  if (response.length >0) {
+                  if (response.length > 0) {
+                    this.RECENT_BOOKING_LIST = [];
+                    this.FUTURE_BOOKING_LIST = [];
+                    this.ALL_BOOKING_LIST = [];
+                    for (const booking of response) {
+                      const start_date_time = new Date(booking.startTime);
+                      const end_date_time = new Date(booking.endTime);
+                      const difference = end_date_time.getTime() - start_date_time.getTime();
+                      const resultInMinutes = Math.round(difference / 60000);
+
+                      const date_time = await this.getDateFormat(booking.startTime);
+                      
+                      
+                      let selectedStaff = this.STAFF_LIST.filter(staff => staff.employee_id == booking.employeeId);
+                      
+                      const employee_name = selectedStaff[0].firstName + ' ' + selectedStaff[0].lastName;
+                      const data = {
+                        service_name: booking.service,
+                        service_duration: resultInMinutes + ' minutes',
+                        id: booking.id,
+                        employee_id: booking.employeeId,
+                        employee_name,
+                        date_time,
+                        start_time: booking.startTime,
+                        endTime: booking.endTime,
+                        paymentReceipt: booking.paymentReceipt,
+                        compare_date_time: booking.endTime.split('T')[0]
+                      };
+
+                      this.ALL_BOOKING_LIST.push(data);
 
 
-                      this.RECENT_BOOKING_LIST = [];
-                      this.FUTURE_BOOKING_LIST = [];
-                      this.ALL_BOOKING_LIST = [];
-
-                      for (const booking of response) {
-                        const start_date_time = new Date(booking.startTime);
-                        const end_date_time = new Date(booking.endTime);
-                        const difference = end_date_time.getTime() - start_date_time.getTime();
-                        const resultInMinutes = Math.round(difference / 60000);
-        
-                        const date_time = await this.getDateFormat(booking.startTime);
-        
-                        const data = {
-                            service_name: booking.service,
-                            service_duration: resultInMinutes + ' minutes',
-                            id: booking.id,
-                            date_time,
-                            start_time: booking.startTime,
-                            endTime: booking.endTime,
-                            paymentReceipt: booking.paymentReceipt,
-                            compare_date_time: booking.endTime.split('T')[0]
-                        };
-        
-                        this.ALL_BOOKING_LIST.push(data);
                     }
                   }
                   let currentDate = new Date();
-                  this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() > (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
-                  this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() <= (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
+                  this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter(data => (new Date(currentDate)).getTime() > (new Date(new Date(data.start_time).getTime() + 60000)).getTime());
+                  this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter(data => (new Date(currentDate)).getTime() <= (new Date(new Date(data.start_time).getTime() + 60000)).getTime());
                   // Sort array
+                  this.FUTURE_BOOKING_LIST.sort((a, b) => <any>new Date(a.start_time) - <any>new Date(b.start_time));
 
-                  this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
-
-                  console.log(this.FUTURE_BOOKING_LIST)
+                  console.log("FUTURE_BOOKING_LIST", this.FUTURE_BOOKING_LIST);
 
                   this.intervalId = setInterval(() => this.getAvailableBookings(), 5000);
                   await this.apiData.dismiss();
@@ -117,17 +141,17 @@ export class MyBookingListComponent implements OnInit {
               );
 
             },
-            async (error:any) => {
+            async (error: any) => {
               await this.apiData.dismiss();
 
-              await this.apiData.presentAlert('profile error'+ JSON.stringify(error))
+              await this.apiData.presentAlert('profile error' + JSON.stringify(error));
             }
-          )
+          );
         },
-        async (error:any) => {
+        async (error: any) => {
           await this.apiData.dismiss();
 
-          await this.apiData.presentAlert('auth api error'+ JSON.stringify(error))
+          await this.apiData.presentAlert('auth api error' + JSON.stringify(error));
         }
       );
     }

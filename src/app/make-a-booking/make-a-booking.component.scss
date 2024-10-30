@@ -98,7 +98,6 @@ ion-content {
 
     .list {
         max-height: 65%;
-        overflow: scroll;
         overflow-x: hidden;
     }
     .card-list {
@@ -205,3 +204,56 @@ ion-content {
         }
     }
 }
+.dropdown {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .selected {
+    display: flex;
+    align-items: center;
+  }
+  
+  .options {
+    // position: absolute;
+    background: white;
+   
+    z-index: 1000;
+    width: 100%;
+
+    overflow-y: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .option {
+    max-height: 65%;
+    overflow: hidden;
+    overflow-x: hidden;
+    align-items: center;
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px 5px;
+    padding: 10px 10px;
+    box-shadow:  0px 0px 10px 3px rgba(0, 0, 0, 0.2);
+    ion-list {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+    max-height: 50%;
+  }
+  
+  .option:hover {
+    background-color: #f0f0f0;
+  }
+  .service_price{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+  .moveback{
+    font-size: 20px;
+    background: white;
+  }
+  
