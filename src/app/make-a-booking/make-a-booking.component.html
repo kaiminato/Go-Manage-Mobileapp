@@ -60,7 +60,7 @@
     </ion-col>
   </ion-row>
 
-  <div class="list card-list" style="height: 230px;" *ngIf="SELECT_STAFF && !IS_STAFF">
+  <div class="list card-list" style="height: 250px; border-radius: 0; margin: 0; box-shadow: none;" *ngIf="SELECT_STAFF && !IS_STAFF">
     <ion-list lines="none" *ngFor="let service of SELECTED_SERVICE_LIST; let service_index = index">
       <ion-label style="color : {{this.dataService.TEXT_COLOR}} !important;">
         <h3>{{ service?.serviceName }}</h3>
@@ -96,16 +96,19 @@
 
   <ion-row class="book_now"  *ngIf="SELECT_STAFF && !IS_STAFF">
     <ion-col size="12">
-      <ion-button expand="block" (click)="gotoDatePicker()"
+      <!-- <ion-button expand="block" (click)="gotoDatePicker()"
         [disabled]="this.selectedStaff_List.length == 0" 
         [ngStyle]="{'--background': this.selectedStaff_List.length > 0 ? this.dataService.BUTTON_COLOR : 'gray'}" 
+      > -->
+      <ion-button expand="block" (click)="gotoDatePicker() "
+        [ngStyle]="{'--background': this.dataService.BUTTON_COLOR}" 
       >
         <ion-text>Go to Date picker</ion-text>
       </ion-button>
     </ion-col>
   </ion-row>
 
-  <div class="list card-list" [class.ion-hide]="IS_STAFF || SELECT_STAFF" style="height: 200px;">
+  <div class="list card-list" [class.ion-hide]="IS_STAFF || SELECT_STAFF" style="height: 270px; border-radius: 0; margin: 0; box-shadow: none;">
     <ion-list lines="none" *ngFor="let service of CATEGORY_LIST; let service_index = index">
 
       <ion-item button class="service_detail" detail="false"
