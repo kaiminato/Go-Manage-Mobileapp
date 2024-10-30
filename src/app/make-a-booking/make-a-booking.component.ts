@@ -234,14 +234,14 @@ export class MakeABookingComponent implements OnInit {
         if (service.id == service_id) {
           service.is_checked = flag;
         }
-
       }
     }
+    
     this.selectedServicesDetail();
   }
 
   async selectedServicesDetail() {
-    
+    this.AVAILABLE_STAFF_LIST = [];
     let selected_service_details = await this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id))
 
     this.TOTAL_SERVICE_SELECTED = selected_service_details.length;
@@ -249,16 +249,17 @@ export class MakeABookingComponent implements OnInit {
     if (selected_service_details.length > 0) {
      
       for (let service_detail of selected_service_details) {
+        
+        this.TOTAL_PRICE += parseFloat(service_detail.servicePrice);
+
         const data = {
-          available_staffs : await this.STAFF_LIST.filter(data => data.performedServices.includes(service_detail.id))
+          available_staffs : this.STAFF_LIST.filter(data => data.performedServices.includes(service_detail.id))
         }
-        
         this.AVAILABLE_STAFF_LIST.push(data);
-        
-        this.TOTAL_PRICE += parseFloat(service_detail.servicePrice)
       }
     }
     this.SELECTED_SERVICE_LIST = selected_service_details;
+    
     this.dataService.setSelectedServicesInBooking(selected_service_details);
   }
 
