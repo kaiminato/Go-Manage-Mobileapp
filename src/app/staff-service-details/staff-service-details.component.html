@@ -70,8 +70,8 @@
             expand="block"
             [routerLink]="['/select-a-time']"
             [queryParams]="this.CANCEL_BOOKING_ID == 0 ? '' : {id: CANCEL_BOOKING_ID}"
-            [disabled]="this.SERVICE_OPEN_NUMBER == 0" 
-            [ngStyle]="{'--background': this.SERVICE_OPEN_NUMBER != 0 ? this.dataService.BUTTON_COLOR : 'gray'}" 
+            [disabled]="this.SERVICE_OPEN_NUMBER == 0 || this.TOTAL_SERVICE_SELECTED == 0" 
+            [ngStyle]="{'--background': this.SERVICE_OPEN_NUMBER != 0 || this.TOTAL_SERVICE_SELECTED != 0 ? this.dataService.BUTTON_COLOR : 'gray'}" 
             
             >
             <!-- [disabled]="TOTAL_SERVICE_SELECTED == '0'" -->
