@@ -288,4 +288,11 @@ export class ApiDataService {
     // Make the GET request using the updated URL
     return await this.makeRequest('GET', url);
   }
+  async getSlotsAvailableForWholeDayAndServiceDuration(serviceDuration: number) {
+    // Construct the URL with query parameters using template literals for clarity
+    const url = `${this.apiUrl}appointment/getSlotsAvailableForWholeDayAndServiceDuration?serviceDuration=${serviceDuration}`;
+
+    // Make the GET request using the updated URL
+    return await this.makeRequest('GET', url);
+  }
 }
