@@ -158,6 +158,10 @@ export class ApiDataService {
     return this.http.post(this.apiUrl + 'bookings/saveBookingWithPayment', data);
   }
 
+  async _updateBooking(data: any) {
+    return this.http.post(this.apiUrl + 'bookings/updateBooking', data);
+  }
+
   async _sendMessageToClient(data: any) {
     return this.http.post(this.apiUrl + 'messaging/customSmsMessage', data);
   }

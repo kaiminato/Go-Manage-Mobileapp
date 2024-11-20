@@ -20,7 +20,7 @@ export class AddReviewComponent implements OnInit {
   currentRating: number = 0;
   STAFF_LIST: any = [];
   STAFF_ID: any = '';
-  SELECTED_STAFF_DETAIL:any ;
+  SELECTED_STAFF_DETAIL: any;
 
   selectedOption: any;
 
@@ -48,7 +48,7 @@ export class AddReviewComponent implements OnInit {
       async (response: any) => {
         (await this.apiData.getMyProfile(response.email)).subscribe(
           async (user_info: any) => {
-            this.user_id = user_info.UserGMID;
+            this.user_id = user_info.userGMID;
           });
       },
       async (error: any) => {
@@ -69,7 +69,7 @@ export class AddReviewComponent implements OnInit {
       reviewText: this.REVIEW_TEXT,
       rating: this.currentRating,
     };
-    if((data.reviewText == null || data.reviewText == '') || (data.rating == null || data.rating <= 0)){
+    if ((data.reviewText == null || data.reviewText == '') || (data.rating == null || data.rating <= 0)) {
       await this.apiData.presentAlertWithHeader("Failed", "Please try to enter into respective fields.");
       return 0;
     }
@@ -99,7 +99,7 @@ export class AddReviewComponent implements OnInit {
         if (response.length > 0) {
           this.STAFF_LIST = response;
           this.SELECTED_STAFF_DETAIL = this.STAFF_LIST.filter(staff => staff.employee_id == this.STAFF_ID)[0];
-          if(this.SELECTED_STAFF_DETAIL == null){
+          if (this.SELECTED_STAFF_DETAIL == null) {
             this.SELECTED_STAFF_DETAIL = this.STAFF_LIST[0];
           }
           this.selectedOption = this.SELECTED_STAFF_DETAIL.employee_id;

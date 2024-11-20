@@ -84,10 +84,10 @@ export class ProfileComponent implements OnInit {
             this.RESPONSE = user_info;
             let user_details = user_info;
 
-            if (user_details.hasOwnProperty('UserGMID')) {
-              this.USERGMID = user_details.UserGMID;
+            if (user_details.hasOwnProperty('userGMID')) {
+              this.USERGMID = user_details.userGMID;
             }
-            
+
             if (user_details.givenName == 'null' && user_details.familyName == 'null') {
 
               let name_array = user_details.name.split(' ');
@@ -122,7 +122,7 @@ export class ProfileComponent implements OnInit {
               }
             }
 
-            this.USERGMID = user_details.UserGMID;
+            this.USERGMID = user_details.userGMID;
             this.PHONE = parsePhoneNumber(user_details.phoneMobile, 'IE').number;
             this.BIRTHDAY = user_details.dateOfBirth;
             if (user_details.gender) {
@@ -196,7 +196,7 @@ export class ProfileComponent implements OnInit {
       // address: this.HOME_LOCATION,
       gender: this.GENDER,
       dateOfBirth: this.BIRTHDAY,
-      UserGMID: this.USERGMID,
+      userGMID: this.USERGMID,
     }
     console.log(data);
     await this.apiData.presentLoading();
@@ -226,7 +226,7 @@ export class ProfileComponent implements OnInit {
   capitalizeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-  
+
   navigation() {
 
     this.router.navigate(['/']);
