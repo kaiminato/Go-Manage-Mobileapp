@@ -33,22 +33,22 @@ export class BookingFormComponent implements OnInit {
     private alertController: AlertController
   ) { }
 
-  async ngOnInit() { 
+  async ngOnInit() {
     await (this.activateRoute.params
       .subscribe(params => {
         this.FORM_ID = params.hasOwnProperty('formId') ? parseInt(params.formId) : 0;
       }
-    ));
-    if(this.FORM_ID !== 0) {
+      ));
+    if (this.FORM_ID !== 0) {
       await this.apiData.presentLoading();
       (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
         async (user_info: any) => {
-          this.userGMID = user_info.UserGMID;
+          this.userGMID = user_info.userGMID;
           await (await this.apiData._getAllClientForms()).subscribe(
             async (response: any) => {
               const matchingItem = response.find(item => item.formId === this.FORM_ID && parseInt(item.clientId) === this.userGMID);
-              if(matchingItem !== undefined) {
-                if(matchingItem.isFormComplete) {
+              if (matchingItem !== undefined) {
+                if (matchingItem.isFormComplete) {
                   this.presentAlert("You have already filled the form.");
                   await this.apiData.dismiss();
                 } else {
@@ -56,7 +56,7 @@ export class BookingFormComponent implements OnInit {
                   await (await this.apiData._getAllForms()).subscribe(
                     async (response: any) => {
                       const matchedItem = response.find(item => item.formId === this.FORM_ID);
-                      if(matchedItem !== undefined) {
+                      if (matchedItem !== undefined) {
                         this.CLIENT_FORM_TEMPLATE = matchedItem;
                         const survey = new Model(this.CLIENT_FORM_TEMPLATE.content);
                         survey.onComplete.add(this.completeSurvey.bind(this));
@@ -121,7 +121,7 @@ export class BookingFormComponent implements OnInit {
 
         (await this.apiData.getMyProfile(this.EMAIL)).subscribe(
           async (user_info: any) => {
-            this.userGMID = user_info.UserGMID;
+            this.userGMID = user_info.userGMID;
             if (user_info.givenName == 'null' || user_info?.givenName == '' || user_info.familyName == 'null' || user_info?.familyName == '' || user_info.givenName == undefined || user_info.familyName == undefined || user_info.phoneMobile == 'null' || user_info.phoneMobile == undefined || user_info.phoneMobile == '') {
               this.presentUserAlert(this.EMAIL);
             } else {

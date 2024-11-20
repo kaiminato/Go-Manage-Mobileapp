@@ -17,7 +17,7 @@ export class BuyVoucherComponent implements OnInit {
   HEADING: string = "";
   CUSTOM_PRICE: any = '';
   SEND_TO_ME: boolean = true;
-  TOTAL_PRICE : any = 0;
+  TOTAL_PRICE: any = 0;
   SELECTED_PRICE: any = [];
 
   F_FIRST_NAME: string = '';
@@ -32,10 +32,10 @@ export class BuyVoucherComponent implements OnInit {
   IS_LOGIN: boolean = false;
   userGMID: any;
   PRICE_LIST: any = [
-    { id: 1 , price: 50 , is_active: false , is_button: true},
-    { id: 2 , price: 100 , is_active: false , is_button: true},
-    { id: 3 , price: 150 , is_active: false , is_button: true},
-    { id: 4 , price: 0 , is_active: false , is_button: false},
+    { id: 1, price: 50, is_active: false, is_button: true },
+    { id: 2, price: 100, is_active: false, is_button: true },
+    { id: 3, price: 150, is_active: false, is_button: true },
+    { id: 4, price: 0, is_active: false, is_button: false },
   ];
 
   constructor(
@@ -45,19 +45,19 @@ export class BuyVoucherComponent implements OnInit {
     public imageService: ImageService,
     private auth: AuthService,
     private authusrService: AuthUserService,
-  ) { 
-    
+  ) {
+
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  async ionViewWillEnter () {
+  async ionViewWillEnter() {
 
     this.F_FIRST_NAME = '';
     this.F_LAST_NAME = '';
     this.F_EMAIL = '';
     this.SEND_TO_ME = true;
-    this.TOTAL_PRICE  = 0;
+    this.TOTAL_PRICE = 0;
     this.SELECTED_PRICE = [];
 
     this.S_FIRST_NAME = '';
@@ -66,7 +66,7 @@ export class BuyVoucherComponent implements OnInit {
     this.S_GIFTEE_EMAIL = '';
     this.S_GIFTEE_EMAIL_MESSAGE = '';
     await this.checkLogin();
-    if(this.IS_LOGIN){
+    if (this.IS_LOGIN) {
       this.auth.getUser().subscribe(
         async (response: any) => {
           if (response && response.hasOwnProperty('email')) { // Check if response is defined
@@ -75,13 +75,13 @@ export class BuyVoucherComponent implements OnInit {
           } else {
             this.F_EMAIL = await this.dataService._getUserEmail();
           }
-      
+
           // Now safely calling getMyProfile with the EMAIL
           (await this.apiData.getMyProfile(this.F_EMAIL)).subscribe(
             async (user_info: any) => {
-              this.userGMID = user_info.UserGMID;
-              if (!user_info.givenName || user_info.givenName === 'null' || user_info.familyName === 'null' || 
-                  !user_info.familyName || !user_info.phoneMobile || user_info.phoneMobile === 'null') {
+              this.userGMID = user_info.iserGMID;
+              if (!user_info.givenName || user_info.givenName === 'null' || user_info.familyName === 'null' ||
+                !user_info.familyName || !user_info.phoneMobile || user_info.phoneMobile === 'null') {
                 console.log("User GMID with missing info:");
               } else {
                 this.F_FIRST_NAME = user_info.givenName;
@@ -100,18 +100,18 @@ export class BuyVoucherComponent implements OnInit {
     }
 
     let prefilled_data = await this.dataService.getVoucherData();
-    
-    
-    
+
+
+
     if (prefilled_data.hasOwnProperty('price')) return await this.preFilleddata()
   }
 
-  async preFilleddata () {
+  async preFilleddata() {
     let prefilled_data = await this.dataService.getVoucherData();
-  
+
 
     await this.selectPrice(prefilled_data.selected_price_id);
-    let selected_data = await this.PRICE_LIST.filter( data => data.id == prefilled_data.selected_price_id)
+    let selected_data = await this.PRICE_LIST.filter(data => data.id == prefilled_data.selected_price_id)
 
     if (selected_data[0].is_button == false) this.CUSTOM_PRICE = prefilled_data.price
 
@@ -134,17 +134,17 @@ export class BuyVoucherComponent implements OnInit {
 
   }
 
-  async selectPrice (price_id: any) {
+  async selectPrice(price_id: any) {
 
     for (let price_detail of this.PRICE_LIST) price_detail.is_active = price_detail.id == price_id ? true : false;
-    this.SELECTED_PRICE = this.PRICE_LIST.filter( data => data.id == price_id);
+    this.SELECTED_PRICE = this.PRICE_LIST.filter(data => data.id == price_id);
 
     if (this.SELECTED_PRICE[0].is_button == true) this.CUSTOM_PRICE = '';
 
   }
 
 
-  async confirm () {
+  async confirm() {
     // if (!this.IS_LOGIN) {
     //   this.auth.buildAuthorizeUrl().subscribe({
     //       next: async (url) => {
@@ -168,17 +168,17 @@ export class BuyVoucherComponent implements OnInit {
     // }
 
 
-    
-    
+
+
     let validate_email = /\S+@\S+\.\S+/;
 
-    let data : any = {};
+    let data: any = {};
 
-    this.SELECTED_PRICE = this.PRICE_LIST.filter( data => data.is_active == true);
+    this.SELECTED_PRICE = this.PRICE_LIST.filter(data => data.is_active == true);
 
     if (this.SELECTED_PRICE.length == 0) return await this.apiData.presentAlert("Please select price first")
 
-    if (this.SELECTED_PRICE[0].is_button == false){
+    if (this.SELECTED_PRICE[0].is_button == false) {
 
       data.price = this.CUSTOM_PRICE;
     } else {
@@ -198,13 +198,13 @@ export class BuyVoucherComponent implements OnInit {
 
       data.send_type = this.dataService.VOUCHER_SEND_TYPE_ME;
       data.info = {
-        first_name : this.F_FIRST_NAME,
-        last_name : this.F_LAST_NAME,
-        email : this.F_EMAIL,
+        first_name: this.F_FIRST_NAME,
+        last_name: this.F_LAST_NAME,
+        email: this.F_EMAIL,
       }
 
     } else {
-      
+
       if (this.S_FIRST_NAME.trim() == '') return await this.apiData.presentAlert("First name can't be empty")
       if (this.S_LAST_NAME.trim() == '') return await this.apiData.presentAlert("Last name can't be empty")
       if (this.S_EMAIL.trim() == '') return await this.apiData.presentAlert("Email can't be empty")
@@ -215,11 +215,11 @@ export class BuyVoucherComponent implements OnInit {
 
       data.send_type = this.dataService.VOUCHER_SEND_TYPE_SOME_ELSE;
       data.info = {
-        first_name : this.S_FIRST_NAME,
-        last_name : this.S_LAST_NAME,
-        email : this.S_EMAIL,
-        giftee_email : this.S_GIFTEE_EMAIL,
-        giftee_email_message : this.S_GIFTEE_EMAIL_MESSAGE,
+        first_name: this.S_FIRST_NAME,
+        last_name: this.S_LAST_NAME,
+        email: this.S_EMAIL,
+        giftee_email: this.S_GIFTEE_EMAIL,
+        giftee_email_message: this.S_GIFTEE_EMAIL_MESSAGE,
       }
     }
     await this.dataService.setVoucherData(data);
@@ -235,17 +235,17 @@ export class BuyVoucherComponent implements OnInit {
   }
   checkLogin(): Promise<boolean> {
     return new Promise((resolve) => {
-        this.auth.getUser().subscribe({
-            next: (user_data: any) => {
-                this.IS_LOGIN = user_data !== undefined;
-                resolve(this.IS_LOGIN);  // Resolves the promise with login state
-            },
-            error: (err) => {
-                console.error('Error checking login status:', err);
-                this.IS_LOGIN = false;
-                resolve(this.IS_LOGIN);  // Resolves with false on error
-            }
-        });
+      this.auth.getUser().subscribe({
+        next: (user_data: any) => {
+          this.IS_LOGIN = user_data !== undefined;
+          resolve(this.IS_LOGIN);  // Resolves the promise with login state
+        },
+        error: (err) => {
+          console.error('Error checking login status:', err);
+          this.IS_LOGIN = false;
+          resolve(this.IS_LOGIN);  // Resolves with false on error
+        }
+      });
     });
   }
 
