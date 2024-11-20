@@ -78,7 +78,7 @@ export class SelectTimingComponent implements OnInit {
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
     this.BOOKING_TYPE = this.BOOKING_DATA?.booking_type;
-    console.log("this.BOOKING_TYPE",this.BOOKING_TYPE);
+    console.log("this.BOOKING_TYPE", this.BOOKING_TYPE);
     this.SELECT_STAFF_ID = this.BOOKING_DATA?.staff_id;
     this.getAllAvailableSlotsByEmployee(this.BOOKING_DATA);
     this.DATE = this.getCurrentDate();
@@ -299,18 +299,6 @@ export class SelectTimingComponent implements OnInit {
     pen_book_end_time = <any>await this.returnDateTimeFormat(pen_book_end_time);
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
-    let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
-
-    // Check services's time is under office timing
-
-    let office_last_shift = new Date(`${get_booking_data.date} ${selected_shift_list[0].shift_list[selected_shift_list[0].shift_list.length - 1].value}`);
-    let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
-
-    if (ending_date_time > office_closed_time) {
-
-      await this.apiService.presentAlert('Sorry outside of business owner working days')
-      return
-    }
 
     if (!this.IS_LOGIN) {
       await this.dataService.saveSelectTimingInfo("true", this.DATE, JSON.stringify(get_booking_data.timing_id), String(id));
@@ -504,7 +492,7 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _onDateSelect(selected_date: string) {
-    if(this.BOOKING_TYPE == 2){
+    if (this.BOOKING_TYPE == 2) {
       this.DATE = selected_date;
       this.IS_CALNDER_OPEN = false;
       const totalDuration = this.BOOKING_DATA.servises.reduce((sum: number, service: any) => {
@@ -556,13 +544,13 @@ export class SelectTimingComponent implements OnInit {
         console.error('Error in getAllAvailableSlotsByEmployee:', error);
       }
     }
-    else{
+    else {
       this.DATE = selected_date;
       this.IS_CALNDER_OPEN = false;
-  
+
       // Filter DISPLAY_LIST to include only the selected date's slots
       this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
-  
+
       // Scroll to the selected date's slot section
       const desiredDateId = this.DATE;
       const element = document.getElementById(desiredDateId);
