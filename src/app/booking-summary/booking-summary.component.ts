@@ -446,7 +446,7 @@ export class BookingSummaryComponent implements OnInit {
                   }
                   await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                   setTimeout(async () => {
-                    await this.apiData.dismiss();
+                    //await this.apiData.dismiss();
                     this.router.navigate(['/booking-complete']);
                   }, 300);
                 } else {
