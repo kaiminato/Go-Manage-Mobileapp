@@ -3,35 +3,10 @@
   <div class="green-background" style="background : {{this.dataService.BUTTON_COLOR}}!important; "></div>
   <div class="card-list" style="padding-bottom: 5px; height: 84%;">
     <ion-list lines="none" class="ion-margin-top" style="display: block;height: 20%; overflow: auto;">
-      <!-- <ion-img slot="end" [src]="this.dataService.APP_HOME_PAGE_ICON" class="ion-margin-bottom"></ion-img>
-
-      <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
-
-        <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> Date and Time
-          <br/>
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ DATE }} at {{ STARTING_TIME }}</ion-text>
-        </ion-text>
-
-      </ion-item>
-      <ion-item button  class="details" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
-
-        <ion-text class="ion-margin-bottom " style="color : {{this.dataService.TEXT_COLOR}} !important;"> Duration
-          <br/>
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ TOTAL_DURATION }} minutes, ends at {{ ENDING_TIME }}</ion-text>
-        </ion-text>
-
-      </ion-item>
-
-      <ion-item button  class="details ion-margin-top" style="color : {{this.dataService.TEXT_COLOR}} !important; "  detail="false">
-        <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ STUDIO_NAME }} Studio</ion-text>
-      </ion-item> -->
-
       <ion-item button  class="details" style="height: 20px; color : {{this.dataService.TEXT_COLOR}} !important;"   detail="false" *ngFor="let service of this.BOOKINGS_DETAILS?.servises">
 
         <ion-text class="ion-margin-bottom" style="color : {{this.dataService.TEXT_COLOR}} !important;"> {{ service.serviceName }}
-          <!-- <br/>
-          <ion-text style="color : {{this.dataService.TEXT_COLOR}} !important;">{{ service.serviceDuration }} mins with {{ this.BOOKINGS_DETAILS.staff_details[0].firstName }}</ion-text> -->
-          
+
         </ion-text>
 
         <ion-text slot="end" style="color : {{this.dataService.TEXT_COLOR}} !important;" class="ion-margin-bottom" *ngIf="service.servicePrice != 0"> {{ service.servicePrice | currency: 'EUR'}}</ion-text>
@@ -59,7 +34,6 @@
           <ion-card-header style="padding: 13px 13px 0px 13px !important;">
             <ion-row style="color:{{this.dataService.TEXT_COLOR}} !important; text-align: center;">
               <ion-col>Booking Deposit Due Now: {{ 1 | currency: 'EUR'}}</ion-col>
-              <!-- <ion-col> {{ 1 | currency: 'EUR'}} </ion-col> -->
             </ion-row>
             <ion-row class="term_conditions">
               <div class="term_conditions">
