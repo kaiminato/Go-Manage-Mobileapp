@@ -260,7 +260,6 @@ export class BookingSummaryComponent implements OnInit {
       event.preventDefault();
       this.stripe.createPaymentMethod({ type: "card", card: this.card }).then(async result => {
         if (result.error) {
-          await this.apiData.dismiss();
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
         } else {
@@ -385,7 +384,6 @@ export class BookingSummaryComponent implements OnInit {
 
                 await this.apiData.presentAlertWithHeader(successHeader, successMessage);
                 setTimeout(async () => {
-                  await this.apiData.dismiss();
                   this.router.navigate(['/booking-complete']);
                 }, 300);
               },
@@ -412,7 +410,6 @@ export class BookingSummaryComponent implements OnInit {
                                 },
                                 async (error: any) => {
                                   if (error.status == 200) { console.log(error); } else {
-                                    await this.apiData.dismiss();
                                     await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                                   }
                                 }
@@ -426,7 +423,6 @@ export class BookingSummaryComponent implements OnInit {
                                 },
                                 async (error: any) => {
                                   if (error.status == 200) { console.log(error); } else {
-                                    await this.apiData.dismiss();
                                     await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                                   }
                                 }
@@ -438,7 +434,6 @@ export class BookingSummaryComponent implements OnInit {
                       },
                       async (error: any) => {
                         if (error.status == 200) { console.log(error); } else {
-                          await this.apiData.dismiss();
                           await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                         }
                       }
@@ -450,7 +445,6 @@ export class BookingSummaryComponent implements OnInit {
                     this.router.navigate(['/booking-complete']);
                   }, 300);
                 } else {
-                  await this.apiData.dismiss();
                   await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
                 }
               }
@@ -458,7 +452,6 @@ export class BookingSummaryComponent implements OnInit {
           },
 
           async (error: any) => {
-            await this.apiData.dismiss();
             await this.apiData.presentAlert(
               'profile error' + JSON.stringify(error)
             );
@@ -466,13 +459,11 @@ export class BookingSummaryComponent implements OnInit {
         );
       },
       async (error: any) => {
-        await this.apiData.dismiss();
         await this.apiData.presentAlert(
           'auth api error' + JSON.stringify(error)
         );
       }
     );
-    await this.apiData.dismiss();
   }
 
   async createClientForm(clientId: any, formId: any) {
@@ -587,18 +578,15 @@ export class BookingSummaryComponent implements OnInit {
 
     (await this.apiData.updateProfile(data)).subscribe(
       async (response: any) => {
-        await this.apiData.dismiss();
         this._onEnterData();
         return true;
       },
       async (error: any) => {
         if (error.status === 200) {
-          await this.apiData.dismiss();
           this._onEnterData();
           return true;
         }
         else {
-          await this.apiData.dismiss();
           await this.apiData.presentAlert('Server error, Please try again later');
         }
 
