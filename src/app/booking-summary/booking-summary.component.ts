@@ -256,7 +256,6 @@ export class BookingSummaryComponent implements OnInit {
     var form = document.getElementById('payment-form');
     form.addEventListener('submit', async event => {
       if (this.apiData.isLoading == true) return;
-      await this.apiData.presentLoading();
       event.preventDefault();
       this.stripe.createPaymentMethod({ type: "card", card: this.card }).then(async result => {
         if (result.error) {
@@ -285,7 +284,6 @@ export class BookingSummaryComponent implements OnInit {
 
   async _createBookingWithPayment(paymentMethodId: any) {
     // Hardcoded deposit value
-    await this.apiData.presentLoading();
     let amount = 100;
 
     if (!this.IS_LOGIN) {
@@ -574,10 +572,9 @@ export class BookingSummaryComponent implements OnInit {
       userGMID: this.userGMID
     };
 
-    await this.apiData.presentLoading();
-
     (await this.apiData.updateProfile(data)).subscribe(
       async (response: any) => {
+        await this.apiData.dismiss();
         this._onEnterData();
         return true;
       },
