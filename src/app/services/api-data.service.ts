@@ -77,7 +77,7 @@ export class ApiDataService {
   }
 
   async _getBusinessOwnerDetails() {
-    return await this.makeRequest('GET', this.apiUrl + 'settings/getSettings');
+    return await this.makeRequest('GET', this.apiUrl + 'settings/getAppSettings');
   }
 
   async _getStripePublicKey() {
@@ -156,6 +156,10 @@ export class ApiDataService {
 
   async _createBookingWithPayment(data: any) {
     return this.http.post(this.apiUrl + 'bookings/saveBookingWithPayment', data);
+  }
+
+  async _updateBooking(data: any) {
+    return this.http.post(this.apiUrl + 'bookings/updateBooking', data);
   }
 
   async _sendMessageToClient(data: any) {

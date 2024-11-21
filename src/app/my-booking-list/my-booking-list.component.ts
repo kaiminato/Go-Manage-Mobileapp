@@ -22,7 +22,7 @@ export class MyBookingListComponent implements OnInit {
   RECENT_BOOKING_LIST: any = [];
   STAFF_LIST: any = [];
   IS_LOGIN: boolean = false;
-  intervalId : any;
+  intervalId: any;
   constructor(
     private router: Router,
     private apiData: ApiDataService,
@@ -30,7 +30,7 @@ export class MyBookingListComponent implements OnInit {
     public auth: AuthService,
     private alertController: AlertController,
     private imageService: ImageService,
-  ) { 
+  ) {
     this.checkLogin();
     this.RECENT_BOOKING_LIST = [];
     this.FUTURE_BOOKING_LIST = [];
@@ -43,7 +43,7 @@ export class MyBookingListComponent implements OnInit {
 
   async getStaffList() {
 
-     (await this.apiData.getStaffList()).subscribe(
+    (await this.apiData.getStaffList()).subscribe(
       async (response: any) => {
 
         if (response.length > 0) {
@@ -61,18 +61,18 @@ export class MyBookingListComponent implements OnInit {
     clearInterval(this.intervalId);
   }
 
-  ionViewWillEnter () {
+  ionViewWillEnter() {
     this.getStaffList();
   }
 
-  async ionViewWillLeave () {
-    
-    
+  async ionViewWillLeave() {
+
+
   }
 
-  async getBookings () {
-    
-    if(this.IS_LOGIN){
+  async getBookings() {
+
+    if (this.IS_LOGIN) {
       await this.apiData.presentLoading();
 
       this.auth.getUser().subscribe(
@@ -86,7 +86,7 @@ export class MyBookingListComponent implements OnInit {
           }
           (await this.apiData.getMyProfile(userEmail)).subscribe(
             async (user_info: any) => {
-              (await this.apiData.retrievSingleUserBooking(user_info.UserGMID)).subscribe(
+              (await this.apiData.retrievSingleUserBooking(user_info.userGMID)).subscribe(
                 async (response: any) => {
                   if (response.length > 0) {
                     this.RECENT_BOOKING_LIST = [];
@@ -99,10 +99,10 @@ export class MyBookingListComponent implements OnInit {
                       const resultInMinutes = Math.round(difference / 60000);
 
                       const date_time = await this.getDateFormat(booking.startTime);
-                      
-                      
+
+
                       let selectedStaff = this.STAFF_LIST.filter(staff => staff.employee_id == booking.employeeId);
-                      
+
                       const employee_name = selectedStaff[0].firstName + ' ' + selectedStaff[0].lastName;
                       const data = {
                         service_name: booking.service,
@@ -169,16 +169,16 @@ export class MyBookingListComponent implements OnInit {
     }
   }
 
-   getAvailableBookings(){
+  getAvailableBookings() {
     if (!this.ALL_BOOKING_LIST) {
       return;
-  }
+    }
     let currentDate = new Date();
-    this.RECENT_BOOKING_LIST =  this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() > (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
-    this.FUTURE_BOOKING_LIST =  this.ALL_BOOKING_LIST.filter( data => (new Date(currentDate)).getTime() <= (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
+    this.RECENT_BOOKING_LIST = this.ALL_BOOKING_LIST.filter(data => (new Date(currentDate)).getTime() > (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
+    this.FUTURE_BOOKING_LIST = this.ALL_BOOKING_LIST.filter(data => (new Date(currentDate)).getTime() <= (new Date(new Date(data.start_time).getTime() + 60000)).getTime())
     // Sort array
 
-    this.FUTURE_BOOKING_LIST.sort((a,b) => <any> new Date(a.start_time) - <any> new Date(b.start_time));
+    this.FUTURE_BOOKING_LIST.sort((a, b) => <any>new Date(a.start_time) - <any>new Date(b.start_time));
   }
 
   subtractHourFromDate(timeString: string): Date {
@@ -190,27 +190,27 @@ export class MyBookingListComponent implements OnInit {
 
     return time;
   }
-  async getDateFormat (date_value: any) {
+  async getDateFormat(date_value: any) {
 
-    let month_name = ['Jan' , 'Feb' , 'Mar' , 'Apr' , 'May' , 'Jun' , 'Jul' , 'Aug' , 'Sep' , 'Oct' , 'Nov' , 'Dec'];
-    let day_name = ['Sun' , 'Mon' , 'Tue' , 'Wed' , 'Thu' , 'Fri' , 'Sat'];
+    let month_name = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let day_name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let date_val = new Date(date_value);
 
     let day = day_name[date_val.getDay()];
     let mon = month_name[date_val.getMonth()];
     let date = date_val.getDate();
-    let time = (date_val.getHours() < 10 ? '0'+date_val.getHours() : date_val.getHours()) + ':' + (date_val.getMinutes() < 10 ? '0'+date_val.getMinutes() : date_val.getMinutes());
+    let time = (date_val.getHours() < 10 ? '0' + date_val.getHours() : date_val.getHours()) + ':' + (date_val.getMinutes() < 10 ? '0' + date_val.getMinutes() : date_val.getMinutes());
 
-    return  `${day}, ${date} ${mon} ${date_val.getFullYear()} at ${time}`;
+    return `${day}, ${date} ${mon} ${date_val.getFullYear()} at ${time}`;
   }
 
-  async cancelBooking (id: any) {
+  async cancelBooking(id: any) {
 
 
     const alert = await this.alertController.create({
       header: 'Do you want cancel this booking ?',
-      cssClass:'my-custom-class',
-      backdropDismiss:false, // alert will not close automaticall if we click outside of alert
+      cssClass: 'my-custom-class',
+      backdropDismiss: false, // alert will not close automaticall if we click outside of alert
       buttons: [
         {
           text: 'No',
@@ -231,7 +231,7 @@ export class MyBookingListComponent implements OnInit {
                 await this.apiData.dismiss();
                 let msg_alert = await this.alertController.create({
                   header: 'You have successfully cancelled this booking',
-                  cssClass:'my-custom-class',
+                  cssClass: 'my-custom-class',
                   buttons: ['Ok']
                 }).then((res) => {
 
@@ -239,7 +239,7 @@ export class MyBookingListComponent implements OnInit {
 
                   res.onDidDismiss().then((dis) => {
 
-                   this.router.navigate(['/'])
+                    this.router.navigate(['/'])
                   })
 
                 });
