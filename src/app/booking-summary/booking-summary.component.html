@@ -58,13 +58,13 @@
               <div style="display: flex;justify-content: center; margin-top: 4px;">
                 <ion-button
                 type="submit"
-                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important;border-radius: 10px;"
+                style="--background:{{this.dataService.BUTTON_COLOR}} !important; --background-activated : {{this.dataService.BUTTON_COLOR}} !important; border-radius: 10px;"
                 class="Confirm"
-                [disabled]="!termsAccepted"
-                >
+                [disabled]="!termsAccepted || isSubmitting"
+              >
                 <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
                 <ion-text>BOOK & PAY NOW</ion-text>
-                </ion-button>
+              </ion-button>
               </div>
               <ion-text style="margin-top: 5px; font-size: 10px;">
                 "Please note bookings can be changed up to 48 hours in advance of an appointment. If you fail to comply with the cancellation policy within the terms & conditions, you may be charged the remaining balance."

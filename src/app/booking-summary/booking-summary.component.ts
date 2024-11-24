@@ -41,6 +41,8 @@ export class BookingSummaryComponent implements OnInit {
   STAFF_LIST: any = [];
   SELECTEC_STAFF: any;
   termsAccepted: boolean = false;
+  isSubmitting: boolean;
+
 
   constructor(
     private router: Router,
@@ -282,7 +284,12 @@ export class BookingSummaryComponent implements OnInit {
     return await `${year}-${month}-${date} ${hour}:${minutes}:${seconds}`;
   }
 
+
   async _createBookingWithPayment(paymentMethodId: any) {
+
+    if (this.isSubmitting) return; // Prevent repeated submission
+    this.isSubmitting = true; // Disable the button
+
     // Hardcoded deposit value
     let amount = 100;
 
@@ -431,6 +438,7 @@ export class BookingSummaryComponent implements OnInit {
                         }
                       },
                       async (error: any) => {
+                        this.isSubmitting = false; // Reset the flag after error
                         if (error.status == 200) { console.log(error); } else {
                           await this.apiData.presentAlertWithHeader("Server Error", "Something Went Wrong. Please try later.");
                         }
@@ -443,6 +451,7 @@ export class BookingSummaryComponent implements OnInit {
                     this.router.navigate(['/booking-complete']);
                   }, 300);
                 } else {
+                  this.isSubmitting = false; // Reset the flag after error
                   await this.apiData.presentAlertWithHeader("Payment Failed", "Something Went Wrong. Please try later.");
                 }
               }
@@ -450,6 +459,8 @@ export class BookingSummaryComponent implements OnInit {
           },
 
           async (error: any) => {
+            this.isSubmitting = false; // Reset the flag after error
+
             await this.apiData.presentAlert(
               'profile error' + JSON.stringify(error)
             );
@@ -457,6 +468,7 @@ export class BookingSummaryComponent implements OnInit {
         );
       },
       async (error: any) => {
+        this.isSubmitting = false; // Reset the flag after error
         await this.apiData.presentAlert(
           'auth api error' + JSON.stringify(error)
         );
