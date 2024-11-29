@@ -77,6 +77,7 @@ export class SelectTimingComponent implements OnInit {
     private cdr: ChangeDetectorRef // Inject ChangeDetectorRef for change detection
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
+    console.log("Initial booking data", this.dataService.getInitialBookingdata());
     this.BOOKING_TYPE = this.BOOKING_DATA?.booking_type;
     console.log("this.BOOKING_TYPE", this.BOOKING_TYPE);
     this.SELECT_STAFF_ID = this.BOOKING_DATA?.staff_id;
@@ -502,10 +503,14 @@ export class SelectTimingComponent implements OnInit {
 
       try {
         for (let i = 0; i < this.BOOKING_DATA.servises.length; i++) {
+          let reference_id = this.BOOKING_DATA.staff_id;
           let staff_id = this.BOOKING_DATA.servises[i].staff_id;
 
+          // console.log(this.BOOKING_DATA);
+          // console.log("Staff ID", staff_id);
+          // console.log("Reference ID", reference_id);
           // Await the API call and convert Observable to Promise
-          const response = await (await this.apiData.getSlotsAvailableForEmployeeAndServiceDuration(staff_id, totalDuration)).toPromise();
+          const response = await (await (reference_id ? this.apiData.getSlotsAvailableForEmployeeAndServiceDuration(staff_id, totalDuration) : this.apiData.getSlotsAvailableForWholeDayAndServiceDuration(totalDuration))).toPromise();
 
           this.ALL_DISPLAY_LIST = response.map((slotData) => {
             return {
@@ -665,6 +670,8 @@ export class SelectTimingComponent implements OnInit {
     this.SELECT_STAFF_ID = staff_id;
     this.BOOKING_DATA.staff_id = staff_id; // Update the booking data with new staff ID
     this.SELECT_STAFF_OPEN = false;
+
+    console.log("Booking data staff id updated ", staff_id);
 
     // Clear previous slots data
     this.DISPLAY_LIST = [];
