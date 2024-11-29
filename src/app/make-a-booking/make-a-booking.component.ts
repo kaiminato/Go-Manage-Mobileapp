@@ -289,7 +289,6 @@ export class MakeABookingComponent implements OnInit {
     initial_data.servises[this.index].staff_id = staff_id;
     initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
 
-
     await this.dataService.setInitialBooking(initial_data);
     //this.router.navigate(['/select-a-time'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } })
   }
@@ -297,14 +296,16 @@ export class MakeABookingComponent implements OnInit {
     this.SELECT_STAFF = true;
     let selected_service = this.SERVICE_LIST.filter(data => this.SELECTED_SERVICES.includes(data.id));
     let index = 0;
+
     for(let services of this.SELECTED_SERVICES){
       let staff_id = this.getStaffId(index);
       if(staff_id!==0){
         let initial_data = { ... await this.dataService.BOOKING_INITIAL_DATA };
         initial_data.servises = selected_service;
-        initial_data.staff_id = staff_id;
+        initial_data.staff_id = 0; // staff_id;
         initial_data.servises[index].staff_id = staff_id;
         initial_data.booking_type = await this.dataService.BOOKING_WITH_SERVICE;
+        console.log(initial_data);
         await this.dataService.setInitialBooking(initial_data);
         index++;
       }
