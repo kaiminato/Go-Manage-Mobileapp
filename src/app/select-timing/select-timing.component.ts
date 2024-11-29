@@ -505,7 +505,7 @@ export class SelectTimingComponent implements OnInit {
           let staff_id = this.BOOKING_DATA.servises[i].staff_id;
 
           // Await the API call and convert Observable to Promise
-          const response = await (await this.apiData.getSlotsAvailableForWholeDayAndServiceDuration(totalDuration)).toPromise();
+          const response = await (await this.apiData.getSlotsAvailableForEmployeeAndServiceDuration(staff_id, totalDuration)).toPromise();
 
           this.ALL_DISPLAY_LIST = response.map((slotData) => {
             return {
