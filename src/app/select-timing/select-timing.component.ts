@@ -77,8 +77,9 @@ export class SelectTimingComponent implements OnInit {
     private cdr: ChangeDetectorRef // Inject ChangeDetectorRef for change detection
   ) {
     this.BOOKING_DATA = this.dataService.getInitialBookingdata();
+    console.log("Initial booking data", this.dataService.getInitialBookingdata());
     this.BOOKING_TYPE = this.BOOKING_DATA?.booking_type;
-    console.log("this.BOOKING_TYPE",this.BOOKING_TYPE);
+    console.log("this.BOOKING_TYPE", this.BOOKING_TYPE);
     this.SELECT_STAFF_ID = this.BOOKING_DATA?.staff_id;
     this.getAllAvailableSlotsByEmployee(this.BOOKING_DATA);
     this.DATE = this.getCurrentDate();
@@ -299,18 +300,6 @@ export class SelectTimingComponent implements OnInit {
     pen_book_end_time = <any>await this.returnDateTimeFormat(pen_book_end_time);
 
     let create_pending_booking_start_time = await this.returnDateTimeFormat(starting_date_time);
-    let create_pending_booking_end_time = await this.returnDateTimeFormat(ending_date_time);
-
-    // Check services's time is under office timing
-
-    let office_last_shift = new Date(`${get_booking_data.date} ${selected_shift_list[0].shift_list[selected_shift_list[0].shift_list.length - 1].value}`);
-    let office_closed_time = new Date(office_last_shift.setMinutes(office_last_shift.getMinutes() + 30));
-
-    if (ending_date_time > office_closed_time) {
-
-      await this.apiService.presentAlert('Sorry outside of business owner working days')
-      return
-    }
 
     if (!this.IS_LOGIN) {
       await this.dataService.saveSelectTimingInfo("true", this.DATE, JSON.stringify(get_booking_data.timing_id), String(id));
@@ -504,7 +493,7 @@ export class SelectTimingComponent implements OnInit {
   }
 
   async _onDateSelect(selected_date: string) {
-    if(this.BOOKING_TYPE == 2){
+    if (this.BOOKING_TYPE == 2) {
       this.DATE = selected_date;
       this.IS_CALNDER_OPEN = false;
       const totalDuration = this.BOOKING_DATA.servises.reduce((sum: number, service: any) => {
@@ -514,10 +503,14 @@ export class SelectTimingComponent implements OnInit {
 
       try {
         for (let i = 0; i < this.BOOKING_DATA.servises.length; i++) {
+          let reference_id = this.BOOKING_DATA.staff_id;
           let staff_id = this.BOOKING_DATA.servises[i].staff_id;
 
+          // console.log(this.BOOKING_DATA);
+          // console.log("Staff ID", staff_id);
+          // console.log("Reference ID", reference_id);
           // Await the API call and convert Observable to Promise
-          const response = await (await this.apiData.getSlotsAvailableForWholeDayAndServiceDuration(totalDuration)).toPromise();
+          const response = await (await (reference_id ? this.apiData.getSlotsAvailableForEmployeeAndServiceDuration(staff_id, totalDuration) : this.apiData.getSlotsAvailableForWholeDayAndServiceDuration(totalDuration))).toPromise();
 
           this.ALL_DISPLAY_LIST = response.map((slotData) => {
             return {
@@ -556,13 +549,13 @@ export class SelectTimingComponent implements OnInit {
         console.error('Error in getAllAvailableSlotsByEmployee:', error);
       }
     }
-    else{
+    else {
       this.DATE = selected_date;
       this.IS_CALNDER_OPEN = false;
-  
+
       // Filter DISPLAY_LIST to include only the selected date's slots
       this.DISPLAY_LIST = this.ALL_DISPLAY_LIST.filter(data => data.DATE === this.DATE);
-  
+
       // Scroll to the selected date's slot section
       const desiredDateId = this.DATE;
       const element = document.getElementById(desiredDateId);
@@ -670,13 +663,17 @@ export class SelectTimingComponent implements OnInit {
   }
 
   navigation() {
-    this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    this.router.navigate(['/make-a-booking']);
+    //this.router.navigate(['/make-a-booking'], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
+    // this.router.navigate(['/staff-service-details', this.SELECT_STAFF_ID], { queryParams: this.CANCEL_BOOKING_ID == 0 ? {} : { id: this.CANCEL_BOOKING_ID } });
   }
 
   SelectStaff(staff_id: any) {
     this.SELECT_STAFF_ID = staff_id;
     this.BOOKING_DATA.staff_id = staff_id; // Update the booking data with new staff ID
     this.SELECT_STAFF_OPEN = false;
+
+    console.log("Booking data staff id updated ", staff_id);
 
     // Clear previous slots data
     this.DISPLAY_LIST = [];

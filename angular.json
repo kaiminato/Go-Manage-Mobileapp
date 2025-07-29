@@ -111,12 +111,12 @@
             },
             "test": {
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
+              //"outputHashing": "all",
+              "sourceMap": true,
               "namedChunks": false,
               "aot": false,
               "extractLicenses": true,
-              "vendorChunk": true,
+              "vendorChunk": false,
               "buildOptimizer": false,
               "fileReplacements": [
                 {
@@ -159,12 +159,13 @@
             },
             "dev": {
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
+              //"outputHashing": "all",
+              "sourceMap": true,
               "namedChunks": false,
+              "allowedCommonJsDependencies": ["localforage", "ion2-calendar"],
               "aot": false,
               "extractLicenses": true,
-              "vendorChunk": true,
+              "vendorChunk": false,
               "buildOptimizer": false,
               "fileReplacements": [
                 {
